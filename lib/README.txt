@@ -1,1 +1,0 @@
-Extract twitter bootstrap files into this folder.
