@@ -117,35 +117,32 @@ function twitter_bootstrap_preprocess_form_element(&$vars) {
 }
 
 /**
+ * Preprocess variables for region.tpl.php
+ *
+ * @see region.tpl.php
+ */
+function twitter_bootstrap_preprocess_region(&$vars) {  
+  if($vars['region'] == "sidebar_first" || $vars['region'] == "sidebar_second")
+    $vars['classes_array'][] = 'span5';
+  
+  if($vars['region'] == "sidebar_second")
+    $vars['classes_array'][] = 'span5';
+}
+
+/**
  * Returns the correct span class for a region
  */
-function _twitter_bootstrap_region_span($region, $columns = 1) {
-  if($region == "content") {
-    switch($columns) {
-      case 1:
-        $class = 'span8';
-        break;
-      case 2:
-        $class = 'span10';
-        break;
-      case 3:
-        $class = 'span8';
-        break;
-    }
-  }
-  
-  if($region == "sidebar_first" || $region == "sidebar_second") {
-    switch($columns) {
-      case 1:
-        $class = 'span16';
-        break;
-      case 2:
-        $class = 'span6';
-        break;
-      case 3:
-        $class = 'span4';
-        break;
-    }
+function _twitter_bootstrap_content_span($columns = 1) {
+  switch($columns) {
+    case 1:
+      $class = 'span16';
+      break;
+    case 2:
+      $class = 'span11';
+      break;
+    case 3:
+      $class = 'span6';
+      break;
   }
   
   return $class;

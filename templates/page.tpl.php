@@ -23,7 +23,9 @@
   <?php if ($page['highlight']): ?>
   <div class="highlight">
 	<div class="container">
-	  <?php print render($page['highlight']); ?>
+	  <div class="row">
+		<?php print render($page['highlight']); ?>
+	  </div>
 	</div>
   </div>
   <?php endif; ?>
@@ -43,19 +45,15 @@
 	 
 	<div class="row">
 	  <?php if ($page['sidebar_first']): ?>
-		<div class="sidebar-first <?php print _twitter_bootstrap_region_span('sidebar_first', $columns); ?>">
-		  <?php print render($page['sidebar_first']); ?>
-		</div>
+		<?php print render($page['sidebar_first']); ?>
 	  <?php endif; ?>	  
 	  
-	  <div class="<?php print _twitter_bootstrap_region_span('content', $columns); ?>">
+	  <div class="<?php print _twitter_bootstrap_content_span($columns); ?>">
 		<?php print render($page['content']); ?>
 	  </div>
 	  
 	  <?php if ($page['sidebar_second']): ?>
-		<div class="sidebar-second <?php print _twitter_bootstrap_region_span('sidebar_second', $columns); ?>">
-		  <?php print render($page['sidebar_second']); ?>
-		</div>
+		<?php print render($page['sidebar_second']); ?>
 	  <?php endif; ?>
 	</div>
 
