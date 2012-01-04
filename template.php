@@ -127,6 +127,9 @@ function twitter_bootstrap_preprocess_region(&$vars) {
   
   if($vars['region'] == "sidebar_second")
     $vars['classes_array'][] = 'span5';
+    
+  if($vars['region'] == "highlight")
+    $vars['classes_array'][] = 'span16';  
 }
 
 /**

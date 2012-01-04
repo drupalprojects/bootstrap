@@ -89,10 +89,13 @@ function twitter_bootstrap_js_alter(&$js) {
 
 function _twitter_bootstrap_alter($files, $type) {
   $output = array();
+  
   foreach($files as $key => $value) {
+    if(isset($files[$key][$type])) {
 	  foreach($files[$key][$type] as $file => $name) {
 		  $output[$name] = FALSE;
 	  }
+    }
   }
   return $output;
 }

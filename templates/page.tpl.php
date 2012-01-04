@@ -11,6 +11,7 @@
 			  <?php endif; ?> 
 			</a>
 		  </h3>
+		  
 		  <?php if ($main_menu || $secondary_menu): ?>
 			<?php print theme('links__system_main_menu', array('links' => $main_menu, 'attributes' => array('id' => 'main-menu', 'class' => array('nav')))); ?>
 		  <?php endif; ?>
@@ -21,13 +22,13 @@
   </div>
   
   <?php if ($page['highlight']): ?>
-  <div class="highlight">
-	<div class="container">
-	  <div class="row">
-		<?php print render($page['highlight']); ?>
+	<div class="highlight">
+	  <div class="container">
+		<div class="row">
+		  <?php print render($page['highlight']); ?>
+		</div>
 	  </div>
 	</div>
-  </div>
   <?php endif; ?>
 	
   <div id="content" class="container">
