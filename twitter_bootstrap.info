@@ -3,14 +3,14 @@ description = ..
 version = VERSION
 core = 7.x
 
-scripts[] = 'lib/js/bootstrap-twipsy.js'
-scripts[] = 'lib/js/bootstrap-alerts.js'
-scripts[] = 'lib/js/bootstrap-buttons.js'
-scripts[] = 'lib/js/bootstrap-dropdown.js'
-scripts[] = 'lib/js/bootstrap-modal.js'
-scripts[] = 'lib/js/bootstrap-popover.js'
-scripts[] = 'lib/js/bootstrap-tabs.js'
-stylesheets[all][] = 'lib/bootstrap.min.css'
+;scripts[] = 'lib/js/bootstrap-twipsy.js'
+;scripts[] = 'lib/js/bootstrap-alerts.js'
+;scripts[] = 'lib/js/bootstrap-buttons.js'
+;scripts[] = 'lib/js/bootstrap-dropdown.js'
+;scripts[] = 'lib/js/bootstrap-modal.js'
+;scripts[] = 'lib/js/bootstrap-popover.js'
+;scripts[] = 'lib/js/bootstrap-tabs.js'
+;stylesheets[all][] = 'lib/bootstrap.min.css'
 
 regions[header] = 'Top Bar'
 regions[highlight] = 'Highlight'
@@ -20,7 +20,16 @@ regions[sidebar_second] = 'Secondary'
 regions[footer] = 'Footer'
 
 ;Settings
-;settings[rebuild_registry] = 1
+settings[twitter_bootstrap_css_files] = "http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css"
+settings[twitter_bootstrap_js_files] =
+"http://twitter.github.com/bootstrap/1.4.0/bootstrap-alerts.js
+http://twitter.github.com/bootstrap/1.4.0/bootstrap-popover.js
+http://twitter.github.com/bootstrap/1.4.0/bootstrap-twipsy.js
+http://twitter.github.com/bootstrap/1.4.0/bootstrap-tabs.js
+http://twitter.github.com/bootstrap/1.4.0/bootstrap-buttons.js
+http://twitter.github.com/bootstrap/1.4.0/bootstrap-scrollspy.js
+http://twitter.github.com/bootstrap/1.4.0/bootstrap-dropdown.js
+http://twitter.github.com/bootstrap/1.4.0/bootstrap-modal.js"
 
 ;Exclude
 ;javascript
