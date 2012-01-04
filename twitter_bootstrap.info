@@ -3,15 +3,6 @@ description = ..
 version = VERSION
 core = 7.x
 
-;scripts[] = 'lib/js/bootstrap-twipsy.js'
-;scripts[] = 'lib/js/bootstrap-alerts.js'
-;scripts[] = 'lib/js/bootstrap-buttons.js'
-;scripts[] = 'lib/js/bootstrap-dropdown.js'
-;scripts[] = 'lib/js/bootstrap-modal.js'
-;scripts[] = 'lib/js/bootstrap-popover.js'
-;scripts[] = 'lib/js/bootstrap-tabs.js'
-;stylesheets[all][] = 'lib/bootstrap.min.css'
-
 regions[header] = 'Top Bar'
 regions[highlight] = 'Highlight'
 regions[content] = 'Content'
