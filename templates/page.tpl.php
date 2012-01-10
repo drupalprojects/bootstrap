@@ -2,7 +2,7 @@
 	 <div class="fill">
 	   <div class="container">
 		  <h3>
-			<a class="brand" href="#">
+			<a class="brand" href="/">
 			  <?php if ($logo): ?>
 				<img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" />
 			  <?php endif; ?>
