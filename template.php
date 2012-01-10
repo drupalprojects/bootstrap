@@ -94,6 +94,9 @@ function twitter_bootstrap_preprocess_page(&$variables) {
   
   // Our custom search because its cool :)
   $variables['search'] = drupal_get_form('_twitter_bootstrap_search_form');
+  
+  // Add user menu
+  //$variables['user_menu'] = menu_navigation_links('user-menu');
 }
 
 function _twitter_bootstrap_search_form($form, &$form_state) {
