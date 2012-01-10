@@ -19,6 +19,7 @@
  * @ingroup themeable
  */
 function twitter_bootstrap_pager($variables) {
+  $output = "";
   $tags = $variables['tags'];
   $element = $variables['element'];
   $parameters = $variables['parameters'];
@@ -50,11 +51,8 @@ function twitter_bootstrap_pager($variables) {
     $pager_last = $pager_last + (1 - $i);
     $i = 1;
   }
-  
-  //print_r($tags);
-  //exit;
-  // End of generation loop preparation.
 
+  // End of generation loop preparation.
   $li_first = theme('pager_first', array('text' => (isset($tags[0]) ? $tags[0] : t('first')), 'element' => $element, 'parameters' => $parameters));
   $li_previous = theme('pager_previous', array('text' => (isset($tags[1]) ? $tags[1] : t('previous')), 'element' => $element, 'interval' => 1, 'parameters' => $parameters));
   $li_next = theme('pager_next', array('text' => (isset($tags[3]) ? $tags[3] : t('next')), 'element' => $element, 'interval' => 1, 'parameters' => $parameters));

@@ -3,18 +3,21 @@
 	   <div class="container">
 		  <h3>
 			<a class="brand" href="#">
+			  <?php if ($logo): ?>
+				<img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" />
+			  <?php endif; ?>
+			  
 			  <?php if ($site_name): ?>
 				<?php print $site_name; ?>
 			  <?php endif; ?>	
-			  <?php if ($logo): ?>
-			   <img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" />
-			  <?php endif; ?> 
 			</a>
 		  </h3>
 		  
 		  <?php if ($main_menu || $secondary_menu): ?>
 			<?php print theme('links__system_main_menu', array('links' => $main_menu, 'attributes' => array('id' => 'main-menu', 'class' => array('nav')))); ?>
 		  <?php endif; ?>
+		  
+		  <?php if ($search): print render($search); endif; ?>
 		  
 		  <?php print render($page['header']); ?>
 	   </div>

@@ -91,6 +91,18 @@ function twitter_bootstrap_preprocess_page(&$variables) {
   else {
     $variables['columns'] = 1;
   }
+  
+  // Our custom search because its cool :)
+  $variables['search'] = drupal_get_form('_twitter_bootstrap_search_form');
+}
+
+function _twitter_bootstrap_search_form($form, &$form_state) {
+  $form = search_form($form, &$form_state);
+  $form['#attributes']['class'][] = 'pull-left';
+  $form['basic']['keys']['#title'] = '';
+  unset($form['basic']['submit']);
+
+  return $form;
 }
 
 function twitter_bootstrap_preprocess_form_element(&$vars) {

@@ -10,6 +10,8 @@ regions[sidebar_first] = 'Primary'
 regions[sidebar_second] = 'Secondary'
 regions[footer] = 'Footer'
 
+stylesheets[screen][] = css/twitter_bootstrap.css
+
 ;Settings
 settings[twitter_bootstrap_css_files] = "http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css"
 settings[twitter_bootstrap_js_files] =
@@ -21,6 +23,7 @@ http://twitter.github.com/bootstrap/1.4.0/bootstrap-buttons.js
 http://twitter.github.com/bootstrap/1.4.0/bootstrap-scrollspy.js
 http://twitter.github.com/bootstrap/1.4.0/bootstrap-dropdown.js
 http://twitter.github.com/bootstrap/1.4.0/bootstrap-modal.js"
+settings[toggle_name] = 0
 
 ;Exclude
 ;javascript
