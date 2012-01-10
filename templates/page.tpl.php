@@ -7,7 +7,7 @@
 				<?php print $site_name; ?>
 			  <?php endif; ?>	
 			  <?php if ($logo): ?>
-			   <img src="<?php print $logo; ?> alt="<?php print t('Home'); ?>" />
+			   <img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" />
 			  <?php endif; ?> 
 			</a>
 		  </h3>
