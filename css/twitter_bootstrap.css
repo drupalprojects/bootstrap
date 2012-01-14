@@ -9,3 +9,6 @@
   clip: rect(1px 1px 1px 1px);
   clip: rect(1px,1px,1px,1px);
 }
+div#admin-toolbar.vertical {
+  top:40px;
+}
