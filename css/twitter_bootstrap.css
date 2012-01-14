@@ -4,11 +4,6 @@
   font-weight: normal;
   color: #777;
 }
-.element-invisible {
-  position: absolute !important;
-  clip: rect(1px 1px 1px 1px);
-  clip: rect(1px,1px,1px,1px);
-}
 
 /* Admin toolbar fix */
 div#admin-toolbar.vertical {
