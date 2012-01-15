@@ -78,28 +78,13 @@ function twitter_bootstrap_status_messages($variables) {
 }
 
 function twitter_bootstrap_css_alter(&$css) {
-  //include_once('theme-settings.php');
-  
   $excludes = _twitter_bootstrap_alter(twitter_bootstrap_theme_get_info('exclude'), 'css');
   $css = array_diff_key($css, $excludes);
-  
-
-  //print_r(twitter_bootstrap_theme_get_setting('twitter_bootstrap_js_files'));
-  //exit;
-  //$css
 }
  
 function twitter_bootstrap_js_alter(&$js) {
   $excludes = _twitter_bootstrap_alter(twitter_bootstrap_theme_get_info('exclude'), 'js');
   $js = array_diff_key($js, $excludes);
-  
-  // Add includes
-  /*
-  $lines = preg_split( '/\r\n|\r|\n/', twitter_bootstrap_theme_get_setting('twitter_bootstrap_js_files'));
-  print_r($js);
-  exit;
-  $css += $lines;
-  */
 }
 
 function _twitter_bootstrap_alter($files, $type) {

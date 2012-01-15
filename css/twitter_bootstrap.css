@@ -14,3 +14,8 @@ div#admin-toolbar.vertical {
 .container-inline div, .container-inline label {
   display: block;
 }
+
+/* Default form fields to auto */
+input, textarea, select, .uneditable-input {
+  width:auto;
+}
