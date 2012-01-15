@@ -19,3 +19,12 @@ div#admin-toolbar.vertical {
 input, textarea, select, .uneditable-input {
   width:auto;
 }
+
+/* throbber fix */
+html.js input.form-autocomplete {
+  background-position: 100% 7px; /* LTR */
+  background-repeat: no-repeat;
+}
+html.js input.throbbing {
+  background-position: 100% -13px; /* LTR */
+}

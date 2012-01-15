@@ -118,10 +118,10 @@ function twitter_bootstrap_preprocess_form_element(&$vars) {
  */
 function twitter_bootstrap_preprocess_region(&$vars) {  
   if($vars['region'] == "sidebar_first" || $vars['region'] == "sidebar_second")
-    $vars['classes_array'][] = 'span5';
+    $vars['classes_array'][] = 'span4';
   
   if($vars['region'] == "sidebar_second")
-    $vars['classes_array'][] = 'span5';
+    $vars['classes_array'][] = 'span4';
     
   if($vars['region'] == "highlight")
     $vars['classes_array'][] = 'span16';  
@@ -136,10 +136,10 @@ function _twitter_bootstrap_content_span($columns = 1) {
       $class = 'span16';
       break;
     case 2:
-      $class = 'span11';
+      $class = 'span12';
       break;
     case 3:
-      $class = 'span6';
+      $class = 'span8';
       break;
   }
   
