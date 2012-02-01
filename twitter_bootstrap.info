@@ -13,16 +13,19 @@ regions[footer] = 'Footer'
 stylesheets[screen][] = css/twitter_bootstrap.css
 
 ;Settings
-settings[twitter_bootstrap_css_files] = "http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css"
+settings[twitter_bootstrap_css_files] =
+"http://twitter.github.com/bootstrap/assets/css/bootstrap.css
+http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css"
+
 settings[twitter_bootstrap_js_files] =
-"http://twitter.github.com/bootstrap/1.4.0/bootstrap-alerts.js
-http://twitter.github.com/bootstrap/1.4.0/bootstrap-popover.js
-http://twitter.github.com/bootstrap/1.4.0/bootstrap-twipsy.js
-http://twitter.github.com/bootstrap/1.4.0/bootstrap-tabs.js
-http://twitter.github.com/bootstrap/1.4.0/bootstrap-buttons.js
-http://twitter.github.com/bootstrap/1.4.0/bootstrap-scrollspy.js
-http://twitter.github.com/bootstrap/1.4.0/bootstrap-dropdown.js
-http://twitter.github.com/bootstrap/1.4.0/bootstrap-modal.js"
+"http://twitter.github.com/bootstrap/assets/js/bootstrap-alerts.js
+http://twitter.github.com/bootstrap/assets/js/bootstrap-popover.js
+http://twitter.github.com/bootstrap/assets/js/bootstrap-twipsy.js
+http://twitter.github.com/bootstrap/assets/js/bootstrap-tabs.js
+http://twitter.github.com/bootstrap/assets/js/bootstrap-buttons.js
+http://twitter.github.com/bootstrap/assets/js/bootstrap-scrollspy.js
+http://twitter.github.com/bootstrap/assets/js/bootstrap-dropdown.js
+http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"
 settings[toggle_name] = 0
 
 ;Exclude
