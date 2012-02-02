@@ -101,7 +101,7 @@ function twitter_bootstrap_preprocess_page(&$variables) {
 
 function _twitter_bootstrap_search_form($form, &$form_state) {
   $form = search_form($form, &$form_state);
-  $form['#attributes']['class'][] = 'pull-left';
+  $form['#attributes']['class'][] = 'form-search';  
   $form['basic']['keys']['#title'] = '';
   unset($form['basic']['submit']);
 
@@ -118,13 +118,13 @@ function twitter_bootstrap_preprocess_form_element(&$vars) {
  */
 function twitter_bootstrap_preprocess_region(&$vars) {  
   if($vars['region'] == "sidebar_first" || $vars['region'] == "sidebar_second")
-    $vars['classes_array'][] = 'span4';
+    $vars['classes_array'][] = 'span3';
   
   if($vars['region'] == "sidebar_second")
-    $vars['classes_array'][] = 'span4';
+    $vars['classes_array'][] = 'span3';
     
   if($vars['region'] == "highlight")
-    $vars['classes_array'][] = 'span16';  
+    $vars['classes_array'][] = 'span12';  
 }
 
 /**
@@ -133,13 +133,13 @@ function twitter_bootstrap_preprocess_region(&$vars) {
 function _twitter_bootstrap_content_span($columns = 1) {
   switch($columns) {
     case 1:
-      $class = 'span16';
-      break;
-    case 2:
       $class = 'span12';
       break;
-    case 3:
+    case 2:
       $class = 'span8';
+      break;
+    case 3:
+      $class = 'span4';
       break;
   }
   

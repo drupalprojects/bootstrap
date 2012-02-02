@@ -1,7 +1,6 @@
 <?php
 
 function twitter_bootstrap_button(&$vars) {
-  //print_r($vars);
   $element = $vars['element'];
   $element['#attributes']['type'] = 'submit';
   element_set_attributes($element, array('id', 'name', 'value'));
@@ -38,7 +37,7 @@ function twitter_bootstrap_form($variables) {
   $element['#attributes']['class'][] = "form-stacked";
   
   // Anonymous DIV to satisfy XHTML compliance.
-  return '<form' . drupal_attributes($element['#attributes']) . '><div>' . $element['#children'] . '</div></form>';
+  return '<form' . drupal_attributes($element['#attributes']) . '>' . $element['#children'] . '</form>';
 }
 
 /**
@@ -73,6 +72,7 @@ function twitter_bootstrap_container($vars) {
   }
 
   return '<div' . drupal_attributes($element['#attributes']) . '>' . $element['#children'] . '</div>';
+  #return $element['#children'];
 }
 
 function twitter_bootstrap_form_element($variables) {
@@ -87,7 +87,7 @@ function twitter_bootstrap_form_element($variables) {
   );
   
   // Add clearfix class
-  $attributes['class'][] = "clearfix";
+  $attributes['class'][] = "control-group";
   
   $output = '<div' . drupal_attributes($attributes) . '>' . "\n";
 
@@ -108,18 +108,18 @@ function twitter_bootstrap_form_element($variables) {
     case 'before':
     case 'invisible':
       $output .= ' ' . theme('form_element_label', $variables);
-      $output .= '<div class="input"> ' . $prefix . $element['#children'] . $suffix . $description ."</div>\n";
+      $output .= '<div class="controls"> ' . $prefix . $element['#children'] . $suffix . $description ."</div>\n";
       break;
 
     case 'after':
       $output .= ' ' . $prefix . $element['#children'] . $suffix;
-      $output .= '<div class="input"> ' . theme('form_element_label', $variables) . $description ."</div>\n";
+      $output .= '<div class="controls"> ' . theme('form_element_label', $variables) . $description ."</div>\n";
       break;
 
     case 'none':
     case 'attribute':
       // Output no label and no required marker, only the children.
-      $output .= '<div class="input"> ' . $prefix . $element['#children'] . $suffix . $description ."</div>\n";
+      $output .= '<div class="controls"> ' . $prefix . $element['#children'] . $suffix . $description ."</div>\n";
       break;
   }
 

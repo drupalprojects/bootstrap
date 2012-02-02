@@ -1,7 +1,6 @@
-  <div class="topbar">
-	 <div class="fill">
-	   <div class="container">
-		  <h3>
+  <div class="navbar navbar-fixed-top">
+	 <div class="navbar-inner">
+	   <div class="container-fluid">
 			<a class="brand" href="/">
 			  <?php if ($logo): ?>
 				<img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" />
@@ -11,62 +10,69 @@
 				<?php print $site_name; ?>
 			  <?php endif; ?>	
 			</a>
-		  </h3>
 		  
-		  <?php if ($main_menu ): ?>
-			<?php print theme('links__system_main_menu', array('links' => $main_menu, 'attributes' => array('id' => 'main-menu', 'class' => array('nav')))); ?>
-		  <?php endif; ?>
-		  
-		  <?php if ($search): print render($search); endif; ?>
+		  <div class="nav-collapse">
+			<?php if ($main_menu ): ?>
+			  <?php print theme('links__system_main_menu', array('links' => $main_menu, 'attributes' => array('id' => 'main-menu', 'class' => array('nav')))); ?>
+			<?php endif; ?>
+		  </div>
 		  
 		  <?php if ($secondary_menu): ?>
-			<?php print theme('links__system_main_menu', array('links' => $secondary_menu, 'attributes' => array('id' => 'secondary-menu', 'class' => array('nav', 'secondary-nav')))); ?>
+			<?php print theme('links__system_main_menu', array('links' => $secondary_menu, 'attributes' => array('id' => 'secondary-menu', 'class' => array('nav', 'secondary-nav', 'pull-right')))); ?>
 		  <?php endif; ?>
+		  
+		  <div class="pull-right">
+			<?php if ($search): print render($search); endif; ?>
+		  </div>
 		  
 		  <?php print render($page['header']); ?>
 	   </div>
 	 </div>
   </div>
   
-  <?php if ($page['highlight']): ?>
-	<div class="highlight">
-	  <div class="container">
-		<div class="row">
+  <div class="container-fluid">
+	<div class="row-fluid">
+	  <?php if ($page['highlight']): ?>
+		<div class="highlight hero-unit">
 		  <?php print render($page['highlight']); ?>
 		</div>
-	  </div>
-	</div>
-  <?php endif; ?>
-	
-  <div id="content" class="container">
-	<?php print $messages; ?>
-	
-	<?php if ($breadcrumb): ?>
-	  <?php print $breadcrumb; ?>
-	<?php endif; ?>
-     
-	<?php if ($title): ?><h1><?php print $title; ?></h1><?php endif; ?>
-	
-	<?php if ($tabs && $tabs['#primary']): ?>
-	  <nav><?php print render($tabs); ?></nav>
-	<?php endif; ?>
-	 
-	<div class="row">
-	  <?php if ($page['sidebar_first']): ?>
-		<?php print render($page['sidebar_first']); ?>
-	  <?php endif; ?>	  
-	  
-	  <div class="<?php print _twitter_bootstrap_content_span($columns); ?>">
-		<?php print render($page['content']); ?>
-	  </div>
-	  
-	  <?php if ($page['sidebar_second']): ?>
-		<?php print render($page['sidebar_second']); ?>
 	  <?php endif; ?>
-	</div>
+		
 
+		<?php print $messages; ?>
+		
+		<?php if ($breadcrumb): ?>
+		  <?php print $breadcrumb; ?>
+		<?php endif; ?>
+		 
+		<?php if ($title): ?>
+		<div class="page-header">
+		  <h1>Button groups <small><?php print $title; ?></small></h1>
+		</div>
+		<?php endif; ?>
+		
+		<?php if ($tabs && $tabs['#primary']): ?>
+		  <?php print render($tabs); ?>
+		<?php endif; ?>
+		 
+	
+		  <?php if ($page['sidebar_first']): ?>
+			<?php print render($page['sidebar_first']); ?>
+		  <?php endif; ?>	  
+		  
+		  <div class="<?php print _twitter_bootstrap_content_span($columns); ?>">
+			<?php print render($page['content']); ?>
+		  </div>
+		  
+		  <?php if ($page['sidebar_second']): ?>
+			<?php print render($page['sidebar_second']); ?>
+		  <?php endif; ?>
+
+	
+	
+	  
+	  <footer class="footer">
+		<?php print render($page['footer']); ?>
+	  </footer>
+	</div>
   </div>
-  
-  <footer class="footer">
-	<?php print render($page['footer']); ?>
-  </footer>
