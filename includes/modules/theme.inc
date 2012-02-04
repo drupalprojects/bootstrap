@@ -64,7 +64,7 @@ function twitter_bootstrap_status_messages($variables) {
   foreach (drupal_get_messages($display) as $type => $messages) {
     if (count($messages) > 1) {
       foreach ($messages as $message) {
-        $output .= "<div class=\"alert-message $type\" data-alert=\"data-alert\">\n";
+        $output .= "<div class=\"alert alert-$type\" data-dismiss=\"alert\">\n";
         $output .= "  <a class=\"close\" href=\"#\">x</a>\n";
         $output .= '  <p>' . $message . "</p>\n";
         $output .= " </div>\n";

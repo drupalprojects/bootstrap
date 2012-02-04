@@ -56,7 +56,7 @@ function twitter_bootstrap_form($variables) {
  */
 function twitter_bootstrap_container($vars) {
   $element = $vars['element'];
-  //print_r($element);
+  
   // Special handling for form elements.
   if (isset($element['#array_parents'])) {
     // Assign an html ID.

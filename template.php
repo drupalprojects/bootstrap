@@ -139,7 +139,7 @@ function _twitter_bootstrap_content_span($columns = 1) {
       $class = 'span8';
       break;
     case 3:
-      $class = 'span4';
+      $class = 'span5';
       break;
   }
   

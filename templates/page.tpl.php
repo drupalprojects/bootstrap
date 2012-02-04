@@ -30,49 +30,48 @@
 	 </div>
   </div>
   
-  <div class="container-fluid">
+  <div class="container">
+	
 	<div class="row-fluid">
+	  
+	  <?php print $messages; ?>
+	  
 	  <?php if ($page['highlight']): ?>
 		<div class="highlight hero-unit">
 		  <?php print render($page['highlight']); ?>
 		</div>
 	  <?php endif; ?>
-		
-
-		<?php print $messages; ?>
-		
-		<?php if ($breadcrumb): ?>
-		  <?php print $breadcrumb; ?>
-		<?php endif; ?>
-		 
-		<?php if ($title): ?>
-		<div class="page-header">
-		  <h1>Button groups <small><?php print $title; ?></small></h1>
-		</div>
-		<?php endif; ?>
-		
-		<?php if ($tabs && $tabs['#primary']): ?>
-		  <?php print render($tabs); ?>
-		<?php endif; ?>
-		 
-	
-		  <?php if ($page['sidebar_first']): ?>
-			<?php print render($page['sidebar_first']); ?>
-		  <?php endif; ?>	  
-		  
-		  <div class="<?php print _twitter_bootstrap_content_span($columns); ?>">
-			<?php print render($page['content']); ?>
-		  </div>
-		  
-		  <?php if ($page['sidebar_second']): ?>
-			<?php print render($page['sidebar_second']); ?>
-		  <?php endif; ?>
-
-	
-	
 	  
-	  <footer class="footer">
-		<?php print render($page['footer']); ?>
-	  </footer>
+	  <?php if ($breadcrumb): ?>
+		<?php print $breadcrumb; ?>
+	  <?php endif; ?>
+	   
+	  <?php if ($title): ?>
+	  <div class="page-header">
+		<h1><?php print $title; ?></h1>
+	  </div>
+	  <?php endif; ?>
+	  
+	  <?php if ($tabs && $tabs['#primary']): ?>
+		<?php print render($tabs); ?>
+	  <?php endif; ?>
+  
+	  <?php if ($page['sidebar_first']): ?>
+		<?php print render($page['sidebar_first']); ?>
+	  <?php endif; ?>	  
+	  
+	  <div class="<?php print _twitter_bootstrap_content_span($columns); ?>">
+		<?php print render($page['content']); ?>
+	  </div>
+	  
+	  <?php if ($page['sidebar_second']): ?>
+		<?php print render($page['sidebar_second']); ?>
+	  <?php endif; ?>
+
 	</div>
+	
+	<footer class="footer">
+	  <?php print render($page['footer']); ?>
+	</footer>
+	
   </div>
