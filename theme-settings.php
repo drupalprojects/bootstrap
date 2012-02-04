@@ -22,5 +22,10 @@ function twitter_bootstrap_form_system_theme_settings_alter(&$form, &$form_state
     '#default_value' => twitter_bootstrap_theme_get_setting('twitter_bootstrap_js_files'),
     '#description' => t('Enter the path and filename, relative to Drupal root, where the JavaScript file is located, seperated by an new line.'),
   );
+  $form['theme_settings']['toggle_search'] = array(
+    '#type' => 'checkbox', 
+    '#title' => t('Search box'), 
+    '#default_value' => theme_get_setting('toggle_search'), 
+  );
 }
 

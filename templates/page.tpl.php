@@ -21,9 +21,11 @@
 			<?php print theme('links__system_main_menu', array('links' => $secondary_menu, 'attributes' => array('id' => 'secondary-menu', 'class' => array('nav', 'secondary-nav', 'pull-right')))); ?>
 		  <?php endif; ?>
 		  
-		  <div class="pull-right">
-			<?php if ($search): print render($search); endif; ?>
-		  </div>
+		  <?php if ($search): ?>
+			<div class="pull-right">
+			  <?php if ($search): print render($search); endif; ?>
+			</div>
+		  <?php endif; ?>
 		  
 		  <?php print render($page['header']); ?>
 	   </div>
