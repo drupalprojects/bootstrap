@@ -18,12 +18,11 @@ settings[twitter_bootstrap_css_files] =
 http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css"
 
 settings[twitter_bootstrap_js_files] =
-"http://twitter.github.com/bootstrap/assets/js/bootstrap-alerts.js
+"http://twitter.github.com/bootstrap/assets/js/bootstrap-alert.js
 http://twitter.github.com/bootstrap/assets/js/bootstrap-tooltip.js
 http://twitter.github.com/bootstrap/assets/js/bootstrap-popover.js
-http://twitter.github.com/bootstrap/assets/js/bootstrap-twipsy.js
-http://twitter.github.com/bootstrap/assets/js/bootstrap-tabs.js
-http://twitter.github.com/bootstrap/assets/js/bootstrap-buttons.js
+http://twitter.github.com/bootstrap/assets/js/bootstrap-tab.js
+http://twitter.github.com/bootstrap/assets/js/bootstrap-button.js
 http://twitter.github.com/bootstrap/assets/js/bootstrap-scrollspy.js
 http://twitter.github.com/bootstrap/assets/js/bootstrap-dropdown.js
 http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"

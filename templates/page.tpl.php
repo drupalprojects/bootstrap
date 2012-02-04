@@ -1,6 +1,6 @@
   <div class="navbar navbar-fixed-top">
 	 <div class="navbar-inner">
-	   <div class="container" style="width: auto;">
+	   <div class="container">
 		    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
 			  <span class="icon-bar"></span>
 			  <span class="icon-bar"></span>
@@ -51,21 +51,22 @@
 		<?php print $breadcrumb; ?>
 	  <?php endif; ?>
 	   
-	  <?php if ($title): ?>
-	  <div class="page-header">
-		<h1><?php print $title; ?></h1>
-	  </div>
-	  <?php endif; ?>
-	  
-	  <?php if ($tabs && $tabs['#primary']): ?>
-		<?php print render($tabs); ?>
-	  <?php endif; ?>
-  
 	  <?php if ($page['sidebar_first']): ?>
 		<?php print render($page['sidebar_first']); ?>
 	  <?php endif; ?>	  
 	  
 	  <div class="<?php print _twitter_bootstrap_content_span($columns); ?>">
+	  
+		<?php if ($title): ?>
+		<div class="page-header">
+		  <h1><?php print $title; ?></h1>
+		</div>
+		<?php endif; ?>
+		
+		<?php if ($tabs && $tabs['#primary']): ?>
+		  <?php print render($tabs); ?>
+		<?php endif; ?>
+	  
 		<?php print render($page['content']); ?>
 	  </div>
 	  
