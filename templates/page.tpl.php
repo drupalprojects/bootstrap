@@ -1,6 +1,11 @@
   <div class="navbar navbar-fixed-top">
 	 <div class="navbar-inner">
-	   <div class="container-fluid">
+	   <div class="container" style="width: auto;">
+		    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+			  <span class="icon-bar"></span>
+			  <span class="icon-bar"></span>
+			  <span class="icon-bar"></span>
+			</a>
 			<a class="brand" href="/">
 			  <?php if ($logo): ?>
 				<img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" />
@@ -15,17 +20,15 @@
 			<?php if ($main_menu ): ?>
 			  <?php print theme('links__system_main_menu', array('links' => $main_menu, 'attributes' => array('id' => 'main-menu', 'class' => array('nav')))); ?>
 			<?php endif; ?>
-		  </div>
 		  
-		  <?php if ($secondary_menu): ?>
-			<?php print theme('links__system_main_menu', array('links' => $secondary_menu, 'attributes' => array('id' => 'secondary-menu', 'class' => array('nav', 'secondary-nav', 'pull-right')))); ?>
-		  <?php endif; ?>
-		  
-		  <?php if ($search): ?>
-			<div class="pull-right">
+		  	<?php if ($search): ?>
 			  <?php if ($search): print render($search); endif; ?>
-			</div>
-		  <?php endif; ?>
+			<?php endif; ?>
+		  
+			<?php if ($secondary_menu): ?>
+			  <?php print theme('links__system_main_menu', array('links' => $secondary_menu, 'attributes' => array('id' => 'secondary-menu', 'class' => array('nav', 'pull-right')))); ?>
+			<?php endif; ?>
+		  </div>
 		  
 		  <?php print render($page['header']); ?>
 	   </div>
