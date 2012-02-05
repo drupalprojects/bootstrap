@@ -32,7 +32,7 @@ settings[toggle_name] = 0
 ;Exclude
 ;javascript
 ;exclude[js][] = 'modules/contextual/contextual.js'
-exclude[js][] = 'misc/jquery.js'
+;exclude[js][] = 'misc/jquery.js'
 
 ;css
 ;exclude[css][] = 'misc/vertical-tabs.css'
