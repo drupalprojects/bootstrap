@@ -29,11 +29,13 @@ function twitter_bootstrap_form($variables) {
   if (isset($element['#action'])) {
     $element['#attributes']['action'] = drupal_strip_dangerous_protocols($element['#action']);
   }
+  
   element_set_attributes($element, array('method', 'id'));
   if (empty($element['#attributes']['accept-charset'])) {
     $element['#attributes']['accept-charset'] = "UTF-8";
   }
-  
+  //print_r($variables);
+  //exit;
   $element['#attributes']['class'][] = "form-stacked";
   
   // Anonymous DIV to satisfy XHTML compliance.
@@ -101,7 +103,7 @@ function twitter_bootstrap_form_element($variables) {
   
   $description = '';
   if (!empty($element['#description'])) {
-    $description = '<span class="help-block">' . $element['#description'] . "</span>\n";
+    $description = '<p class="help-block">' . $element['#description'] . "</p>\n";
   }
   
   switch ($element['#title_display']) {
