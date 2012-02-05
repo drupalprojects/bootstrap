@@ -59,8 +59,8 @@ function twitter_bootstrap_breadcrumb($vars) {
  * @see node.tpl.php
  */
 function twitter_bootstrap_preprocess_node(&$vars) {
-  //if($vars['teaser'])
-   //$vars['classes_array'][] = 'row';
+  if($vars['teaser'])
+    $vars['classes_array'][] = 'row-fluid';
 }
 
 /**
