@@ -23,20 +23,21 @@ foreach ($modules as $module) {
  */
 function twitter_bootstrap_preprocess_html(&$vars) {
   if (module_exists('twitter_bootstrap_ui')) {
+    //$jqjs = variable_get('twitter_bootstrap_ui_jq_file', twitter_bootstrap_theme_get_setting('twitter_bootstrap_jq_file'));
     $js = preg_split( '/\r\n|\r|\n/', variable_get('twitter_bootstrap_ui_js_files', twitter_bootstrap_theme_get_setting('twitter_bootstrap_js_files')));
     $css = preg_split( '/\r\n|\r|\n/', variable_get('twitter_bootstrap_ui_css_files', twitter_bootstrap_theme_get_setting('twitter_bootstrap_css_files')));
   }else{
+    //$jqjs = twitter_bootstrap_theme_get_setting('twitter_bootstrap_jq_file');
     $js = preg_split( '/\r\n|\r|\n/', twitter_bootstrap_theme_get_setting('twitter_bootstrap_js_files'));
     $css = preg_split( '/\r\n|\r|\n/', twitter_bootstrap_theme_get_setting('twitter_bootstrap_css_files'));
   }
   
-  
   foreach($js as $file) {
-    drupal_add_js($file, array('scope' => 'footer'));
+    drupal_add_js($file, array('scope' => 'footer', 'group' => JS_THEME));
   }
   
   foreach($css as $file) {
-    drupal_add_css($file, array('type' => 'external'));
+    drupal_add_css($file, array('type' => 'external', 'group' => CSS_THEME));
   }
 }
 
@@ -98,7 +99,21 @@ function twitter_bootstrap_preprocess_page(&$variables) {
   else {
     $variables['columns'] = 1;
   }
-}  
+  
+  // Our custom search because its cool :)
+  $variables['search'] = FALSE;
+  if(theme_get_setting('toggle_search'))
+    $variables['search'] = drupal_get_form('_twitter_bootstrap_search_form');
+}
+
+function _twitter_bootstrap_search_form($form, &$form_state) {
+  $form = search_form($form, &$form_state);
+  $form['#attributes']['class'][] = 'form-search';  
+  $form['basic']['keys']['#title'] = '';
+  unset($form['basic']['submit']);
+
+  return $form;
+}
 
 function twitter_bootstrap_preprocess_form_element(&$vars) {
 }

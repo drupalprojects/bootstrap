@@ -26,11 +26,13 @@ http://twitter.github.com/bootstrap/assets/js/bootstrap-button.js
 http://twitter.github.com/bootstrap/assets/js/bootstrap-scrollspy.js
 http://twitter.github.com/bootstrap/assets/js/bootstrap-dropdown.js
 http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"
+settings[twitter_bootstrap_jq_file] = "http://twitter.github.com/bootstrap/assets/js/jquery.js"
 settings[toggle_name] = 0
 
 ;Exclude
 ;javascript
 ;exclude[js][] = 'modules/contextual/contextual.js'
+exclude[js][] = 'misc/jquery.js'
 
 ;css
 ;exclude[css][] = 'misc/vertical-tabs.css'
