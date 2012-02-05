@@ -66,7 +66,13 @@
 		<?php if ($tabs && $tabs['#primary']): ?>
 		  <?php print render($tabs); ?>
 		<?php endif; ?>
-	  
+	     
+		<?php if ($page['help']): ?> 
+		  <div class="well">
+			<?php print render($page['help']); ?>
+		  </div>
+		 <?php endif; ?>
+		 
 		<?php print render($page['content']); ?>
 	  </div>
 	  

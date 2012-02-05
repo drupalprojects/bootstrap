@@ -3,12 +3,13 @@ description = ..
 version = VERSION
 core = 7.x
 
-regions[header] = 'Top Bar'
-regions[highlight] = 'Highlight'
-regions[content] = 'Content'
-regions[sidebar_first] = 'Primary'
+regions[header]         = 'Top Bar'
+regions[highlight]      = 'Highlight'
+regions[help]           = 'Help'
+regions[content]        = 'Content'
+regions[sidebar_first]  = 'Primary'
 regions[sidebar_second] = 'Secondary'
-regions[footer] = 'Footer'
+regions[footer]         = 'Footer'
 
 stylesheets[screen][] = css/twitter_bootstrap.css
 
