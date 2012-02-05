@@ -3,6 +3,7 @@
 include_once(dirname(__FILE__) . '/includes/twitter_bootstrap.inc');
 
 function twitter_bootstrap_form_system_theme_settings_alter(&$form, &$form_state) {
+  /*
   $form['twitter_bootstrap_settings'] = array(
     '#type' => 'fieldset',
     '#title' => t('Twitter bootstrap Settings'),
@@ -22,6 +23,7 @@ function twitter_bootstrap_form_system_theme_settings_alter(&$form, &$form_state
     '#default_value' => twitter_bootstrap_theme_get_setting('twitter_bootstrap_js_files'),
     '#description' => t('Enter the path and filename, relative to Drupal root, where the JavaScript file is located, seperated by an new line.'),
   );
+  */
   $form['theme_settings']['toggle_search'] = array(
     '#type' => 'checkbox', 
     '#title' => t('Search box'), 

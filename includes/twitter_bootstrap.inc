@@ -16,13 +16,13 @@
  *   twitter_bootstrap_theme_get_setting().
  */
 function twitter_bootstrap_theme_get_setting($name, $theme = NULL) {
-	switch($name){
-		case 'exclude':
-			$setting = twitter_bootstrap_theme_get_info($name, $theme);
-			break;
-		default:
-		  $setting = theme_get_setting($name, $theme);
-			break;
+  switch($name){
+	case 'exclude':
+		$setting = twitter_bootstrap_theme_get_info($name, $theme);
+		break;
+	default:
+	  $setting = theme_get_setting($name, $theme);
+		break;
   }
 
   return isset($setting) ? $setting : NULL; 

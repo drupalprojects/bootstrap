@@ -22,12 +22,19 @@ foreach ($modules as $module) {
  * @see html.tpl.php
  */
 function twitter_bootstrap_preprocess_html(&$vars) {
-  $js = preg_split( '/\r\n|\r|\n/', twitter_bootstrap_theme_get_setting('twitter_bootstrap_js_files'));
+  if (module_exists('twitter_bootstrap_ui')) {
+    $js = preg_split( '/\r\n|\r|\n/', variable_get('twitter_bootstrap_ui_js_files', twitter_bootstrap_theme_get_setting('twitter_bootstrap_js_files')));
+    $css = preg_split( '/\r\n|\r|\n/', variable_get('twitter_bootstrap_ui_css_files', twitter_bootstrap_theme_get_setting('twitter_bootstrap_css_files')));
+  }else{
+    $js = preg_split( '/\r\n|\r|\n/', twitter_bootstrap_theme_get_setting('twitter_bootstrap_js_files'));
+    $css = preg_split( '/\r\n|\r|\n/', twitter_bootstrap_theme_get_setting('twitter_bootstrap_css_files'));
+  }
+  
+  
   foreach($js as $file) {
     drupal_add_js($file, array('scope' => 'footer'));
   }
   
-  $css = preg_split( '/\r\n|\r|\n/', twitter_bootstrap_theme_get_setting('twitter_bootstrap_css_files'));
   foreach($css as $file) {
     drupal_add_css($file, array('type' => 'external'));
   }
