@@ -24,7 +24,7 @@ foreach ($modules as $module) {
 function twitter_bootstrap_preprocess_html(&$vars) {
   $js = preg_split( '/\r\n|\r|\n/', twitter_bootstrap_theme_get_setting('twitter_bootstrap_js_files'));
   foreach($js as $file) {
-    drupal_add_js($file);
+    drupal_add_js($file, array('scope' => 'footer'));
   }
   
   $css = preg_split( '/\r\n|\r|\n/', twitter_bootstrap_theme_get_setting('twitter_bootstrap_css_files'));
@@ -91,25 +91,7 @@ function twitter_bootstrap_preprocess_page(&$variables) {
   else {
     $variables['columns'] = 1;
   }
-  
-  // Our custom search because its cool :)
-  if(theme_get_setting('toggle_search'))
-    $variables['search'] = drupal_get_form('_twitter_bootstrap_search_form');
-  
-  // Add user menu
-  //$variables['user_menu'] = menu_navigation_links('user-menu');
-}
-
-function _twitter_bootstrap_search_form($form, &$form_state) {
-  $form = search_form($form, &$form_state);
-  $form['#attributes']['class'][] = 'pull-left';
-  $form['basic']['keys']['#attributes']['class'][] = 'search-query';
-  $form['basic']['keys']['#attributes']['class'][] = 'span2';
-  $form['basic']['keys']['#title'] = '';
-  unset($form['basic']['submit']);
- 
-  return $form;
-}
+}  
 
 function twitter_bootstrap_preprocess_form_element(&$vars) {
 }
