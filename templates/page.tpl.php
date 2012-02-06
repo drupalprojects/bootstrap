@@ -17,8 +17,14 @@
 			</a>
 		  
 		  <div class="nav-collapse">
+			<?php if ($primary_nav): ?>
+			  <?php print $primary_nav; ?>
+			<?php endif; ?>
+			
+			<?php print theme('twitter_bootstrap_navigation', array()); ?>
+			
 			<?php if ($main_menu): ?>
-			  <?php print theme('links__main_menu', array('links' => $main_menu, 'attributes' => array('dropdown' => TRUE, 'id' => 'main-menu', 'class' => array('nav')))); ?>
+			  <?php print theme('links__main_menu', array('links' => $main_menu, 'attributes' => array('dropdown' => TRUE, 'id' => 'main-menu', 'class' => array('nav'))));; ?>
 			<?php endif; ?>
 		  
 		  	<?php if ($search): ?>

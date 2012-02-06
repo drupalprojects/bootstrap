@@ -22,10 +22,10 @@ function twitter_bootstrap_menu_local_tasks(&$vars) {
   return $output;
 }
 
-/*
 function twitter_bootstrap_menu_tree(&$variables) {
   return '<ul class="nav">' . $variables['tree'] . '</ul>';
 }
+
 
 function twitter_bootstrap_menu_link(array $variables) {
   $element = $variables['element'];
@@ -37,32 +37,18 @@ function twitter_bootstrap_menu_link(array $variables) {
   if ($element['#below']) {
 	// Ad our own wrapper
 	unset($element['#below']['#theme_wrappers']);
-    $sub_menu = '<ul class="dropdown-menu">' . drupal_render($element['#below']) . '</u>';
+    $sub_menu = '<ul>' . drupal_render($element['#below']) . '</u>';
 
-    $element['#localized_options']['attributes']['class'][] = 'dropdown-toggle';
-	$element['#localized_options']['attributes']['data-toggle'] = 'dropdown';
-	$element['#attributes']['class'][] = 'dropdown';
+    //$element['#localized_options']['attributes']['class'][] = 'dropdown-toggle';
+	//$element['#localized_options']['attributes']['data-toggle'] = 'dropdown';
+	//$element['#attributes']['class'][] = 'dropdown';
 	$element['#localized_options']['html'] = TRUE;
-	$element['#title'] .= '<b class="caret"></b>';
+	//$element['#title'] .= '<b class="caret"></b>';
 	
 	// auch
-	$element['#localized_options']['fragment'] = 'test';
 	$element['#href'] = "";
   }
 
   $output = l($element['#title'], $element['#href'], $element['#localized_options']);
   return '<li' . drupal_attributes($element['#attributes']) . '>' . $output . $sub_menu . "</li>\n";
 }
-
-function _twitter_bootstrap_search_form($form, &$form_state) {
-  $form = search_form($form, &$form_state);
-  $form['#attributes']['class'][] = 'pull-left';
-  $form['basic']['keys']['#attributes']['class'][] = 'search-query';
-  $form['basic']['keys']['#attributes']['class'][] = 'span2';
-  $form['basic']['keys']['#title'] = '';
-  unset($form['basic']['submit']);
- 
-  return $form;
-}
-*/
-

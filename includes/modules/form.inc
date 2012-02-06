@@ -1,5 +1,6 @@
 <?php
 
+/*
 function twitter_bootstrap_button(&$vars) {
   $element = $vars['element'];
   $element['#attributes']['type'] = 'submit';
@@ -13,7 +14,7 @@ function twitter_bootstrap_button(&$vars) {
 
   return '<input' . drupal_attributes($element['#attributes']) . ' />';
 }
-
+*/
 /**
  * Returns HTML for a form.
  *
@@ -23,7 +24,7 @@ function twitter_bootstrap_button(&$vars) {
  *     Properties used: #action, #method, #attributes, #children
  *
  * @ingroup themeable
- */
+
 function twitter_bootstrap_form($variables) {
   $element = $variables['element'];
   if (isset($element['#action'])) {
@@ -34,47 +35,20 @@ function twitter_bootstrap_form($variables) {
   if (empty($element['#attributes']['accept-charset'])) {
     $element['#attributes']['accept-charset'] = "UTF-8";
   }
-  //print_r($variables);
-  //exit;
+
   $element['#attributes']['class'][] = "form-stacked";
   
   // Anonymous DIV to satisfy XHTML compliance.
   return '<form' . drupal_attributes($element['#attributes']) . '>' . $element['#children'] . '</form>';
 }
+ */
 
 /**
- * Returns HTML to wrap child elements in a container.
- *
- * Used for grouped form items. Can also be used as a #theme_wrapper for any
- * renderable element, to surround it with a <div> and add attributes such as
- * classes or an HTML id.
- *
- * @param $vars
- *   An associative array containing:
- *   - element: An associative array containing the properties of the element.
- *     Properties used: #id, #attributes, #children.
- *
- * @ingroup themeable
+ * Implements hook_form_alter().
  */
-function twitter_bootstrap_container($vars) {
-  $element = $vars['element'];
-  
-  // Special handling for form elements.
-  if (isset($element['#array_parents'])) {
-    // Assign an html ID.
-    if (!isset($element['#attributes']['id'])) {
-      $element['#attributes']['id'] = $element['#id'];
-    }
-    // Add the 'form-wrapper' class.
-    $element['#attributes']['class'][] = 'form-wrapper';
-  }
-  
-  if(in_array('actions', $element['#parents'])) {
-    $element['#attributes']['class'][] = 'actions';
-  }
-
-  return '<div' . drupal_attributes($element['#attributes']) . '>' . $element['#children'] . '</div>';
-  #return $element['#children'];
+function stanley_form_alter(&$form, &$form_state, $form_id) {
+  // Stack all forms
+  $form['#attributes']['class'][] = 'form-stacked';
 }
 
 function twitter_bootstrap_form_element($variables) {
@@ -128,4 +102,45 @@ function twitter_bootstrap_form_element($variables) {
   $output .= "</div>\n";
 
   return $output;
+}
+
+/**
+ * Preprocessor for theme('button').
+ */
+function twitter_bootstrap_preprocess_button(&$vars) {
+  $vars['element']['#attributes']['class'][] = 'btn';
+
+  if (isset($vars['element']['#value'])) {
+    $classes = array(
+      //specifics
+      t('Save and add') => 'btn-info',
+      t('Add another item') => 'btn-info',
+      t('Add effect') => 'btn-primary',
+      t('Add and configure') => 'btn-primary',
+      t('Update style') => 'btn-primary',
+      t('Download feature') => 'btn-primary',
+
+      //generals
+      t('Save') => 'btn-primary',
+      t('Apply') => 'btn-primary',
+      t('Create') => 'btn-primary',
+      t('Confirm') => 'btn-primary',
+      t('Submit') => 'btn-primary',
+      t('Export') => 'btn-primary',
+      t('Import') => 'btn-primary',
+      t('Restore') => 'btn-primary',
+      t('Rebuild') => 'btn-primary',
+      t('Search') => 'btn-primary',
+      t('Add') => 'btn-info',
+      t('Update') => 'btn-info',
+      t('Delete') => 'btn-danger',
+      t('Remove') => 'btn-danger',
+    );
+    foreach ($classes as $search => $class) {
+      if (strpos($vars['element']['#value'], $search) !== FALSE) {
+        $vars['element']['#attributes']['class'][] = $class;
+        break;
+      }
+    }
+  }
 }

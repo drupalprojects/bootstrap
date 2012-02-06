@@ -15,6 +15,14 @@ foreach ($modules as $module) {
   }    
 }
 
+function twitter_bootstrap_theme() {
+  return array(
+    'twitter_bootstrap_navigation' => array(
+      'variables' => array('links' => NULL, 'attributes' => NULL),
+    ), 
+  );
+}
+
 /**
  * Preprocess variables for html.tpl.php
  *
@@ -104,6 +112,18 @@ function twitter_bootstrap_preprocess_page(&$variables) {
   $variables['search'] = FALSE;
   if(theme_get_setting('toggle_search'))
     $variables['search'] = drupal_get_form('_twitter_bootstrap_search_form');
+  
+  
+  /*
+  $variables['primary_nav'] = FALSE;  
+  if ($variables['main_menu']) {
+    if(module_exists('twitter_bootstrap_ui')) {
+      $variables['primary_nav'] = theme('twitter_bootstrap_ui_navigation', array('links' => $variables['main_menu']));
+    }else{
+      //$variables['primary_nav'] = theme('links__main_menu', array('links' => $variables['main_menu'], 'attributes' => array('dropdown' => TRUE, 'id' => 'main-menu', 'class' => array('nav'))));
+    }
+  }
+  */
 }
 
 function _twitter_bootstrap_search_form($form, &$form_state) {
