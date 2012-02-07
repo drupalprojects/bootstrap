@@ -46,7 +46,7 @@ function twitter_bootstrap_form($variables) {
 /**
  * Implements hook_form_alter().
  */
-function stanley_form_alter(&$form, &$form_state, $form_id) {
+function twitter_bootstrap_form_alter(&$form, &$form_state, $form_id) {
   // Stack all forms
   $form['#attributes']['class'][] = 'form-stacked';
 }
