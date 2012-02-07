@@ -70,9 +70,3 @@ function twitter_bootstrap_theme_get_info($setting_name, $theme = NULL) {
   
   return $output;
 }
-
-
-function twitter_bootstrap_twitter_bootstrap_navigation($variables) {
-  return "custom nav";
-}
-

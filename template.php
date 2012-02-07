@@ -15,14 +15,6 @@ foreach ($modules as $module) {
   }    
 }
 
-function twitter_bootstrap_theme() {
-  return array(
-    'twitter_bootstrap_navigation' => array(
-      'variables' => array('links' => NULL, 'attributes' => NULL),
-    ), 
-  );
-}
-
 /**
  * Preprocess variables for html.tpl.php
  *
