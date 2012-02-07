@@ -11,23 +11,20 @@ regions[sidebar_first]  = 'Primary'
 regions[sidebar_second] = 'Secondary'
 regions[footer]         = 'Footer'
 
+stylesheets[screen][] = bootstrap/css/bootstrap.min.css
+stylesheets[screen][] = bootstrap/css/bootstrap-responsive.min.css
 stylesheets[screen][] = css/twitter_bootstrap.css
 
-;Settings
-settings[twitter_bootstrap_css_files] =
-"http://twitter.github.com/bootstrap/assets/css/bootstrap.css
-http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css"
+scripts[] = bootstrap/js/bootstrap-alerts.js
+scripts[] = bootstrap/js/bootstrap-tooltip.js
+scripts[] = bootstrap/js/bootstrap-tab.js
+scripts[] = bootstrap/js/bootstrap-button.js
+scripts[] = bootstrap/js/bootstrap-dropdown.js
+scripts[] = bootstrap/js/bootstrap-modal.js
+scripts[] = bootstrap/js/bootstrap-popover.js
+scripts[] = bootstrap/js/bootstrap-scrollspy.js
+scripts[] = bootstrap/js/bootstrap.min.js
 
-settings[twitter_bootstrap_js_files] =
-"http://twitter.github.com/bootstrap/assets/js/bootstrap-alert.js
-http://twitter.github.com/bootstrap/assets/js/bootstrap-tooltip.js
-http://twitter.github.com/bootstrap/assets/js/bootstrap-popover.js
-http://twitter.github.com/bootstrap/assets/js/bootstrap-tab.js
-http://twitter.github.com/bootstrap/assets/js/bootstrap-button.js
-http://twitter.github.com/bootstrap/assets/js/bootstrap-scrollspy.js
-http://twitter.github.com/bootstrap/assets/js/bootstrap-dropdown.js
-http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"
-settings[twitter_bootstrap_jq_file] = "http://twitter.github.com/bootstrap/assets/js/jquery.js"
 settings[toggle_name] = 0
 
 ;Exclude
