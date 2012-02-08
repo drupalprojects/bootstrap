@@ -146,6 +146,16 @@ function twitter_bootstrap_preprocess_page(&$variables) {
       'dropdown' => TRUE,
     ));
   }
+  
+  // Local tasks
+  //_twitter_bootstrap_local_tasks($vars);
+  //print_r($variables['tabs']);
+  //print_r(_twitter_bootstrap_local_tasks());
+  $variables['tabs'] = _twitter_bootstrap_local_tasks($variables['tabs']['#primary']);
+  //print_r($variables['tabs']);
+  //exit;
+  //exit;
+  
 }
 
 function _twitter_bootstrap_search_form($form, &$form_state) {

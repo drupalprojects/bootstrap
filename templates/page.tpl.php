@@ -64,8 +64,8 @@
 		</div>
 		<?php endif; ?>
 		
-		<?php if ($tabs && $tabs['#primary']): ?>
-		  <?php print render($tabs); ?>
+		<?php if ($tabs): ?>
+		  <ul class="primary-tabs nav nav-tabs"><?php print render($tabs); ?></ul>
 		<?php endif; ?>
 	     
 		<?php if ($page['help']): ?> 
