@@ -6,7 +6,7 @@
 			  <span class="icon-bar"></span>
 			  <span class="icon-bar"></span>
 			</a>
-			<a class="brand" href="/">
+			<a class="brand" href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>">
 			  <?php if ($logo): ?>
 				<img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" />
 			  <?php endif; ?>
