@@ -51,32 +51,7 @@ function twitter_bootstrap_item_list($variables) {
  
   return $output;
 }
-/*
-function twitter_bootstrap_status_messages($variables) {
-  $display = $variables['display'];
-  $output = '';
 
-  $status_heading = array(
-    'status' => t('Status message'), 
-    'error' => t('Error message'), 
-    'warning' => t('Warning message'),
-  );
-  foreach (drupal_get_messages($display) as $type => $messages) {
-    if (count($messages) > 1) {
-      foreach ($messages as $message) {
-        $output .= "<div class=\"alert alert-$type\" data-dismiss=\"alert\">\n";
-        $output .= "  <a class=\"close\" href=\"#\">x</a>\n";
-        $output .= '  <p>' . $message . "</p>\n";
-        $output .= " </div>\n";
-      }  
-    }
-    else {
-      $output .= $messages[0];
-    }
-  }
-  return $output;
-}
-*/
 /**
  * Returns HTML for status and/or error messages, grouped by type.
  *
@@ -131,5 +106,116 @@ function _twitter_bootstrap_alter($files, $type) {
 	  }
     }
   }
+  return $output;
+}
+
+/**
+ * Returns HTML for a set of links.
+ */
+function twitter_bootstrap_links($variables) {
+  $links = $variables['links'];
+  $attributes = $variables['attributes'];
+  $heading = $variables['heading'];
+  $dropdown = $variables['dropdown'];
+
+  global $language_url;
+  $output = '';
+
+  if (count($links) > 0) {
+    $output = '';
+    $output .= '<ul' . drupal_attributes($attributes) . '>';
+    
+    // Treat the heading first if it is present to prepend it to the
+    // list of links.
+    if (!empty($heading)) {
+      if (is_string($heading)) {
+        // Prepare the array that will be used when the passed heading
+        // is a string.
+        $heading = array(
+          'text' => $heading,
+          // Set the default level of the heading. 
+          'level' => 'li',
+        );
+      }
+      $output .= '<' . $heading['level'];
+      if (!empty($heading['class'])) {
+        $output .= drupal_attributes(array('class' => $heading['class']));
+      }
+      $output .= '>' . check_plain($heading['text']) . '</' . $heading['level'] . '>';
+    }
+
+    $num_links = count($links);
+    $i = 1;
+	
+    foreach ($links as $key => $link) {
+      $children = array();
+      if(isset($link['below']))
+        $children = $link['below'];
+      
+	  $attributes = array('class' => array($key));
+	  
+	  // Add first, last and active classes to the list of links to help out themers.
+      if ($i == 1) {
+        $attributes['class'][] = 'first';
+      }
+      if ($i == $num_links) {
+        $attributes['class'][] = 'last';
+      }
+      if (isset($link['href']) && ($link['href'] == $_GET['q'] || ($link['href'] == '<front>' && drupal_is_front_page()))
+           && (empty($link['language']) || $link['language']->language == $language_url->language)) {
+        $attributes['class'][] = 'active';
+      }
+	  
+	  if(count($children) > 0 && $dropdown) {
+		$attributes['class'][] = 'dropdown';
+		$link['attributes']['data-toggle'] = 'dropdown';
+		$link['attributes']['class'][] = 'dropdown-toggle';
+      }
+	  
+	  if(!isset($link['attributes']))
+		$link['attributes'] = array();
+		
+	  $class = ($dropdown && count($children) > 0) ? 'dropdown' : NULL;
+	  $output .= '<li' . drupal_attributes(array('class' => array($class))) . '>';
+	  
+	  if (isset($link['href'])) {
+		if(count($children) > 0 && $dropdown) { 
+		  $link['html'] = TRUE;
+		  $link['title'] .= '<b class="caret"></b>';
+		  $output .=  '<a' . drupal_attributes($link['attributes']) . ' href="#">'. $link['title'] .'</a>';
+		}else{
+		// Pass in $link as $options, they share the same keys.
+		 $output .= l($link['title'], $link['href'], $link);
+		}
+	  }
+	  elseif (!empty($link['title'])) {
+	   // Some links are actually not links, but we wrap these in <span> for adding title and class attributes.
+	   if (empty($link['html'])) {
+		 $link['title'] = check_plain($link['title']);
+	   }
+	   $span_attributes = '';
+	   if (isset($link['attributes'])) {
+		 $span_attributes = drupal_attributes($link['attributes']);
+	   }
+	   $output .= '<span' . $span_attributes . '>' . $link['title'] . '</span>';
+	  }
+	  
+	  $i++;
+	  
+	  if(count($children) > 0) {
+		$attributes = array();
+        
+        if($dropdown)
+          $attributes['class'] = array('dropdown-menu');
+		
+		$output .= theme('links', array('links' => $link['below'], 'attributes' => $attributes));
+	  }
+	  
+	  $output .= "</li>\n";	
+    }
+
+    $output .= '</ul>';
+  }
+
   return $output;
 }

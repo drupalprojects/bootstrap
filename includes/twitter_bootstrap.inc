@@ -71,122 +71,23 @@ function twitter_bootstrap_theme_get_info($setting_name, $theme = NULL) {
   return $output;
 }
 
-
-function twitter_bootstrap_clean_navigation($tree) {
+/**
+ * Returns navigational links based on a menu tree
+ */
+function twitter_bootstrap_menu_navigation_links($tree) {
   $result = array();
-  foreach($tree as $id => $item) {
-
+  if(count($tree) > 0) {
+	foreach($tree as $id => $item) {
 	  $new_item = array('title' => $item['link']['title'], 'link_path' => $item['link']['link_path'], 'href' => $item['link']['href']);
-
-	  if ($item['below']) {
-		  $new_item['below'] = twitter_bootstrap_clean_navigation($item['below']);
-	  }
+  
+	  //if (count($item['below']) > 0) {
+		$new_item['below'] = twitter_bootstrap_menu_navigation_links($item['below']);
+	  //}else{
+		//$item['below'] = array();
+	  //}
+	  
 	  $result['menu-'. $item['link']['mlid']] = $new_item;
+	}
   }
   return $result;
-}
-
-function twitter_bootstrap_twitter_bootstrap_link($variables) {
-  $link = $variables['link'];
-  $attributes = $variables['attributes'];
-  $heading = $variables['heading'];
-  $dropdown = $variables['dropdown'];
-  
-  $output = '';
-  $class = ($dropdown && $link['below']) ? 'dropdown' : NULL;
-  $output .= '<li' . drupal_attributes(array('class' => array($class))) . '>';
-  
-  if (isset($link['href'])) {
-   // Pass in $link as $options, they share the same keys.
-   
-  if($link['below']) { 
-	$link['html'] = TRUE;
-	$link['title'] .= '<b class="caret"></b>';
-	$output .=  '<a' . drupal_attributes($link['attributes']) . ' href="#">'. $link['title'] .'</a>';
-  }else{
-   
-   $output .= l($link['title'], $link['href'], $link);
-  }
-  }
-  elseif (!empty($link['title'])) {
-   // Some links are actually not links, but we wrap these in <span> for adding title and class attributes.
-   if (empty($link['html'])) {
-	 $link['title'] = check_plain($link['title']);
-   }
-   $span_attributes = '';
-   if (isset($link['attributes'])) {
-	 $span_attributes = drupal_attributes($link['attributes']);
-   }
-   $output .= '<span' . $span_attributes . '>' . $link['title'] . '</span>';
-  }
-  
-  $i++;
-  
-  if($link['below']) {
-	$attributes = array();
-	$attributes['class'] = array('dropdown-menu');
-	
-	$output .= theme('twitter_bootstrap_links', array('links' => $link['below'], 'attributes' => $attributes));
-  }
-  
-  $output .= "</li>\n";
-  
-  return $output;
-}  
-
-
-function twitter_bootstrap_twitter_bootstrap_links($variables) {
-  $links = $variables['links'];
-  $attributes = $variables['attributes'];
-  $heading = $variables['heading'];
-  $dropdown = $variables['dropdown'];
-  
-  global $language_url;
-  $output = '';
-
-  if (count($links) > 0) {
-    $output = '';
-
-    // Treat the heading first if it is present to prepend it to the
-    // list of links.
-    if (!empty($heading)) {
-      if (is_string($heading)) {
-        // Prepare the array that will be used when the passed heading
-        // is a string.
-        $heading = array(
-          'text' => $heading,
-          // Set the default level of the heading. 
-          'level' => 'h2',
-        );
-      }
-      $output .= '<' . $heading['level'];
-      if (!empty($heading['class'])) {
-        $output .= drupal_attributes(array('class' => $heading['class']));
-      }
-      $output .= '>' . check_plain($heading['text']) . '</' . $heading['level'] . '>';
-    }
-
-    $output .= '<ul' . drupal_attributes($attributes) . '>';
-
-    $num_links = count($links);
-    $i = 1;
-	
-	$has_children = FALSE;
-    foreach ($links as $key => $link) {
-      //$class = array($key);
-	  $attributes = array('class' => array($key));
-      if($link['below'] && $dropdown) {
-		$attributes['class'][] = 'dropdown';
-		$link['attributes']['data-toggle'] = 'dropdown';
-		$link['attributes']['class'][] = 'dropdown-toggle';
-      }
-	  
-	  $output .= theme('twitter_bootstrap_link', array('link' => $link, 'dropdown' => $dropdown, 'attributes' => $attributes));
-
-    }
-
-    $output .= '</ul>';
-  }
-
-  return $output;
 }

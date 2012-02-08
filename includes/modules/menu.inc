@@ -26,7 +26,6 @@ function twitter_bootstrap_menu_tree(&$variables) {
   return '<ul class="nav">' . $variables['tree'] . '</ul>';
 }
 
-
 function twitter_bootstrap_menu_link(array $variables) {
   $element = $variables['element'];
   $sub_menu = '';
@@ -48,7 +47,7 @@ function twitter_bootstrap_menu_link(array $variables) {
 	// auch
 	$element['#href'] = "";
   }
-
+  
   $output = l($element['#title'], $element['#href'], $element['#localized_options']);
   return '<li' . drupal_attributes($element['#attributes']) . '>' . $output . $sub_menu . "</li>\n";
 }

@@ -7,24 +7,19 @@ include_once(dirname(__FILE__) . '/includes/modules/theme.inc');
 include_once(dirname(__FILE__) . '/includes/modules/pager.inc');
 include_once(dirname(__FILE__) . '/includes/modules/form.inc');
 
-/*
 $modules = module_list();
-
 foreach ($modules as $module) {
   if (is_file(drupal_get_path('theme', $theme_key) . '/includes/modules/' . str_replace('_', '-', $module) . '.inc')) {
     include_once(drupal_get_path('theme', $theme_key) . '/includes/modules/' . str_replace('_', '-', $module) . '.inc');
   }    
 }
-*/
 
 function twitter_bootstrap_theme() {
   return array(
-    'twitter_bootstrap_links' => array(
-      'variables' => array('links' => array(), 'attributes' => array(), 'dropdown' => FALSE, 'heading' => NULL),
-    ),
-    'twitter_bootstrap_link' => array(
-      'variables' => array('link' => array(), 'attributes' => NULL, 'dropdown' => FALSE, 'heading' => NULL),
-    ),
+    // Takeover links to support nested lists
+    'links' => array(
+      'variables' => array('links' => array(), 'attributes' => array(), 'heading' => NULL, 'dropdown' => FALSE),
+    ), 
   );
 }
 
@@ -116,10 +111,23 @@ function twitter_bootstrap_preprocess_page(&$variables) {
   if(theme_get_setting('toggle_search'))
     $variables['search'] = drupal_get_form('_twitter_bootstrap_search_form');
 
-  // Custom menu  
-  $main_menu = twitter_bootstrap_clean_navigation(menu_tree_page_data('main-menu'));
-  $variables['primary_nav'] = theme('twitter_bootstrap_links', array('links' => $main_menu, 'dropdown' => TRUE, 'attributes' => array('id' => 'main-menu', 'class' => array('nav'))));
-
+  // Primary nav
+  $variables['main_menu'] = twitter_bootstrap_menu_navigation_links(menu_tree_page_data('main-menu'));
+  $variables['primary_nav'] = theme('links', array(
+    'links' => $variables['main_menu'],
+    'attributes' => array(
+      'id' => 'main-menu',
+      'class' => array('nav'),
+    ),
+    /*
+    'heading' => array(
+      'text' => t('Main menu'),
+      'level' => 'li',
+      'class' => array('nav-header'),
+    ),
+    */
+    'dropdown' => TRUE,
+  ));
 }
 
 function _twitter_bootstrap_search_form($form, &$form_state) {
