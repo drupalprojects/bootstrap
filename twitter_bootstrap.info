@@ -4,7 +4,7 @@ version = VERSION
 core = 7.x
 
 regions[header]         = 'Top Bar'
-regions[highlight]      = 'Highlight'
+regions[highlighted]    = 'Highlighted'
 regions[help]           = 'Help'
 regions[content]        = 'Content'
 regions[sidebar_first]  = 'Primary'
