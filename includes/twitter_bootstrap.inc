@@ -76,21 +76,47 @@ function twitter_bootstrap_theme_get_info($setting_name, $theme = NULL) {
  */
 function twitter_bootstrap_menu_navigation_links($tree) {
   $result = array();
+
   if(count($tree) > 0) {
 	foreach($tree as $id => $item) {
 	  $new_item = array('title' => $item['link']['title'], 'link_path' => $item['link']['link_path'], 'href' => $item['link']['href']);
-  
-	  //if (count($item['below']) > 0) {
-		$new_item['below'] = twitter_bootstrap_menu_navigation_links($item['below']);
-	  //}else{
-		//$item['below'] = array();
-	  //}
-	  
+	  $new_item['below'] = twitter_bootstrap_menu_navigation_links($item['below']);
 	  $result['menu-'. $item['link']['mlid']] = $new_item;
 	}
   }
+  
   return $result;
 }
+
+function twitter_bootstrap_preprocess_twitter_bootstrap_btn_dropdown(&$variables) {
+  // Add default class
+  $variables['attributes']['class'][] = 'btn-group';
+  
+  // Check if its a array of links so we need to theme it first here.
+  if(is_array($variables['links'])) {
+	$variables['links'] = theme('links', array(
+	  'links' => $variables['links'],
+	  'attributes' => array(
+		'class' => array('dropdown-menu'),
+	  ),
+	));
+  }
+}  
+
+function twitter_bootstrap_twitter_bootstrap_btn_dropdown($variables) {
+  // Type class
+  $type_class = '';
+  if(isset($variables['type']))
+	$type_class = ' btn-'. $variables['type'];
+  
+  return '<div'. drupal_attributes($variables['attributes']) .'>
+	<a class="btn'. $type_class .'" href="#">'. check_plain($variables['label']) .'</a>
+	<a class="btn'. $type_class .' dropdown-toggle" data-toggle="dropdown" href="#">
+	  <span class="caret"></span>
+	</a>
+	' . $variables['links'] . '
+  </div>';
+}  
 
 function twitter_bootstrap_progress_bar($variables) {
   $variables['attributes']['class'][] = 'progress';

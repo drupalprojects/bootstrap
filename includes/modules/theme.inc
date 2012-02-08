@@ -116,7 +116,7 @@ function twitter_bootstrap_twitter_bootstrap_links($variables) {
   $links = $variables['links'];
   $attributes = $variables['attributes'];
   $heading = $variables['heading'];
-  $dropdown = $variables['dropdown'];
+  //$dropdown = $variables['dropdown'];
 
   global $language_url;
   $output = '';
@@ -166,7 +166,7 @@ function twitter_bootstrap_twitter_bootstrap_links($variables) {
         $attributes['class'][] = 'active';
       }
 	  
-	  if(count($children) > 0 && $dropdown) {
+	  if(count($children) > 0) {
 		$attributes['class'][] = 'dropdown';
 		$link['attributes']['data-toggle'] = 'dropdown';
 		$link['attributes']['class'][] = 'dropdown-toggle';
@@ -175,11 +175,11 @@ function twitter_bootstrap_twitter_bootstrap_links($variables) {
 	  if(!isset($link['attributes']))
 		$link['attributes'] = array();
 		
-	  $class = ($dropdown && count($children) > 0) ? 'dropdown' : NULL;
+	  $class = (count($children) > 0) ? 'dropdown' : NULL;
 	  $output .= '<li' . drupal_attributes(array('class' => array($class))) . '>';
 	  
 	  if (isset($link['href'])) {
-		if(count($children) > 0 && $dropdown) { 
+		if(count($children) > 0) { 
 		  $link['html'] = TRUE;
 		  $link['title'] .= '<b class="caret"></b>';
 		  $output .=  '<a' . drupal_attributes($link['attributes']) . ' href="#">'. $link['title'] .'</a>';
@@ -204,9 +204,7 @@ function twitter_bootstrap_twitter_bootstrap_links($variables) {
 	  
 	  if(count($children) > 0) {
 		$attributes = array();
-        
-        if($dropdown)
-          $attributes['class'] = array('dropdown-menu');
+        $attributes['class'] = array('dropdown-menu');
 		
 		$output .= theme('twitter_bootstrap_links', array('links' => $children, 'attributes' => $attributes));
 	  }

@@ -15,11 +15,16 @@ foreach ($modules as $module) {
   }    
 }
 
+/**
+ * hook_theme() 
+ */
 function twitter_bootstrap_theme() {
   return array(
-    // Takeover links to support nested lists
     'twitter_bootstrap_links' => array(
-      'variables' => array('links' => array(), 'attributes' => array(), 'heading' => NULL, 'dropdown' => FALSE),
+      'variables' => array('links' => array(), 'attributes' => array(), 'heading' => NULL),
+    ),
+    'twitter_bootstrap_btn_dropdown' => array(
+      'variables' => array('links' => array(), 'attributes' => array(), 'type' => NULL),
     ), 
   );
 }
@@ -126,7 +131,6 @@ function twitter_bootstrap_preprocess_page(&$variables) {
         'id' => 'main-menu',
         'class' => array('nav'),
       ),
-      'dropdown' => TRUE,
     ));
   }
   
@@ -138,13 +142,14 @@ function twitter_bootstrap_preprocess_page(&$variables) {
     $variables['secondary_menu'] = twitter_bootstrap_menu_navigation_links($tree);
     
     // Build list
-    $variables['secondary_nav'] = theme('twitter_bootstrap_links', array(
+    $variables['secondary_nav'] = theme('twitter_bootstrap_btn_dropdown', array(
       'links' => $variables['secondary_menu'],
+      'label' => t("User Menu"),
+      'type' => 'success',
       'attributes' => array(
-        'id' => 'main-menu',
-        'class' => array('nav', 'pull-right'),
+        'id' => 'user-menu',
+        'class' => array('pull-right'),
       ),
-      'dropdown' => TRUE,
     ));
   }
   
