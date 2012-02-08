@@ -1,42 +1,53 @@
-  <div id="navbar" class="navbar navbar-fixed-top">
-	 <div class="navbar-inner">
-	   <div class="container">
-		    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-			  <span class="icon-bar"></span>
-			  <span class="icon-bar"></span>
-			  <span class="icon-bar"></span>
-			</a>
-			<a class="brand" href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>">
-			  <?php if ($logo): ?>
-				<img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" />
-			  <?php endif; ?>
-			  
-			  <?php if ($site_name): ?>
-				<?php print $site_name; ?>
-			  <?php endif; ?>	
-			</a>
-		  
-		  <div class="nav-collapse">
-			<?php if ($primary_nav): ?>
-			  <?php print $primary_nav; ?>
-			<?php endif; ?>
-	
-		  	<?php if ($search): ?>
-			  <?php if ($search): print render($search); endif; ?>
-			<?php endif; ?>
-		  
-			<?php if ($secondary_nav): ?>
-			  <?php print $secondary_nav; ?>
-			<?php endif; ?>
-
-		  </div>
-		  
-		  <?php print render($page['header']); ?>
-	   </div>
-	 </div>
-  </div>
-  
   <div class="container">
+
+    <header role="banner">
+      <?php if ($logo): ?>
+        <a class="brand" href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>">
+          <img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" />
+        </a>
+      <?php endif; ?>
+      <?php if ($site_name || $site_slogan): ?>
+        <hgroup>
+          <?php if ($site_name): ?>
+            <h1 class="page-header">
+              <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>"><span><?php print $site_name; ?></span></a>
+              <?php if ($site_slogan): ?>
+                <small><?php print $site_slogan; ?></small>
+              <?php endif; ?>
+            </h1>
+          <?php endif; ?>
+        </hgroup>
+      <?php endif; ?>
+  
+      <?php print render($page['header']); ?>
+      <div id="navbar" class="navbar">
+        <div class="navbar-inner">
+          <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+          
+            <div class="nav-collapse">
+              <?php if ($primary_nav): ?>
+                <?php print $primary_nav; ?>
+              <?php endif; ?>
+          
+              <?php if ($search): ?>
+                <?php if ($search): print render($search); endif; ?>
+              <?php endif; ?>
+              
+              <?php if ($secondary_nav): ?>
+                <?php print $secondary_nav; ?>
+              <?php endif; ?>
+            </div>
+          
+            <?php print render($page['header']); ?>
+          </div>
+        </div>
+      </div>    
+    </header> <!-- /#header -->
 	
 	<div class="row-fluid">
  
