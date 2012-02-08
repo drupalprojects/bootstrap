@@ -112,7 +112,7 @@ function _twitter_bootstrap_alter($files, $type) {
 /**
  * Returns HTML for a set of links.
  */
-function twitter_bootstrap_links($variables) {
+function twitter_bootstrap_twitter_bootstrap_links($variables) {
   $links = $variables['links'];
   $attributes = $variables['attributes'];
   $heading = $variables['heading'];
@@ -208,7 +208,7 @@ function twitter_bootstrap_links($variables) {
         if($dropdown)
           $attributes['class'] = array('dropdown-menu');
 		
-		$output .= theme('links', array('links' => $children, 'attributes' => $attributes));
+		$output .= theme('twitter_bootstrap_links', array('links' => $children, 'attributes' => $attributes));
 	  }
 	  
 	  $output .= "</li>\n";	

@@ -6,6 +6,7 @@ include_once(dirname(__FILE__) . '/includes/twitter_bootstrap.inc');
 include_once(dirname(__FILE__) . '/includes/modules/theme.inc');
 include_once(dirname(__FILE__) . '/includes/modules/pager.inc');
 include_once(dirname(__FILE__) . '/includes/modules/form.inc');
+include_once(dirname(__FILE__) . '/includes/modules/admin.inc');
 
 $modules = module_list();
 foreach ($modules as $module) {
@@ -13,16 +14,16 @@ foreach ($modules as $module) {
     include_once(drupal_get_path('theme', $theme_key) . '/includes/modules/' . str_replace('_', '-', $module) . '.inc');
   }    
 }
-/*
+
 function twitter_bootstrap_theme() {
   return array(
     // Takeover links to support nested lists
-    'links' => array(
+    'twitter_bootstrap_links' => array(
       'variables' => array('links' => array(), 'attributes' => array(), 'heading' => NULL, 'dropdown' => FALSE),
     ), 
   );
 }
-*/
+
 /**
  * Preprocess variables for html.tpl.php
  *
@@ -119,7 +120,7 @@ function twitter_bootstrap_preprocess_page(&$variables) {
     $variables['main_menu'] = twitter_bootstrap_menu_navigation_links($tree);
     
     // Build list
-    $variables['primary_nav'] = theme('links', array(
+    $variables['primary_nav'] = theme('twitter_bootstrap_links', array(
       'links' => $variables['main_menu'],
       'attributes' => array(
         'id' => 'main-menu',
@@ -137,7 +138,7 @@ function twitter_bootstrap_preprocess_page(&$variables) {
     $variables['secondary_menu'] = twitter_bootstrap_menu_navigation_links($tree);
     
     // Build list
-    $variables['secondary_nav'] = theme('links', array(
+    $variables['secondary_nav'] = theme('twitter_bootstrap_links', array(
       'links' => $variables['secondary_menu'],
       'attributes' => array(
         'id' => 'main-menu',
@@ -148,7 +149,7 @@ function twitter_bootstrap_preprocess_page(&$variables) {
   }
   
   // Replace tabs with dropw down version
-  $variables['tabs'] = _twitter_bootstrap_local_tasks($vars['tabs']['#primary']);
+  $variables['tabs'] = _twitter_bootstrap_local_tasks($variables['tabs']['#primary']);
 }
 
 function _twitter_bootstrap_search_form($form, &$form_state) {

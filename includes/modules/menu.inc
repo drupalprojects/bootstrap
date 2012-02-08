@@ -75,6 +75,9 @@ function twitter_bootstrap_menu_link(array $variables) {
 * Get all primary tasks including subsets
 */
 function _twitter_bootstrap_local_tasks($tabs = FALSE) {
+  if($tabs == '')
+	return $tabs;
+  
   if(!$tabs)
 	$tabs = menu_primary_local_tasks();
   
