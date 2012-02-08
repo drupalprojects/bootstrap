@@ -25,9 +25,10 @@
 			  <?php if ($search): print render($search); endif; ?>
 			<?php endif; ?>
 		  
-			<?php if ($secondary_menu): ?>
-			  <?php print theme('links__system_main_menu', array('links' => $secondary_menu, 'attributes' => array('id' => 'secondary-menu', 'class' => array('nav', 'pull-right')))); ?>
+			<?php if ($secondary_nav): ?>
+			  <?php print $secondary_nav; ?>
 			<?php endif; ?>
+
 		  </div>
 		  
 		  <?php print render($page['header']); ?>

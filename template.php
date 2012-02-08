@@ -112,22 +112,38 @@ function twitter_bootstrap_preprocess_page(&$variables) {
     $variables['search'] = drupal_get_form('_twitter_bootstrap_search_form');
 
   // Primary nav
-  $variables['main_menu'] = twitter_bootstrap_menu_navigation_links(menu_tree_page_data('main-menu'));
-  $variables['primary_nav'] = theme('links', array(
-    'links' => $variables['main_menu'],
-    'attributes' => array(
-      'id' => 'main-menu',
-      'class' => array('nav'),
-    ),
-    /*
-    'heading' => array(
-      'text' => t('Main menu'),
-      'level' => 'li',
-      'class' => array('nav-header'),
-    ),
-    */
-    'dropdown' => TRUE,
-  ));
+  if($variables['main_menu']) {
+    // Build links
+    $tree = menu_tree_page_data(variable_get('menu_main_links_source', 'main-menu'));
+    $variables['main_menu'] = twitter_bootstrap_menu_navigation_links($tree);
+    
+    // Build list
+    $variables['primary_nav'] = theme('links', array(
+      'links' => $variables['main_menu'],
+      'attributes' => array(
+        'id' => 'main-menu',
+        'class' => array('nav'),
+      ),
+      'dropdown' => TRUE,
+    ));
+  }
+  
+  // Secondary nav
+  if($variables['secondary_menu']) {
+    // Build links
+    $tree = menu_tree_page_data(variable_get('menu_secondary_links_source', 'user-menu'));
+    $variables['secondary_menu'] = twitter_bootstrap_menu_navigation_links($tree);
+    
+    // Build list
+    $variables['secondary_nav'] = theme('links', array(
+      'links' => $variables['secondary_menu'],
+      'attributes' => array(
+        'id' => 'main-menu',
+        'class' => array('nav', 'pull-right'),
+      ),
+      'dropdown' => TRUE,
+    ));
+  }
 }
 
 function _twitter_bootstrap_search_form($form, &$form_state) {

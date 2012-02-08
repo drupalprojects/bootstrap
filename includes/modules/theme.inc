@@ -208,7 +208,7 @@ function twitter_bootstrap_links($variables) {
         if($dropdown)
           $attributes['class'] = array('dropdown-menu');
 		
-		$output .= theme('links', array('links' => $link['below'], 'attributes' => $attributes));
+		$output .= theme('links', array('links' => $children, 'attributes' => $attributes));
 	  }
 	  
 	  $output .= "</li>\n";	
