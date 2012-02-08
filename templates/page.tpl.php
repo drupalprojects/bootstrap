@@ -39,7 +39,7 @@
   <div class="container">
 	
 	<div class="row-fluid">
-	  
+ 
 	  <?php print $messages; ?>
 	  
 	  <?php if ($page['highlight']): ?>
