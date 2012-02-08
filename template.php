@@ -112,6 +112,7 @@ function twitter_bootstrap_preprocess_page(&$variables) {
     $variables['search'] = drupal_get_form('_twitter_bootstrap_search_form');
 
   // Primary nav
+  $variables['primary_nav'] = FALSE;
   if($variables['main_menu']) {
     // Build links
     $tree = menu_tree_page_data(variable_get('menu_main_links_source', 'main-menu'));
@@ -129,6 +130,7 @@ function twitter_bootstrap_preprocess_page(&$variables) {
   }
   
   // Secondary nav
+  $variables['secondary_nav'] = FALSE;
   if($variables['secondary_menu']) {
     // Build links
     $tree = menu_tree_page_data(variable_get('menu_secondary_links_source', 'user-menu'));
