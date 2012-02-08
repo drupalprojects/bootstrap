@@ -219,3 +219,8 @@ function twitter_bootstrap_links($variables) {
 
   return $output;
 }
+
+function twitter_bootstrap_preprocess_table(&$variables) {
+  $variables['attributes']['class'][] = 'table';
+  $variables['attributes']['class'][] = 'table-striped';
+}

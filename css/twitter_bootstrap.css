@@ -19,9 +19,15 @@ body.toolbar .navbar {
 }
 
 /* Admin toolbar fix */
-div#admin-toolbar.vertical {
-  top:40px;
+body.admin-expanded.admin-vertical.admin-nw .navbar,
+body.admin-expanded.admin-vertical.admin-sw .navbar {
+  margin-left: 260px;
 }
+
+div#admin-toolbar {
+  z-index: 500;
+}
+
 
 /* System base fix */
 .container-inline div, .container-inline label {

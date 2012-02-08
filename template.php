@@ -13,7 +13,7 @@ foreach ($modules as $module) {
     include_once(drupal_get_path('theme', $theme_key) . '/includes/modules/' . str_replace('_', '-', $module) . '.inc');
   }    
 }
-
+/*
 function twitter_bootstrap_theme() {
   return array(
     // Takeover links to support nested lists
@@ -22,7 +22,7 @@ function twitter_bootstrap_theme() {
     ), 
   );
 }
-
+*/
 /**
  * Preprocess variables for html.tpl.php
  *
