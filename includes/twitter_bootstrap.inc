@@ -91,3 +91,12 @@ function twitter_bootstrap_menu_navigation_links($tree) {
   }
   return $result;
 }
+
+function twitter_bootstrap_progress_bar($variables) {
+  $variables['attributes']['class'][] = 'progress';
+  
+  return "<div". drupal_attributes($variables['attributes']) .">
+  <div class=\"bar\"
+       style=\"width: ". $variables['percent'] ."%;\"></div>
+  </div>";
+}
