@@ -19,7 +19,6 @@
       </hgroup>
     <?php endif; ?>
 
-    <?php print render($page['header']); ?>
     <div id="navbar" class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
