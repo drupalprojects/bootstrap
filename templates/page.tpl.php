@@ -69,7 +69,7 @@
       <?php endif; ?>
       <?php print render($title_suffix); ?>
       <?php print $messages; ?>
-      <?php if (!empty($tabs['#primary'])): ?>
+      <?php if ($tabs && $tabs['#primary']): ?>
         <?php print render($tabs); ?>
       <?php endif; ?>
       <?php if ($page['help']): ?> 
