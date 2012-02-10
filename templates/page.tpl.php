@@ -21,7 +21,7 @@
 
     <div id="navbar" class="navbar">
       <div class="navbar-inner">
-        <div class="container">
+        <div class="container" style="width: auto;">
           <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
           <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
             <span class="icon-bar"></span>
