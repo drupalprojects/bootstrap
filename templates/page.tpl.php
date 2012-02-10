@@ -1,6 +1,6 @@
 <div class="container">
 
-  <header role="banner">
+  <header role="banner" id="header">
     <?php if ($logo): ?>
       <a class="brand" href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>">
         <img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" />
@@ -19,7 +19,7 @@
       </hgroup>
     <?php endif; ?>
 
-    <div id="navbar" class="navbar">
+    <nav id="navbar" role="navigation" class="navbar">
       <div class="navbar-inner">
         <div class="container" style="width: auto;">
           <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
@@ -44,8 +44,10 @@
           </div>         
         </div>
       </div>
-    </div>
-    <?php print render($page['header']); ?>   
+    </nav>
+	
+    <?php print render($page['header']); ?>
+	
   </header> <!-- /#header -->
 	
 	<div class="row">

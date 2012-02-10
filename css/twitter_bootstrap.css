@@ -1,6 +1,13 @@
-body {
-  padding-top: 60px;
-  padding-bottom: 40px;
+#header {
+  padding: 2em 0 0;
+}
+#header .brand {
+  float: left;
+  margin: 0 1em 2em 0;
+}
+
+#navbar {
+  clear: both;
 }
 
 /* Fix Toolbar for .navbar-fixed-top */
