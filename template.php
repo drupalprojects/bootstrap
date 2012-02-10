@@ -166,7 +166,11 @@ function twitter_bootstrap_preprocess_page(&$variables) {
 }
 
 function _twitter_bootstrap_search_form($form, &$form_state) {
+  // Get custom search form for now
   $form = search_form($form, &$form_state);
+  //print_r($form);
+  //exit;
+  // Cleanup
   $form['#attributes']['class'][] = 'navbar-search';
   $form['#attributes']['class'][] = 'pull-left';
   $form['basic']['keys']['#title'] = '';
@@ -174,6 +178,14 @@ function _twitter_bootstrap_search_form($form, &$form_state) {
   $form['basic']['keys']['#attributes']['class'][] = 'span2';
   $form['basic']['keys']['#attributes']['placeholder'] = t('Search');
   unset($form['basic']['submit']);
+  unset($form['basic']['#type']);
+  unset($form['basic']['#attributes']);
+  $form += $form['basic'];
+  unset($form['basic']);
+  //print_r($form);
+  //exit;
+  
+  //$form['basic']
 
   return $form;
 }

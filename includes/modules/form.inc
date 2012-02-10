@@ -24,7 +24,7 @@ function twitter_bootstrap_button(&$vars) {
  *     Properties used: #action, #method, #attributes, #children
  *
  * @ingroup themeable
-
+ */
 function twitter_bootstrap_form($variables) {
   $element = $variables['element'];
   if (isset($element['#action'])) {
@@ -35,13 +35,10 @@ function twitter_bootstrap_form($variables) {
   if (empty($element['#attributes']['accept-charset'])) {
     $element['#attributes']['accept-charset'] = "UTF-8";
   }
-
-  $element['#attributes']['class'][] = "form-stacked";
   
-  // Anonymous DIV to satisfy XHTML compliance.
   return '<form' . drupal_attributes($element['#attributes']) . '>' . $element['#children'] . '</form>';
 }
- */
+
 
 /**
  * Implements hook_form_alter().
@@ -65,13 +62,18 @@ function twitter_bootstrap_form_element($variables) {
   // Add clearfix class
   $attributes['class'][] = "control-group";
   
+  // Check for errors and set correct error class
+  if (isset($element['#parents']) && form_get_error($element)) {
+    $attributes['class'][] = 'error';
+  }
+  
   $output = '<div' . drupal_attributes($attributes) . '>' . "\n";
-
+  
   // If #title is not set, we don't display any label or required marker.
   if (!isset($element['#title'])) {
     $element['#title_display'] = 'none';
   }
-  
+
   $prefix = isset($element['#field_prefix']) ? '<span class="field-prefix">' . $element['#field_prefix'] . '</span> ' : '';
   $suffix = isset($element['#field_suffix']) ? ' <span class="field-suffix">' . $element['#field_suffix'] . '</span>' : '';
   
@@ -79,7 +81,7 @@ function twitter_bootstrap_form_element($variables) {
   if (!empty($element['#description'])) {
     $description = '<p class="help-block">' . $element['#description'] . "</p>\n";
   }
-  
+ 
   switch ($element['#title_display']) {
     case 'before':
     case 'invisible':
@@ -103,6 +105,12 @@ function twitter_bootstrap_form_element($variables) {
 
   return $output;
 }
+
+/*
+function twitter_bootstrap_preprocess_textfield($variables) {
+
+}
+*/
 
 /**
  * Preprocessor for theme('button').
