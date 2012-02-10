@@ -24,7 +24,11 @@ function twitter_bootstrap_button(&$vars) {
  *     Properties used: #action, #method, #attributes, #children
  *
  * @ingroup themeable
- */
+ 
+
+function twitter_bootstrap_preprocess_form(&$variables) {
+}  
+
 function twitter_bootstrap_form($variables) {
   $element = $variables['element'];
   if (isset($element['#action'])) {
@@ -35,15 +39,28 @@ function twitter_bootstrap_form($variables) {
   if (empty($element['#attributes']['accept-charset'])) {
     $element['#attributes']['accept-charset'] = "UTF-8";
   }
-  
+
   return '<form' . drupal_attributes($element['#attributes']) . '>' . $element['#children'] . '</form>';
 }
-
+*/
 
 /**
  * Implements hook_form_alter().
  */
 function twitter_bootstrap_form_alter(&$form, &$form_state, $form_id) {
+  // Id's of forms that should be ignored
+  // Make this configurable?
+  $form_ids = array(
+    'node_form',
+    'system_site_information_settings',
+    'user_profile_form',
+  );
+  
+  // Only wrap in container for certain form
+  if(!in_array($form['#form_id'], $form_ids) && !isset($form['#node_edit_form']))
+    $form['actions']['#theme_wrappers'] = array();
+    //unset($form['actions']['#type']);
+  
   // Stack all forms
   $form['#attributes']['class'][] = 'form-stacked';
 }
@@ -52,7 +69,7 @@ function twitter_bootstrap_form_element($variables) {
   $element = &$variables['element'];
   // This is also used in the installer, pre-database setup.
   $t = get_t();
-
+ 
   // This function is invoked as theme wrapper, but the rendered form element
   // may not necessarily have been processed by form_builder().
   $element += array(
