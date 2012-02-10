@@ -165,6 +165,7 @@ function twitter_bootstrap_preprocess_page(&$variables) {
   
   // Replace tabs with dropw down version
   $variables['tabs'] = _twitter_bootstrap_local_tasks($variables['tabs']['#primary']);
+  //print_r($variables['tabs']);
 }
 
 function _twitter_bootstrap_search_form($form, &$form_state) {
