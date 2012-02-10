@@ -7,9 +7,9 @@
       </a>
     <?php endif; ?>
     <?php if ($site_name || $site_slogan): ?>
-      <hgroup>
+      <hgroup id="site-name-slogan">
         <?php if ($site_name): ?>
-          <h1 class="page-header">
+          <h1>
             <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>"><span><?php print $site_name; ?></span></a>
             <?php if ($site_slogan): ?>
               <small><?php print $site_slogan; ?></small>

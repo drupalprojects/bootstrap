@@ -1,9 +1,15 @@
 #header {
   padding: 2em 0 0;
 }
+
 #header .brand {
   float: left;
   margin: 0 1em 2em 0;
+}
+
+#header #site-name-slogan {
+  float: left;
+  margin: 0 0 2em;
 }
 
 #navbar {
