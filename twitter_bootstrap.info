@@ -23,7 +23,6 @@ scripts[] = bootstrap/js/bootstrap-dropdown.js
 scripts[] = bootstrap/js/bootstrap-modal.js
 scripts[] = bootstrap/js/bootstrap-popover.js
 scripts[] = bootstrap/js/bootstrap-scrollspy.js
-scripts[] = bootstrap/js/bootstrap.min.js
 
 settings[toggle_name] = 0
 

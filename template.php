@@ -8,12 +8,20 @@ include_once(dirname(__FILE__) . '/includes/modules/pager.inc');
 include_once(dirname(__FILE__) . '/includes/modules/form.inc');
 include_once(dirname(__FILE__) . '/includes/modules/admin.inc');
 
+
+// Load module include files
 $modules = module_list();
 foreach ($modules as $module) {
   if (is_file(drupal_get_path('theme', $theme_key) . '/includes/modules/' . str_replace('_', '-', $module) . '.inc')) {
     include_once(drupal_get_path('theme', $theme_key) . '/includes/modules/' . str_replace('_', '-', $module) . '.inc');
   }    
 }
+
+// Lame attempt to check if bootstrap is present
+// This needs to be doen correctly one time
+if (!is_file(drupal_get_path('theme', $theme_key) . '/bootstrap/css/bootstrap.min.css')) {
+  drupal_set_message(t("Make sure the bootstrap core files are under the theme directory [theme-dir]/bootstrap/.."), 'error');
+}  
 
 /**
  * hook_theme() 

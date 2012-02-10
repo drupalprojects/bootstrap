@@ -19,7 +19,7 @@
       </hgroup>
     <?php endif; ?>
 
-    <div id="navbar" class="navbar navbar-fixed-top">
+    <div id="navbar" class="navbar">
       <div class="navbar-inner">
         <div class="container">
           <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
