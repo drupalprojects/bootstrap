@@ -167,9 +167,12 @@ function twitter_bootstrap_preprocess_page(&$variables) {
 
 function _twitter_bootstrap_search_form($form, &$form_state) {
   $form = search_form($form, &$form_state);
-  $form['#attributes']['class'][] = 'form-search';
-  $form['#attributes']['class'][] = 'pull-left';  
+  $form['#attributes']['class'][] = 'navbar-search';
+  $form['#attributes']['class'][] = 'pull-left';
   $form['basic']['keys']['#title'] = '';
+  $form['basic']['keys']['#attributes']['class'][] = 'search-query';
+  $form['basic']['keys']['#attributes']['class'][] = 'span2';
+  $form['basic']['keys']['#attributes']['placeholder'] = t('Search');
   unset($form['basic']['submit']);
 
   return $form;

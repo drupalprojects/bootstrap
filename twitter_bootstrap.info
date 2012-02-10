@@ -25,6 +25,7 @@ scripts[] = bootstrap/js/bootstrap-popover.js
 scripts[] = bootstrap/js/bootstrap-scrollspy.js
 
 settings[toggle_name] = 0
+settings[toggle_search] = 1
 
 ;Exclude
 ;javascript
