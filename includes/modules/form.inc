@@ -75,7 +75,7 @@ function twitter_bootstrap_form_element($variables) {
   $element += array(
     '#title_display' => 'before',
   );
-  
+
   // Add clearfix class
   $attributes['class'][] = "control-group";
   
@@ -99,22 +99,24 @@ function twitter_bootstrap_form_element($variables) {
     $description = '<p class="help-block">' . $element['#description'] . "</p>\n";
   }
  
+  //print_r($element);
+   
   switch ($element['#title_display']) {
     case 'before':
     case 'invisible':
       $output .= ' ' . theme('form_element_label', $variables);
-      $output .= '<div class="controls"> ' . $prefix . $element['#children'] . $suffix . $description ."</div>\n";
+      $output .= "<div class=\"controls\">\n " . $prefix . $element['#children'] . $suffix . $description ."</div>\n";
       break;
 
     case 'after':
-      $output .= ' ' . $prefix . $element['#children'] . $suffix;
-      $output .= '<div class="controls"> ' . theme('form_element_label', $variables) . $description ."</div>\n";
+      //$output .= ' ' . $prefix . $element['#children'] . $suffix;
+      $output .= "<div class=\"controls\">\n " . $prefix . $element['#children'] . $suffix ."\n ". $t('!title !required', array('!title' => $element['#title'], '!required' => $element['#required'])) ."</div>\n"; // Quick fix
       break;
 
     case 'none':
     case 'attribute':
       // Output no label and no required marker, only the children.
-      $output .= '<div class="controls"> ' . $prefix . $element['#children'] . $suffix . $description ."</div>\n";
+      $output .= "<div class=\"controls\">\n " . $prefix . $element['#children'] . $suffix . $description ."</div>\n";
       break;
   }
 
