@@ -84,7 +84,7 @@ function twitter_bootstrap_form_element($variables) {
     $attributes['class'][] = 'error';
   }
   
-  $output = '<div' . drupal_attributes($attributes) . '>' . "\n";
+ // $output = '<div' . drupal_attributes($attributes) . '>' . "\n";
   
   // If #title is not set, we don't display any label or required marker.
   if (!isset($element['#title'])) {
@@ -98,18 +98,16 @@ function twitter_bootstrap_form_element($variables) {
   if (!empty($element['#description'])) {
     $description = '<p class="help-block">' . $element['#description'] . "</p>\n";
   }
- 
-  //print_r($element);
    
   switch ($element['#title_display']) {
     case 'before':
     case 'invisible':
       $output .= ' ' . theme('form_element_label', $variables);
-      $output .= "<div class=\"controls\">\n " . $prefix . $element['#children'] . $suffix . $description ."</div>\n";
+      //$output .= "<div class=\"controls\">\n " . $prefix . $element['#children'] . $suffix . $description ."</div>\n";
+      $output .= $prefix . $element['#children'] . $suffix . $description ;
       break;
 
     case 'after':
-      //$output .= ' ' . $prefix . $element['#children'] . $suffix;
       $output .= "<div class=\"controls\">\n " . $prefix . $element['#children'] . $suffix ."\n ". $t('!title !required', array('!title' => $element['#title'], '!required' => $element['#required'])) ."</div>\n"; // Quick fix
       break;
 
@@ -120,7 +118,7 @@ function twitter_bootstrap_form_element($variables) {
       break;
   }
 
-  $output .= "</div>\n";
+  //$output .= "</div>\n";
 
   return $output;
 }

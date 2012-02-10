@@ -76,3 +76,8 @@ html.js input.throbbing {
 .navbar-search .control-group {
   margin-bottom:0px;
 }
+
+input.error {
+  color: #B94A48;
+  border-color: #B94A48;
+}
