@@ -145,14 +145,16 @@ function twitter_bootstrap_preprocess_page(&$variables) {
   // Secondary nav
   $variables['secondary_nav'] = FALSE;
   if($variables['secondary_menu']) {
+    $secondary_menu = menu_load(variable_get('menu_secondary_links_source', 'user-menu'));
+    
     // Build links
-    $tree = menu_tree_page_data(variable_get('menu_secondary_links_source', 'user-menu'));
+    $tree = menu_tree_page_data($secondary_menu['menu_name']);
     $variables['secondary_menu'] = twitter_bootstrap_menu_navigation_links($tree);
     
     // Build list
     $variables['secondary_nav'] = theme('twitter_bootstrap_btn_dropdown', array(
       'links' => $variables['secondary_menu'],
-      'label' => t("User Menu"),
+      'label' => $secondary_menu['title'],
       'type' => 'success',
       'attributes' => array(
         'id' => 'user-menu',
@@ -168,8 +170,7 @@ function twitter_bootstrap_preprocess_page(&$variables) {
 function _twitter_bootstrap_search_form($form, &$form_state) {
   // Get custom search form for now
   $form = search_form($form, &$form_state);
-  //print_r($form);
-  //exit;
+
   // Cleanup
   $form['#attributes']['class'][] = 'navbar-search';
   $form['#attributes']['class'][] = 'pull-left';
@@ -182,10 +183,6 @@ function _twitter_bootstrap_search_form($form, &$form_state) {
   unset($form['basic']['#attributes']);
   $form += $form['basic'];
   unset($form['basic']);
-  //print_r($form);
-  //exit;
-  
-  //$form['basic']
 
   return $form;
 }

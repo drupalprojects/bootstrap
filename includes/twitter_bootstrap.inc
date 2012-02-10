@@ -109,9 +109,10 @@ function twitter_bootstrap_twitter_bootstrap_btn_dropdown($variables) {
   if(isset($variables['type']))
 	$type_class = ' btn-'. $variables['type'];
   
+  //<a class="btn'. $type_class .'" href="#">'. check_plain($variables['label']) .'</a>
   return '<div'. drupal_attributes($variables['attributes']) .'>
-	<a class="btn'. $type_class .'" href="#">'. check_plain($variables['label']) .'</a>
 	<a class="btn'. $type_class .' dropdown-toggle" data-toggle="dropdown" href="#">
+	'. check_plain($variables['label']) .'
 	  <span class="caret"></span>
 	</a>
 	' . $variables['links'] . '
