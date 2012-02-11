@@ -184,7 +184,9 @@ function twitter_bootstrap_button($variables) {
   $label = check_plain($element['#value']);
   unset($element['#value']);
   
-  //return '<input' . drupal_attributes($element['#attributes']) . ' />';
-  return '<button' . drupal_attributes($element['#attributes']) . ' />'. $label .'</button>';
+  return '<input' . drupal_attributes($element['#attributes']) . ' />
+  '; // line break adds browser inherited margins
+//  return '<button' . drupal_attributes($element['#attributes']) . ' />'. $label .'</button>
+//  '; // line break adds browser inherited margins
 }
 */
