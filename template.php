@@ -96,8 +96,26 @@ function twitter_bootstrap_preprocess_node(&$vars) {
  *
  * @see block.tpl.php
  */
-function twitter_bootstrap_preprocess_block(&$vars) {
+function twitter_bootstrap_preprocess_block(&$vars, $hook) {
   //$vars['classes_array'][] = 'row';
+  // Use a bare template for the page's main content.
+  if ($variables['block_html_id'] == 'block-system-main') {
+    $variables['theme_hook_suggestions'][] = 'block__no_wrapper';
+  }
+  $variables['title_attributes_array']['class'][] = 'block-title';
+}
+
+/**
+ * Override or insert variables into the block templates.
+ *
+ * @param $variables
+ *   An array of variables to pass to the theme template.
+ * @param $hook
+ *   The name of the template being rendered ("block" in this case.)
+ */
+function bootstrap_process_block(&$variables, $hook) {
+  // Drupal 7 should use a $title variable instead of $block->subject.
+  $variables['title'] = $variables['block']->subject;
 }
 
 /**
