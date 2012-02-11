@@ -92,6 +92,15 @@ function twitter_bootstrap_preprocess_node(&$vars) {
 }
 
 /**
+ * Preprocess variables for region.tpl.php
+ */
+function bootstrap_preprocess_region(&$variables, $hook) {  
+  if ($variables['region'] == 'content') {
+    $variables['theme_hook_suggestions'][] = 'region__no_wrapper';
+  }
+}
+
+/**
  * Preprocess variables for block.tpl.php
  *
  * @see block.tpl.php
