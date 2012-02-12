@@ -43,7 +43,7 @@ function twitter_bootstrap_theme() {
  * @see system_elements()
  * @see html.tpl.php
  */
-function twitter_bootstrap_preprocess_html(&$vars) {
+function twitter_bootstrap_preprocess_html(&$variables) {
   if (module_exists('twitter_bootstrap_ui')) {
     $js = preg_split( '/\r\n|\r|\n/', variable_get('twitter_bootstrap_ui_js_files', twitter_bootstrap_theme_get_setting('twitter_bootstrap_js_files')));
     $css = preg_split( '/\r\n|\r|\n/', variable_get('twitter_bootstrap_ui_css_files', twitter_bootstrap_theme_get_setting('twitter_bootstrap_css_files')));
@@ -61,8 +61,8 @@ function twitter_bootstrap_preprocess_html(&$vars) {
   }
 }
 
-function twitter_bootstrap_breadcrumb($vars) {
-  $breadcrumb = $vars['breadcrumb'];
+function twitter_bootstrap_breadcrumb($variables) {
+  $breadcrumb = $variables['breadcrumb'];
 
   if (!empty($breadcrumb)) {
     $breadcrumbs = '<ul class="breadcrumb">';
@@ -86,9 +86,9 @@ function twitter_bootstrap_breadcrumb($vars) {
  *
  * @see node.tpl.php
  */
-function twitter_bootstrap_preprocess_node(&$vars) {
-  if($vars['teaser'])
-    $vars['classes_array'][] = 'row-fluid';
+function twitter_bootstrap_preprocess_node(&$variables) {
+  if($variables['teaser'])
+    $variables['classes_array'][] = 'row-fluid';
 }
 
 /**
@@ -96,8 +96,26 @@ function twitter_bootstrap_preprocess_node(&$vars) {
  *
  * @see block.tpl.php
  */
-function twitter_bootstrap_preprocess_block(&$vars) {
-  //$vars['classes_array'][] = 'row';
+function twitter_bootstrap_preprocess_block(&$variables, $hook) {
+  //$variables['classes_array'][] = 'row';
+  // Use a bare template for the page's main content.
+  if ($variables['block_html_id'] == 'block-system-main') {
+    $variables['theme_hook_suggestions'][] = 'block__no_wrapper';
+  }
+  $variables['title_attributes_array']['class'][] = 'block-title';
+}
+
+/**
+ * Override or insert variables into the block templates.
+ *
+ * @param $variables
+ *   An array of variables to pass to the theme template.
+ * @param $hook
+ *   The name of the template being rendered ("block" in this case.)
+ */
+function twitter_bootstrap_process_block(&$variables, $hook) {
+  // Drupal 7 should use a $title variable instead of $block->subject.
+  $variables['title'] = $variables['block']->subject;
 }
 
 /**
@@ -188,7 +206,7 @@ function _twitter_bootstrap_search_form($form, &$form_state) {
   return $form;
 }
 
-function twitter_bootstrap_preprocess_form_element(&$vars) {
+function twitter_bootstrap_preprocess_form_element(&$variables) {
 }
 
 /**
@@ -196,15 +214,19 @@ function twitter_bootstrap_preprocess_form_element(&$vars) {
  *
  * @see region.tpl.php
  */
-function twitter_bootstrap_preprocess_region(&$vars) {  
-  if($vars['region'] == "sidebar_first" || $vars['region'] == "sidebar_second")
-    $vars['classes_array'][] = 'span3';
+function twitter_bootstrap_preprocess_region(&$variables, $hook) {  
+  if($variables['region'] == "sidebar_first" || $variables['region'] == "sidebar_second")
+    $variables['classes_array'][] = 'span3';
   
-  if($vars['region'] == "sidebar_second")
-    $vars['classes_array'][] = 'span3';
+  if($variables['region'] == "sidebar_second")
+    $variables['classes_array'][] = 'span3';
     
-  if($vars['region'] == "highlight")
-    $vars['classes_array'][] = 'span12';  
+  if($variables['region'] == "highlight")
+    $variables['classes_array'][] = 'span12';
+
+  if ($variables['region'] == 'content') {
+    $variables['theme_hook_suggestions'][] = 'region__no_wrapper';
+  }
 }
 
 /**
