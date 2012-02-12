@@ -53,7 +53,7 @@
 	<div class="row">
 	  
     <?php if ($page['sidebar_first']): ?>
-      <aside class="span4" role="complementary">
+      <aside role="complementary">
         <?php print render($page['sidebar_first']); ?>
       </aside>  <!-- /#sidebar-first -->
     <?php endif; ?>  
@@ -83,7 +83,7 @@
 	  </section>
 
     <?php if ($page['sidebar_second']): ?>
-      <aside class="span4" role="complementary">
+      <aside role="complementary">
         <?php print render($page['sidebar_second']); ?>
       </aside>  <!-- /#sidebar-second -->
     <?php endif; ?>

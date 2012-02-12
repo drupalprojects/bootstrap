@@ -227,6 +227,10 @@ function twitter_bootstrap_preprocess_region(&$variables, $hook) {
   if ($variables['region'] == 'content') {
     $variables['theme_hook_suggestions'][] = 'region__no_wrapper';
   }
+  
+  // Me likes
+  //if($variables['region'] == "sidebar_first")
+    //$variables['classes_array'][] = 'well';
 }
 
 /**
@@ -238,10 +242,10 @@ function _twitter_bootstrap_content_span($columns = 1) {
       $class = 'span12';
       break;
     case 2:
-      $class = 'span8';
+      $class = 'span9';
       break;
     case 3:
-      $class = 'span5';
+      $class = 'span6';
       break;
   }
   
