@@ -33,7 +33,7 @@
             <?php if ($primary_nav): ?>
               <?php print $primary_nav; ?>
             <?php endif; ?>
-        
+		  
             <?php if ($search): ?>
               <?php if ($search): print render($search); endif; ?>
             <?php endif; ?>

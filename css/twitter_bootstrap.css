@@ -81,3 +81,9 @@ input.error {
   color: #B94A48;
   border-color: #B94A48;
 }
+
+.footer {
+  margin-top: 45px;
+  padding: 35px 0 36px;
+  border-top: 1px solid #E5E5E5;
+}
