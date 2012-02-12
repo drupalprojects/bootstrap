@@ -214,8 +214,10 @@ function twitter_bootstrap_preprocess_form_element(&$variables) {
  *
  * @see region.tpl.php
  */
-function twitter_bootstrap_preprocess_region(&$variables, $hook) {  
-  if($variables['region'] == "sidebar_first" || $variables['region'] == "sidebar_second")
+function twitter_bootstrap_preprocess_region(&$variables, $hook) {
+  // Set span in wrapper for now
+  /*
+  if($variables['region'] == "sidebar_first")
     $variables['classes_array'][] = 'span3';
   
   if($variables['region'] == "sidebar_second")
@@ -223,14 +225,15 @@ function twitter_bootstrap_preprocess_region(&$variables, $hook) {
     
   if($variables['region'] == "highlight")
     $variables['classes_array'][] = 'span12';
-
+  */
+  
   if ($variables['region'] == 'content') {
     $variables['theme_hook_suggestions'][] = 'region__no_wrapper';
   }
   
   // Me likes
-  //if($variables['region'] == "sidebar_first")
-    //$variables['classes_array'][] = 'well';
+  if($variables['region'] == "sidebar_first")
+    $variables['classes_array'][] = 'well';
 }
 
 /**
