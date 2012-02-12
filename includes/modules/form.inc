@@ -76,7 +76,7 @@ function twitter_bootstrap_form_element($variables) {
     '#title_display' => 'before',
   );
 
-  // Add clearfix class
+  // Add control-group class
   $attributes['class'][] = "control-group";
   
   // Check for errors and set correct error class
@@ -84,7 +84,7 @@ function twitter_bootstrap_form_element($variables) {
     $attributes['class'][] = 'error';
   }
   
- // $output = '<div' . drupal_attributes($attributes) . '>' . "\n";
+ $output = '<div' . drupal_attributes($attributes) . '>' . "\n";
   
   // If #title is not set, we don't display any label or required marker.
   if (!isset($element['#title'])) {
@@ -103,8 +103,8 @@ function twitter_bootstrap_form_element($variables) {
     case 'before':
     case 'invisible':
       $output .= ' ' . theme('form_element_label', $variables);
-      //$output .= "<div class=\"controls\">\n " . $prefix . $element['#children'] . $suffix . $description ."</div>\n";
-      $output .= $prefix . $element['#children'] . $suffix . $description ;
+      $output .= "<div class=\"controls\">\n " . $prefix . $element['#children'] . $suffix . $description ."</div>\n";
+      //$output .= $prefix . $element['#children'] . $suffix . $description ;
       break;
 
     case 'after':
@@ -118,7 +118,7 @@ function twitter_bootstrap_form_element($variables) {
       break;
   }
 
-  //$output .= "</div>\n";
+  $output .= "</div>\n";
 
   return $output;
 }

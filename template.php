@@ -18,8 +18,8 @@ foreach ($modules as $module) {
 }
 
 // Lame attempt to check if bootstrap is present
-// This needs to be doen correctly one time
-if (!is_file(drupal_get_path('theme', $theme_key) . '/bootstrap/css/bootstrap.min.css')) {
+// This needs to be done correctly one time
+if (!is_file(drupal_get_path('theme', $theme_key) . '/bootstrap/css/bootstrap.min.css') || !is_file(drupal_get_path('theme', $theme_key) . '/bootstrap/js/bootstrap.min.js')) {
   drupal_set_message(t("Make sure the bootstrap core files are under the theme directory [theme-dir]/bootstrap/.."), 'error');
 }
 
