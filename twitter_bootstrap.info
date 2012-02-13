@@ -11,19 +11,7 @@ regions[sidebar_first]  = 'Primary'
 regions[sidebar_second] = 'Secondary'
 regions[footer]         = 'Footer'
 
-stylesheets[screen][] = bootstrap/css/bootstrap.min.css
-stylesheets[screen][] = bootstrap/css/bootstrap-responsive.min.css
 stylesheets[screen][] = css/twitter_bootstrap.css
-
-scripts[] = bootstrap/js/bootstrap.min.js
-scripts[] = bootstrap/js/bootstrap-alert.js
-scripts[] = bootstrap/js/bootstrap-tooltip.js
-scripts[] = bootstrap/js/bootstrap-tab.js
-scripts[] = bootstrap/js/bootstrap-button.js
-scripts[] = bootstrap/js/bootstrap-dropdown.js
-scripts[] = bootstrap/js/bootstrap-modal.js
-scripts[] = bootstrap/js/bootstrap-popover.js
-scripts[] = bootstrap/js/bootstrap-scrollspy.js
 
 settings[toggle_name] = 0
 settings[toggle_search] = 1

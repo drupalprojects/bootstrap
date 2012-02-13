@@ -17,12 +17,6 @@ foreach ($modules as $module) {
   }    
 }
 
-// Lame attempt to check if bootstrap is present
-// This needs to be done correctly one time
-if (!is_file(drupal_get_path('theme', $theme_key) . '/bootstrap/css/bootstrap.min.css') || !is_file(drupal_get_path('theme', $theme_key) . '/bootstrap/js/bootstrap.min.js')) {
-  drupal_set_message(t("Make sure the bootstrap core files are under the theme directory [theme-dir]/bootstrap/.."), 'error');
-}
-
 /**
  * hook_theme() 
  */
@@ -44,20 +38,39 @@ function twitter_bootstrap_theme() {
  * @see html.tpl.php
  */
 function twitter_bootstrap_preprocess_html(&$variables) {
-  if (module_exists('twitter_bootstrap_ui')) {
-    $js = preg_split( '/\r\n|\r|\n/', variable_get('twitter_bootstrap_ui_js_files', twitter_bootstrap_theme_get_setting('twitter_bootstrap_js_files')));
-    $css = preg_split( '/\r\n|\r|\n/', variable_get('twitter_bootstrap_ui_css_files', twitter_bootstrap_theme_get_setting('twitter_bootstrap_css_files')));
-  }else{
-    $js = preg_split( '/\r\n|\r|\n/', twitter_bootstrap_theme_get_setting('twitter_bootstrap_js_files'));
-    $css = preg_split( '/\r\n|\r|\n/', twitter_bootstrap_theme_get_setting('twitter_bootstrap_css_files'));
-  }
+  global $theme_key;
+  $theme_path = drupal_get_path('theme', $theme_key);
   
-  foreach($js as $file) {
-    drupal_add_js($file, array('scope' => 'footer', 'group' => JS_THEME));
-  }
-  
-  foreach($css as $file) {
-    drupal_add_css($file, array('type' => 'external', 'group' => CSS_THEME));
+  // Try to load the library, otherwise use dropped in files
+  if (!module_exists('libraries') ||
+    (($library = libraries_load('twitter_bootstrap', 'minified')) && empty($library['loaded']))) {
+    //print "kut";
+    // Define our needed files
+    $css = array(
+      $theme_path .'/bootstrap/css/bootstrap.min.css',
+      $theme_path .'/bootstrap/css/bootstrap-responsive.min.css',
+    );
+    
+    $js = array(
+      $theme_path .'/bootstrap/js/bootstrap.min.js',
+    );
+    
+    // Check if files are there
+    $files = $css + $js;
+    foreach($files as $file) {
+      if (!is_file($file)) {
+        drupal_set_message(t("Make sure the bootstrap core files are under the theme directory [theme-dir]/bootstrap/..<br> Or install twitter_bootstrap_ui to use the libraries API"), 'error');
+        break;
+      }
+    }
+    
+    foreach($js as $file) {
+      drupal_add_js($file, array('scope' => 'footer', 'group' => JS_THEME));
+    }
+    
+    foreach($css as $file) {
+      drupal_add_css($file, array('group' => CSS_THEME));
+    }
   }
 }
 
