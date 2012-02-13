@@ -42,9 +42,9 @@ function twitter_bootstrap_preprocess_html(&$variables) {
   $theme_path = drupal_get_path('theme', $theme_key);
   
   // Try to load the library, otherwise use dropped in files
-  if (!module_exists('libraries') ||
+  if (!module_exists('twitter_bootstrap_ui') ||
     (($library = libraries_load('twitter_bootstrap', 'minified')) && empty($library['loaded']))) {
-    //print "kut";
+   
     // Define our needed files
     $css = array(
       $theme_path .'/bootstrap/css/bootstrap.min.css',
