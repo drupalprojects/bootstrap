@@ -1,3 +1,4 @@
+/*
 #header {
   padding: 2em 0 0;
 }
@@ -11,9 +12,12 @@
   float: left;
   margin: 0 0 2em;
 }
-
+*/
 #navbar {
   clear: both;
+}
+body {
+  padding-top:60px;
 }
 
 /* Fix Toolbar for .navbar-fixed-top */
