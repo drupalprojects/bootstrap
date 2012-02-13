@@ -177,14 +177,11 @@ function twitter_bootstrap_button($variables) {
   $element = $variables['element'];
   $label = check_plain($element['#value']);
   element_set_attributes($element, array('id'));
-  
+
   $element['#attributes']['class'][] = 'form-' . $element['#button_type'];
   if (!empty($element['#attributes']['disabled'])) {
     $element['#attributes']['class'][] = 'form-button-disabled';
   }
-  
-  // Dont want it, dont need it 
-  unset($element['#value']);
 
   return '<button' . drupal_attributes($element['#attributes']) . ' />'. $label .'</button>';
 }
