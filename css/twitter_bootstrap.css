@@ -16,6 +16,16 @@
 #navbar {
   clear: both;
 }
+
+#navbar .slogan {
+  float: left;
+  display: block;
+  margin-left:-10px;
+  padding: 11px 0px 0px;
+  font-size:15px;
+  line-height: 1;
+}
+
 body {
   padding-top:60px;
 }

@@ -8,7 +8,6 @@
 		<span class="icon-bar"></span>
 	  </a>
 	  
-	  <header role="banner" id="header">
 	  <?php if ($logo): ?>
 		<a class="brand" href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>">
 		  <img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" />
@@ -18,10 +17,7 @@
 		<hgroup id="site-name-slogan">
 		  <?php if ($site_name): ?>
 			<h1>
-			  <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>"><span><?php print $site_name; ?></span></a>
-			  <?php if ($site_slogan): ?>
-				<small><?php print $site_slogan; ?></small>
-			  <?php endif; ?>
+			  <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" class="brand"><?php print $site_name; ?></a>
 			</h1>
 		  <?php endif; ?>
 		</hgroup>
@@ -46,11 +42,12 @@
 
 <div class="container">
 
-
-
-
+  <header role="banner" id="header">
+	<?php if ( $site_slogan ): ?>
+      <p class="lead"><?php print $site_slogan; ?></p>
+    <?php endif; ?>
 	
-    <?php print render($page['header']); ?>
+	<?php print render($page['header']); ?>
 	
   </header> <!-- /#header -->
 	

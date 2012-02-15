@@ -59,75 +59,133 @@ function twitter_bootstrap_form_alter(&$form, &$form_state, $form_id) {
   // Only wrap in container for certain form
   if(!in_array($form['#form_id'], $form_ids) && !isset($form['#node_edit_form']))
     $form['actions']['#theme_wrappers'] = array();
-    //unset($form['actions']['#type']);
-  
-  // Stack all forms
-  $form['#attributes']['class'][] = 'form-stacked';
-}
+}  
 
-function twitter_bootstrap_form_element($variables) {
+/**
+ * Returns HTML for a form element.
+ */
+function twitter_bootstrap_form_element(&$variables) {
   $element = &$variables['element'];
   // This is also used in the installer, pre-database setup.
   $t = get_t();
- 
+
   // This function is invoked as theme wrapper, but the rendered form element
   // may not necessarily have been processed by form_builder().
   $element += array(
     '#title_display' => 'before',
   );
 
-  // Add control-group class
-  $attributes['class'][] = "control-group";
-  
-  // Check for errors and set correct error class
-  if (isset($element['#parents']) && form_get_error($element)) {
+  // Add element #id for #type 'item'.
+  if (isset($element['#markup']) && !empty($element['#id'])) {
+    $attributes['id'] = $element['#id'];
+  }
+
+  // Add bootstrap class
+  $attributes['class'] = array('control-group');
+
+  // Add an error class to the form wrapper.
+  if ( form_get_error($element) ) {
     $attributes['class'][] = 'error';
   }
-  
- $output = '<div' . drupal_attributes($attributes) . '>' . "\n";
-  
+
+  if (!empty($element['#type'])) {
+    $attributes['class'][] = 'form-type-' . strtr($element['#type'], '_', '-');
+  }
+  if (!empty($element['#name'])) {
+    $attributes['class'][] = 'form-item-' . strtr($element['#name'], array(' ' => '-', '_' => '-', '[' => '-', ']' => ''));
+  }
+  // Add a class for disabled elements to facilitate cross-browser styling.
+  if (!empty($element['#attributes']['disabled'])) {
+    $attributes['class'][] = 'form-disabled';
+  }
+  $output = '<div' . drupal_attributes($attributes) . '>' . "\n";
+
   // If #title is not set, we don't display any label or required marker.
   if (!isset($element['#title'])) {
     $element['#title_display'] = 'none';
   }
-
   $prefix = isset($element['#field_prefix']) ? '<span class="field-prefix">' . $element['#field_prefix'] . '</span> ' : '';
   $suffix = isset($element['#field_suffix']) ? ' <span class="field-suffix">' . $element['#field_suffix'] . '</span>' : '';
-  
-  $description = '';
-  if (!empty($element['#description'])) {
-    $description = '<p class="help-block">' . $element['#description'] . "</p>\n";
-  }
-   
+
   switch ($element['#title_display']) {
     case 'before':
     case 'invisible':
       $output .= ' ' . theme('form_element_label', $variables);
-      $output .= "<div class=\"controls\">\n " . $prefix . $element['#children'] . $suffix . $description ."</div>\n";
-      //$output .= $prefix . $element['#children'] . $suffix . $description ;
+      $output .= '<div class="controls">';
+      $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
       break;
 
     case 'after':
-      $output .= "<div class=\"controls\">\n " . $prefix . $element['#children'] . $suffix ."\n ". $t('!title !required', array('!title' => $element['#title'], '!required' => $element['#required'])) ."</div>\n"; // Quick fix
+      $output .= '<div class="controls">';
+      $variables['#children'] = ' ' . $prefix . $element['#children'] . $suffix;
+      $output .= ' ' . theme('form_element_label', $variables) . "\n";
       break;
 
     case 'none':
     case 'attribute':
       // Output no label and no required marker, only the children.
-      $output .= "<div class=\"controls\">\n " . $prefix . $element['#children'] . $suffix . $description ."</div>\n";
+      $output .= '<div class="controls">';
+      $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
       break;
   }
 
-  $output .= "</div>\n";
+  if ( !empty($element['#description']) ) {
+    $output .= '<p class="help-block">' . $element['#description'] . "</p>\n";
+  }
+
+  $output .= "</div></div>\n";
 
   return $output;
 }
 
-/*
-function twitter_bootstrap_preprocess_textfield($variables) {
+/**
+ * Returns HTML for a form element label and required marker.
+ */
+function twitter_bootstrap_form_element_label(&$variables) {
+  $element = $variables['element'];
+  // This is also used in the installer, pre-database setup.
+  $t = get_t();
 
+  // If title and required marker are both empty, output no label.
+  if ((!isset($element['#title']) || $element['#title'] === '') && empty($element['#required'])) {
+    return '';
+  }
+
+  // If the element is required, a required marker is appended to the label.
+  $required = !empty($element['#required']) ? theme('form_required_marker', array('element' => $element)) : '';
+
+  $title = filter_xss_admin($element['#title']);
+
+  $attributes = array();
+  // Style the label as class option to display inline with the element.
+  if ($element['#title_display'] == 'after') {
+    $attributes['class'][] = 'option';
+    $attributes['class'][] = $element['#type'];
+  }
+  // Show label only to screen readers to avoid disruption in visual flows.
+  elseif ($element['#title_display'] == 'invisible') {
+    $attributes['class'][] = 'element-invisible';
+  }
+
+  if (!empty($element['#id'])) {
+    $attributes['for'] = $element['#id'];
+  }
+
+  // @Bootstrap: Add Bootstrap control-label class.
+  $attributes['class'][] = 'control-label';
+
+  // @Bootstrap: Insert radio and checkboxes inside label elements.
+  $output = '';
+  if ( isset($variables['#children']) ) {
+    $output .= $variables['#children'];
+  }
+
+  // @Bootstrap: Append label
+  $output .= $t('!title !required', array('!title' => $title, '!required' => $required));
+
+  // The leading whitespace helps visually separate fields from inline labels.
+  return ' <label' . drupal_attributes($attributes) . '>' . $output . "</label>\n";
 }
-*/
 
 /**
  * Preprocessor for theme('button').
