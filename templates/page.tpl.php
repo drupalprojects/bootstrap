@@ -72,7 +72,7 @@
       <?php print render($title_suffix); ?>
       <?php print $messages; ?>
       <?php if ($tabs): ?>
-        <ul class="primary-tabs nav nav-tabs"><?php print render($tabs); ?></ul>
+        <?php print render($tabs); ?>
       <?php endif; ?>
       <?php if ($page['help']): ?> 
         <div class="well"><?php print render($page['help']); ?></div>
