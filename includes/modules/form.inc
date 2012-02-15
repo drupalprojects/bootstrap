@@ -83,8 +83,8 @@ function twitter_bootstrap_form_element(&$variables) {
   // Add bootstrap class
   $attributes['class'] = array('control-group');
 
-  // Add an error class to the form wrapper.
-  if ( form_get_error($element) ) {
+  // Check for errors and set correct error class
+  if (isset($element['#parents']) && form_get_error($element)) {
     $attributes['class'][] = 'error';
   }
 
