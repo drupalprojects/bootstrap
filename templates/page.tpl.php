@@ -1,4 +1,4 @@
-<header id="navbar" role="navigation" class="navbar navbar-fixed-top">
+<header id="navbar" role="banner" class="navbar navbar-fixed-top">
   <div class="navbar-inner">
   	<div class="container">
   	  <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
@@ -25,7 +25,7 @@
   	  <?php endif; ?>
   	  
   	  <div class="nav-collapse">
-    	  <nav>
+    	  <nav role="navigation">
       		<?php if ($primary_nav): ?>
       		  <?php print $primary_nav; ?>
       		<?php endif; ?>
@@ -45,13 +45,12 @@
 
 <div class="container">
 
-  <header role="banner" id="header">
-	<?php if ( $site_slogan ): ?>
+  <header role="banner" id="page-header">
+    <?php if ( $site_slogan ): ?>
       <p class="lead"><?php print $site_slogan; ?></p>
     <?php endif; ?>
-	
-	<?php print render($page['header']); ?>
-	
+
+    <?php print render($page['header']); ?>
   </header> <!-- /#header -->
 	
 	<div class="row">
@@ -92,10 +91,12 @@
       </aside>  <!-- /#sidebar-second -->
     <?php endif; ?>
 
-	</div>
-	
-	<footer class="footer">
-	  <?php print render($page['footer']); ?>
-	</footer>
-	
   </div>
+  <footer class="footer container">
+    <?php print render($page['footer']); ?>
+  </footer>
+</div>
+
+
+	
+
