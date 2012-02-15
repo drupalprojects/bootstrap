@@ -92,8 +92,8 @@ function twitter_bootstrap_pager($variables) {
         }
         if ($i == $pager_current) {
           $items[] = array(
-            'class' => array('active'),  // Add the active class 
-            'data' => l($i, '#'),
+            'class' => array('active'), // Add the active class 
+            'data' => l($i, '#', array('fragment' => '','external' => TRUE)),
           );
         }
         if ($i > $pager_current) {
