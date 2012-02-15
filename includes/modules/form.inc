@@ -241,6 +241,7 @@ function twitter_bootstrap_button($variables) {
     $element['#attributes']['class'][] = 'form-button-disabled';
   }
 
-  return '<button' . drupal_attributes($element['#attributes']) . '>'. $label .'</button>';
+  return '<button' . drupal_attributes($element['#attributes']) . '>'. $label .'</button>
+  '; // This line break adds inherent margin between multiple buttons
 }
 
