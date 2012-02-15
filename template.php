@@ -170,6 +170,11 @@ function twitter_bootstrap_preprocess_page(&$variables) {
         'id' => 'main-menu',
         'class' => array('nav'),
       ),
+      'heading' => array(
+        'text' => t('Main menu'),
+        'level' => 'h2',
+        'class' => array('element-invisible'),
+      ),
     ));
   }
   
@@ -190,6 +195,11 @@ function twitter_bootstrap_preprocess_page(&$variables) {
       'attributes' => array(
         'id' => 'user-menu',
         'class' => array('pull-right'),
+      ),
+      'heading' => array(
+        'text' => t('Secondary menu'),
+        'level' => 'h2',
+        'class' => array('element-invisible'),
       ),
     ));
   }
