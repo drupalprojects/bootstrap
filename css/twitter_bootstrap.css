@@ -26,16 +26,23 @@
   line-height: 1;
 }
 */
+
 body {
-  padding-top:60px;
+  padding-top: 60px;
 }
 
+/* Fix Toolbar for .navbar-fixed-top */
 body.toolbar .navbar-fixed-top {
  top: 30px;
 }
 
 body.toolbar-drawer .navbar-fixed-top {
  top: 65px;
+}
+
+@media(min-width: 980px) {
+  body.toolbar { padding-top: 90px !important; }
+  body.toolbar-drawer { padding-top: 125px !important; }
 }
 
 html.overlay-open .navbar-fixed-top {
