@@ -11,7 +11,11 @@ regions[sidebar_first]  = 'Primary'
 regions[sidebar_second] = 'Secondary'
 regions[footer]         = 'Footer'
 
-stylesheets[screen][] = css/twitter_bootstrap.css
+stylesheets[all][] = bootstrap/css/bootstrap.css
+stylesheets[all][] = bootstrap/css/bootstrap-responsive.css
+stylesheets[all][] = css/twitter_bootstrap.css
+
+scripts[] = bootstrap/js/bootstrap.js
 
 settings[toggle_name] = 0
 settings[toggle_search] = 1

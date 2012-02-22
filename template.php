@@ -38,40 +38,10 @@ function twitter_bootstrap_theme() {
  * @see html.tpl.php
  */
 function twitter_bootstrap_preprocess_html(&$variables) {
-  global $theme_key;
-  $theme_path = drupal_get_path('theme', $theme_key);
-  
-  // Try to load the library, otherwise use dropped in files
-  if (!module_exists('twitter_bootstrap_ui') ||
-    (($library = libraries_load('twitter_bootstrap', 'minified')) && empty($library['loaded']))) {
-   
-    // Define our needed files
-    $css = array(
-      $theme_path .'/bootstrap/css/bootstrap.min.css',
-      $theme_path .'/bootstrap/css/bootstrap-responsive.min.css',
-    );
-    
-    $js = array(
-      $theme_path .'/bootstrap/js/bootstrap.min.js',
-    );
-    
-    // Check if files are there
-    $files = $css + $js;
-    foreach($files as $file) {
-      if (!is_file($file)) {
-        drupal_set_message(t("Make sure the bootstrap core files are under the theme directory [theme-dir]/bootstrap/..<br> Or install twitter_bootstrap_ui to use the libraries API"), 'error');
-        break;
-      }
-    }
-    
-    foreach($js as $file) {
-      drupal_add_js($file, array('scope' => 'footer', 'group' => JS_THEME));
-    }
-    
-    foreach($css as $file) {
-      drupal_add_css($file, array('group' => CSS_THEME));
-    }
-  }
+   // Try to load the library
+  if (module_exists('twitter_bootstrap_ui')){
+    $library = libraries_load('twitter_bootstrap', 'minified');
+  }  
 }
 
 function twitter_bootstrap_breadcrumb($variables) {
@@ -236,18 +206,6 @@ function _twitter_bootstrap_search_form($form, &$form_state) {
  * @see region.tpl.php
  */
 function twitter_bootstrap_preprocess_region(&$variables, $hook) {
-  // Set span in wrapper for now
-  /*
-  if($variables['region'] == "sidebar_first")
-    $variables['classes_array'][] = 'span3';
-  
-  if($variables['region'] == "sidebar_second")
-    $variables['classes_array'][] = 'span3';
-    
-  if($variables['region'] == "highlight")
-    $variables['classes_array'][] = 'span12';
-  */
-  
   if ($variables['region'] == 'content') {
     $variables['theme_hook_suggestions'][] = 'region__no_wrapper';
   }
@@ -261,6 +219,8 @@ function twitter_bootstrap_preprocess_region(&$variables, $hook) {
  * Returns the correct span class for a region
  */
 function _twitter_bootstrap_content_span($columns = 1) {
+  $class = FALSE;
+  
   switch($columns) {
     case 1:
       $class = 'span12';

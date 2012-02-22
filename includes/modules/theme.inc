@@ -87,6 +87,9 @@ function twitter_bootstrap_status_messages($vars) {
 }
 
 function twitter_bootstrap_css_alter(&$css) {
+  //global $theme_key;
+  //$theme_path = drupal_get_path('theme', $theme_key);
+  
   $excludes = _twitter_bootstrap_alter(twitter_bootstrap_theme_get_info('exclude'), 'css');
   $css = array_diff_key($css, $excludes);
 }
