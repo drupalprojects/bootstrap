@@ -180,7 +180,7 @@ function twitter_bootstrap_preprocess_page(&$variables) {
 
 function _twitter_bootstrap_search_form($form, &$form_state) {
   // Get custom search form for now
-  $form = search_form($form, $form_state);
+  $form = search_form($form, &$form_state);
 
   // Cleanup
   $form['#attributes']['class'][] = 'navbar-search';
