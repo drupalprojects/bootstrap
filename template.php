@@ -123,7 +123,7 @@ function twitter_bootstrap_preprocess_page(&$variables) {
   
   // Our custom search because its cool :)
   $variables['search'] = FALSE;
-  if(theme_get_setting('toggle_search'))
+  if(theme_get_setting('toggle_search') && module_exists('search'))
     $variables['search'] = drupal_get_form('_twitter_bootstrap_search_form');
 
   // Primary nav
