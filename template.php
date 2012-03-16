@@ -12,9 +12,10 @@ include_once(drupal_get_path('theme', 'twitter_bootstrap') . '/includes/modules/
 
 // Load module include files
 $modules = module_list();
+
 foreach ($modules as $module) {
-  if (is_file(drupal_get_path('theme', $theme_key) . '/includes/modules/' . str_replace('_', '-', $module) . '.inc')) {
-    include_once(drupal_get_path('theme', $theme_key) . '/includes/modules/' . str_replace('_', '-', $module) . '.inc');
+  if (is_file(drupal_get_path('theme', 'twitter_bootstrap') . '/includes/modules/' . str_replace('_', '-', $module) . '.inc')) {
+    include_once(drupal_get_path('theme', 'twitter_bootstrap') . '/includes/modules/' . str_replace('_', '-', $module) . '.inc');
   }    
 }
 
