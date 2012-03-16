@@ -2,11 +2,12 @@
 
 global $theme_key;
 
-include_once(dirname(__FILE__) . '/includes/twitter_bootstrap.inc');
-include_once(dirname(__FILE__) . '/includes/modules/theme.inc');
-include_once(dirname(__FILE__) . '/includes/modules/pager.inc');
-include_once(dirname(__FILE__) . '/includes/modules/form.inc');
-include_once(dirname(__FILE__) . '/includes/modules/admin.inc');
+include_once(drupal_get_path('theme', 'twitter_bootstrap') . '/includes/twitter_bootstrap.inc');
+include_once(drupal_get_path('theme', 'twitter_bootstrap') . '/includes/modules/theme.inc');
+include_once(drupal_get_path('theme', 'twitter_bootstrap') . '/includes/modules/pager.inc');
+include_once(drupal_get_path('theme', 'twitter_bootstrap') . '/includes/modules/form.inc');
+include_once(drupal_get_path('theme', 'twitter_bootstrap') . '/includes/modules/admin.inc');
+include_once(drupal_get_path('theme', 'twitter_bootstrap') . '/includes/modules/menu.inc');
 
 
 // Load module include files
