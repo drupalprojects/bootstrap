@@ -77,7 +77,7 @@ function twitter_bootstrap_menu_link(array $variables) {
   if ($element['#below']) {
 	// Ad our own wrapper
 	unset($element['#below']['#theme_wrappers']);
-    $sub_menu = '<ul>' . drupal_render($element['#below']) . '</u>';
+    $sub_menu = '<ul>' . drupal_render($element['#below']) . '</ul>';
 
     //$element['#localized_options']['attributes']['class'][] = 'dropdown-toggle';
 	//$element['#localized_options']['attributes']['data-toggle'] = 'dropdown';
