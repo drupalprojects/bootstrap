@@ -1,7 +1,5 @@
 <?php
 
-global $theme_key;
-
 include_once(drupal_get_path('theme', 'twitter_bootstrap') . '/includes/twitter_bootstrap.inc');
 include_once(drupal_get_path('theme', 'twitter_bootstrap') . '/includes/modules/theme.inc');
 include_once(drupal_get_path('theme', 'twitter_bootstrap') . '/includes/modules/pager.inc');
