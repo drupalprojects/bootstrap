@@ -234,7 +234,7 @@ function twitter_bootstrap_preprocess_button(&$vars) {
 function twitter_bootstrap_button($variables) {
   $element = $variables['element'];
   $label = check_plain($element['#value']);
-  element_set_attributes($element, array('id', 'name', 'value'));
+  element_set_attributes($element, array('id', 'name', 'value', 'type'));
 
   $element['#attributes']['class'][] = 'form-' . $element['#button_type'];
   if (!empty($element['#attributes']['disabled'])) {
