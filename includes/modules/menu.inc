@@ -115,7 +115,7 @@ function _twitter_bootstrap_local_tasks($tabs = FALSE) {
       ->orderBy('title')
       ->execute();
   
-    $router_item = menu_get_item($element['#link']['path']);
+    $router_item = menu_get_item($element['#link']['href']);
     $map = $router_item['original_map'];
   
     $i = 0;
@@ -126,7 +126,7 @@ function _twitter_bootstrap_local_tasks($tabs = FALSE) {
       if ($item['tab_parent'] && $item['access']) {
         //set path to that of parent for the first item
         if ($i === 0) {
-          $item['href'] = $item['tab_parent'];
+          $item['href'] = $element['#link']['href'];
         }
   
         if (current_path() == $item['href']) {
