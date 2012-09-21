@@ -97,54 +97,56 @@ function twitter_bootstrap_menu_link(array $variables) {
 * Get all primary tasks including subsets
 */
 function _twitter_bootstrap_local_tasks($tabs = FALSE) {
-  if($tabs == '')
-	return $tabs;
+  if ($tabs == '') {
+    return $tabs;
+  }
   
-  if(!$tabs)
-	$tabs = menu_primary_local_tasks();
+  if (!$tabs) {
+  	$tabs = menu_primary_local_tasks();
+	}
   
   foreach($tabs as $key => $element) {
-	$result = db_select('menu_router', NULL, array('fetch' => PDO::FETCH_ASSOC))
-	  ->fields('menu_router')
-	  ->condition('tab_parent', $element['#link']['path'])
-	  ->condition('context', MENU_CONTEXT_INLINE, '<>')
-	  ->condition('type', array(MENU_DEFAULT_LOCAL_TASK, MENU_LOCAL_TASK), 'IN')
-	  ->orderBy('weight')
-	  ->orderBy('title')
-	  ->execute();
+	  $result = db_select('menu_router', NULL, array('fetch' => PDO::FETCH_ASSOC))
+      ->fields('menu_router')
+      ->condition('tab_parent', $element['#link']['path'])
+      ->condition('context', MENU_CONTEXT_INLINE, '<>')
+      ->condition('type', array(MENU_DEFAULT_LOCAL_TASK, MENU_LOCAL_TASK), 'IN')
+      ->orderBy('weight')
+      ->orderBy('title')
+      ->execute();
   
-	$router_item = menu_get_item($element['#link']['path']);
-	$map = $router_item['original_map'];
+    $router_item = menu_get_item($element['#link']['path']);
+    $map = $router_item['original_map'];
   
-	$i = 0;
-	foreach ($result as $item) {
-	  _menu_translate($item, $map, TRUE);
+    $i = 0;
+    foreach ($result as $item) {
+      _menu_translate($item, $map, TRUE);
   
-	  //only add items that we have access to
-	  if ($item['tab_parent'] && $item['access']) {
-		//set path to that of parent for the first item
-		if ($i === 0) {
-		  $item['href'] = $item['tab_parent'];
-		}
+      //only add items that we have access to
+      if ($item['tab_parent'] && $item['access']) {
+        //set path to that of parent for the first item
+        if ($i === 0) {
+          $item['href'] = $item['tab_parent'];
+        }
   
-		if (current_path() == $item['href']) {
-		  $tabs[$key][] = array(
-			'#theme' => 'menu_local_task',
-			'#link' => $item,
-			'#active' => TRUE,
-		  );
-		}
-		else {
-		  $tabs[$key][] = array(
-			'#theme' => 'menu_local_task',
-			'#link' => $item,
-		  );
-		}
+        if (current_path() == $item['href']) {
+          $tabs[$key][] = array(
+          '#theme' => 'menu_local_task',
+          '#link' => $item,
+          '#active' => TRUE,
+          );
+        }
+        else {
+          $tabs[$key][] = array(
+          '#theme' => 'menu_local_task',
+          '#link' => $item,
+          );
+        }
   
-		//only count items we have access to.
-		$i++;
-	  }
-	}
+        //only count items we have access to.
+        $i++;
+      }
+    }
   }
   
   return $tabs;
