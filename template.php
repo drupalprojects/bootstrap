@@ -31,19 +31,6 @@ function twitter_bootstrap_theme() {
   );
 }
 
-/**
- * Preprocess variables for html.tpl.php
- *
- * @see system_elements()
- * @see html.tpl.php
- */
-function twitter_bootstrap_preprocess_html(&$variables) {
-   // Try to load the library
-  if (module_exists('twitter_bootstrap_ui')){
-    $library = libraries_load('twitter_bootstrap', 'minified');
-  }  
-}
-
 function twitter_bootstrap_breadcrumb($variables) {
   $breadcrumb = $variables['breadcrumb'];
 

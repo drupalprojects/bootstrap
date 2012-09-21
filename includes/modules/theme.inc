@@ -93,9 +93,17 @@ function twitter_bootstrap_css_alter(&$css) {
   $excludes = _twitter_bootstrap_alter(twitter_bootstrap_theme_get_info('exclude'), 'css');
   $css = array_diff_key($css, $excludes);
 }
- 
+
+/**
+ * Implements hook_js_alter().
+ */
 function twitter_bootstrap_js_alter(&$js) {
   $excludes = _twitter_bootstrap_alter(twitter_bootstrap_theme_get_info('exclude'), 'js');
+  // If twitter_bootstrap_ui available, we should not add js from theme info file.
+  if (module_exists('twitter_bootstrap_ui')) {
+    libraries_load('twitter_bootstrap', 'minified');
+    $excludes[drupal_get_path('theme', 'twitter_bootstrap') . '/bootstrap/js/bootstrap.js'] = array();
+  }
   $js = array_diff_key($js, $excludes);
 }
 
