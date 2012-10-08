@@ -17,12 +17,12 @@
  */
 function twitter_bootstrap_theme_get_setting($name, $theme = NULL) {
   switch($name){
-	case 'exclude':
-		$setting = twitter_bootstrap_theme_get_info($name, $theme);
-		break;
-	default:
-	  $setting = theme_get_setting($name, $theme);
-		break;
+  case 'exclude':
+    $setting = twitter_bootstrap_theme_get_info($name, $theme);
+    break;
+  default:
+    $setting = theme_get_setting($name, $theme);
+    break;
   }
 
   return isset($setting) ? $setting : NULL; 
@@ -33,11 +33,11 @@ function twitter_bootstrap_get_settings($theme = NULL) {
   if (!isset($theme)) {
     $theme = !empty($GLOBALS['theme_key']) ? $GLOBALS['theme_key'] : '';
   }
-	if($theme) {
-		$themes = list_themes();
+  if($theme) {
+    $themes = list_themes();
     $theme_object = $themes[$theme];
-	}
-	return $theme_object->info['settings'];
+  }
+  return $theme_object->info['settings'];
 }
 
 function twitter_bootstrap_theme_get_info($setting_name, $theme = NULL) {
@@ -78,15 +78,15 @@ function twitter_bootstrap_menu_navigation_links($tree, $lvl = 0) {
   $result = array();
 
   if(count($tree) > 0) {
-  	foreach($tree as $id => $item) {
-  	  $new_item = array('title' => $item['link']['title'], 'link_path' => $item['link']['link_path'], 'href' => $item['link']['href']);
-	  
-  	  // Dont do drugs and don't do any levels deeper then 1
-  	  if($lvl < 1)
-  		$new_item['below'] = twitter_bootstrap_menu_navigation_links($item['below'], $lvl+1);
-	  
-  	  $result['menu-'. $item['link']['mlid']] = $new_item;
-  	}
+    foreach($tree as $id => $item) {
+      $new_item = array('title' => $item['link']['title'], 'link_path' => $item['link']['link_path'], 'href' => $item['link']['href']);
+    
+      // Dont do drugs and don't do any levels deeper then 1
+      if($lvl < 1)
+      $new_item['below'] = twitter_bootstrap_menu_navigation_links($item['below'], $lvl+1);
+    
+      $result['menu-'. $item['link']['mlid']] = $new_item;
+    }
   }
   
   return $result;
@@ -107,12 +107,12 @@ function twitter_bootstrap_preprocess_twitter_bootstrap_btn_dropdown(&$variables
   
   // Check if its a array of links so we need to theme it first here.
   if(is_array($variables['links'])) {
-	$variables['links'] = theme('links', array(
-	  'links' => $variables['links'],
-	  'attributes' => array(
-		'class' => array('dropdown-menu'),
-	  ),
-	));
+  $variables['links'] = theme('links', array(
+    'links' => $variables['links'],
+    'attributes' => array(
+    'class' => array('dropdown-menu'),
+    ),
+  ));
   }
 }  
 
@@ -124,28 +124,28 @@ function twitter_bootstrap_twitter_bootstrap_btn_dropdown($variables) {
   
   // Type class
   if(isset($variables['type']))
-	$type_class = ' btn-'. $variables['type'];
+  $type_class = ' btn-'. $variables['type'];
   
   // Start markup
   $output = '<div'. drupal_attributes($variables['attributes']) .'>';
   
   // Ad as string if its not a link
   if(is_array($variables['label'])) {
-	$output .= l($variables['label']['title'], $$variables['label']['href'], $variables['label']);
+  $output .= l($variables['label']['title'], $$variables['label']['href'], $variables['label']);
   }
   
   $output .= '<a class="btn'. $type_class .' dropdown-toggle" data-toggle="dropdown" href="#">';
   
   // Its a link so create one
   if(is_string($variables['label'])) {
-	$output .= check_plain($variables['label']);
+  $output .= check_plain($variables['label']);
   }
   
-  // Finish markup 	
+  // Finish markup  
   $output .= '
   <span class="caret"></span>
-	</a>
-	' . $variables['links'] . '
+  </a>
+  ' . $variables['links'] . '
   </div>';
   
   return $output;
