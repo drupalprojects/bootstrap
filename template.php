@@ -31,6 +31,11 @@ function twitter_bootstrap_theme() {
   );
 }
 
+/**
+ * Override theme_breadrumb().
+ *
+ * Print breadcrumbs as a list, with separators.
+ */
 function twitter_bootstrap_breadcrumb($variables) {
   $breadcrumb = $variables['breadcrumb'];
 
