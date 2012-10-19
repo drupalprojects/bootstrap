@@ -14,14 +14,10 @@
     		</a>
   	  <?php endif; ?>
 
-  	  <?php if ($site_name || $site_slogan): ?>
-    		<hgroup id="site-name-slogan">
-    		  <?php if ($site_name): ?>
-    			<h1>
-    			  <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" class="brand"><?php print $site_name; ?></a>
-    			</h1>
-    		  <?php endif; ?>
-    		</hgroup>
+  	  <?php if ($site_name): ?>
+  			<h1 id="site-name">
+  			  <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" class="brand"><?php print $site_name; ?></a>
+  			</h1>
   	  <?php endif; ?>
   	  
   	  <div class="nav-collapse">
