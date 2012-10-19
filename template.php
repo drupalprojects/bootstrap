@@ -188,8 +188,6 @@ function _twitter_bootstrap_search_form($form, &$form_state) {
   return $form;
 }
 
-
-
 /**
  * Preprocess variables for region.tpl.php
  *
@@ -224,4 +222,21 @@ function _twitter_bootstrap_content_span($columns = 1) {
   }
   
   return $class;
+}
+
+/**
+ * Fixes inline form button spacing
+ */
+function framework_bootstrap_button($variables) {
+  $element = $variables['element'];
+  $element['#attributes']['type'] = 'submit';
+  element_set_attributes($element, array('id', 'name', 'value'));
+
+  $element['#attributes']['class'][] = 'form-' . $element['#button_type'];
+  if (!empty($element['#attributes']['disabled'])) {
+    $element['#attributes']['class'][] = 'form-button-disabled';
+  }
+
+  return '<input' . drupal_attributes($element['#attributes']) . ' />
+  ';
 }
