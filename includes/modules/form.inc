@@ -15,7 +15,7 @@ function twitter_bootstrap_button(&$vars) {
   return '<input' . drupal_attributes($element['#attributes']) . ' />';
 }
 */
-/**
+/*
  * Returns HTML for a form.
  *
  * @param $vars
@@ -98,6 +98,7 @@ function twitter_bootstrap_form_element(&$variables) {
   if (!empty($element['#attributes']['disabled'])) {
     $attributes['class'][] = 'form-disabled';
   }
+  $attributes['class'][] = 'form-item';
   $output = '<div' . drupal_attributes($attributes) . '>' . "\n";
 
   // If #title is not set, we don't display any label or required marker.
