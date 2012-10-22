@@ -242,7 +242,16 @@ function twitter_bootstrap_button($variables) {
     $element['#attributes']['class'][] = 'form-button-disabled';
   }
 
-  return '<button' . drupal_attributes($element['#attributes']) . '>'. $label .'</button>
-  '; // This line break adds inherent margin between multiple buttons
+  // Prepare input whitelist - added to ensure ajax functions don't break
+  $whitelist = array('edit-refresh');
+
+  if (in_array($element['#id'], $whitelist)) {
+    return '<input' . drupal_attributes($element['#attributes']) . '>
+    '; // This line break adds inherent margin between multiple buttons
+  }
+  else {
+    return '<button' . drupal_attributes($element['#attributes']) . '>'. $label .'</button>
+    '; // This line break adds inherent margin between multiple buttons
+  }
 }
 
