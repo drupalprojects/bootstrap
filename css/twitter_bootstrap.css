@@ -99,6 +99,11 @@ html.js input.throbbing {
   background-position: 100% -13px; /* LTR */
 }
 
+#autocomplete li.selected {
+  background: none repeat scroll 0 0 #0072B9;
+  color: #FFFFFF;
+}
+
 .navbar-search .control-group {
   margin-bottom:0px;
 }
