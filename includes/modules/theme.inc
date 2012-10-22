@@ -185,9 +185,12 @@ function twitter_bootstrap_twitter_bootstrap_links($variables) {
 	  
 	  if(!isset($link['attributes']))
 		$link['attributes'] = array();
+
+    $link['attributes'] = array_merge($link['attributes'], $attributes);
 		
-	  $class = (count($children) > 0) ? 'dropdown' : NULL;
-	  $output .= '<li' . drupal_attributes(array('class' => array($class))) . '>';
+    if(count($children) > 0) 
+      $link['attributes']['class'][] = 'dropdown'; 
+    $output .= '<li' . drupal_attributes($attributes) . '>';
 	  
 	  if (isset($link['href'])) {
 		if(count($children) > 0) { 
