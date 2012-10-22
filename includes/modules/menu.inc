@@ -71,9 +71,6 @@ function twitter_bootstrap_menu_link(array $variables) {
   $element = $variables['element'];
   $sub_menu = '';
   
-  // Sanitize title
-  $element['#title'] = check_plain($element['#title']);
-  
   if ($element['#below']) {
 	// Ad our own wrapper
 	unset($element['#below']['#theme_wrappers']);
