@@ -26,8 +26,8 @@
   line-height: 1;
 }
 */
-body {
-  padding-top: 60px;
+@media(min-width: 980px) {
+  body { padding-top: 60px; }
 }
 
 #site-name {
@@ -62,8 +62,8 @@ body.toolbar-drawer .navbar-fixed-top {
 }
 
 @media(min-width: 980px) {
-  body.toolbar { padding-top: 90px !important; }
-  body.toolbar-drawer { padding-top: 125px !important; }
+  body.toolbar { padding-top: 94px !important; }
+  body.toolbar-drawer { padding-top: 129px !important; }
 }
 
 html.overlay-open .navbar-fixed-top {
