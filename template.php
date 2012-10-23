@@ -17,10 +17,29 @@ foreach ($modules as $module) {
   }    
 }
 
+// Auto-rebuild the theme registry during theme development.
+if (theme_get_setting('twitter_bootstrap_rebuild_registry') && !defined('MAINTENANCE_MODE')) {
+  // Rebuild .info data.
+  system_rebuild_theme_data();
+  // Rebuild theme registry.
+  drupal_theme_rebuild();
+}
+
 /**
  * hook_theme() 
  */
-function twitter_bootstrap_theme() {
+function twitter_bootstrap_theme(&$existing, $type, $theme, $path) {
+  // If we are auto-rebuilding the theme registry, warn about the feature.
+  if (
+    // Only display for site config admins.
+    function_exists('user_access') && user_access('administer site configuration')
+    && theme_get_setting('twitter_bootstrap_rebuild_registry')
+    // Always display in the admin section, otherwise limit to three per hour.
+    && (arg(0) == 'admin' || flood_is_allowed($GLOBALS['theme'] . '_rebuild_registry_warning', 3))
+  ) {
+    flood_register_event($GLOBALS['theme'] . '_rebuild_registry_warning');
+    drupal_set_message(t('For easier theme development, the theme registry is being rebuilt on every page request. It is <em>extremely</em> important to <a href="!link">turn off this feature</a> on production websites.', array('!link' => url('admin/appearance/settings/' . $GLOBALS['theme']))), 'warning', FALSE);
+  }
   return array(
     'twitter_bootstrap_links' => array(
       'variables' => array('links' => array(), 'attributes' => array(), 'heading' => NULL),
