@@ -94,44 +94,6 @@ function twitter_bootstrap_process_html_tag(&$variables) {
 }
 
 /**
- * Preprocess variables for node.tpl.php
- *
- * @see node.tpl.php
- */
-function twitter_bootstrap_preprocess_node(&$variables) {
-  if ($variables['teaser']) {
-    $variables['classes_array'][] = 'row-fluid';
-  }
-}
-
-/**
- * Preprocess variables for block.tpl.php
- *
- * @see block.tpl.php
- */
-function twitter_bootstrap_preprocess_block(&$variables, $hook) {
-  //$variables['classes_array'][] = 'row';
-  // Use a bare template for the page's main content.
-  if ($variables['block_html_id'] == 'block-system-main') {
-    $variables['theme_hook_suggestions'][] = 'block__no_wrapper';
-  }
-  $variables['title_attributes_array']['class'][] = 'block-title';
-}
-
-/**
- * Override or insert variables into the block templates.
- *
- * @param $variables
- *   An array of variables to pass to the theme template.
- * @param $hook
- *   The name of the template being rendered ("block" in this case.)
- */
-function twitter_bootstrap_process_block(&$variables, $hook) {
-  // Drupal 7 should use a $title variable instead of $block->subject.
-  $variables['title'] = $variables['block']->subject;
-}
-
-/**
  * Preprocess variables for page.tpl.php
  *
  * @see page.tpl.php
@@ -204,6 +166,59 @@ function twitter_bootstrap_preprocess_page(&$variables) {
   $variables['tabs']['#primary'] = _twitter_bootstrap_local_tasks($variables['tabs']['#primary']);
 }
 
+/**
+ * Preprocess variables for node.tpl.php
+ *
+ * @see node.tpl.php
+ */
+function twitter_bootstrap_preprocess_node(&$variables) {
+  if ($variables['teaser']) {
+    $variables['classes_array'][] = 'row-fluid';
+  }
+}
+
+/**
+ * Preprocess variables for region.tpl.php
+ *
+ * @see region.tpl.php
+ */
+function twitter_bootstrap_preprocess_region(&$variables, $hook) {
+  if ($variables['region'] == 'content') {
+    $variables['theme_hook_suggestions'][] = 'region__no_wrapper';
+  }
+  
+  // Me likes
+  if($variables['region'] == "sidebar_first")
+    $variables['classes_array'][] = 'well';
+}
+
+/**
+ * Preprocess variables for block.tpl.php
+ *
+ * @see block.tpl.php
+ */
+function twitter_bootstrap_preprocess_block(&$variables, $hook) {
+  //$variables['classes_array'][] = 'row';
+  // Use a bare template for the page's main content.
+  if ($variables['block_html_id'] == 'block-system-main') {
+    $variables['theme_hook_suggestions'][] = 'block__no_wrapper';
+  }
+  $variables['title_attributes_array']['class'][] = 'block-title';
+}
+
+/**
+ * Override or insert variables into the block templates.
+ *
+ * @param $variables
+ *   An array of variables to pass to the theme template.
+ * @param $hook
+ *   The name of the template being rendered ("block" in this case.)
+ */
+function twitter_bootstrap_process_block(&$variables, $hook) {
+  // Drupal 7 should use a $title variable instead of $block->subject.
+  $variables['title'] = $variables['block']->subject;
+}
+
 function _twitter_bootstrap_search_form($form, &$form_state) {
   // Get custom search form for now
   $form = search_form($form, $form_state);
@@ -222,21 +237,6 @@ function _twitter_bootstrap_search_form($form, &$form_state) {
   unset($form['basic']);
 
   return $form;
-}
-
-/**
- * Preprocess variables for region.tpl.php
- *
- * @see region.tpl.php
- */
-function twitter_bootstrap_preprocess_region(&$variables, $hook) {
-  if ($variables['region'] == 'content') {
-    $variables['theme_hook_suggestions'][] = 'region__no_wrapper';
-  }
-  
-  // Me likes
-  if($variables['region'] == "sidebar_first")
-    $variables['classes_array'][] = 'well';
 }
 
 /**
