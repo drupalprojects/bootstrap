@@ -1,12 +1,12 @@
 <?php
 
-include_once(drupal_get_path('theme', 'twitter_bootstrap') . '/includes/twitter_bootstrap.inc');
-include_once(drupal_get_path('theme', 'twitter_bootstrap') . '/includes/modules/theme.inc');
-include_once(drupal_get_path('theme', 'twitter_bootstrap') . '/includes/modules/pager.inc');
-include_once(drupal_get_path('theme', 'twitter_bootstrap') . '/includes/modules/form.inc');
-include_once(drupal_get_path('theme', 'twitter_bootstrap') . '/includes/modules/admin.inc');
-include_once(drupal_get_path('theme', 'twitter_bootstrap') . '/includes/modules/menu.inc');
-
+$theme_path = drupal_get_path('theme', 'twitter_bootstrap');
+include_once($theme_path . '/includes/twitter_bootstrap.inc');
+include_once($theme_path . '/includes/modules/theme.inc');
+include_once($theme_path . '/includes/modules/pager.inc');
+include_once($theme_path . '/includes/modules/form.inc');
+include_once($theme_path . '/includes/modules/admin.inc');
+include_once($theme_path . '/includes/modules/menu.inc');
 
 // Load module include files
 $modules = module_list();
