@@ -77,6 +77,23 @@ function twitter_bootstrap_breadcrumb($variables) {
 }
 
 /**
+ * Override or insert variables in the html_tag theme function.
+ */
+function twitter_bootstrap_process_html_tag(&$variables) {
+  $tag = &$variables['element'];
+
+  if ($tag['#tag'] == 'style' || $tag['#tag'] == 'script') {
+    // Remove redundant type attribute and CDATA comments.
+    unset($tag['#attributes']['type'], $tag['#value_prefix'], $tag['#value_suffix']);
+
+    // Remove media="all" but leave others unaffected.
+    if (isset($tag['#attributes']['media']) && $tag['#attributes']['media'] === 'all') {
+      unset($tag['#attributes']['media']);
+    }
+  }
+}
+
+/**
  * Preprocess variables for node.tpl.php
  *
  * @see node.tpl.php
