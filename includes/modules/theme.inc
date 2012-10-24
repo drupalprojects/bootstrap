@@ -195,7 +195,7 @@ function twitter_bootstrap_twitter_bootstrap_links($variables) {
 	  if (isset($link['href'])) {
 		if(count($children) > 0) { 
 		  $link['html'] = TRUE;
-		  $link['title'] .= '<b class="caret"></b>';
+		  $link['title'] .= ' <b class="caret"></b>';
 		  $output .=  '<a' . drupal_attributes($link['attributes']) . ' href="#">'. $link['title'] .'</a>';
 		}else{
 		// Pass in $link as $options, they share the same keys.
