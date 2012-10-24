@@ -3,19 +3,21 @@
 /**
  * Returns HTML for primary and secondary local tasks.
  */
-function twitter_bootstrap_menu_local_tasks(&$vars) {
+function twitter_bootstrap_menu_local_tasks(&$variables) {
   $output = '';
 
-  if ( !empty($vars['primary']) ) {
-    $vars['primary']['#prefix'] = '<ul class="nav nav-tabs">';
-    $vars['primary']['#suffix'] = '</ul>';
-    $output .= drupal_render($vars['primary']);
+  if ( !empty($variables['primary']) ) {
+    $variables['primary']['#prefix'] = '<h2 class="element-invisible">' . t('Primary tabs') . '</h2>';
+    $variables['primary']['#prefix'] = '<ul class="nav nav-tabs">';
+    $variables['primary']['#suffix'] = '</ul>';
+    $output .= drupal_render($variables['primary']);
   }
 
-  if ( !empty($vars['secondary']) ) {
-    $vars['secondary']['#prefix'] = '<ul class="nav nav-pills">';
-    $vars['secondary']['#suffix'] = '</ul>';
-    $output .= drupal_render($vars['secondary']);
+  if ( !empty($variables['secondary']) ) {
+    $variables['primary']['#prefix'] = '<h2 class="element-invisible">' . t('Primary tabs') . '</h2>';
+    $variables['secondary']['#prefix'] = '<ul class="nav nav-pills">';
+    $variables['secondary']['#suffix'] = '</ul>';
+    $output .= drupal_render($variables['secondary']);
   }
 
   return $output;
