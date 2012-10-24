@@ -56,8 +56,8 @@ function twitter_bootstrap_item_list($variables) {
  * Returns HTML for status and/or error messages, grouped by type.
  *
  */
-function twitter_bootstrap_status_messages($vars) {
-  $display = $vars['display'];
+function twitter_bootstrap_status_messages($variables) {
+  $display = $variables['display'];
   $output = '';
 
   $status_heading = array(
