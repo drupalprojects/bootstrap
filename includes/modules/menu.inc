@@ -53,15 +53,16 @@ function twitter_bootstrap_menu_local_task($variables) {
   $children = '';
   if (element_children($variables['element'])) {
     $link['localized_options']['attributes']['class'][] = 'dropdown-toggle';
-	$link['localized_options']['attributes']['data-toggle'][] = 'dropdown';
+    $link['localized_options']['attributes']['data-toggle'][] = 'dropdown';
     $classes[] = 'dropdown';
 
     $children = drupal_render_children($variables['element']);
-    $children = '</b><ul class="secondary-tabs dropdown-menu">' . $children . "</ul>";
+    $children = '<ul class="secondary-tabs dropdown-menu">' . $children . "</ul>";
 
-	return '<li class="' . implode(' ', $classes) . '"><a href="#"' . drupal_attributes($link['localized_options']['attributes']) .'>' . $link_text . '<b class="caret"></a>' . $children . "</li>\n";
-  }else{
-	return '<li class="' . implode(' ', $classes) . '">' . l($link_text, $link['href'], $link['localized_options']) . $children . "</li>\n";
+    return '<li class="' . implode(' ', $classes) . '"><a href="#"' . drupal_attributes($link['localized_options']['attributes']) .'>' . $link_text . ' <b class="caret"></b></a>' . $children . "</li>\n";
+  }
+  else {
+    return '<li class="' . implode(' ', $classes) . '">' . l($link_text, $link['href'], $link['localized_options']) . $children . "</li>\n";
   }
 }
 
