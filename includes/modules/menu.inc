@@ -75,18 +75,16 @@ function twitter_bootstrap_menu_link(array $variables) {
   $sub_menu = '';
   
   if ($element['#below']) {
-	// Ad our own wrapper
-	unset($element['#below']['#theme_wrappers']);
+	  // Ad our own wrapper
+	  unset($element['#below']['#theme_wrappers']);
     $sub_menu = '<ul>' . drupal_render($element['#below']) . '</ul>';
 
     //$element['#localized_options']['attributes']['class'][] = 'dropdown-toggle';
-	//$element['#localized_options']['attributes']['data-toggle'] = 'dropdown';
-	//$element['#attributes']['class'][] = 'dropdown';
-	$element['#localized_options']['html'] = TRUE;
-	//$element['#title'] .= '<b class="caret"></b>';
-	
-	// auch
-	$element['#href'] = "";
+    //$element['#localized_options']['attributes']['data-toggle'] = 'dropdown';
+    $element['#localized_options']['attributes']['data-target'] = '#';
+    //$element['#attributes']['class'][] = 'dropdown';
+    $element['#localized_options']['html'] = TRUE;
+    //$element['#title'] .= '<b class="caret"></b>';
   }
   
   $output = l($element['#title'], $element['#href'], $element['#localized_options']);
