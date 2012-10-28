@@ -108,12 +108,22 @@ function twitter_bootstrap_form_element(&$variables) {
   $prefix = isset($element['#field_prefix']) ? '<span class="field-prefix">' . $element['#field_prefix'] . '</span> ' : '';
   $suffix = isset($element['#field_suffix']) ? ' <span class="field-suffix">' . $element['#field_suffix'] . '</span>' : '';
 
+  // Prepare input whitelist - added to ensure ajax functions don't break
+  $whitelist = _twitter_bootstrap_element_whitelist();
+
   switch ($element['#title_display']) {
     case 'before':
     case 'invisible':
       $output .= ' ' . theme('form_element_label', $variables);
-      $output .= '<div class="controls">';
-      $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
+      // Check if item exists in element whitelist
+      if (in_array($element['#id'], $whitelist)) {
+        $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
+        $exclude_control = TRUE;
+      }
+      else {
+        $output .= '<div class="controls">';
+        $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
+      }
       break;
 
     case 'after':
@@ -134,8 +144,13 @@ function twitter_bootstrap_form_element(&$variables) {
     $output .= '<p class="help-block">' . $element['#description'] . "</p>\n";
   }
 
-  $output .= "</div></div>\n";
-
+  // Check if control wrapper was added to ensure we close div correctly
+  if (!empty($exclude_control)) {
+    $output .= "</div>\n";
+  }
+  else {
+    $output .= "</div></div>\n";
+  }
   return $output;
 }
 
@@ -243,7 +258,7 @@ function twitter_bootstrap_button($variables) {
   }
 
   // Prepare input whitelist - added to ensure ajax functions don't break
-  $whitelist = array('edit-refresh');
+  $whitelist = _twitter_bootstrap_element_whitelist();
 
   if (in_array($element['#id'], $whitelist)) {
     return '<input' . drupal_attributes($element['#attributes']) . '>
@@ -255,3 +270,19 @@ function twitter_bootstrap_button($variables) {
   }
 }
 
+/**
+ * Returns an array containing ids of any whitelisted drupal elements
+ */
+function _twitter_bootstrap_element_whitelist() {
+/**
+ * Why whitelist an element?
+ * The reason is to provide a list of elements we wish to exclude
+ * from certain modifications made by the twitter bootstrap theme
+ * which break core functionality - e.g. ajax.
+ */
+  return array(
+    'edit-refresh',
+    'edit-pass-pass1',
+    'edit-pass-pass2',
+  );
+}
