@@ -76,7 +76,7 @@ function twitter_bootstrap_menu_link(array $variables) {
   
   if ($element['#below']) {
     // Ad our own wrapper
-	  unset($element['#below']['#theme_wrappers']);
+    unset($element['#below']['#theme_wrappers']);
     $sub_menu = '<ul>' . drupal_render($element['#below']) . '</ul>';
 
     //$element['#localized_options']['attributes']['class'][] = 'dropdown-toggle';
@@ -100,11 +100,11 @@ function _twitter_bootstrap_local_tasks($tabs = FALSE) {
   }
   
   if (!$tabs) {
-  	$tabs = menu_primary_local_tasks();
-	}
+    $tabs = menu_primary_local_tasks();
+  }
   
   foreach($tabs as $key => $element) {
-	  $result = db_select('menu_router', NULL, array('fetch' => PDO::FETCH_ASSOC))
+    $result = db_select('menu_router', NULL, array('fetch' => PDO::FETCH_ASSOC))
       ->fields('menu_router')
       ->condition('tab_parent', $element['#link']['path'])
       ->condition('context', MENU_CONTEXT_INLINE, '<>')
