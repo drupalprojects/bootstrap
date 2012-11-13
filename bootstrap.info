@@ -13,7 +13,7 @@ regions[footer]         = 'Footer'
 
 stylesheets[all][] = bootstrap/css/bootstrap.css
 stylesheets[all][] = bootstrap/css/bootstrap-responsive.css
-stylesheets[all][] = css/twitter_bootstrap.css
+stylesheets[all][] = css/style.css
 
 scripts[] = bootstrap/js/bootstrap.js
 

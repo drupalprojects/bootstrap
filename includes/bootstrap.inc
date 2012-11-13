@@ -1,7 +1,7 @@
 <?php
 
 /**
- * A wrapper function for twitter_bootstrap_theme_get_settings().
+ * A wrapper function for bootstrap_theme_get_settings().
  * 
  * @param $name
  *   The name of the setting that you want to retrieve. 
@@ -13,12 +13,12 @@
  *   current theme if not defined.
  *   
  * @see 
- *   twitter_bootstrap_theme_get_setting().
+ *   bootstrap_theme_get_setting().
  */
-function twitter_bootstrap_theme_get_setting($name, $theme = NULL) {
+function bootstrap_theme_get_setting($name, $theme = NULL) {
   switch($name){
   case 'exclude':
-    $setting = twitter_bootstrap_theme_get_info($name, $theme);
+    $setting = bootstrap_theme_get_info($name, $theme);
     break;
   default:
     $setting = theme_get_setting($name, $theme);
@@ -28,7 +28,7 @@ function twitter_bootstrap_theme_get_setting($name, $theme = NULL) {
   return isset($setting) ? $setting : NULL; 
 }
 
-function twitter_bootstrap_get_settings($theme = NULL) {
+function bootstrap_get_settings($theme = NULL) {
 
   if (!isset($theme)) {
     $theme = !empty($GLOBALS['theme_key']) ? $GLOBALS['theme_key'] : '';
@@ -40,7 +40,7 @@ function twitter_bootstrap_get_settings($theme = NULL) {
   return $theme_object->info['settings'];
 }
 
-function twitter_bootstrap_theme_get_info($setting_name, $theme = NULL) {
+function bootstrap_theme_get_info($setting_name, $theme = NULL) {
 // If no key is given, use the current theme if we can determine it.
   if (!isset($theme)) {
     $theme = !empty($GLOBALS['theme_key']) ? $GLOBALS['theme_key'] : '';
@@ -74,7 +74,7 @@ function twitter_bootstrap_theme_get_info($setting_name, $theme = NULL) {
 /**
  * Returns navigational links based on a menu tree
  */
-function twitter_bootstrap_menu_navigation_links($tree, $lvl = 0) {
+function bootstrap_menu_navigation_links($tree, $lvl = 0) {
   $result = array();
 
   if(count($tree) > 0) {
@@ -83,7 +83,7 @@ function twitter_bootstrap_menu_navigation_links($tree, $lvl = 0) {
     
       // Dont do drugs and don't do any levels deeper then 1
       if($lvl < 1)
-      $new_item['below'] = twitter_bootstrap_menu_navigation_links($item['below'], $lvl+1);
+      $new_item['below'] = bootstrap_menu_navigation_links($item['below'], $lvl+1);
     
       $result['menu-'. $item['link']['mlid']] = $new_item;
     }
@@ -99,9 +99,9 @@ function twitter_bootstrap_menu_navigation_links($tree, $lvl = 0) {
  */
 
 /**
- * Preprocess function for theme_twitter_bootstrap_btn_dropdown
+ * Preprocess function for theme_bootstrap_btn_dropdown
  */
-function twitter_bootstrap_preprocess_twitter_bootstrap_btn_dropdown(&$variables) {
+function bootstrap_preprocess_bootstrap_btn_dropdown(&$variables) {
   // Add default class
   $variables['attributes']['class'][] = 'btn-group';
   
@@ -117,9 +117,9 @@ function twitter_bootstrap_preprocess_twitter_bootstrap_btn_dropdown(&$variables
 }  
 
 /**
- * theme_twitter_bootstrap_btn_dropdown
+ * theme_bootstrap_btn_dropdown
  */
-function twitter_bootstrap_twitter_bootstrap_btn_dropdown($variables) {
+function bootstrap_bootstrap_btn_dropdown($variables) {
   $type_class = '';
   
   // Type class
@@ -152,9 +152,9 @@ function twitter_bootstrap_twitter_bootstrap_btn_dropdown($variables) {
 }  
 
 /**
- * theme_twitter_bootstrap_progress_bar
+ * theme_bootstrap_progress_bar
  */
-function twitter_bootstrap_twitter_bootstrap_progress_bar($variables) {
+function bootstrap_bootstrap_progress_bar($variables) {
   $variables['attributes']['class'][] = 'progress';
   
   return "<div". drupal_attributes($variables['attributes']) .">

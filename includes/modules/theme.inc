@@ -1,6 +1,6 @@
 <?php
 
-function twitter_bootstrap_item_list($variables) {
+function bootstrap_item_list($variables) {
   $items = $variables['items'];
   $title = $variables['title'];
   $type = $variables['type'];
@@ -56,7 +56,7 @@ function twitter_bootstrap_item_list($variables) {
  * Returns HTML for status and/or error messages, grouped by type.
  *
  */
-function twitter_bootstrap_status_messages($variables) {
+function bootstrap_status_messages($variables) {
   $display = $variables['display'];
   $output = '';
 
@@ -86,28 +86,28 @@ function twitter_bootstrap_status_messages($variables) {
   return $output;
 }
 
-function twitter_bootstrap_css_alter(&$css) {
+function bootstrap_css_alter(&$css) {
   //global $theme_key;
   //$theme_path = drupal_get_path('theme', $theme_key);
   
-  $excludes = _twitter_bootstrap_alter(twitter_bootstrap_theme_get_info('exclude'), 'css');
+  $excludes = _bootstrap_alter(bootstrap_theme_get_info('exclude'), 'css');
   $css = array_diff_key($css, $excludes);
 }
 
 /**
  * Implements hook_js_alter().
  */
-function twitter_bootstrap_js_alter(&$js) {
-  $excludes = _twitter_bootstrap_alter(twitter_bootstrap_theme_get_info('exclude'), 'js');
-  // If twitter_bootstrap_ui available, we should not add js from theme info file.
-  if (module_exists('twitter_bootstrap_ui')) {
-    libraries_load('twitter_bootstrap', 'minified');
-    $excludes[drupal_get_path('theme', 'twitter_bootstrap') . '/bootstrap/js/bootstrap.js'] = array();
+function bootstrap_js_alter(&$js) {
+  $excludes = _bootstrap_alter(bootstrap_theme_get_info('exclude'), 'js');
+  // If bootstrap_ui available, we should not add js from theme info file.
+  if (module_exists('bootstrap_ui')) {
+    libraries_load('bootstrap', 'minified');
+    $excludes[drupal_get_path('theme', 'bootstrap') . '/bootstrap/js/bootstrap.js'] = array();
   }
   $js = array_diff_key($js, $excludes);
 }
 
-function _twitter_bootstrap_alter($files, $type) {
+function _bootstrap_alter($files, $type) {
   $output = array();
   
   foreach($files as $key => $value) {
@@ -123,7 +123,7 @@ function _twitter_bootstrap_alter($files, $type) {
 /**
  * Returns HTML for a set of links.
  */
-function twitter_bootstrap_twitter_bootstrap_links($variables) {
+function bootstrap_bootstrap_links($variables) {
   $links = $variables['links'];
   $attributes = $variables['attributes'];
   $heading = $variables['heading'];
@@ -220,7 +220,7 @@ function twitter_bootstrap_twitter_bootstrap_links($variables) {
     $attributes = array();
         $attributes['class'] = array('dropdown-menu');
     
-    $output .= theme('twitter_bootstrap_links', array('links' => $children, 'attributes' => $attributes));
+    $output .= theme('bootstrap_links', array('links' => $children, 'attributes' => $attributes));
     }
     
     $output .= "</li>\n"; 
@@ -232,7 +232,7 @@ function twitter_bootstrap_twitter_bootstrap_links($variables) {
   return $output;
 }
 
-function twitter_bootstrap_preprocess_table(&$variables) {
+function bootstrap_preprocess_table(&$variables) {
   $variables['attributes']['class'][] = 'table';
   $variables['attributes']['class'][] = 'table-striped';
 }

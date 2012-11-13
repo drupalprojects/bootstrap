@@ -3,7 +3,7 @@
 /**
  * Returns HTML for primary and secondary local tasks.
  */
-function twitter_bootstrap_menu_local_tasks(&$variables) {
+function bootstrap_menu_local_tasks(&$variables) {
   $output = '';
 
   if ( !empty($variables['primary']) ) {
@@ -29,7 +29,7 @@ function twitter_bootstrap_menu_local_tasks(&$variables) {
  *
  * @ingroup themeable
  */
-function twitter_bootstrap_menu_local_task($variables) {
+function bootstrap_menu_local_task($variables) {
   $link = $variables['element']['#link'];
   $link_text = $link['title'];
   $classes = array();
@@ -66,11 +66,11 @@ function twitter_bootstrap_menu_local_task($variables) {
   }
 }
 
-function twitter_bootstrap_menu_tree(&$variables) {
+function bootstrap_menu_tree(&$variables) {
   return '<ul class="menu nav">' . $variables['tree'] . '</ul>';
 }
 
-function twitter_bootstrap_menu_link(array $variables) {
+function bootstrap_menu_link(array $variables) {
   $element = $variables['element'];
   $sub_menu = '';
   
@@ -94,7 +94,7 @@ function twitter_bootstrap_menu_link(array $variables) {
 /**
 * Get all primary tasks including subsets
 */
-function _twitter_bootstrap_local_tasks($tabs = FALSE) {
+function _bootstrap_local_tasks($tabs = FALSE) {
   if ($tabs == '') {
     return $tabs;
   }
