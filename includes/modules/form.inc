@@ -277,8 +277,8 @@ function _bootstrap_element_whitelist() {
 /**
  * Why whitelist an element?
  * The reason is to provide a list of elements we wish to exclude
- * from certain modifications made by the twitter bootstrap theme
- * which break core functionality - e.g. ajax.
+ * from certain modifications made by the bootstrap theme which
+ * break core functionality - e.g. ajax.
  */
   return array(
     'edit-refresh',
