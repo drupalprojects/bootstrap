@@ -17,26 +17,27 @@
  */
 function bootstrap_theme_get_setting($name, $theme = NULL) {
   switch($name){
-  case 'exclude':
-    $setting = bootstrap_theme_get_info($name, $theme);
-    break;
-  default:
-    $setting = theme_get_setting($name, $theme);
-    break;
+    case 'exclude':
+      $setting = bootstrap_theme_get_info($name, $theme);
+      break;
+    default:
+      $setting = theme_get_setting($name, $theme);
+      break;
   }
 
   return isset($setting) ? $setting : NULL; 
 }
 
 function bootstrap_get_settings($theme = NULL) {
-
   if (!isset($theme)) {
     $theme = !empty($GLOBALS['theme_key']) ? $GLOBALS['theme_key'] : '';
   }
-  if($theme) {
+  
+  if ($theme) {
     $themes = list_themes();
     $theme_object = $themes[$theme];
   }
+  
   return $theme_object->info['settings'];
 }
 
