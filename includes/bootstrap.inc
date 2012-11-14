@@ -83,7 +83,11 @@ function bootstrap_menu_navigation_links($tree, $lvl = 0) {
     foreach ($tree as $id => $item) {
       // Only work with enabled links
       if (empty($item['link']['hidden'])) {
-        $new_item = array('title' => $item['link']['title'], 'link_path' => $item['link']['link_path'], 'href' => $item['link']['href']);
+        $new_item = array(
+          'title' => $item['link']['title'], 
+          'link_path' => $item['link']['link_path'], 
+          'href' => $item['link']['href'],
+        );
 
         // Dont do drugs and don't do any levels deeper then 1
         if ($lvl < 1) {
