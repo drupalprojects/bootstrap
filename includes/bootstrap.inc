@@ -16,7 +16,7 @@
  *   bootstrap_theme_get_setting().
  */
 function bootstrap_theme_get_setting($name, $theme = NULL) {
-  switch($name){
+  switch($name) {
     case 'exclude':
       $setting = bootstrap_theme_get_info($name, $theme);
       break;
@@ -84,8 +84,8 @@ function bootstrap_menu_navigation_links($tree, $lvl = 0) {
       // Only work with enabled links
       if (empty($item['link']['hidden'])) {
         $new_item = array(
-          'title' => $item['link']['title'], 
-          'link_path' => $item['link']['link_path'], 
+          'title' => $item['link']['title'],
+          'link_path' => $item['link']['link_path'],
           'href' => $item['link']['href'],
         );
 
@@ -117,12 +117,12 @@ function bootstrap_preprocess_bootstrap_btn_dropdown(&$variables) {
   
   // Check if its a array of links so we need to theme it first here.
   if(is_array($variables['links'])) {
-  $variables['links'] = theme('links', array(
-    'links' => $variables['links'],
-    'attributes' => array(
-    'class' => array('dropdown-menu'),
-    ),
-  ));
+    $variables['links'] = theme('links', array(
+      'links' => $variables['links'],
+      'attributes' => array(
+      'class' => array('dropdown-menu'),
+      ),
+    ));
   }
 }  
 
