@@ -24,6 +24,7 @@ function bootstrap_pager($variables) {
   $element = $variables['element'];
   $parameters = $variables['parameters'];
   $quantity = $variables['quantity'];
+
   global $pager_page_array, $pager_total;
 
   // Calculate various markers within this pager piece:
