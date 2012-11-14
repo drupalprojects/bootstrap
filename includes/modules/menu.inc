@@ -59,7 +59,7 @@ function bootstrap_menu_local_task($variables) {
     $children = drupal_render_children($variables['element']);
     $children = '<ul class="secondary-tabs dropdown-menu">' . $children . "</ul>";
 
-    return '<li class="' . implode(' ', $classes) . '"><a href="#"' . drupal_attributes($link['localized_options']['attributes']) .'>' . $link_text . ' <b class="caret"></b></a>' . $children . "</li>\n";
+    return '<li class="' . implode(' ', $classes) . '"><a href="#"' . drupal_attributes($link['localized_options']['attributes']) .'>' . $link_text . ' <span class="caret"></span></a>' . $children . "</li>\n";
   }
   else {
     return '<li class="' . implode(' ', $classes) . '">' . l($link_text, $link['href'], $link['localized_options']) . $children . "</li>\n";
@@ -84,7 +84,7 @@ function bootstrap_menu_link(array $variables) {
     $element['#localized_options']['attributes']['data-target'] = '#';
     //$element['#attributes']['class'][] = 'dropdown';
     $element['#localized_options']['html'] = TRUE;
-    //$element['#title'] .= '<b class="caret"></b>';
+    //$element['#title'] .= '<span class="caret"></span>';
   }
   
   $output = l($element['#title'], $element['#href'], $element['#localized_options']);
