@@ -124,12 +124,13 @@ function bootstrap_preprocess_page(&$variables) {
   
   // Our custom search because its cool :)
   $variables['search'] = FALSE;
-  if(theme_get_setting('toggle_search') && module_exists('search'))
+  if (theme_get_setting('toggle_search') && module_exists('search')) {
     $variables['search'] = drupal_get_form('_bootstrap_search_form');
+  }
 
   // Primary nav
   $variables['primary_nav'] = FALSE;
-  if($variables['main_menu']) {
+  if ($variables['main_menu']) {
     // Build links
     $tree = menu_tree_page_data(variable_get('menu_main_links_source', 'main-menu'));
     $variables['main_menu'] = bootstrap_menu_navigation_links($tree);
@@ -151,7 +152,7 @@ function bootstrap_preprocess_page(&$variables) {
   
   // Secondary nav
   $variables['secondary_nav'] = FALSE;
-  if(function_exists('menu_load') && $variables['secondary_menu']) {
+  if (function_exists('menu_load') && $variables['secondary_menu']) {
     $secondary_menu = menu_load(variable_get('menu_secondary_links_source', 'user-menu'));
 
     // Build list
