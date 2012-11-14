@@ -133,30 +133,27 @@ function bootstrap_bootstrap_btn_dropdown($variables) {
   $type_class = '';
   
   // Type class
-  if(isset($variables['type']))
-  $type_class = ' btn-'. $variables['type'];
-  
+  if (isset($variables['type'])) {
+    $type_class = ' btn-'. $variables['type'];
+  }
+
   // Start markup
   $output = '<div'. drupal_attributes($variables['attributes']) .'>';
-  
+
   // Ad as string if its not a link
-  if(is_array($variables['label'])) {
-  $output .= l($variables['label']['title'], $$variables['label']['href'], $variables['label']);
+  if (is_array($variables['label'])) {
+    $output .= l($variables['label']['title'], $$variables['label']['href'], $variables['label']);
   }
-  
+
   $output .= '<a class="btn'. $type_class .' dropdown-toggle" data-toggle="dropdown" href="#">';
-  
+
   // Its a link so create one
-  if(is_string($variables['label'])) {
-  $output .= check_plain($variables['label']);
+  if (is_string($variables['label'])) {
+    $output .= check_plain($variables['label']);
   }
-  
+
   // Finish markup  
-  $output .= '
-  <span class="caret"></span>
-  </a>
-  ' . $variables['links'] . '
-  </div>';
+  $output .= '<span class="caret"></span></a>' . $variables['links'] . '</div>';
   
   return $output;
 }  
