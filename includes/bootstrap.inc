@@ -42,7 +42,7 @@ function bootstrap_get_settings($theme = NULL) {
 }
 
 function bootstrap_theme_get_info($setting_name, $theme = NULL) {
-// If no key is given, use the current theme if we can determine it.
+  // If no key is given, use the current theme if we can determine it.
   if (!isset($theme)) {
     $theme = !empty($GLOBALS['theme_key']) ? $GLOBALS['theme_key'] : '';
   }
@@ -61,6 +61,7 @@ function bootstrap_theme_get_info($setting_name, $theme = NULL) {
     else {
       $theme_keys = array($theme);
     }
+
     foreach ($theme_keys as $theme_key) {
       if (!empty($themes[$theme_key]->info[$setting_name])) {
         $output[$setting_name] = $themes[$theme_key]->info[$setting_name];
