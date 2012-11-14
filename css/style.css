@@ -1,38 +1,14 @@
-/*
-#header {
-  padding: 2em 0 0;
-}
 
-#header .brand {
-  float: left;
-  margin: 0 1em 2em 0;
-}
-
-#header #site-name-slogan {
-  float: left;
-  margin: 0 0 2em;
-}
-
-#navbar {
-  clear: both;
-}
-
-#navbar .slogan {
-  float: left;
-  display: block;
-  margin-left:-10px;
-  padding: 11px 0px 0px;
-  font-size:15px;
-  line-height: 1;
-}
-*/
 @media(min-width: 980px) {
-  body { padding-top: 60px; }
+  body {
+    padding-top: 60px;
+  }
 }
 
 .navbar .logo { 
   margin-top: 5px;
-  margin-right: 10px;}
+  margin-right: 10px;
+}
 
 #site-name {
   line-height: 1;
@@ -51,7 +27,6 @@
   padding: 35px 0 36px;
   border-top: 1px solid #E5E5E5;
 }
-
 /**
  * Admin Styling
  */
@@ -66,8 +41,13 @@ body.toolbar-drawer .navbar-fixed-top {
 }
 
 @media(min-width: 980px) {
-  body.toolbar { padding-top: 94px !important; }
-  body.toolbar-drawer { padding-top: 129px !important; }
+  body.toolbar {
+    padding-top: 94px !important;
+  }
+
+  body.toolbar-drawer {
+    padding-top: 129px !important;
+  }
 }
 
 html.overlay-open .navbar-fixed-top {
@@ -99,13 +79,9 @@ html.js input.form-autocomplete {
   background-position: 100% 7px; /* LTR */
   background-repeat: no-repeat;
 }
+
 html.js input.throbbing {
   background-position: 100% -13px; /* LTR */
-}
-
-#autocomplete li.selected {
-  background: none repeat scroll 0 0 #0072B9;
-  color: #FFFFFF;
 }
 
 .navbar-search .control-group {
@@ -125,43 +101,52 @@ input.error {
   float: right;  /* LTR */
   margin-top: 1.4em;
 }
+
 .password-strength-title {
   display: inline;
 }
+
 .password-strength-text {
   float: right; /* LTR */
   font-weight: bold;
 }
+
 .password-indicator {
   background-color: #C4C4C4;
   height: 0.3em;
   width: 100%;
 }
+
 .password-indicator div {
   height: 100%;
   width: 0%;
   background-color: #47C965;
 }
+
 input.password-confirm,
 input.password-field {
   width: 16em;
   margin-bottom: 0.4em;
 }
+
 div.password-confirm {
   float: right;  /* LTR */
   margin-top: 1.5em;
   visibility: hidden;
   width: 17em;
 }
+
 div.form-item div.password-suggestions {
   padding: 0.2em 0.5em;
   margin: 0.7em 0;
   width: 38.5em;
   border: 1px solid #B4B4B4;
 }
+
 div.password-suggestions ul {
   margin-bottom: 0;
 }
+
 .confirm-parent,
 .password-parent {
   clear: left; /* LTR */
