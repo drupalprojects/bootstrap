@@ -16,7 +16,7 @@
  *   bootstrap_theme_get_setting().
  */
 function bootstrap_theme_get_setting($name, $theme = NULL) {
-  switch($name) {
+  switch ($name) {
     case 'exclude':
       $setting = bootstrap_theme_get_info($name, $theme);
       break;
@@ -116,7 +116,7 @@ function bootstrap_preprocess_bootstrap_btn_dropdown(&$variables) {
   $variables['attributes']['class'][] = 'btn-group';
   
   // Check if its a array of links so we need to theme it first here.
-  if(is_array($variables['links'])) {
+  if (is_array($variables['links'])) {
     $variables['links'] = theme('links', array(
       'links' => $variables['links'],
       'attributes' => array(
