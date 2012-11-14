@@ -218,12 +218,10 @@ function bootstrap_button($variables) {
   $whitelist = _bootstrap_element_whitelist();
 
   if (in_array($element['#id'], $whitelist)) {
-    return '<input' . drupal_attributes($element['#attributes']) . '>
-    '; // This line break adds inherent margin between multiple buttons
+    return '<input' . drupal_attributes($element['#attributes']) . ">\n"; // This line break adds inherent margin between multiple buttons
   }
   else {
-    return '<button' . drupal_attributes($element['#attributes']) . '>'. $label .'</button>
-    '; // This line break adds inherent margin between multiple buttons
+    return '<button' . drupal_attributes($element['#attributes']) . '>'. $label ."</button>\n"; // This line break adds inherent margin between multiple buttons
   }
 }
 
