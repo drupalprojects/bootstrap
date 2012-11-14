@@ -5,4 +5,4 @@ Bootstrap theme for Drupal
 3. Put any plugin files into [path_to_themes]/bootstrap/bootstrap/js/
 4. Make sure you have jQuery 1.7, which is available through the jQuery Update module (http://drupal.org/project/jquery_update/) 7.x-2.x-dev version. You need to make sure the 1.7 version is selected on the configuration page for it to work.
 
-Author: Sjoerd Arendsen, Andre Griffin, et al.
+Author: http://drupal.org/node/259843/committers
