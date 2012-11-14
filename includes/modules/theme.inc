@@ -198,13 +198,13 @@ function bootstrap_bootstrap_links($variables) {
       $link['attributes'] = array_merge($link['attributes'], $attributes);
 
       if (count($children) > 0) {
-        $link['attributes']['class'][] = 'dropdown'; 
+        $link['attributes']['class'][] = 'dropdown';
       }
 
       $output .= '<li' . drupal_attributes($attributes) . '>';
 
       if (isset($link['href'])) {
-        if (count($children) > 0) { 
+        if (count($children) > 0) {
           $link['html'] = TRUE;
           $link['title'] .= ' <span class="caret"></span>';
           $output .=  '<a' . drupal_attributes($link['attributes']) . ' href="#">'. $link['title'] .'</a>';
