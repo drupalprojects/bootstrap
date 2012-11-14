@@ -103,7 +103,7 @@ function _bootstrap_local_tasks($tabs = FALSE) {
     $tabs = menu_primary_local_tasks();
   }
   
-  foreach($tabs as $key => $element) {
+  foreach ($tabs as $key => $element) {
     $result = db_select('menu_router', NULL, array('fetch' => PDO::FETCH_ASSOC))
       ->fields('menu_router')
       ->condition('tab_parent', $element['#link']['path'])
