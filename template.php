@@ -40,12 +40,21 @@ function bootstrap_theme(&$existing, $type, $theme, $path) {
     flood_register_event($GLOBALS['theme'] . '_rebuild_registry_warning');
     drupal_set_message(t('For easier theme development, the theme registry is being rebuilt on every page request. It is <em>extremely</em> important to <a href="!link">turn off this feature</a> on production websites.', array('!link' => url('admin/appearance/settings/' . $GLOBALS['theme']))), 'warning', FALSE);
   }
+  
   return array(
     'bootstrap_links' => array(
-      'variables' => array('links' => array(), 'attributes' => array(), 'heading' => NULL),
+      'variables' => array(
+        'links' => array(),
+        'attributes' => array(),
+        'heading' => NULL
+      ),
     ),
     'bootstrap_btn_dropdown' => array(
-      'variables' => array('links' => array(), 'attributes' => array(), 'type' => NULL),
+      'variables' => array(
+        'links' => array(),
+        'attributes' => array(),
+        'type' => NULL
+      ),
     ), 
   );
 }
