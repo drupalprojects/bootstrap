@@ -18,6 +18,7 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
     '#type'          => 'fieldset',
     '#title'         => t('Theme development settings'),
   );
+  
   $form['themedev']['bootstrap_rebuild_registry'] = array(
     '#type'          => 'checkbox',
     '#title'         => t('Rebuild theme registry on every page.'),
