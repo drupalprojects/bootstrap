@@ -1,49 +1,5 @@
 <?php
 
-/*
-function bootstrap_button(&$vars) {
-  $element = $vars['element'];
-  $element['#attributes']['type'] = 'submit';
-  element_set_attributes($element, array('id', 'name', 'value'));
-  
-  $element['#attributes']['class'][] = 'btn'; // Add bootstrap class
-  $element['#attributes']['class'][] = 'form-' . $element['#button_type'];
-  if (!empty($element['#attributes']['disabled'])) {
-    $element['#attributes']['class'][] = 'form-button-disabled';
-  }
-
-  return '<input' . drupal_attributes($element['#attributes']) . ' />';
-}
-*/
-/*
- * Returns HTML for a form.
- *
- * @param $vars
- *   An associative array containing:
- *   - element: An associative array containing the properties of the element.
- *     Properties used: #action, #method, #attributes, #children
- *
- * @ingroup themeable
- 
-
-function bootstrap_preprocess_form(&$variables) {
-}  
-
-function bootstrap_form($variables) {
-  $element = $variables['element'];
-  if (isset($element['#action'])) {
-    $element['#attributes']['action'] = drupal_strip_dangerous_protocols($element['#action']);
-  }
-  
-  element_set_attributes($element, array('method', 'id'));
-  if (empty($element['#attributes']['accept-charset'])) {
-    $element['#attributes']['accept-charset'] = "UTF-8";
-  }
-
-  return '<form' . drupal_attributes($element['#attributes']) . '>' . $element['#children'] . '</form>';
-}
-*/
-
 /**
  * Implements hook_form_alter().
  */
