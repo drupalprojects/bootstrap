@@ -32,12 +32,12 @@ function bootstrap_get_settings($theme = NULL) {
   if (!isset($theme)) {
     $theme = !empty($GLOBALS['theme_key']) ? $GLOBALS['theme_key'] : '';
   }
-  
+
   if ($theme) {
     $themes = list_themes();
     $theme_object = $themes[$theme];
   }
-  
+
   return $theme_object->info['settings'];
 }
 
