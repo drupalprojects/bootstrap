@@ -239,5 +239,8 @@ function _bootstrap_element_whitelist() {
     'edit-refresh',
     'edit-pass-pass1',
     'edit-pass-pass2',
+    'panels-ipe-cancel',
+    'panels-ipe-customize-page',
+    'panels-ipe-save',
   );
 }
