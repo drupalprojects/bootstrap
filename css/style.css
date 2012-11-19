@@ -88,6 +88,14 @@ input, textarea, select, .uneditable-input {
   width:auto;
 }
 
+/* Default textfield styles inside vertical tabs */
+.vertical-tabs .form-type-textfield input {
+  -moz-box-sizing: inherit;
+  -webkit-box-sizing: inherit;
+  box-sizing: inherit;
+  width: auto;
+}
+
 /* throbber fix */
 html.js input.form-autocomplete {
   background-position: 100% 7px; /* LTR */
