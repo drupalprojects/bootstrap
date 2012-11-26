@@ -91,17 +91,52 @@ function bootstrap_status_messages($variables) {
 }
 
 function bootstrap_css_alter(&$css) {
-  //global $theme_key;
-  //$theme_path = drupal_get_path('theme', $theme_key);
+  $theme_path = drupal_get_path('theme', 'bootstrap');
+  $files = array();
 
   $excludes = _bootstrap_alter(bootstrap_theme_get_info('exclude'), 'css');
   $css = array_diff_key($css, $excludes);
+
+  if (theme_get_setting('cdn_bootstrap')){
+    $files[]= array(
+      'url' => 'http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css',
+      'type' => 'external'
+      );
+  }
+  else {
+    $files[]= array (
+      'url' => $theme_path . '/bootstrap/css/bootstrap-responsive.css',
+      'type' => 'file',
+    );
+
+    $files[]= array (
+      'url' => $theme_path . '/bootstrap/css/bootstrap.css',
+      'type' => 'file',
+    );
+  }
+
+  foreach ($files as $file) {
+    if (!isset($css[$file['url']])) {
+      $css[$file['url']]['data'] = $file['url'];
+      $css[$file['url']]['type'] = $file['type'];
+      $css[$file['url']]['every_page'] = TRUE;
+      $css[$file['url']]['media'] = 'all';
+      $css[$file['url']]['preprocess'] = TRUE;
+      $css[$file['url']]['group'] = 0;
+      $css[$file['url']]['weight'] = 0;
+      $css[$file['url']]['browsers'] = array('IE' => TRUE, '!IE' => TRUE);
+    }
+  }
+
 }
 
 /**
  * Implements hook_js_alter().
  */
 function bootstrap_js_alter(&$js) {
+  $theme_path = drupal_get_path('theme', 'bootstrap');
+  $files = array();
+
   $excludes = _bootstrap_alter(bootstrap_theme_get_info('exclude'), 'js');
 
   // If bootstrap_ui available, we should not add js from theme info file.
@@ -111,6 +146,39 @@ function bootstrap_js_alter(&$js) {
   }
 
   $js = array_diff_key($js, $excludes);
+  if (theme_get_setting('cdn_jquery')) {
+    // Add jQuery and the switch script to the $files array
+    $files[] = 'http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js';
+
+    if (theme_get_setting('cdn_bootstrap')) {
+      $files[] = 'http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js';
+    }
+    else {
+      $files[] = $theme_path . '/bootstrap/js/bootstrap.js';
+    }
+    $files[] = $theme_path . '/js/switch.js';
+  }
+  else {
+    if (theme_get_setting('cdn_bootstrap')) {
+      $files[] = 'http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js';
+    }
+    else {
+      $files[] = $theme_path . '/bootstrap/js/bootstrap.js';
+    }
+  }
+
+  // Rearrange / Add JS
+  $group = -50;
+  $weight = -100;
+  foreach ($files as $file) {
+    if (!isset($js[$file])) {
+      $js[$file] = drupal_js_defaults();
+      $js[$file]['data'] = $file;
+      $js[$file]['group'] = $group;
+      $js[$file]['weight'] = $weight;
+      $weight++;
+    }
+  }
 }
 
 function _bootstrap_alter($files, $type) {
