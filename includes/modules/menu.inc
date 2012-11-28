@@ -49,21 +49,7 @@ function bootstrap_menu_local_task($variables) {
     $classes[] = 'active';
   }
 
-  // Render child tasks if available.
-  $children = '';
-  if (element_children($variables['element'])) {
-    $link['localized_options']['attributes']['class'][] = 'dropdown-toggle';
-    $link['localized_options']['attributes']['data-toggle'][] = 'dropdown';
-    $classes[] = 'dropdown';
-
-    $children = drupal_render_children($variables['element']);
-    $children = '<ul class="secondary-tabs dropdown-menu">' . $children . "</ul>";
-
-    return '<li class="' . implode(' ', $classes) . '"><a href="#"' . drupal_attributes($link['localized_options']['attributes']) .'>' . $link_text . ' <span class="caret"></span></a>' . $children . "</li>\n";
-  }
-  else {
-    return '<li class="' . implode(' ', $classes) . '">' . l($link_text, $link['href'], $link['localized_options']) . $children . "</li>\n";
-  }
+  return '<li class="' . implode(' ', $classes) . '">' . l($link_text, $link['href'], $link['localized_options']) . "</li>\n";
 }
 
 function bootstrap_menu_tree(&$variables) {
