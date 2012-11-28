@@ -27,6 +27,21 @@
   padding: 35px 0 36px;
   border-top: 1px solid #E5E5E5;
 }
+
+ul.action-links {
+  margin-bottom: 2em;
+}
+
+ul.action-links li {
+  display: inline;
+  padding-right: 1.5em;
+}
+
+ul.action-links [class^="icon-"],
+ul.action-links [class*=" icon-"] {
+  padding-right: .5em;
+}
+
 /**
  * Admin Styling
  */
