@@ -111,6 +111,11 @@ input, textarea, select, .uneditable-input {
   width: auto;
 }
 
+/* Collapsible field groups fix */
+html.js fieldset.collapsed {
+ height: auto;
+}
+
 /* throbber fix */
 html.js input.form-autocomplete {
   background-position: 100% 7px; /* LTR */
@@ -189,4 +194,10 @@ div.password-suggestions ul {
   clear: left; /* LTR */
   margin: 0;
   width: 36.3em;
+}
+/* added an extra clear both in the situation the form actions is preceded by an badly wrapped float element and they overlap
+e.g. multipage*/
+
+.form-actions{
+  clear: both;
 }
