@@ -104,15 +104,17 @@ function bootstrap_css_alter(&$css) {
       );
   }
   else {
-    $files[]= array (
-      'url' => $theme_path . '/bootstrap/css/bootstrap-responsive.css',
-      'type' => 'file',
-    );
 
     $files[]= array (
       'url' => $theme_path . '/bootstrap/css/bootstrap.css',
       'type' => 'file',
     );
+
+    $files[]= array (
+      'url' => $theme_path . '/bootstrap/css/bootstrap-responsive.css',
+      'type' => 'file',
+    );
+
   }
 
   foreach ($files as $file) {
