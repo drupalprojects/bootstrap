@@ -35,7 +35,7 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
     '#type'          => 'checkbox',
     '#title'         => t('Use cdn to load in the bootstrap files'),
     '#default_value' => theme_get_setting('cdn_bootstrap'),
-    '#description'   => t('Use cdn (a third party hosting server) to host the bootstrap files, bootstrap theme will not use the local css files anymore and instead the visitor will download them from ') . l('bootstrapcdn.com', 'http://bootstrapcdn.com .')
+    '#description'   => t('Use cdn (a third party hosting server) to host the bootstrap files, bootstrap theme will not use the local css files anymore and instead the visitor will download them from ') . l('bootstrapcdn.com', 'http://bootstrapcdn.com')
                         .'<div class="alert alert-error">' . t('WARNING: this technique will give you a performance boost but will also make you dependant on a third party who has no obligations towards you concerning uptime and service quality.') . '</div>',
   );
 
