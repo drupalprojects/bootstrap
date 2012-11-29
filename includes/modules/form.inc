@@ -6,10 +6,12 @@
 function bootstrap_form_alter(&$form, &$form_state, $form_id) {
   // Id's of forms that should be ignored
   // Make this configurable?
+  dpm($form);
   $form_ids = array(
     'node_form',
     'system_site_information_settings',
     'user_profile_form',
+    'node_delete_confirm',
   );
   
   // Only wrap in container for certain form
