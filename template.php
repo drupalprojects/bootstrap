@@ -1,19 +1,18 @@
 <?php
 
 $theme_path = drupal_get_path('theme', 'bootstrap');
-include_once($theme_path . '/includes/bootstrap.inc');
-include_once($theme_path . '/includes/modules/theme.inc');
-include_once($theme_path . '/includes/modules/pager.inc');
-include_once($theme_path . '/includes/modules/form.inc');
-include_once($theme_path . '/includes/modules/admin.inc');
-include_once($theme_path . '/includes/modules/menu.inc');
+require_once $theme_path . '/includes/bootstrap.inc';
+require_once $theme_path . '/includes/theme.inc';
+require_once $theme_path . '/includes/pager.inc';
+require_once $theme_path . '/includes/form.inc';
+require_once $theme_path . '/includes/admin.inc';
+require_once $theme_path . '/includes/menu.inc';
 
-// Load module include files
-$modules = module_list();
-
-foreach ($modules as $module) {
-  if (is_file(drupal_get_path('theme', 'bootstrap') . '/includes/modules/' . str_replace('_', '-', $module) . '.inc')) {
-    include_once(drupal_get_path('theme', 'bootstrap') . '/includes/modules/' . str_replace('_', '-', $module) . '.inc');
+// Load module specific files in the modules directory.
+$includes = file_scan_directory($theme_path . '/includes/modules', '/\.inc$/');
+foreach ($includes as $include) {
+  if (module_exists($include->name)) {
+    require_once $include->uri;
   }    
 }
 
