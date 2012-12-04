@@ -108,11 +108,13 @@ function bootstrap_css_alter(&$css) {
     $files[]= array (
       'url' => $theme_path . '/bootstrap/css/bootstrap.css',
       'type' => 'file',
+      'weight' => -2,
     );
 
     $files[]= array (
       'url' => $theme_path . '/bootstrap/css/bootstrap-responsive.css',
       'type' => 'file',
+      'weight' => -1,
     );
 
   }
@@ -124,8 +126,8 @@ function bootstrap_css_alter(&$css) {
       $css[$file['url']]['every_page'] = TRUE;
       $css[$file['url']]['media'] = 'all';
       $css[$file['url']]['preprocess'] = TRUE;
-      $css[$file['url']]['group'] = 0;
-      $css[$file['url']]['weight'] = 0;
+      $css[$file['url']]['group'] = CSS_THEME;
+      $css[$file['url']]['weight'] = $file['weight'];;
       $css[$file['url']]['browsers'] = array('IE' => TRUE, '!IE' => TRUE);
     }
   }
