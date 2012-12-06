@@ -20,7 +20,7 @@
         </h1>
       <?php endif; ?>
 
-      <?php if ($page['navigation']): ?>
+      <?php if (!empty($page['navigation'])): ?>
         <div class="nav-collapse">
           <nav role="navigation">
             <?php print render($page['navigation']); ?>
@@ -28,6 +28,18 @@
         </div>
       <?php endif; ?>
 
+      <?php if (empty($page['navigation'])): ?>
+        <div class="nav-collapse">
+          <nav role="navigation">
+          <?php if ($primary_nav): ?>
+            <?php print $primary_nav; ?>
+          <?php endif; ?>
+          <?php if ($secondary_nav): ?>
+            <?php print $secondary_nav; ?>
+          <?php endif; ?>
+          </nav>
+        </div>
+      <?php endif; ?>
     </div>
   </div>
 </header>
