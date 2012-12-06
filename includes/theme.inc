@@ -54,7 +54,6 @@ function bootstrap_item_list($variables) {
 
 /**
  * Returns HTML for status and/or error messages, grouped by type.
- *
  */
 function bootstrap_status_messages($variables) {
   $display = $variables['display'];
@@ -66,12 +65,21 @@ function bootstrap_status_messages($variables) {
     'warning' => t('Warning message'),
   );
 
+  // Map Drupal message types to their corresponding Bootstrap classes.
+  // @see http://twitter.github.com/bootstrap/components.html#alerts
+  $status_class = array(
+    'status' => 'success',
+    'error' => 'error',
+    'warning' => 'info',
+  );
+
   foreach (drupal_get_messages($display) as $type => $messages) {
-    $output .= "<div class=\"alert alert-block alert-$type\">\n";
+    $class = (isset($status_class[$type])) ? ' alert-' . $status_class[$type] : '';
+    $output .= "<div class=\"alert alert-block$class\">\n";
     $output .= "  <a class=\"close\" data-dismiss=\"alert\" href=\"#\">x</a>\n";
 
     if (!empty($status_heading[$type])) {
-      $output .= '<h4 class="alert-heading">' . $status_heading[$type] . "</h4>\n";
+      $output .= '<h2 class="element-invisible">' . $status_heading[$type] . "</h2>\n";
     }
 
     if (count($messages) > 1) {
