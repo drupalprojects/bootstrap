@@ -20,21 +20,14 @@
         </h1>
       <?php endif; ?>
 
-      <div class="nav-collapse">
-        <nav role="navigation">
-          <?php if ($primary_nav): ?>
-            <?php print $primary_nav; ?>
-          <?php endif; ?>
+      <?php if ($page['navigation']): ?>
+        <div class="nav-collapse">
+          <nav role="navigation">
+            <?php print render($page['navigation']); ?>
+          </nav>
+        </div>
+      <?php endif; ?>
 
-          <?php if ($search): ?>
-            <?php if ($search): print render($search); endif; ?>
-          <?php endif; ?>
-
-          <?php if ($secondary_nav): ?>
-            <?php print $secondary_nav; ?>
-          <?php endif; ?>
-        </nav>
-      </div>
     </div>
   </div>
 </header>
