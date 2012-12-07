@@ -27,20 +27,20 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
 
   $form['cdn']['cdn_bootstrap'] = array(
     '#type'          => 'checkbox',
-    '#title'         => t('Use cdn to load in the bootstrap files'),
+    '#title'         => t('Use CDN to load in the bootstrap files'),
     '#default_value' => theme_get_setting('cdn_bootstrap'),
-    '#description'   => t('Use cdn (a third party hosting server) to host the bootstrap files, bootstrap theme will not use the local css files anymore and instead the visitor will download them from ') . l('bootstrapcdn.com', 'http://bootstrapcdn.com')
+    '#description'   => t('Use cdn (a third party hosting server) to host the bootstrap files, Bootstrap Theme will not use the local CSS files anymore and instead the visitor will download them from ') . l('bootstrapcdn.com', 'http://bootstrapcdn.com')
                         .'<div class="alert alert-error">' . t('WARNING: this technique will give you a performance boost but will also make you dependant on a third party who has no obligations towards you concerning uptime and service quality.') . '</div>',
   );
 
   $form['cdn']['cdn_jquery'] = array(
     '#type'          => 'checkbox',
-    '#title'         => t('Use cdn to load in a newer version of jquery using the no-conflict solution.'),
+    '#title'         => t('Use CDN to load in a newer version of jQuery using the no-conflict solution.'),
     '#default_value' => theme_get_setting('cdn_jquery'),
     '#description'   => t('Use cdn to host the latest version of jquery and load the newer version using the ') . l('no-conflict', 'http://api.jquery.com/jQuery.noConflict/') . t(' solution.')
                           . '<div class="alert alert-error">' .
-                            ('WARNING: this technique loads 2 versions of jquery, what is bad for frontend performance and adds an extra whopping 90kb (not gziped) to your download (aka not mobile friendly).
-                             Also this solution uses cdn and this will make you dependant on a third party who has no obligations towards you concerning uptime and service quality.') . '</div>',
+                            ('WARNING: this technique will load 2 versions of jQuery, which is bad for front-end performance and adds an extra whopping 90kb (not gziped) to your download (aka not mobile friendly).
+                             Also this solution uses CDN and this will make you dependant on a third party who has no obligations towards you concerning uptime and service quality.') . '</div>',
   );
 }
 
