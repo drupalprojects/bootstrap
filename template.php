@@ -125,48 +125,36 @@ function bootstrap_preprocess_page(&$variables) {
   $variables['primary_nav'] = FALSE;
   if ($variables['main_menu']) {
     // Build links
-    $tree = menu_tree_page_data(variable_get('menu_main_links_source', 'main-menu'));
-    $variables['main_menu'] = bootstrap_menu_navigation_links($tree);
-
-    // Build list
-    $variables['primary_nav'] = theme('bootstrap_links', array(
-      'links' => $variables['main_menu'],
-      'attributes' => array(
-        'id' => 'main-menu',
-        'class' => array('nav'),
-      ),
-      'heading' => array(
-        'text' => t('Main menu'),
-        'level' => 'h2',
-        'class' => array('element-invisible'),
-      ),
-    ));
+    $variables['primary_nav'] = menu_tree(variable_get('menu_main_links_source', 'main-menu'));
+    // Provide default theme wrapper function
+    $variables['primary_nav']['#theme_wrappers'] = array('menu_tree__primary');
   }
 
   // Secondary nav
   $variables['secondary_nav'] = FALSE;
-  if (function_exists('menu_load') && $variables['secondary_menu']) {
-    $secondary_menu = menu_load(variable_get('menu_secondary_links_source', 'user-menu'));
-
-    // Build list
-    $variables['secondary_nav'] = theme('bootstrap_btn_dropdown', array(
-      'links' => $variables['secondary_menu'],
-      'label' => $secondary_menu['title'],
-      'type' => 'success',
-      'attributes' => array(
-        'id' => 'user-menu',
-        'class' => array('pull-right'),
-      ),
-      'heading' => array(
-        'text' => t('Secondary menu'),
-        'level' => 'h2',
-        'class' => array('element-invisible'),
-      ),
-    ));
+  if ($variables['secondary_menu']) {
+    // Build links
+    $variables['secondary_nav'] = menu_tree(variable_get('menu_secondary_links_source', 'user-menu'));
+    // Provide default theme wrapper function
+    $variables['secondary_nav']['#theme_wrappers'] = array('menu_tree__secondary');
   }
 
   // Replace tabs with drop down version
   $variables['tabs']['#primary'] = _bootstrap_local_tasks($variables['tabs']['#primary']);
+}
+
+/**
+ * Bootstrap theme wrapper function for the primary menu links
+ */
+function bootstrap_menu_tree__primary(&$variables) {
+  return '<ul class="menu nav">' . $variables['tree'] . '</ul>';
+}
+
+/**
+ * Bootstrap theme wrapper function for the secondary menu links
+ */
+function bootstrap_menu_tree__secondary(&$variables) {
+  return '<ul class="menu nav pull-right">' . $variables['tree'] . '</ul>';
 }
 
 /**
