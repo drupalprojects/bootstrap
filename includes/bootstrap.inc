@@ -109,29 +109,13 @@ function bootstrap_menu_navigation_links($tree, $lvl = 0) {
  */
 
 /**
- * Preprocess function for theme_bootstrap_btn_dropdown
- */
-function bootstrap_preprocess_bootstrap_btn_dropdown(&$variables) {
-  // Add default class
-  $variables['attributes']['class'][] = 'btn-group';
-  
-  // Check if its a array of links so we need to theme it first here.
-  if (is_array($variables['links'])) {
-    $variables['links'] = theme('links', array(
-      'links' => $variables['links'],
-      'attributes' => array(
-      'class' => array('dropdown-menu'),
-      ),
-    ));
-  }
-}  
-
-/**
  * theme_bootstrap_btn_dropdown
  */
 function bootstrap_bootstrap_btn_dropdown($variables) {
   $type_class = '';
-  
+  $sub_links ='';
+
+  $variables['attributes']['class'][] = 'btn-group';
   // Type class
   if (isset($variables['type'])) {
     $type_class = ' btn-'. $variables['type'];
@@ -152,9 +136,13 @@ function bootstrap_bootstrap_btn_dropdown($variables) {
     $output .= check_plain($variables['label']);
   }
 
-  // Finish markup  
-  $output .= '<span class="caret"></span></a>' . $variables['links'] . '</div>';
-  
+  if (is_array($variables['links'])) {
+    $sub_links = theme('links', array('links' => $variables['links'],'attributes' => array('class' => array('dropdown-menu'))));
+  }
+
+  // Finish markup
+  $output .= '<span class="caret"></span></a>' . $sub_links . '</div>';
+
   return $output;
 }  
 
