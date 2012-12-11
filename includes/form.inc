@@ -152,9 +152,10 @@ function bootstrap_form_element_label(&$variables) {
     $attributes['for'] = $element['#id'];
   }
 
-  // @Bootstrap: Add Bootstrap control-label class.
-  $attributes['class'][] = 'control-label';
-
+  // @Bootstrap: Add Bootstrap control-label class except for radio.
+  if ($element['#type'] != 'radio')
+    $attributes['class'][] = 'control-label';
+  }
   // @Bootstrap: Insert radio and checkboxes inside label elements.
   $output = '';
   if ( isset($variables['#children']) ) {
