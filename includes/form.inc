@@ -153,7 +153,7 @@ function bootstrap_form_element_label(&$variables) {
   }
 
   // @Bootstrap: Add Bootstrap control-label class except for radio.
-  if ($element['#type'] != 'radio')
+  if ($element['#type'] != 'radio') {
     $attributes['class'][] = 'control-label';
   }
   // @Bootstrap: Insert radio and checkboxes inside label elements.
