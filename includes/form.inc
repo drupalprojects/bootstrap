@@ -74,7 +74,7 @@ function bootstrap_form_element(&$variables) {
     case 'invisible':
       $output .= ' ' . theme('form_element_label', $variables);
       // Check if item exists in element whitelist
-      if (in_array($element['#id'], $whitelist)) {
+      if (isset($element['#id']) && in_array($element['#id'], $whitelist)) {
         $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
         $exclude_control = TRUE;
       }
