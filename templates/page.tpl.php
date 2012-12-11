@@ -39,7 +39,7 @@
   </div>
 </header>
 
-<div class="container">
+<div class="main-container container">
 
   <header role="banner" id="page-header">
     <?php if ( $site_slogan ): ?>
