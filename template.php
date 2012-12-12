@@ -54,7 +54,7 @@ function bootstrap_theme(&$existing, $type, $theme, $path) {
         'attributes' => array(),
         'type' => NULL
       ),
-    ), 
+    ),
   );
 }
 
