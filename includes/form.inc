@@ -41,7 +41,7 @@ function bootstrap_form_element(&$variables) {
   $exclude_control = FALSE;
   $control_wrapper = '<div class="controls">';
   // Add bootstrap class
-  if ($element['#type'] == "radio" || $element['#type'] == "checkbox") {
+  if (isset($element['#type']) && ($element['#type'] == "radio" || $element['#type'] == "checkbox")){
     $exclude_control = TRUE;
   }
   else {
