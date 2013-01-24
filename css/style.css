@@ -111,6 +111,11 @@ input, textarea, select, .uneditable-input {
   width: auto;
 }
 
+/* Vertical tabs form elements alighment */
+.vertical-tabs .form-item{
+  margin: 1em 0;
+}
+
 /* Collapsible field groups fix */
 html.js fieldset.collapsed {
  height: auto;
