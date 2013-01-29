@@ -17,6 +17,49 @@ function bootstrap_form_alter(&$form, &$form_state, $form_id) {
   if (isset($form['#form_id']) && !in_array($form['#form_id'], $form_ids) && !isset($form['#node_edit_form'])) {
     $form['actions']['#theme_wrappers'] = array();
   }
+}  
+
+/**
+ * Implements hook_form_FORM_ID_alter() for search_form().
+ */
+function bootstrap_form_search_form_alter(&$form, &$form_state) {
+  $form['#attributes']['class'][] = 'form-search';
+  $form['#attributes']['class'][] = 'pull-left';
+
+  $form['basic']['keys']['#title'] = '';
+  $form['basic']['keys']['#attributes']['class'][] = 'search-query';
+  $form['basic']['keys']['#attributes']['class'][] = 'span2';
+  $form['basic']['keys']['#attributes']['placeholder'] = t('Search');
+
+  // Hide the default button from display and implement a theme wrapper to add
+  // a submit button containing a search icon directly after the input element.
+  $form['basic']['submit']['#attributes']['class'][] = 'element-invisible';
+  $form['basic']['keys']['#theme_wrappers'][] = 'bootstrap_search_form_wrapper';
+
+  // Apply a clearfix so the results don't overflow onto the form.
+  $form['#suffix'] = '<div class="clearfix"></div>';
+  $form['#attributes']['class'][] = 'content-search';
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for search_block_form().
+ */
+function bootstrap_form_search_block_form_alter(&$form, &$form_state) {
+  $form['#attributes']['class'][] = 'form-search';
+  $form['#attributes']['class'][] = 'pull-left';
+
+  $form['search_block_form']['#title'] = '';
+  $form['search_block_form']['#attributes']['class'][] = 'search-query';
+  $form['search_block_form']['#attributes']['class'][] = 'span2';
+  $form['search_block_form']['#attributes']['placeholder'] = t('Search');
+
+  // Hide the default button from display and implement a theme wrapper to add
+  // a submit button containing a search icon directly after the input element.
+  $form['actions']['submit']['#attributes']['class'][] = 'element-invisible';
+  $form['search_block_form']['#theme_wrappers'][] = 'bootstrap_search_form_wrapper';
+
+  // Apply a clearfix so the results don't overflow onto the form.
+  $form['#attributes']['class'][] = 'content-search';
 }
 
 /**
