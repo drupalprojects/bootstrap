@@ -12,12 +12,12 @@ function bootstrap_form_alter(&$form, &$form_state, $form_id) {
     'user_profile_form',
     'node_delete_confirm',
   );
-  
+
   // Only wrap in container for certain form
   if (isset($form['#form_id']) && !in_array($form['#form_id'], $form_ids) && !isset($form['#node_edit_form'])) {
     $form['actions']['#theme_wrappers'] = array();
   }
-}  
+}
 
 /**
  * Returns HTML for a form element.
@@ -215,7 +215,7 @@ function bootstrap_preprocess_button(&$vars) {
  */
 function bootstrap_button($variables) {
   $element = $variables['element'];
-  $label = check_plain($element['#value']);
+  $label = $element['#value'];
   element_set_attributes($element, array('id', 'name', 'value', 'type'));
 
   $element['#attributes']['class'][] = 'form-' . $element['#button_type'];
