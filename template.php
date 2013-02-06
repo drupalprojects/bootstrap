@@ -142,10 +142,6 @@ function bootstrap_preprocess_page(&$variables) {
     $variables['secondary_nav']['#theme_wrappers'] = array('menu_tree__secondary');
   }
 
-  // Replace tabs with drop down version
-  if (!empty($variables['tabs']['#primary'])) {
-    $variables['tabs']['#primary'] = _bootstrap_local_tasks($variables['tabs']['#primary']);
-  }
 }
 
 /**
