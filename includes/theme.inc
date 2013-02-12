@@ -361,7 +361,7 @@ function bootstrap_preprocess_table(&$variables) {
   }
 
   $variables['attributes']['class'][] = 'table';
-  if(!in_array('no_striping', $variables['attributes']['class'])) {
+  if(!in_array('table-no-striping', $variables['attributes']['class'])) {
     $variables['attributes']['class'][] = 'table-striped';
   }
   
