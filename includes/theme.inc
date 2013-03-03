@@ -362,11 +362,11 @@ function bootstrap_bootstrap_modal($variables) {
   $links = $variables['footer'];
   $heading = $variables['heading'];
   $attributes = $variables['attributes'];
-  
+
   if (isset($variables['attributes']['class']) && is_string($variables['attributes']['class'])) { // Convert classes to an array.
     $variables['attributes']['class'] = explode(' ', $variables['attributes']['class']);
   }
-  
+
   $variables['attributes']['class'][] = 'modal';
 
   $output = '<div'. drupal_attributes($variables['attributes']) .'>';
