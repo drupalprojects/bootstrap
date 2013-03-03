@@ -353,6 +353,33 @@ function _bootstrap_alter($files, $type) {
   }
   return $output;
 }
+
+/**
+ * Returns HTML for Bootstrap's modal.
+ */
+function bootstrap_bootstrap_modal($variables) {
+  $body = $variables['body'];
+  $links = $variables['footer'];
+  $heading = $variables['heading'];
+  $attributes = $variables['attributes'];
+  
+  if (isset($variables['attributes']['class']) && is_string($variables['attributes']['class'])) { // Convert classes to an array.
+    $variables['attributes']['class'] = explode(' ', $variables['attributes']['class']);
+  }
+  
+  $variables['attributes']['class'][] = 'modal';
+
+  $output = '<div'. drupal_attributes($variables['attributes']) .'>';
+  $output .= '<div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>';
+  $output .= '<h3>'. check_plain($variables['heading']) .'</h3>';
+  $output .= '</div>';
+  $output .= '<div class="modal-body">'. $variables['body'] .'</div>';
+  $output .= '<div class="modal-footer">'. $variables['footer'] .'</div>';
+  $output .= '</div>';
+
+  return $output;
+}
+
 function bootstrap_preprocess_table(&$variables) {
 
   if (isset($variables['attributes']['class']) && is_string($variables['attributes']['class'])) {

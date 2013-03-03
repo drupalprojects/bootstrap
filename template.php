@@ -55,6 +55,14 @@ function bootstrap_theme(&$existing, $type, $theme, $path) {
         'type' => NULL
       ),
     ),
+    'bootstrap_modal' => array(
+      'variables' => array(
+        'heading' => '',
+        'body' => '',
+        'footer' => '',
+        'attributes' => array(),
+      ),
+    ),
     'bootstrap_search_form_wrapper' => array(
       'render element' => 'element',
     ),
