@@ -380,6 +380,9 @@ function bootstrap_bootstrap_modal($variables) {
   return $output;
 }
 
+/**
+ * Add stripping to tables (in case they don't have .table-no-striping class)
+ */
 function bootstrap_preprocess_table(&$variables) {
 
   if (isset($variables['attributes']['class']) && is_string($variables['attributes']['class'])) {
