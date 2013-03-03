@@ -11,7 +11,6 @@ function theme_bootstrap_links($variables) {
   $links = $variables['links'];
   $attributes = $variables['attributes'];
   $heading = $variables['heading'];
-  //$dropdown = $variables['dropdown'];
 
   global $language_url;
   $output = '';
