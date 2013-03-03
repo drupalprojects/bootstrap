@@ -160,11 +160,10 @@ function theme_bootstrap_btn_dropdown($variables) {
 
   return $output;
 }
-/*
- * heming functions overwrites
- *
- */
 
+/*
+ * Overwrites the default item list to make it prettier
+ */
 function bootstrap_item_list($variables) {
   $items = $variables['items'];
   $title = $variables['title'];
