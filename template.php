@@ -63,6 +63,12 @@ function bootstrap_theme(&$existing, $type, $theme, $path) {
         'attributes' => array(),
       ),
     ),
+    'bootstrap_accordion' => array(
+      'variables' => array(
+        'id' => '',
+        'elements' => array(),
+      ),
+    ),
     'bootstrap_search_form_wrapper' => array(
       'render element' => 'element',
     ),
