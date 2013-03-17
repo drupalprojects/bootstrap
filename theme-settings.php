@@ -33,6 +33,29 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
                         .'<div class="alert alert-error">' . t('WARNING: this technique will give you a performance boost but will also make you dependant on a third party who has no obligations towards you concerning uptime and service quality.') . '</div>',
   );
 
+  $form['cdn']['cdn_bootstrap_version_container'] = array(
+    '#type' => 'container',
+    '#states' => array(
+      'invisible' => array(
+       ':input[name="cdn_bootstrap"]' => array('checked' => FALSE),
+      ),
+    ),
+  );
+
+  $form['cdn']['cdn_bootstrap_version_container']['cdn_bootstrap_version'] = array(
+    '#type' => 'select',
+    '#title' => t('Bootstrap version'),
+    '#options' => array(
+      '2.3.0' => 'v2.3.0',
+      '2.2.2' => 'v2.2.2',
+      '2.2.1' => 'v2.2.1',
+      '2.2.0' => 'v2.2.0',
+      '2.1.1' => 'v2.1.1',
+      '2.1.0' => 'v2.1.0',
+    ),
+    '#default_value' => theme_get_setting('cdn_bootstrap_version'),
+  );
+
   $form['cdn']['cdn_jquery'] = array(
     '#type'          => 'checkbox',
     '#title'         => t('Use CDN to load in a newer version of jQuery using the no-conflict solution.'),

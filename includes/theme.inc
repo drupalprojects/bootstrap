@@ -277,7 +277,7 @@ function bootstrap_css_alter(&$css) {
     $excludes[$theme_path . '/bootstrap/css/bootstrap-responsive.css'] = FALSE ;
     
     //and then add the cdn css
-    $cdn_url = '//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css';
+    $cdn_url = '//netdna.bootstrapcdn.com/twitter-bootstrap/'. theme_get_setting('cdn_bootstrap_version')  .'/css/bootstrap-combined.min.css';
     $css[$cdn_url]['data'] = $cdn_url;
     $css[$cdn_url]['type'] = 'external';
     $css[$cdn_url]['every_page'] = TRUE;
@@ -311,7 +311,7 @@ function bootstrap_js_alter(&$js) {
     $files[] = '//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js';
 
     if (theme_get_setting('cdn_bootstrap')) {
-      $files[] = '//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js';
+      $files[] = '//netdna.bootstrapcdn.com/twitter-bootstrap/'. theme_get_setting('cdn_bootstrap_version')  .'/js/bootstrap.min.js';
     }
     else {
       $files[] = $theme_path . '/bootstrap/js/bootstrap.js';
@@ -320,7 +320,7 @@ function bootstrap_js_alter(&$js) {
   }
   else {
     if (theme_get_setting('cdn_bootstrap')) {
-      $files[] = '//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js';
+      $files[] = '//netdna.bootstrapcdn.com/twitter-bootstrap/'. theme_get_setting('cdn_bootstrap_version')  .'/js/bootstrap.min.js';
     }
     else {
       $files[] = $theme_path . '/bootstrap/js/bootstrap.js';
