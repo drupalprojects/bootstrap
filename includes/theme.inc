@@ -306,25 +306,11 @@ function bootstrap_js_alter(&$js) {
   }
 
   $js = array_diff_key($js, $excludes);
-  if (theme_get_setting('cdn_jquery')) {
-    // Add jQuery and the switch script to the $files array
-    $files[] = '//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js';
-
-    if (theme_get_setting('cdn_bootstrap')) {
-      $files[] = '//netdna.bootstrapcdn.com/twitter-bootstrap/'. theme_get_setting('cdn_bootstrap_version')  .'/js/bootstrap.min.js';
-    }
-    else {
-      $files[] = $theme_path . '/bootstrap/js/bootstrap.js';
-    }
-    $files[] = $theme_path . '/js/switch.js';
+  if (theme_get_setting('cdn_bootstrap')) {
+    $files[] = '//netdna.bootstrapcdn.com/twitter-bootstrap/'. theme_get_setting('cdn_bootstrap_version')  .'/js/bootstrap.min.js';
   }
   else {
-    if (theme_get_setting('cdn_bootstrap')) {
-      $files[] = '//netdna.bootstrapcdn.com/twitter-bootstrap/'. theme_get_setting('cdn_bootstrap_version')  .'/js/bootstrap.min.js';
-    }
-    else {
-      $files[] = $theme_path . '/bootstrap/js/bootstrap.js';
-    }
+    $files[] = $theme_path . '/bootstrap/js/bootstrap.js';
   }
 
   // Rearrange / Add JS

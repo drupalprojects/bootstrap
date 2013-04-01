@@ -56,14 +56,5 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
     '#default_value' => theme_get_setting('cdn_bootstrap_version'),
   );
 
-  $form['cdn']['cdn_jquery'] = array(
-    '#type'          => 'checkbox',
-    '#title'         => t('Use CDN to load in a newer version of jQuery using the no-conflict solution.'),
-    '#default_value' => theme_get_setting('cdn_jquery'),
-    '#description'   => t('Use cdn to host the latest version of jquery and load the newer version using the ') . l('no-conflict', 'http://api.jquery.com/jQuery.noConflict/') . t(' solution.')
-                          . '<div class="alert alert-error">' .
-                            ('WARNING: this technique will load 2 versions of jQuery, which is bad for front-end performance and adds an extra whopping 90kb (not gziped) to your download (aka not mobile friendly).
-                             Also this solution uses CDN and this will make you dependant on a third party who has no obligations towards you concerning uptime and service quality.') . '</div>',
-  );
 }
 
