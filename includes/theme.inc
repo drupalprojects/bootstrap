@@ -267,16 +267,10 @@ function bootstrap_status_messages($variables) {
  * Implements hook_css_alter().
  */
 function bootstrap_css_alter(&$css) {
-  $theme_path = drupal_get_path('theme', 'bootstrap');
-
+  // Load excluded CSS files from theme.
   $excludes = _bootstrap_alter(bootstrap_theme_get_info('exclude'), 'css');
-
+  // Add the Bootstrap CDN CSS files.
   if (theme_get_setting('cdn_bootstrap')){
-    //first add the existing bootstrap css to the exclude
-    $excludes[$theme_path . '/bootstrap/css/bootstrap.css'] = FALSE;
-    $excludes[$theme_path . '/bootstrap/css/bootstrap-responsive.css'] = FALSE ;
-    
-    //and then add the cdn css
     $cdn_url = '//netdna.bootstrapcdn.com/twitter-bootstrap/'. theme_get_setting('cdn_bootstrap_version')  .'/css/bootstrap-combined.min.css';
     $css[$cdn_url]['data'] = $cdn_url;
     $css[$cdn_url]['type'] = 'external';
@@ -294,23 +288,19 @@ function bootstrap_css_alter(&$css) {
  * Implements hook_js_alter().
  */
 function bootstrap_js_alter(&$js) {
-  $theme_path = drupal_get_path('theme', 'bootstrap');
   $files = array();
 
+  // Load excluded JS files from theme.
   $excludes = _bootstrap_alter(bootstrap_theme_get_info('exclude'), 'js');
-
+  
   // If bootstrap_ui available, we should not add js from theme info file.
   if (module_exists('bootstrap_ui')) {
     libraries_load('bootstrap', 'minified');
-    $excludes[drupal_get_path('theme', 'bootstrap') . '/bootstrap/js/bootstrap.js'] = array();
   }
 
   $js = array_diff_key($js, $excludes);
   if (theme_get_setting('cdn_bootstrap')) {
     $files[] = '//netdna.bootstrapcdn.com/twitter-bootstrap/'. theme_get_setting('cdn_bootstrap_version')  .'/js/bootstrap.min.js';
-  }
-  else {
-    $files[] = $theme_path . '/bootstrap/js/bootstrap.js';
   }
 
   // Rearrange / Add JS

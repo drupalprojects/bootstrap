@@ -10,14 +10,12 @@ regions[sidebar_first]  = 'Primary'
 regions[sidebar_second] = 'Secondary'
 regions[footer]         = 'Footer'
 
-stylesheets[all][] = bootstrap/css/bootstrap.css
-stylesheets[all][] = bootstrap/css/bootstrap-responsive.css
 stylesheets[all][] = css/style.css
 
 settings[toggle_name] = 0
 settings[toggle_search] = 1
-settings[cdn_bootstrap] = 0
-settings[cdn_bootstrap_version] = 2.3.0
+settings[cdn_bootstrap] = 1
+settings[cdn_bootstrap_version] = 2.3.1
 
 ;Exclude
 ;javascript
