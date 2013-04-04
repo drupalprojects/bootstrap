@@ -1,15 +1,18 @@
 <?php
 
-$theme_path = drupal_get_path('theme', 'bootstrap');
-require_once $theme_path . '/includes/bootstrap.inc';
-require_once $theme_path . '/includes/theme.inc';
-require_once $theme_path . '/includes/pager.inc';
-require_once $theme_path . '/includes/form.inc';
-require_once $theme_path . '/includes/admin.inc';
-require_once $theme_path . '/includes/menu.inc';
+// Provide < PHP 5.3 support for the __DIR__ constant.
+if (!defined('__DIR__')) {
+  define('__DIR__', dirname(__FILE__));
+}
+require_once __DIR__ . '/includes/bootstrap.inc';
+require_once __DIR__ . '/includes/theme.inc';
+require_once __DIR__ . '/includes/pager.inc';
+require_once __DIR__ . '/includes/form.inc';
+require_once __DIR__ . '/includes/admin.inc';
+require_once __DIR__ . '/includes/menu.inc';
 
 // Load module specific files in the modules directory.
-$includes = file_scan_directory($theme_path . '/includes/modules', '/\.inc$/');
+$includes = file_scan_directory(__DIR__ . '/includes/modules', '/\.inc$/');
 foreach ($includes as $include) {
   if (module_exists($include->name)) {
     require_once $include->uri;
@@ -31,7 +34,7 @@ function bootstrap_theme(&$existing, $type, $theme, $path) {
   // If we are auto-rebuilding the theme registry, warn about the feature.
   if (
     // Only display for site config admins.
-    function_exists('user_access') && user_access('administer site configuration')
+    isset($GLOBALS['user']) && function_exists('user_access') && user_access('administer site configuration')
     && theme_get_setting('bootstrap_rebuild_registry')
     // Always display in the admin section, otherwise limit to three per hour.
     && (arg(0) == 'admin' || flood_is_allowed($GLOBALS['theme'] . '_rebuild_registry_warning', 3))
