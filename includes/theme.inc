@@ -292,7 +292,7 @@ function bootstrap_js_alter(&$js) {
 
   // Load excluded JS files from theme.
   $excludes = _bootstrap_alter(bootstrap_theme_get_info('exclude'), 'js');
-  
+
   // If bootstrap_ui available, we should not add js from theme info file.
   if (module_exists('bootstrap_ui')) {
     libraries_load('bootstrap', 'minified');
