@@ -35,10 +35,17 @@ Library into your sub-theme. By default, the Bootstrap base theme enables a CDN
 to provide the necessary files. If this method suites you then you can skip
 this step. 
 
-The second method is probably the most dynamic and will grant you the ability
+The first method is probably the most dynamic and will grant you the ability
 to change the variables and utilize the mixins provided by the Bootstrap
-Library. If this method is chosen, you will need to un-comment the lines for
-this method in your sub-theme's .info file before anything will happen.
+Library.
+
+The second method is rather simple and utilizes the CDN Bootstrap Library via
+the base theme. It is very static and will require you to override existing
+styling in your sub-theme.
+
+
+Regardless of which method you choose, you will need to un-comment the
+appropriate lines for your desired method in your sub-theme's .info file.
 
 ##### Method 1: Bootstrap Source Files
 Downloaded and extract the latest 2.x version of the [Bootstrap Library](https://github.com/twitter/bootstrap/tags) into your new sub-theme.
