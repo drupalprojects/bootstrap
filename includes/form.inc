@@ -296,3 +296,111 @@ function _bootstrap_element_whitelist() {
     'panels-ipe-save',
   );
 }
+
+function bootstrap_bootstrap_append_element(&$variables) {
+  $element = &$variables['element'];
+
+  // This is also used in the installer, pre-database setup.
+  $t = get_t();
+
+  // This function is invoked as theme wrapper, but the rendered form element
+  // may not necessarily have been processed by form_builder().
+  $element += array(
+    '#title_display' => 'before',
+  );
+
+  // Add element #id for #type 'item'.
+  if (isset($element['#markup']) && !empty($element['#id'])) {
+    $attributes['id'] = $element['#id'];
+  }
+
+  $exclude_control = FALSE;
+  $control_wrapper = '<div class="controls">';
+  // Add bootstrap class
+  if ($element['#type'] == "radio" || $element['#type'] == "checkbox" || isset($element['#exclude_control'])) {
+    $exclude_control = TRUE;
+  }
+  else {
+    $attributes['class'] = array('control-group');
+  }
+
+  // Check for errors and set correct error class
+  if (isset($element['#parents']) && form_get_error($element)) {
+    $attributes['class'][] = 'error';
+  }
+
+  if (!empty($element['#type'])) {
+    $attributes['class'][] = 'form-type-' . strtr($element['#type'], '_', '-');
+  }
+  if (!empty($element['#name'])) {
+    $attributes['class'][] = 'form-item-' . strtr($element['#name'], array(' ' => '-', '_' => '-', '[' => '-', ']' => ''));
+  }
+  // Add a class for disabled elements to facilitate cross-browser styling.
+  if (!empty($element['#attributes']['disabled'])) {
+    $attributes['class'][] = 'form-disabled';
+  }
+
+
+  if (isset($element['#field_prefix'])) {
+    $attributes['class'][] = 'input-prepend';
+  }
+
+  if (isset($element['#field_suffix'])) {
+    $attributes['class'][] = 'input-append';
+  }
+
+  $attributes['class'][] = 'form-item';
+  $output = '<div' . drupal_attributes($attributes) . '>' . "\n";
+
+  // If #title is not set, we don't display any label or required marker.
+  if (!isset($element['#title'])) {
+    $element['#title_display'] = 'none';
+  }
+  $prefix = isset($element['#field_prefix']) ? $element['#field_prefix'] : '';
+  $suffix = isset($element['#field_suffix']) ? $element['#field_suffix'] : '';
+
+  // Prepare input whitelist - added to ensure ajax functions don't break
+  $whitelist = _bootstrap_element_whitelist();
+
+  switch ($element['#title_display']) {
+    case 'before':
+    case 'invisible':
+      $output .= ' ' . theme('form_element_label', $variables);
+      // Check if item exists in element whitelist
+      if (isset($element['#id']) && in_array($element['#id'], $whitelist)) {
+        $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
+        $exclude_control = TRUE;
+      }
+      else {
+        $output = $exclude_control ? $output : $output.$control_wrapper;
+        $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
+      }
+      break;
+
+    case 'after':
+      $output = $exclude_control ? $output : $output.$control_wrapper;
+      $variables['#children'] = ' ' . $prefix . $element['#children'] . $suffix;
+      $output .= ' ' . theme('form_element_label', $variables) . "\n";
+      break;
+
+    case 'none':
+    case 'attribute':
+      // Output no label and no required marker, only the children.
+      $output = $exclude_control ? $output : $output.$control_wrapper;
+      $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
+      break;
+  }
+
+  if ( !empty($element['#description']) ) {
+    $output .= '<p class="help-block">' . $element['#description'] . "</p>\n";
+  }
+
+  // Check if control wrapper was added to ensure we close div correctly
+  if ($exclude_control) {
+    $output .= "</div>\n";
+  }
+  else {
+    $output .= "</div></div>\n";
+  }
+  return $output;
+}
