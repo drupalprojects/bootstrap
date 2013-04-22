@@ -368,7 +368,7 @@ function bootstrap_bootstrap_modal($variables) {
 
   $output = '<div'. drupal_attributes($variables['attributes']) .'>';
   $output .= '<div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>';
-  $output .= '<h3>'. check_plain($variables['heading']) .'</h3>';
+  $output .= '<h3>'. $variables['html_heading']? $variables['heading'] : check_plain($variables['heading']) .'</h3>';
   $output .= '</div>';
   $output .= '<div class="modal-body">'. render($variables['body']) .'</div>';
   $output .= '<div class="modal-footer">'. render($variables['footer']) .'</div>';

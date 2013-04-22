@@ -64,6 +64,7 @@ function bootstrap_theme(&$existing, $type, $theme, $path) {
         'body' => '',
         'footer' => '',
         'attributes' => array(),
+        'html_heading' => FALSE,
       ),
     ),
     'bootstrap_accordion' => array(
