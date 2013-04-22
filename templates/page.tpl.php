@@ -88,7 +88,7 @@
     <?php endif; ?>
 
   </div>
-  <footer class="footer container">
-    <?php print render($page['footer']); ?>
-  </footer>
 </div>
+<footer class="footer container">
+  <?php print render($page['footer']); ?>
+</footer>
