@@ -297,6 +297,13 @@ function bootstrap_js_alter(&$js) {
   if (module_exists('bootstrap_ui')) {
     libraries_load('bootstrap', 'minified');
   }
+  
+  // Replace core progress bar JS with the Bootstrap equivilent.
+  if (isset($js['misc/progress.js']) && !empty($js['misc/progress.js'])) {
+    unset($js['misc/progress.js']);
+    $progress = drupal_get_path('theme', 'bootstrap') . '/js/progress.js';
+    $js[$progress] = drupal_js_defaults($progress);
+  }
 
   $js = array_diff_key($js, $excludes);
   if (theme_get_setting('cdn_bootstrap')) {
@@ -327,6 +334,20 @@ function _bootstrap_alter($files, $type) {
       }
     }
   }
+  return $output;
+}
+
+/**
+ * Returns HTML for Bootstrap's progress bar.
+ */
+function bootstrap_progress_bar($variables) {
+  $output .= '<div id="progress" class="progress-wrapper">';
+  $output .= '  <div class="progress progress-striped progress-info active">';
+  $output .= '    <div class="bar" style="width: ' . $variables['percent'] . '%"></div>';
+  $output .= '  </div>';
+  $output .= '  <div class="percentage pull-right">' . $variables['percent'] . '%</div>';
+  $output .= '  <div class="message">' . $variables['message'] . '</div>';
+  $output .= '</div>';
   return $output;
 }
 

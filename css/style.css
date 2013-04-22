@@ -226,3 +226,12 @@ e.g. multipage*/
 .form-actions{
   clear: both;
 }
+
+/* Progress Bar Overrides */
+.progress-wrapper .progress {
+  margin-bottom: 10px;
+}
+.progress-wrapper .progress .bar {
+  border: 0 none;
+  margin: 0;
+}
