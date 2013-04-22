@@ -297,7 +297,7 @@ function bootstrap_js_alter(&$js) {
   if (module_exists('bootstrap_ui')) {
     libraries_load('bootstrap', 'minified');
   }
-  
+
   // Replace core progress bar JS with the Bootstrap equivilent.
   if (isset($js['misc/progress.js']) && !empty($js['misc/progress.js'])) {
     unset($js['misc/progress.js']);
