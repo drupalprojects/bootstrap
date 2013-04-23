@@ -1,4 +1,12 @@
-
+/**
+ * Fixing horizontal scroll bar on iPhone
+ * http://drupal.org/node/1870076
+ */
+@media(max-width: 767px) {
+  body {
+    position: relative;
+  }
+}
 @media(min-width: 980px) {
   body {
     padding-top: 60px;
