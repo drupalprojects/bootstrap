@@ -6,14 +6,25 @@
  */
 
 /**
+ * Implements hook_icon_providers().
+ */
+function bootstrap_icon_providers() {
+  $providers['bootstrap'] = array(
+    'title' => t('Bootstrap'),
+    'url' => 'http://twitter.github.com/bootstrap/base-css.html#icons',
+  );
+  return $providers;
+}
+
+/**
  * Implements hook_icon_bundles().
  */
 function bootstrap_icon_bundles() {
-  $bundles['bootstrap_glyphicons'] = array(
+  $bundles['bootstrap'] = array(
     'render' => 'sprite',
-    'provider' => t('Bootstrap (Icons by Glyphicons)'),
-    'url' => 'http://twitter.github.com/bootstrap/base-css.html#icons',
+    'provider' => 'bootstrap',
     'title' => t('Bootstrap'),
+    'version' => t('Icons by Glyphicons'),
     'variations' => array(
       'icon-white' => t('White'),
     ),
