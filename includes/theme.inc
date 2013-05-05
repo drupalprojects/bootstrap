@@ -228,6 +228,7 @@ function bootstrap_status_messages($variables) {
     'status' => t('Status message'),
     'error' => t('Error message'),
     'warning' => t('Warning message'),
+    'info' => t('Informative message'),
   );
 
   // Map Drupal message types to their corresponding Bootstrap classes.
@@ -235,7 +236,11 @@ function bootstrap_status_messages($variables) {
   $status_class = array(
     'status' => 'success',
     'error' => 'error',
-    'warning' => 'info',
+    'warning' => 'warning',
+    // Not supported, but in theory a module could send any type of message.
+    // @see drupal_set_message()
+    // @see theme_status_messages()
+    'info' => 'info',
   );
 
   foreach (drupal_get_messages($display) as $type => $messages) {
@@ -244,7 +249,7 @@ function bootstrap_status_messages($variables) {
     $output .= "  <a class=\"close\" data-dismiss=\"alert\" href=\"#\">&times;</a>\n";
 
     if (!empty($status_heading[$type])) {
-      $output .= '<h2 class="element-invisible">' . $status_heading[$type] . "</h2>\n";
+      $output .= '<h4 class="element-invisible">' . $status_heading[$type] . "</h4>\n";
     }
 
     if (count($messages) > 1) {
