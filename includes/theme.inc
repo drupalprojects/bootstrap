@@ -298,11 +298,26 @@ function bootstrap_js_alter(&$js) {
     libraries_load('bootstrap', 'minified');
   }
 
+  $theme_path = drupal_get_path('theme', 'bootstrap');
+
   // Replace core progress bar JS with the Bootstrap equivilent.
   if (isset($js['misc/progress.js']) && !empty($js['misc/progress.js'])) {
     unset($js['misc/progress.js']);
-    $progress = drupal_get_path('theme', 'bootstrap') . '/js/progress.js';
+    $progress = $theme_path . '/js/progress.js';
     $js[$progress] = drupal_js_defaults($progress);
+  }
+
+  // Fix broken Views AJAX pagers.
+  if (module_exists('views') && !empty($js[drupal_get_path('module', 'views') . '/js/ajax_view.js'])) {
+    // Override core ajax prototype function to append throbber inside links,
+    // instead of after it (floating issues).
+    $ajax = $theme_path . '/js/bootstrap_ajax.js';
+    $js[$ajax] = drupal_js_defaults($ajax);
+    $js[$ajax]['group'] = JS_THEME;
+    // Override views prototype function to bind to Bootstrap pagination.
+    $ajax_view = $theme_path . '/js/bootstrap_ajax_view.js';
+    $js[$ajax_view] = drupal_js_defaults($ajax_view);
+    $js[$ajax_view]['group'] = JS_THEME;
   }
 
   $js = array_diff_key($js, $excludes);

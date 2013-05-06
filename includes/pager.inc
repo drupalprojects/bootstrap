@@ -80,7 +80,7 @@ function bootstrap_pager($variables) {
       if ($i > 1) {
         $items[] = array(
           'class' => array('pager-ellipsis', 'disabled'),
-          'data' => '<a>…</a>',
+          'data' => '<span>…</span>',
         );
       }
       // Now generate the actual pager piece.
@@ -107,7 +107,7 @@ function bootstrap_pager($variables) {
       if ($i < $pager_max) {
         $items[] = array(
           'class' => array('pager-ellipsis', 'disabled'),
-          'data' => '<a>…</a>',
+          'data' => '<span>…</span>',
         );
       }
     }
