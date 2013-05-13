@@ -272,19 +272,35 @@ function bootstrap_status_messages($variables) {
  * Implements hook_css_alter().
  */
 function bootstrap_css_alter(&$css) {
+  $theme_path = drupal_get_path('theme', 'bootstrap');
   // Load excluded CSS files from theme.
   $excludes = _bootstrap_alter(bootstrap_theme_get_info('exclude'), 'css');
-  // Add the Bootstrap CDN CSS files.
+  // Add Bootstrap CDN file and overrides.
   if (theme_get_setting('cdn_bootstrap')){
-    $cdn_url = '//netdna.bootstrapcdn.com/twitter-bootstrap/'. theme_get_setting('cdn_bootstrap_version')  .'/css/bootstrap-combined.min.css';
-    $css[$cdn_url]['data'] = $cdn_url;
-    $css[$cdn_url]['type'] = 'external';
-    $css[$cdn_url]['every_page'] = TRUE;
-    $css[$cdn_url]['media'] = 'all';
-    $css[$cdn_url]['preprocess'] = TRUE;
-    $css[$cdn_url]['group'] = CSS_THEME;
-    $css[$cdn_url]['weight'] = -1;
-    $css[$cdn_url]['browsers'] = array('IE' => TRUE, '!IE' => TRUE);
+    // Add CDN.
+    $cdn = '//netdna.bootstrapcdn.com/twitter-bootstrap/'. theme_get_setting('cdn_bootstrap_version')  .'/css/bootstrap-combined.min.css';
+    $css[$cdn] = array(
+      'data' => $cdn,
+      'type' => 'external',
+      'every_page' => TRUE,
+      'media' => 'all',
+      'preprocess' => TRUE,
+      'group' => CSS_THEME,
+      'browsers' => array('IE' => TRUE, '!IE' => TRUE),
+      'weight' => -2,
+    );
+    // Add overrides.
+    $override = $theme_path . '/css/overrides.css';
+    $css[$override] = array(
+      'data' => $override,
+      'type' => 'file',
+      'every_page' => TRUE,
+      'media' => 'all',
+      'preprocess' => TRUE,
+      'group' => CSS_THEME,
+      'browsers' => array('IE' => TRUE, '!IE' => TRUE),
+      'weight' => -1,
+    );
   }
   $css = array_diff_key($css, $excludes);
 }

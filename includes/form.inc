@@ -46,7 +46,6 @@ function bootstrap_form_search_form_alter(&$form, &$form_state) {
  */
 function bootstrap_form_search_block_form_alter(&$form, &$form_state) {
   $form['#attributes']['class'][] = 'form-search';
-  $form['#attributes']['class'][] = 'pull-left';
 
   $form['search_block_form']['#title'] = '';
   $form['search_block_form']['#attributes']['class'][] = 'search-query';

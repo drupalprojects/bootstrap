@@ -57,12 +57,12 @@ to be updated in the future.
 
 **IF USING THE LESS MODULE**
 Change the stylesheets include of your sub-theme's .info file from
-`css/theme.css` to `less/theme.less`. These will be generated once the theme is
+`css/style.css` to `less/style.less`. These will be generated once the theme is
 enabled and viewed.
 
 **IF USING A LOCAL PREPROCESSOR**
-Compile the `./less/theme.less` file. A new file should be generated as
-`./css/theme.css`.
+Compile the `./less/style.less` file. A new file should be generated as
+`./css/style.css`.
 
 Lastly, you will need to uncomment the lines in your sub-theme's .info file
 (pertaining to this method) before anything will work.
@@ -72,7 +72,7 @@ This method is rather simple, you don't have to do anything unless you wish to
 override the default Bootstrap base theme settings. If so, just uncomment the
 lines pertaining to Method 2.
 
-Edit the provided `./css/theme.css` file to your liking.
+Edit the provided `./css/style.css` file to your liking.
 
 ## Enable
 Navigate to `admin/appearance` and click "Enable and set default" for your

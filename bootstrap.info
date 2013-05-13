@@ -10,8 +10,6 @@ regions[sidebar_first]  = 'Primary'
 regions[sidebar_second] = 'Secondary'
 regions[footer]         = 'Footer'
 
-stylesheets[all][] = css/style.css
-
 settings[toggle_name] = 0
 settings[toggle_search] = 1
 settings[cdn_bootstrap] = 1
