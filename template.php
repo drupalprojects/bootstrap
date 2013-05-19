@@ -16,7 +16,7 @@ $includes = file_scan_directory(__DIR__ . '/includes/modules', '/\.inc$/');
 foreach ($includes as $include) {
   if (module_exists($include->name)) {
     require_once $include->uri;
-  }    
+  }
 }
 
 // Auto-rebuild the theme registry during theme development.
