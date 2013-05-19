@@ -63,14 +63,14 @@ function bootstrap_pager($variables) {
     /*
     if ($li_first) {
       $items[] = array(
-        'class' => array('pager-first'), 
+        'class' => array('pager-first'),
         'data' => $li_first,
       );
     }
     */
     if ($li_previous) {
       $items[] = array(
-        'class' => array('prev'), 
+        'class' => array('prev'),
         'data' => $li_previous,
       );
     }
@@ -87,19 +87,19 @@ function bootstrap_pager($variables) {
       for (; $i <= $pager_last && $i <= $pager_max; $i++) {
         if ($i < $pager_current) {
           $items[] = array(
-           // 'class' => array('pager-item'), 
+           // 'class' => array('pager-item'),
             'data' => theme('pager_previous', array('text' => $i, 'element' => $element, 'interval' => ($pager_current - $i), 'parameters' => $parameters)),
           );
         }
         if ($i == $pager_current) {
           $items[] = array(
-            'class' => array('active'), // Add the active class 
+            'class' => array('active'), // Add the active class
             'data' => l($i, '#', array('fragment' => '','external' => TRUE)),
           );
         }
         if ($i > $pager_current) {
           $items[] = array(
-            //'class' => array('pager-item'), 
+            //'class' => array('pager-item'),
             'data' => theme('pager_next', array('text' => $i, 'element' => $element, 'interval' => ($i - $pager_current), 'parameters' => $parameters)),
           );
         }
@@ -114,21 +114,21 @@ function bootstrap_pager($variables) {
     // End generation.
     if ($li_next) {
       $items[] = array(
-        'class' => array('next'), 
+        'class' => array('next'),
         'data' => $li_next,
       );
     }
     /*
     if ($li_last) {
       $items[] = array(
-        'class' => array('pager-last'), 
+        'class' => array('pager-last'),
         'data' => $li_last,
       );
     }
     */
 
     return '<div class="pagination pagination-centered">'. theme('item_list', array(
-      'items' => $items, 
+      'items' => $items,
       //'attributes' => array('class' => array('pager')),
     )) . '</div>';
   }
