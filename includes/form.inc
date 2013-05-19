@@ -17,7 +17,7 @@ function bootstrap_form_alter(&$form, &$form_state, $form_id) {
   if (isset($form['#form_id']) && !in_array($form['#form_id'], $form_ids) && !isset($form['#node_edit_form']) && isset($form['actions']) && ($form['actions']['#type'] == 'actions')) {
     $form['actions']['#theme_wrappers'] = array();
   }
-}  
+}
 
 /**
  * Implements hook_form_FORM_ID_alter() for search_form().
