@@ -46,6 +46,7 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
     '#type' => 'select',
     '#title' => t('Bootstrap version'),
     '#options' => array(
+      '2.3.2' => 'v2.3.2',
       '2.3.1' => 'v2.3.1',
       '2.3.0' => 'v2.3.0',
       '2.2.2' => 'v2.2.2',
