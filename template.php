@@ -230,17 +230,6 @@ function bootstrap_menu_local_action($variables) {
 }
 
 /**
- * Preprocess variables for node.tpl.php
- *
- * @see node.tpl.php
- */
-function bootstrap_preprocess_node(&$variables) {
-  if ($variables['teaser']) {
-    $variables['classes_array'][] = 'row-fluid';
-  }
-}
-
-/**
  * Preprocess variables for region.tpl.php
  *
  * @see region.tpl.php
