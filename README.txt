@@ -1,8 +1,7 @@
-Bootstrap theme for Drupal
+Bootstrap - A base-theme for Drupal
 
-1. Download the Bootstrap library v2 (http://twitter.github.com/bootstrap/), make sure the resulting folder is named "bootstrap." If you are using the Github master branch, you will need to also find a way to compile the LESS and JS files since this module looks for bootstrap.css and bootstrap.js. 
-2. Place the bootstrap folder inside the bootstrap theme folder or your subtheme folder: [path_to_themes]/bootstrap/bootstrap/js…
-3. Put any plugin files into [path_to_themes]/bootstrap/bootstrap/js/
-4. Make sure you have jQuery 1.7, which is available through the jQuery Update module (http://drupal.org/project/jquery_update/) 7.x-2.x-dev version. You need to make sure the 1.7 version is selected on the configuration page for it to work.
+1. Bootstrap requires a minimum jQuery version of 1.7 to function properly. You must download and enable the ![jQuery Update](http://drupal.org/project/jquery_update/) module, 7.x-2.3 version or higher. Navigate to the configuration page and ensure that the minimum version selected is 1.7.
+2. By default, this base theme enables and uses a CDN for loading the Bootstrap library. If you disable this CDN, you will need to use an alternative solution for adding the necessary CSS and JS files from the Bootstrap library. This can be in the form creating a sub-theme or using a utility module.
 
-Author: http://drupal.org/node/259843/committers
+Authors: http://drupal.org/node/259843/committers
+Documentation: http://drupal.org/node/1976938
