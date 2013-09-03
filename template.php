@@ -169,14 +169,14 @@ function bootstrap_preprocess_page(&$variables) {
  * Bootstrap theme wrapper function for the primary menu links
  */
 function bootstrap_menu_tree__primary(&$variables) {
-  return '<ul class="menu nav">' . $variables['tree'] . '</ul>';
+  return '<ul class="menu nav navbar-nav">' . $variables['tree'] . '</ul>';
 }
 
 /**
  * Bootstrap theme wrapper function for the secondary menu links
  */
 function bootstrap_menu_tree__secondary(&$variables) {
-  return '<ul class="menu nav pull-right">' . $variables['tree'] . '</ul>';
+  return '<ul class="menu nav navbar-nav pull-right">' . $variables['tree'] . '</ul>';
 }
 
 /**
