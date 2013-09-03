@@ -170,7 +170,7 @@ function bootstrap_form_element_label(&$variables) {
   $t = get_t();
 
   // If title and required marker are both empty, output no label.
-  if ((!isset($element['#title']) || $element['#title'] === '') && empty($element['#required'])) {
+  if ((!isset($element['#title']) || $element['#title'] === '' && $element['#type'] !== 'radio' && $element['#type'] !== 'checkbox') && empty($element['#required'])) {
     return '';
   }
 
