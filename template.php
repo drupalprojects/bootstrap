@@ -133,16 +133,13 @@ function bootstrap_process_html_tag(&$variables) {
 function bootstrap_preprocess_page(&$variables) {
   // Add information about the number of sidebars.
   if (!empty($variables['page']['sidebar_first']) && !empty($variables['page']['sidebar_second'])) {
-    $variables['columns'] = 3;
+    $variables['content_column_class'] = ' class="col-sm-6"';
   }
-  elseif (!empty($variables['page']['sidebar_first'])) {
-    $variables['columns'] = 2;
-  }
-  elseif (!empty($variables['page']['sidebar_second'])) {
-    $variables['columns'] = 2;
+  elseif (!empty($variables['page']['sidebar_first']) || !empty($variables['page']['sidebar_second'])) {
+    $variables['content_column_class'] = ' class="col-sm-9"';
   }
   else {
-    $variables['columns'] = 1;
+    $variables['content_column_class'] = NULL;
   }
 
   // Primary nav
@@ -269,27 +266,6 @@ function bootstrap_preprocess_block(&$variables, $hook) {
 function bootstrap_process_block(&$variables, $hook) {
   // Drupal 7 should use a $title variable instead of $block->subject.
   $variables['title'] = $variables['block']->subject;
-}
-
-/**
- * Returns the correct span class for a region
- */
-function _bootstrap_content_span($columns = 1) {
-  $class = FALSE;
-  
-  switch($columns) {
-    case 1:
-      $class = 'span12';
-      break;
-    case 2:
-      $class = 'span9';
-      break;
-    case 3:
-      $class = 'span6';
-      break;
-  }
-  
-  return $class;
 }
 
 /**

@@ -28,7 +28,7 @@ function bootstrap_form_search_form_alter(&$form, &$form_state) {
 
   $form['basic']['keys']['#title'] = '';
   $form['basic']['keys']['#attributes']['class'][] = 'search-query';
-  $form['basic']['keys']['#attributes']['class'][] = 'span2';
+  $form['basic']['keys']['#attributes']['class'][] = 'col-sm-2';
   $form['basic']['keys']['#attributes']['placeholder'] = t('Search');
 
   // Hide the default button from display and implement a theme wrapper to add
@@ -49,7 +49,7 @@ function bootstrap_form_search_block_form_alter(&$form, &$form_state) {
 
   $form['search_block_form']['#title'] = '';
   $form['search_block_form']['#attributes']['class'][] = 'search-query';
-  $form['search_block_form']['#attributes']['class'][] = 'span2';
+  $form['search_block_form']['#attributes']['class'][] = 'col-sm-2';
   $form['search_block_form']['#attributes']['placeholder'] = t('Search');
 
   // Hide the default button from display and implement a theme wrapper to add
