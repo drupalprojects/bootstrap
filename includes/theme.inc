@@ -276,9 +276,9 @@ function bootstrap_css_alter(&$css) {
   // Load excluded CSS files from theme.
   $excludes = _bootstrap_alter(bootstrap_theme_get_info('exclude'), 'css');
   // Add Bootstrap CDN file and overrides.
-  if (theme_get_setting('cdn_bootstrap')){
+  if (theme_get_setting('bootstrap_cdn')){
     // Add CDN.
-    $cdn = '//netdna.bootstrapcdn.com/twitter-bootstrap/'. theme_get_setting('cdn_bootstrap_version')  .'/css/bootstrap-combined.min.css';
+    $cdn = '//netdna.bootstrapcdn.com/bootstrap/'. theme_get_setting('bootstrap_cdn')  .'/css/bootstrap.min.css';
     $css[$cdn] = array(
       'data' => $cdn,
       'type' => 'external',
@@ -342,8 +342,8 @@ function bootstrap_js_alter(&$js) {
   $js = array_diff_key($js, $excludes);
 
   // Add CDN.
-  if (theme_get_setting('cdn_bootstrap')) {
-    $cdn = '//netdna.bootstrapcdn.com/twitter-bootstrap/'. theme_get_setting('cdn_bootstrap_version')  .'/js/bootstrap.min.js';
+  if (theme_get_setting('bootstrap_cdn')) {
+    $cdn = '//netdna.bootstrapcdn.com/bootstrap/'. theme_get_setting('bootstrap_cdn')  .'/js/bootstrap.min.js';
     $js[$cdn] = drupal_js_defaults();
     $js[$cdn]['data'] = $cdn;
     $js[$cdn]['type'] = 'external';
