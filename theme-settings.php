@@ -22,7 +22,7 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
     '#default_value' => theme_get_setting('bootstrap_cdn'),
     '#empty_option' => t('Disabled'),
     '#empty_value' => NULL,
-    '#description' => t('Use the <a href="!bootstrapcdn_url">BootstrapCDN</a> (Content Distribution Network) to serve the Bootstrap framework files. Enabling this will prevent this theme from trying to load local files.', array('!bootstrapcdn_url' => url('http://bootstrapcdn.com'))) . '<div class="alert alert-error">' . t('WARNING: this technique will give you a performance boost but will also make you dependant on a third party who has no obligations towards you concerning uptime and service quality.') . '</div>',
+    '#description' => t('Use !bootstrapcdn to serve the Bootstrap framework files. Enabling this setting will prevent this theme from attempting to load any Bootstrap framework files locally.', array('!bootstrapcdn' => l('BootstrapCDN', 'http://bootstrapcdn.com', array('external' => TRUE)))) . '<div class="alert alert-error">' . t('WARNING: Using this content distribution network will give you a performance boost but will also make you dependant on a third party who has no obligations towards you concerning uptime and service quality.') . '</div>',
   );
 
   $form['bootstrap']['bootstrap_rebuild_registry'] = array(
