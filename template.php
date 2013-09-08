@@ -91,20 +91,7 @@ function bootstrap_breadcrumb($variables) {
   $breadcrumb = $variables['breadcrumb'];
 
   if (!empty($breadcrumb)) {
-    $breadcrumbs = '<ul class="breadcrumb">';
-    
-    $count = count($breadcrumb) - 1;
-    foreach ($breadcrumb as $key => $value) {
-      if ($count != $key) {
-        $breadcrumbs .= '<li>' . $value . '<span class="divider">/</span></li>';
-      }
-      else{
-        $breadcrumbs .= '<li>' . $value . '</li>';
-      }
-    }
-    $breadcrumbs .= '</ul>';
-    
-    return $breadcrumbs;
+    return theme('item_list', array('items' => $breadcrumb, 'type' => 'ol', 'attributes' => array('class' => array('breadcrumb'))));
   }
 }
 
