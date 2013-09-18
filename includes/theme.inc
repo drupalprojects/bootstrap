@@ -235,7 +235,7 @@ function bootstrap_status_messages($variables) {
   // @see http://twitter.github.com/bootstrap/components.html#alerts
   $status_class = array(
     'status' => 'success',
-    'error' => 'error',
+    'error' => 'danger',
     'warning' => 'warning',
     // Not supported, but in theory a module could send any type of message.
     // @see drupal_set_message()
