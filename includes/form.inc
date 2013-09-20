@@ -292,6 +292,22 @@ function bootstrap_button($variables) {
   $label = $element['#value'];
   element_set_attributes($element, array('id', 'name', 'value', 'type'));
 
+  // If a button type class isn't present then add in default.
+  $button_classes = array(
+    'btn-default',
+    'btn-primary',
+    'btn-success',
+    'btn-info',
+    'btn-warning',
+    'btn-danger',
+    'btn-link',
+  );
+  $class_intersection = array_intersect($button_classes, $element['#attributes']['class']);
+  if (empty($class_intersection)) {
+    $element['#attributes']['class'][] = 'btn-default';
+  }
+
+  // Add in the button type class.
   $element['#attributes']['class'][] = 'form-' . $element['#button_type'];
   if (!empty($element['#attributes']['disabled'])) {
     $element['#attributes']['class'][] = 'form-button-disabled';

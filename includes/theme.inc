@@ -134,6 +134,9 @@ function theme_bootstrap_btn_dropdown($variables) {
   if (isset($variables['type'])) {
     $type_class = ' btn-'. $variables['type'];
   }
+  else {
+    $type_class = ' btn-default';
+  }
 
   // Start markup
   $output = '<div'. drupal_attributes($variables['attributes']) .'>';
