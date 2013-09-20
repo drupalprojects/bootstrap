@@ -261,24 +261,30 @@ function bootstrap_process_block(&$variables, $hook) {
  * @ingroup themable
  */
 function bootstrap_bootstrap_search_form_wrapper(&$variables) {
-  $output = '<div class="input-append">';
+  $output = '<div class="input-group">';
   $output .= $variables['element']['#children'];
-  $output .= '<button type="submit" class="btn">';
-  $output .= '<i class="icon-search"></i>';
-  $output .= '<span class="element-invisible">' . t('Search') . '</span>';
+  $output .= '<span class="input-group-btn">';
+  $output .= '<button type="submit" class="btn btn-default">';
+  if (module_exists('icon')) {
+    $output .= theme('icon', array('bundle' => 'bootstrap', 'icon' => 'glyphicon-search'));
+  }
+  else {
+    $output .= t('Search');
+  }
   $output .= '</button>';
+  $output .= '</span>';
   $output .= '</div>';
   return $output;
- }
+}
 
- /**
+/**
  * Implements hook_preprocess_icon().
  *
  * bootstrap need additional class glyphicon to display icons
  *
  * @see icon_preprocess_icon_image()
  * @see template_preprocess_icon()
-*/
+ */
 function bootstrap_preprocess_icon(&$variables) {
   $bundle = &$variables['bundle'];
 
