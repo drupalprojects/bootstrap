@@ -80,16 +80,6 @@ function bootstrap_form_element(&$variables) {
     $attributes['id'] = $element['#id'];
   }
 
-  $exclude_control = FALSE;
-  $control_wrapper = '<div class="controls">';
-  // Add bootstrap class
-  if (isset($element['#type']) && ($element['#type'] == "radio" || $element['#type'] == "checkbox")){
-    $exclude_control = TRUE;
-  }
-  else {
-    $attributes['class'] = array('control-group');
-  }
-
   // Check for errors and set correct error class
   if (isset($element['#parents']) && form_get_error($element)) {
     $attributes['class'][] = 'error';
@@ -106,6 +96,18 @@ function bootstrap_form_element(&$variables) {
     $attributes['class'][] = 'form-disabled';
   }
   $attributes['class'][] = 'form-item';
+
+  // See http://getbootstrap.com/css/#forms-controls.
+  if (isset($element['#type']) ) {
+    if($element['#type'] == "radio") {
+      $attributes['class'][] = 'radio';
+    } elseif ($element['#type'] == "checkbox") {
+      $attributes['class'][] = 'checkbox';
+    } else {
+      $attributes['class'][] = 'form-group';
+    }
+  }
+
   $output = '<div' . drupal_attributes($attributes) . '>' . "\n";
 
   // If #title is not set, we don't display any label or required marker.
@@ -122,19 +124,9 @@ function bootstrap_form_element(&$variables) {
     case 'before':
     case 'invisible':
       $output .= ' ' . theme('form_element_label', $variables);
-      // Check if item exists in element whitelist
-      if (isset($element['#id']) && in_array($element['#id'], $whitelist)) {
-        $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
-        $exclude_control = TRUE;
-      }
-      else {
-        $output = $exclude_control ? $output : $output.$control_wrapper;
-        $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
-      }
+      $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
       break;
-
     case 'after':
-      $output = $exclude_control ? $output : $output.$control_wrapper;
       $variables['#children'] = ' ' . $prefix . $element['#children'] . $suffix;
       $output .= ' ' . theme('form_element_label', $variables) . "\n";
       break;
@@ -142,7 +134,6 @@ function bootstrap_form_element(&$variables) {
     case 'none':
     case 'attribute':
       // Output no label and no required marker, only the children.
-      $output = $exclude_control ? $output : $output.$control_wrapper;
       $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
       break;
   }
@@ -151,13 +142,8 @@ function bootstrap_form_element(&$variables) {
     $output .= '<p class="help-block">' . $element['#description'] . "</p>\n";
   }
 
-  // Check if control wrapper was added to ensure we close div correctly
-  if ($exclude_control) {
-    $output .= "</div>\n";
-  }
-  else {
-    $output .= "</div></div>\n";
-  }
+  $output .= "</div>\n";
+
   return $output;
 }
 
@@ -169,8 +155,9 @@ function bootstrap_form_element_label(&$variables) {
   // This is also used in the installer, pre-database setup.
   $t = get_t();
 
+  $skip_class = 'checkbox' === $element['#type'] || 'radio' === $element['#type'] ? TRUE : FALSE;
   // If title and required marker are both empty, output no label.
-  if ((!isset($element['#title']) || $element['#title'] === '' && $element['#type'] !== 'radio' && $element['#type'] !== 'checkbox') && empty($element['#required'])) {
+  if ((!isset($element['#title']) || $element['#title'] === '' && !$skip_class) && empty($element['#required'])) {
     return '';
   }
 
@@ -181,8 +168,7 @@ function bootstrap_form_element_label(&$variables) {
 
   $attributes = array();
   // Style the label as class option to display inline with the element.
-  if ($element['#title_display'] == 'after') {
-    $attributes['class'][] = 'option';
+  if ($element['#title_display'] == 'after' && !$skip_class) {
     $attributes['class'][] = $element['#type'];
   }
   // Show label only to screen readers to avoid disruption in visual flows.
@@ -360,16 +346,6 @@ function bootstrap_bootstrap_append_element(&$variables) {
     $attributes['id'] = $element['#id'];
   }
 
-  $exclude_control = FALSE;
-  $control_wrapper = '<div class="controls">';
-  // Add bootstrap class
-  if ($element['#type'] == "radio" || $element['#type'] == "checkbox" || isset($element['#exclude_control'])) {
-    $exclude_control = TRUE;
-  }
-  else {
-    $attributes['class'] = array('control-group');
-  }
-
   // Check for errors and set correct error class
   if (isset($element['#parents']) && form_get_error($element)) {
     $attributes['class'][] = 'error';
@@ -386,16 +362,19 @@ function bootstrap_bootstrap_append_element(&$variables) {
     $attributes['class'][] = 'form-disabled';
   }
 
-
-  if (isset($element['#field_prefix'])) {
-    $attributes['class'][] = 'input-prepend';
-  }
-
-  if (isset($element['#field_suffix'])) {
-    $attributes['class'][] = 'input-append';
-  }
-
   $attributes['class'][] = 'form-item';
+
+  // See http://getbootstrap.com/css/#forms-controls.
+  if (isset($element['#type']) ) {
+    if($element['#type'] == 'radio') {
+      $attributes['class'][] = 'radio';
+    } elseif ($element['#type'] == 'checkbox') {
+      $attributes['class'][] = 'checkbox';
+    } else {
+      $attributes['class'][] = 'form-group';
+    }
+  }
+
   $output = '<div' . drupal_attributes($attributes) . '>' . "\n";
 
   // If #title is not set, we don't display any label or required marker.
@@ -413,18 +392,10 @@ function bootstrap_bootstrap_append_element(&$variables) {
     case 'invisible':
       $output .= ' ' . theme('form_element_label', $variables);
       // Check if item exists in element whitelist
-      if (isset($element['#id']) && in_array($element['#id'], $whitelist)) {
         $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
-        $exclude_control = TRUE;
-      }
-      else {
-        $output = $exclude_control ? $output : $output.$control_wrapper;
-        $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
-      }
       break;
 
     case 'after':
-      $output = $exclude_control ? $output : $output.$control_wrapper;
       $variables['#children'] = ' ' . $prefix . $element['#children'] . $suffix;
       $output .= ' ' . theme('form_element_label', $variables) . "\n";
       break;
@@ -432,7 +403,6 @@ function bootstrap_bootstrap_append_element(&$variables) {
     case 'none':
     case 'attribute':
       // Output no label and no required marker, only the children.
-      $output = $exclude_control ? $output : $output.$control_wrapper;
       $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
       break;
   }
@@ -440,13 +410,7 @@ function bootstrap_bootstrap_append_element(&$variables) {
   if ( !empty($element['#description']) ) {
     $output .= '<p class="help-block">' . $element['#description'] . "</p>\n";
   }
+  $output .= "</div>\n";
 
-  // Check if control wrapper was added to ensure we close div correctly
-  if ($exclude_control) {
-    $output .= "</div>\n";
-  }
-  else {
-    $output .= "</div></div>\n";
-  }
   return $output;
 }
