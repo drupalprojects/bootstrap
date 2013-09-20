@@ -212,6 +212,38 @@ function bootstrap_form_element_label(&$variables) {
 }
 
 /**
+ * Add bootstrap_pre_render_element to process list of elements with #input.
+ */
+function bootstrap_element_info_alter(&$elements) {
+  foreach($elements AS &$element) {
+    if (!empty($element['#input'])) {
+      $element['#process'][] = 'bootstrap_pre_render_element';
+    }
+  }
+}
+
+/**
+ * Alters HTML of input elements.
+ */
+function bootstrap_pre_render_element($element, &$form_state) {
+
+  // Don't inject the "form-control" class on these input types.
+  $ignore_types = array(
+    'radios',
+    'radio',
+    'hidden',
+    'checkbox',
+    'submit',
+    'file'
+  );
+  if(!in_array($element['#type'], $ignore_types)) {
+    $element['#attributes']['class'][] = 'form-control';
+  }
+
+  return $element;
+}
+
+/**
  * Preprocessor for theme('button').
  */
 function bootstrap_preprocess_button(&$vars) {
