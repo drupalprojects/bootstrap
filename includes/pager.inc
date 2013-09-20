@@ -127,11 +127,11 @@ function bootstrap_pager($variables) {
     }
     */
 
-    return '<div class="pagination pagination-centered">'. theme('item_list', array(
+    return '<div class="text-center">'. theme('item_list', array(
       'items' => $items,
-      //'attributes' => array('class' => array('pager')),
+      'attributes' => array('class' => array('pagination')),
     )) . '</div>';
   }
-  
+
   return $output;
 }
