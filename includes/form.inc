@@ -251,7 +251,7 @@ function bootstrap_preprocess_button(&$vars) {
 
   if (isset($vars['element']['#value'])) {
     $classes = array(
-      //specifics
+      // Specific strings.
       t('Save and add') => 'btn-info',
       t('Add another item') => 'btn-info',
       t('Add effect') => 'btn-primary',
@@ -259,7 +259,7 @@ function bootstrap_preprocess_button(&$vars) {
       t('Update style') => 'btn-primary',
       t('Download feature') => 'btn-primary',
 
-      //generals
+      // General strings.
       t('Save') => 'btn-primary',
       t('Apply') => 'btn-primary',
       t('Create') => 'btn-primary',
@@ -309,18 +309,17 @@ function bootstrap_button($variables) {
 
   // Add in the button type class.
   $element['#attributes']['class'][] = 'form-' . $element['#button_type'];
-  if (!empty($element['#attributes']['disabled'])) {
-    $element['#attributes']['class'][] = 'form-button-disabled';
-  }
 
-  // Prepare input whitelist - added to ensure ajax functions don't break
+  // Prepare input whitelist - added to ensure ajax functions don't break.
   $whitelist = _bootstrap_element_whitelist();
 
   if (isset($element['#id']) && in_array($element['#id'], $whitelist)) {
-    return '<input' . drupal_attributes($element['#attributes']) . ">\n"; // This line break adds inherent margin between multiple buttons
+    // This line break adds inherent margin between multiple buttons.
+    return '<input' . drupal_attributes($element['#attributes']) . ">\n";
   }
   else {
-    return '<button' . drupal_attributes($element['#attributes']) . '>'. $label ."</button>\n"; // This line break adds inherent margin between multiple buttons
+    // This line break adds inherent margin between multiple buttons.
+    return '<button' . drupal_attributes($element['#attributes']) . '>' . $label . "</button>\n";
   }
 }
 
