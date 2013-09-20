@@ -369,7 +369,7 @@ function _bootstrap_alter($files, $type) {
  * Returns HTML for Bootstrap's progress bar.
  */
 function bootstrap_progress_bar($variables) {
-  $output .= '<div id="progress" class="progress-wrapper">';
+  $output = '<div id="progress" class="progress-wrapper">';
   $output .= '  <div class="progress progress-striped progress-info active">';
   $output .= '    <div class="bar" style="width: ' . $variables['percent'] . '%"></div>';
   $output .= '  </div>';
