@@ -270,3 +270,19 @@ function bootstrap_bootstrap_search_form_wrapper(&$variables) {
   $output .= '</div>';
   return $output;
  }
+
+ /**
+ * Implements hook_preprocess_icon().
+ *
+ * bootstrap need additional class glyphicon to display icons
+ *
+ * @see icon_preprocess_icon_image()
+ * @see template_preprocess_icon()
+*/
+function bootstrap_preprocess_icon(&$variables) {
+  $bundle = &$variables['bundle'];
+
+  if ($bundle['provider'] === 'bootstrap') {
+    $variables['attributes']['class'][] = 'glyphicon';
+  }
+}
