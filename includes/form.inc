@@ -152,12 +152,15 @@ function bootstrap_form_element(&$variables) {
  */
 function bootstrap_form_element_label(&$variables) {
   $element = $variables['element'];
+
   // This is also used in the installer, pre-database setup.
   $t = get_t();
 
-  $skip_class = 'checkbox' === $element['#type'] || 'radio' === $element['#type'] ? TRUE : FALSE;
+  // Determine if certain things should skip for checkbox or radio elements.
+  $skip = ('checkbox' === $element['#type'] || 'radio' === $element['#type']);
+
   // If title and required marker are both empty, output no label.
-  if ((!isset($element['#title']) || $element['#title'] === '' && !$skip_class) && empty($element['#required'])) {
+  if ((!isset($element['#title']) || $element['#title'] === '' && !$skip) && empty($element['#required'])) {
     return '';
   }
 
@@ -167,8 +170,9 @@ function bootstrap_form_element_label(&$variables) {
   $title = filter_xss_admin($element['#title']);
 
   $attributes = array();
+
   // Style the label as class option to display inline with the element.
-  if ($element['#title_display'] == 'after' && !$skip_class) {
+  if ($element['#title_display'] == 'after' && !$skip) {
     $attributes['class'][] = $element['#type'];
   }
   // Show label only to screen readers to avoid disruption in visual flows.
@@ -180,17 +184,13 @@ function bootstrap_form_element_label(&$variables) {
     $attributes['for'] = $element['#id'];
   }
 
-  // @Bootstrap: Add Bootstrap control-label class except for radio.
-  if ($element['#type'] != 'radio') {
-    $attributes['class'][] = 'control-label';
-  }
-  // @Bootstrap: Insert radio and checkboxes inside label elements.
+  // Insert radio and checkboxes inside label elements.
   $output = '';
-  if ( isset($variables['#children']) ) {
+  if (isset($variables['#children'])) {
     $output .= $variables['#children'];
   }
 
-  // @Bootstrap: Append label
+  // Append label.
   $output .= $t('!title !required', array('!title' => $title, '!required' => $required));
 
   // The leading whitespace helps visually separate fields from inline labels.
