@@ -294,9 +294,6 @@ function bootstrap_button($variables) {
   // Add in the button type class.
   $element['#attributes']['class'][] = 'form-' . $element['#button_type'];
 
-  // Prepare input whitelist - added to ensure ajax functions don't break.
-  $whitelist = _bootstrap_element_whitelist();
-
   if (isset($element['#id']) && in_array($element['#id'], $whitelist)) {
     // This line break adds inherent margin between multiple buttons.
     return '<input' . drupal_attributes($element['#attributes']) . ">\n";
@@ -305,26 +302,6 @@ function bootstrap_button($variables) {
     // This line break adds inherent margin between multiple buttons.
     return '<button' . drupal_attributes($element['#attributes']) . '>' . $label . "</button>\n";
   }
-}
-
-/**
- * Returns an array containing ids of any whitelisted drupal elements
- */
-function _bootstrap_element_whitelist() {
-/**
- * Why whitelist an element?
- * The reason is to provide a list of elements we wish to exclude
- * from certain modifications made by the bootstrap theme which
- * break core functionality - e.g. ajax.
- */
-  return array(
-    'edit-refresh',
-    'edit-pass-pass1',
-    'edit-pass-pass2',
-    'panels-ipe-cancel',
-    'panels-ipe-customize-page',
-    'panels-ipe-save',
-  );
 }
 
 function bootstrap_bootstrap_append_element(&$variables) {
@@ -381,9 +358,6 @@ function bootstrap_bootstrap_append_element(&$variables) {
   }
   $prefix = isset($element['#field_prefix']) ? $element['#field_prefix'] : '';
   $suffix = isset($element['#field_suffix']) ? $element['#field_suffix'] : '';
-
-  // Prepare input whitelist - added to ensure ajax functions don't break
-  $whitelist = _bootstrap_element_whitelist();
 
   switch ($element['#title_display']) {
     case 'before':
