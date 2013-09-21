@@ -113,9 +113,6 @@ function bootstrap_form_element(&$variables) {
   $prefix = isset($element['#field_prefix']) ? '<span class="field-prefix">' . $element['#field_prefix'] . '</span> ' : '';
   $suffix = isset($element['#field_suffix']) ? ' <span class="field-suffix">' . $element['#field_suffix'] . '</span>' : '';
 
-  // Prepare input whitelist - added to ensure ajax functions don't break
-  $whitelist = _bootstrap_element_whitelist();
-
   switch ($element['#title_display']) {
     case 'before':
     case 'invisible':
@@ -294,14 +291,8 @@ function bootstrap_button($variables) {
   // Add in the button type class.
   $element['#attributes']['class'][] = 'form-' . $element['#button_type'];
 
-  if (isset($element['#id']) && in_array($element['#id'], $whitelist)) {
-    // This line break adds inherent margin between multiple buttons.
-    return '<input' . drupal_attributes($element['#attributes']) . ">\n";
-  }
-  else {
-    // This line break adds inherent margin between multiple buttons.
-    return '<button' . drupal_attributes($element['#attributes']) . '>' . $label . "</button>\n";
-  }
+  // This line break adds inherent margin between multiple buttons.
+  return '<button' . drupal_attributes($element['#attributes']) . '>' . $label . "</button>\n";
 }
 
 function bootstrap_bootstrap_append_element(&$variables) {
@@ -363,7 +354,6 @@ function bootstrap_bootstrap_append_element(&$variables) {
     case 'before':
     case 'invisible':
       $output .= ' ' . theme('form_element_label', $variables);
-      // Check if item exists in element whitelist
         $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
       break;
 
