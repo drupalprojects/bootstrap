@@ -1,9 +1,15 @@
 <?php
+/**
+ * @file
+ * form.inc
+ *
+ * Implements various form alter and implementations.
+ */
 
 /**
  * Implements hook_form_alter().
  */
-function bootstrap_form_alter(&$form, &$form_state, $form_id) {
+function bootstrap_form_alter(&$form) {
   // Id's of forms that should be ignored
   // Make this configurable?
   $form_ids = array(
@@ -13,7 +19,7 @@ function bootstrap_form_alter(&$form, &$form_state, $form_id) {
     'node_delete_confirm',
   );
 
-  // Only wrap in container for certain form
+  // Only wrap in container for certain form.
   if (isset($form['#form_id']) && !in_array($form['#form_id'], $form_ids) && !isset($form['#node_edit_form']) && isset($form['actions']) && ($form['actions']['#type'] == 'actions')) {
     $form['actions']['#theme_wrappers'] = array();
   }
@@ -22,7 +28,7 @@ function bootstrap_form_alter(&$form, &$form_state, $form_id) {
 /**
  * Implements hook_form_FORM_ID_alter() for search_form().
  */
-function bootstrap_form_search_form_alter(&$form, &$form_state) {
+function bootstrap_form_search_form_alter(&$form) {
   // Add a clearfix class so the results don't overflow onto the form.
   $form['#attributes']['class'][] = 'clearfix';
 
@@ -42,7 +48,7 @@ function bootstrap_form_search_form_alter(&$form, &$form_state) {
 /**
  * Implements hook_form_FORM_ID_alter() for search_block_form().
  */
-function bootstrap_form_search_block_form_alter(&$form, &$form_state) {
+function bootstrap_form_search_block_form_alter(&$form) {
   $form['#attributes']['class'][] = 'form-search';
 
   $form['search_block_form']['#title'] = '';
@@ -62,8 +68,6 @@ function bootstrap_form_search_block_form_alter(&$form, &$form_state) {
  */
 function bootstrap_form_element(&$variables) {
   $element = &$variables['element'];
-  // This is also used in the installer, pre-database setup.
-  $t = get_t();
 
   // This function is invoked as theme wrapper, but the rendered form element
   // may not necessarily have been processed by form_builder().
@@ -76,7 +80,7 @@ function bootstrap_form_element(&$variables) {
     $attributes['id'] = $element['#id'];
   }
 
-  // Check for errors and set correct error class
+  // Check for errors and set correct error class.
   if (isset($element['#parents']) && form_get_error($element)) {
     $attributes['class'][] = 'error';
   }
@@ -85,7 +89,12 @@ function bootstrap_form_element(&$variables) {
     $attributes['class'][] = 'form-type-' . strtr($element['#type'], '_', '-');
   }
   if (!empty($element['#name'])) {
-    $attributes['class'][] = 'form-item-' . strtr($element['#name'], array(' ' => '-', '_' => '-', '[' => '-', ']' => ''));
+    $attributes['class'][] = 'form-item-' . strtr($element['#name'], array(
+        ' ' => '-',
+        '_' => '-',
+        '[' => '-',
+        ']' => '',
+    ));
   }
   // Add a class for disabled elements to facilitate cross-browser styling.
   if (!empty($element['#attributes']['disabled'])) {
@@ -94,12 +103,14 @@ function bootstrap_form_element(&$variables) {
   $attributes['class'][] = 'form-item';
 
   // See http://getbootstrap.com/css/#forms-controls.
-  if (isset($element['#type']) ) {
-    if($element['#type'] == "radio") {
+  if (isset($element['#type'])) {
+    if ($element['#type'] == "radio") {
       $attributes['class'][] = 'radio';
-    } elseif ($element['#type'] == "checkbox") {
+    }
+    elseif ($element['#type'] == "checkbox") {
       $attributes['class'][] = 'checkbox';
-    } else {
+    }
+    else {
       $attributes['class'][] = 'form-group';
     }
   }
@@ -119,6 +130,7 @@ function bootstrap_form_element(&$variables) {
       $output .= ' ' . theme('form_element_label', $variables);
       $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
       break;
+
     case 'after':
       $variables['#children'] = ' ' . $prefix . $element['#children'] . $suffix;
       $output .= ' ' . theme('form_element_label', $variables) . "\n";
@@ -131,7 +143,7 @@ function bootstrap_form_element(&$variables) {
       break;
   }
 
-  if ( !empty($element['#description']) ) {
+  if (!empty($element['#description'])) {
     $output .= '<p class="help-block">' . $element['#description'] . "</p>\n";
   }
 
@@ -255,7 +267,7 @@ function bootstrap_preprocess_bootstrap_panel(&$variables) {
 /**
  * Alters HTML of input elements.
  */
-function bootstrap_pre_render_element($element, &$form_state) {
+function bootstrap_pre_render_element($element) {
 
   // Don't inject the "form-control" class on these input types.
   $ignore_types = array(
@@ -267,9 +279,10 @@ function bootstrap_pre_render_element($element, &$form_state) {
     'radio',
     'radios',
     'submit',
-    'tableselect'
+    'tableselect',
   );
-  if(!in_array($element['#type'], $ignore_types)) {
+
+  if (!in_array($element['#type'], $ignore_types)) {
     $element['#attributes']['class'][] = 'form-control';
   }
 
@@ -347,6 +360,10 @@ function bootstrap_button($variables) {
   return '<button' . drupal_attributes($element['#attributes']) . '>' . $label . "</button>\n";
 }
 
+/**
+ * Used to append bootstrap input types to form elements.
+ * @todo see if this is still used?
+ */
 function bootstrap_bootstrap_append_element(&$variables) {
   $element = &$variables['element'];
 
@@ -364,7 +381,7 @@ function bootstrap_bootstrap_append_element(&$variables) {
     $attributes['id'] = $element['#id'];
   }
 
-  // Check for errors and set correct error class
+  // Check for errors and set correct error class.
   if (isset($element['#parents']) && form_get_error($element)) {
     $attributes['class'][] = 'error';
   }
@@ -372,9 +389,16 @@ function bootstrap_bootstrap_append_element(&$variables) {
   if (!empty($element['#type'])) {
     $attributes['class'][] = 'form-type-' . strtr($element['#type'], '_', '-');
   }
+
   if (!empty($element['#name'])) {
-    $attributes['class'][] = 'form-item-' . strtr($element['#name'], array(' ' => '-', '_' => '-', '[' => '-', ']' => ''));
+    $attributes['class'][] = 'form-item-' . strtr($element['#name'], array(
+      ' ' => '-',
+      '_' => '-',
+      '[' => '-',
+      ']' => '',
+    ));
   }
+
   // Add a class for disabled elements to facilitate cross-browser styling.
   if (!empty($element['#attributes']['disabled'])) {
     $attributes['class'][] = 'form-disabled';
@@ -383,12 +407,14 @@ function bootstrap_bootstrap_append_element(&$variables) {
   $attributes['class'][] = 'form-item';
 
   // See http://getbootstrap.com/css/#forms-controls.
-  if (isset($element['#type']) ) {
-    if($element['#type'] == 'radio') {
+  if (isset($element['#type'])) {
+    if ($element['#type'] == 'radio') {
       $attributes['class'][] = 'radio';
-    } elseif ($element['#type'] == 'checkbox') {
+    }
+    elseif ($element['#type'] == 'checkbox') {
       $attributes['class'][] = 'checkbox';
-    } else {
+    }
+    else {
       $attributes['class'][] = 'form-group';
     }
   }
@@ -406,7 +432,7 @@ function bootstrap_bootstrap_append_element(&$variables) {
     case 'before':
     case 'invisible':
       $output .= ' ' . theme('form_element_label', $variables);
-        $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
+      $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
       break;
 
     case 'after':
@@ -421,7 +447,7 @@ function bootstrap_bootstrap_append_element(&$variables) {
       break;
   }
 
-  if ( !empty($element['#description']) ) {
+  if (!empty($element['#description'])) {
     $output .= '<p class="help-block">' . $element['#description'] . "</p>\n";
   }
   $output .= "</div>\n";
