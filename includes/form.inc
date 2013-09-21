@@ -216,6 +216,7 @@ function bootstrap_pre_render_element($element, &$form_state) {
     'radio',
     'radios',
     'submit',
+    'tableselect'
   );
   if(!in_array($element['#type'], $ignore_types)) {
     $element['#attributes']['class'][] = 'form-control';
