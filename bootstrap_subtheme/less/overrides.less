@@ -19,12 +19,6 @@
      -moz-box-shadow: @shadow;
           box-shadow: @shadow;
 }
-// Box sizing.
-.box-sizing(@boxmodel) {
-  -webkit-box-sizing: @boxmodel;
-     -moz-box-sizing: @boxmodel;
-          box-sizing: @boxmodel;
-}
 
 html {
   &.overlay-open .navbar-fixed-top {
@@ -46,11 +40,6 @@ html {
   }
 }
 body {
-  // Bootstrap manually sets line heights, this should be relative (em) to the
-  // font size, not manually set.
-  &, h1, h2, h3, h4, h5, h6 {
-    line-height: 1.25em;
-  }
   @media @mobile {
     // Fix horizontal scrolling on iOS devices.
     // http://drupal.org/node/1870076
@@ -173,12 +162,11 @@ input, textarea, select, .uneditable-input {
   width: auto;
 }
 select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
-  .box-sizing(border-box);
   height: auto;
 }
 input.error {
-  color: @errorText;
-  border-color: @errorBorder;
+  color: @state-danger-text;
+  border-color: @state-danger-border;
 }
 .form-type-checkbox input, .form-type-radio input {
   float: left;
@@ -190,52 +178,33 @@ input.error {
   .border-radius(~"4px 4px 0 0");
 }
 .help-block, .control-group .help-inline {
-  color: @placeholderText;
+  color: @gray-light;
   font-size: 12px;
-  margin: -8px 0 10px;
-  padding: 0 3px;
-  .description + &,
-  .checkbox + &,
-  .form-type-checkbox + &,
-  .form-type-radio + &,
-  .form-file + &,
-  .resizable-textarea + & {
-    margin-top: 0;
-  }
-}
-
-.input-append {
-  .box-sizing(border-box);
-  padding-right: 40px;
-  width: 100%;
-  input, textarea, select, .uneditable-input {
-    width: 100% !important;
-  }
-}
-
-// Inline containers.
-.container-inline div, .container-inline label {
-  display: block;
+  margin: 5px 0 10px;
+  padding: 0;
 }
 
 // Error containers.
+.error {
+  color: @state-danger-text;
+}
 div.error,
 table tr.error {
-  background-color: @errorBackground;
-  color: @errorText;
+  background-color: @state-danger-bg;
+  color: @state-danger-text;
 }
 .control-group.error {
   background: none;
   label, .control-label {
-    color: @errorText;
+    color: @state-danger-text;
     font-weight: 600;
   }
   input, textarea, select, .uneditable-input {
-    color: @errorText;
-    border: 1px solid @inputBorder;
+    color: @input-color;
+    border: 1px solid @input-border;
   }
   .help-block, .help-inline {
-    color: @placeholderText;
+    color: @text-color;
   }
 }
 
@@ -250,7 +219,6 @@ ul li.leaf {
 // Vertical tabs.
 .vertical-tabs {
   .form-type-textfield input {
-    .box-sizing(inherit);
     width: auto;
   }
   .form-item{
@@ -280,13 +248,13 @@ ul li.leaf {
   font-weight: bold;
 }
 .password-indicator {
-  background-color: darken(@grayLighter, 2%);
+  background-color: darken(@input-color-placeholder, 2%);
   height: 0.3em;
   width: 100%;
   div {
     height: 100%;
     width: 0%;
-    background-color: @green;
+    background-color: @input-color-placeholder;
   }
 }
 input.password-confirm,
