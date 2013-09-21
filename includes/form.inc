@@ -214,6 +214,7 @@ function bootstrap_pre_render_element($element, &$form_state) {
     'radios',
     'radio',
     'hidden',
+    'checkboxes',
     'checkbox',
     'submit',
     'file'
