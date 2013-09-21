@@ -194,11 +194,62 @@ function bootstrap_form_element_label(&$variables) {
  * Add bootstrap_pre_render_element to process list of elements with #input.
  */
 function bootstrap_element_info_alter(&$elements) {
-  foreach($elements AS &$element) {
+  foreach ($elements as &$element) {
+    // Replace core fieldsets with Bootstrap panels.
+    if ('fieldset' === $element['#type']) {
+      $element['#theme_wrappers'] = array('bootstrap_panel');
+      // Replace core's process function.
+      if (($key = array_search('form_process_fieldset', $element['#process'])) !== FALSE) {
+        $element['#process'][$key] = 'bootstrap_form_process_fieldset';
+      }
+    }
     if (!empty($element['#input'])) {
       $element['#process'][] = 'bootstrap_pre_render_element';
     }
   }
+}
+
+/**
+ * Replaces form_process_fieldset().
+ */
+function bootstrap_form_process_fieldset(&$element, &$form_state) {
+  $parents = implode('][', $element['#parents']);
+
+  // Each fieldset forms a new group. The #type 'vertical_tabs' basically only
+  // injects a new fieldset.
+  // @todo figure out how to deal with this in Bootstrap.
+  $form_state['groups'][$parents]['#group_exists'] = TRUE;
+  $element['#groups'] = &$form_state['groups'];
+
+  // Process vertical tabs group member fieldsets.
+  if (isset($element['#group'])) {
+    // Add this fieldset to the defined group (by reference).
+    $group = $element['#group'];
+    $form_state['groups'][$group][] = &$element;
+  }
+
+  // Contains form element summary functionalities.
+  $element['#attached']['library'][] = array('system', 'drupal.form');
+
+  // The .form-wrapper class is required for #states to treat fieldsets like
+  // containers.
+  if (!isset($element['#attributes']['class'])) {
+    $element['#attributes']['class'] = array();
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function bootstrap_preprocess_bootstrap_panel(&$variables) {
+  $element = &$variables['element'];
+  $variables['collapsible'] = $element['#collapsible'];
+  $variables['collapsed'] = $element['#collapsed'];
+  $variables['id'] = $element['#id'];
+  $variables['title'] = !empty($element['#title']) ? $element['#title'] : FALSE;
+  $variables['content'] = $element['#children'];
 }
 
 /**

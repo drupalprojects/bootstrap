@@ -322,6 +322,12 @@ function bootstrap_js_alter(&$js) {
 
   $theme_path = drupal_get_path('theme', 'bootstrap');
 
+  // Inject default the base theme's default bootstrap JS file.
+  $bootstrap = $theme_path . '/js/bootstrap.js';
+  $js[$bootstrap] = drupal_js_defaults($bootstrap);
+  $js[$bootstrap]['group'] = JS_THEME;
+  $js[$bootstrap]['scope'] = 'footer';
+
   // Replace core progress bar JS with the Bootstrap equivilent.
   if (isset($js['misc/progress.js']) && !empty($js['misc/progress.js'])) {
     unset($js['misc/progress.js']);

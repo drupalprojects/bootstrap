@@ -79,6 +79,11 @@ function bootstrap_theme(&$existing, $type, $theme, $path) {
     'bootstrap_append_element' => array(
       'render element' => 'element',
     ),
+    'bootstrap_panel' => array(
+      'render element' => 'element',
+      'path' => $path . '/templates',
+      'template' => 'bootstrap-panel',
+    ),
   );
 }
 
