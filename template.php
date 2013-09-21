@@ -268,6 +268,10 @@ function bootstrap_bootstrap_search_form_wrapper(&$variables) {
   if (module_exists('icon')) {
     $output .= theme('icon', array('bundle' => 'bootstrap', 'icon' => 'glyphicon-search'));
   }
+  // We can be sure that the font icons exist in CDN.
+  elseif (theme_get_setting('bootstrap_cdn')) {
+    $output .= '<i class="glyphicon glyphicon-search" aria-hidden="true"></i>';
+  }
   else {
     $output .= t('Search');
   }

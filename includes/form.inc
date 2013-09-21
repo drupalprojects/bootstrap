@@ -211,13 +211,14 @@ function bootstrap_pre_render_element($element, &$form_state) {
 
   // Don't inject the "form-control" class on these input types.
   $ignore_types = array(
-    'radios',
-    'radio',
-    'hidden',
-    'checkboxes',
     'checkbox',
+    'checkboxes',
+    'file',
+    'hidden',
+    'image_button',
+    'radio',
+    'radios',
     'submit',
-    'file'
   );
   if(!in_array($element['#type'], $ignore_types)) {
     $element['#attributes']['class'][] = 'form-control';
