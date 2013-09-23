@@ -260,8 +260,19 @@ function bootstrap_preprocess_bootstrap_panel(&$variables) {
   $variables['collapsible'] = $element['#collapsible'];
   $variables['collapsed'] = $element['#collapsed'];
   $variables['id'] = $element['#id'];
-  $variables['title'] = !empty($element['#title']) ? $element['#title'] : FALSE;
   $variables['content'] = $element['#children'];
+
+  // Iterate over optional variables.
+  $keys = array(
+    'description',
+    'prefix',
+    'suffix',
+    'title',
+  );
+  foreach ($keys as $key) {
+    $variables[$key] = !empty($element["#$key"]) ? $element["#$key"] : FALSE;
+  }
+
 }
 
 /**

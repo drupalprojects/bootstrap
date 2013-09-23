@@ -18,20 +18,19 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
     return;
   }
 
+  $theme_path = drupal_get_path('theme', 'bootstrap');
+
   $form['bootstrap'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Bootstrap 3'),
+    '#type' => 'vertical_tabs',
+    '#attached' => array(
+      'js'  => array($theme_path . '/js/bootstrap.admin.js'),
+    ),
   );
 
-  $form['bootstrap']['bootstrap_cdn'] = array(
-    '#type' => 'select',
+  $form['bootstrap_cdn'] = array(
+    '#type' => 'fieldset',
     '#title' => t('BootstrapCDN'),
-    '#options' => drupal_map_assoc(array(
-      '3.0.0',
-    )),
-    '#default_value' => theme_get_setting('bootstrap_cdn'),
-    '#empty_option' => t('Disabled'),
-    '#empty_value' => NULL,
+    '#group' => 'bootstrap',
     '#description' => t('Use !bootstrapcdn to serve the Bootstrap framework files. Enabling this setting will prevent this theme from attempting to load any Bootstrap framework files locally. !warning', array(
       '!bootstrapcdn' => l(t('BootstrapCDN'), 'http://bootstrapcdn.com', array(
         'external' => TRUE,
@@ -39,26 +38,48 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
       '!warning' => '<div class="alert alert-danger"><strong>' . t('WARNING') . ':</strong> ' . t('Using this content distribution network will give you a performance boost but will also make you dependant on a third party who has no obligations towards you concerning uptime and service quality.') . '</div>',
     )),
   );
+  $form['bootstrap_cdn']['bootstrap_cdn'] = array(
+    '#type' => 'select',
+    '#options' => drupal_map_assoc(array(
+      '3.0.0',
+    )),
+    '#default_value' => theme_get_setting('bootstrap_cdn'),
+    '#empty_option' => t('Disabled'),
+    '#empty_value' => NULL,
+  );
 
-  $bootswatch_request = drupal_http_request('http://api.bootswatch.com/3/');
-  $bootswatch_api = drupal_json_decode($bootswatch_request->data);
   $bootswatch_themes = array();
-  foreach ($bootswatch_api['themes'] AS $val) {
-    $bootswatch_themes[strtolower($val['name'])] = $val['name'];
+  $request = drupal_http_request('http://api.bootswatch.com/3/');
+  $api = drupal_json_decode($request->data);
+  foreach ($api['themes'] as $bootswatch_theme) {
+    $bootswatch_themes[strtolower($bootswatch_theme['name'])] = $bootswatch_theme['name'];
   }
 
-  $form['bootstrap']['bootstrap_bootswatch'] = array(
-    '#type' => 'select',
-    '#title' => t('Bootswatch Theme'),
-    '#options' => $bootswatch_themes,
-    '#empty_option' => t('Bootstrap'),
-    '#empty_value' => NULL,
-    '#default_value' => theme_get_setting('bootstrap_bootswatch'),
-    '#description' => t('Use !bootstrapcdn to serve a Bootswatch Theme. Choose Bootswatch Theme here.', array('!bootstrapcdn' => l('BootstrapCDN', 'http://bootstrapcdn.com', array('external' => TRUE)))) . '<div id="bootswatch-previews"></div>',
+  $form['bootswatch'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Bootswatch'),
+    '#group' => 'bootstrap',
+    '#description' => t('Use !bootstrapcdn to serve a Bootswatch Theme. Choose Bootswatch theme here.', array(
+      '!bootstrapcdn' => l(t('BootstrapCDN'), 'http://bootstrapcdn.com', array(
+        'external' => TRUE,
+      )),
+    )),
   );
-  $form['#attached']['js'] = array(drupal_get_path('theme', 'bootstrap') . '/js/bootswatch.admin.js');
+  $form['bootswatch']['bootstrap_bootswatch'] = array(
+    '#type' => 'select',
+    '#default_value' => theme_get_setting('bootstrap_bootswatch'),
+    '#options' => $bootswatch_themes,
+    '#empty_option' => t('Disabled'),
+    '#empty_value' => NULL,
+    '#suffix' => '<div id="bootswatch-preview"></div>',
+  );
 
-  $form['bootstrap']['bootstrap_rebuild_registry'] = array(
+  $form['advanced'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Advanced'),
+    '#group' => 'bootstrap',
+  );
+  $form['advanced']['bootstrap_rebuild_registry'] = array(
     '#type' => 'checkbox',
     '#title' => t('Rebuild theme registry on every page.'),
     '#default_value' => theme_get_setting('bootstrap_rebuild_registry'),

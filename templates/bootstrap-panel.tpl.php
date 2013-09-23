@@ -8,6 +8,9 @@
  */
 
 ?>
+<?php if ($prefix): ?>
+  <?php print $prefix; ?>
+<?php endif; ?>
 <div class="panel panel-default">
   <?php if ($title): ?>
     <?php if ($collapsible): ?>
@@ -28,9 +31,15 @@
     <div id="<?php print $id; ?>" class="panel-collapse collapse<?php print (!$collapsed ? ' in' : ''); ?>">
   <?php endif; ?>
   <div class="panel-body">
+    <?php if ($description): ?>
+      <?php print $description; ?>
+    <?php endif; ?>
     <?php print $content; ?>
   </div>
   <?php if ($collapsible): ?>
     </div>
   <?php endif; ?>
 </div>
+<?php if ($suffix): ?>
+  <?php print $suffix; ?>
+<?php endif; ?>
