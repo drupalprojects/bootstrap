@@ -40,6 +40,24 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
     )),
   );
 
+  $bootswatch_request = drupal_http_request('http://api.bootswatch.com/3/');
+  $bootswatch_api = drupal_json_decode($bootswatch_request->data);
+  $bootswatch_themes = array();
+  foreach ($bootswatch_api['themes'] AS $val) {
+    $bootswatch_themes[strtolower($val['name'])] = $val['name'];
+  }
+
+  $form['bootstrap']['bootstrap_bootswatch'] = array(
+    '#type' => 'select',
+    '#title' => t('Bootswatch Theme'),
+    '#options' => $bootswatch_themes,
+    '#empty_option' => t('Bootstrap'),
+    '#empty_value' => NULL,
+    '#default_value' => theme_get_setting('bootstrap_bootswatch'),
+    '#description' => t('Use !bootstrapcdn to serve a Bootswatch Theme. Choose Bootswatch Theme here.', array('!bootstrapcdn' => l('BootstrapCDN', 'http://bootstrapcdn.com', array('external' => TRUE)))) . '<div id="bootswatch-previews"></div>',
+  );
+  $form['#attached']['js'] = array(drupal_get_path('theme', 'bootstrap') . '/js/bootswatch.admin.js');
+
   $form['bootstrap']['bootstrap_rebuild_registry'] = array(
     '#type' => 'checkbox',
     '#title' => t('Rebuild theme registry on every page.'),

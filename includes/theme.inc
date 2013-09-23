@@ -279,9 +279,14 @@ function bootstrap_css_alter(&$css) {
   // Load excluded CSS files from theme.
   $excludes = _bootstrap_alter(bootstrap_theme_get_info('exclude'), 'css');
   // Add Bootstrap CDN file and overrides.
-  if (theme_get_setting('bootstrap_cdn')){
+  $bootstrap_cdn = theme_get_setting('bootstrap_cdn');
+  if ($bootstrap_cdn){
     // Add CDN.
-    $cdn = '//netdna.bootstrapcdn.com/bootstrap/'. theme_get_setting('bootstrap_cdn')  .'/css/bootstrap.min.css';
+    if(theme_get_setting('bootstrap_bootswatch')) {
+      $cdn = '//netdna.bootstrapcdn.com/bootswatch/'. $bootstrap_cdn  .'/'.theme_get_setting('bootstrap_bootswatch').'/bootstrap.min.css';
+    } else {
+      $cdn = '//netdna.bootstrapcdn.com/bootstrap/'. $bootstrap_cdn  .'/css/bootstrap.min.css';
+    }
     $css[$cdn] = array(
       'data' => $cdn,
       'type' => 'external',
