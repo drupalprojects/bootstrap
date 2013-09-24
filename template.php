@@ -328,11 +328,13 @@ function bootstrap_preprocess_icon(&$variables) {
   }
 }
 
+/**
+ * Implements hook_preprocess_links().
+ */
 function bootstrap_preprocess_links(&$variables) {
   if (isset($variables['attributes']) && isset($variables['attributes']['class'])) {
-    $inline_key = array_search('inline', $variables['attributes']['class']);
-    if ($inline_key) {
-      $variables['attributes']['class'][$inline_key] = 'list-inline';
+    if ($key = array_search('inline', $variables['attributes']['class'])) {
+      $variables['attributes']['class'][$key] = 'list-inline';
     }
   }
 }
