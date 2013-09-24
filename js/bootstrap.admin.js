@@ -23,8 +23,21 @@
       });
       $('#edit-advanced', context).drupalSetSummary(function(context) {
         var summary = [];
-        if ($('input[name="bootstrap_rebuild_registry"]').is(':checked')) {
+        if ($('input[name="bootstrap_rebuild_registry"]', context).is(':checked')) {
           summary.push(Drupal.t('Rebuild Registry'));
+        }
+        return summary.join(', ');
+      });
+      $('#edit-breadcrumbs', context).drupalSetSummary(function(context) {
+        var summary = [$('select[name="bootstrap_breadcrumb"] :selected', context).text()];
+        var breadcrumb = parseInt($('select[name="bootstrap_breadcrumb"]', context).val(), 10);
+        if (breadcrumb) {
+          if ($('input[name="bootstrap_breadcrumb_home"]', context).is(':checked')) {
+            summary.push(Drupal.t('Home breadcrumb link'));
+          }
+          if ($('input[name="bootstrap_breadcrumb_title"]', context).is(':checked')) {
+            summary.push(Drupal.t('Current page title'));
+          }
         }
         return summary.join(', ');
       });

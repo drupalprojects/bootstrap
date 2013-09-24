@@ -27,6 +27,7 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
     ),
   );
 
+  // BootstrapCDN.
   $form['bootstrap_cdn'] = array(
     '#type' => 'fieldset',
     '#title' => t('BootstrapCDN'),
@@ -48,13 +49,13 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
     '#empty_value' => NULL,
   );
 
+  // Bootswatch.
   $bootswatch_themes = array();
   $request = drupal_http_request('http://api.bootswatch.com/3/');
   $api = drupal_json_decode($request->data);
   foreach ($api['themes'] as $bootswatch_theme) {
     $bootswatch_themes[strtolower($bootswatch_theme['name'])] = $bootswatch_theme['name'];
   }
-
   $form['bootswatch'] = array(
     '#type' => 'fieldset',
     '#title' => t('Bootswatch'),
@@ -74,6 +75,46 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
     '#suffix' => '<div id="bootswatch-preview"></div>',
   );
 
+  // Breadcrumbs.
+  $form['breadcrumbs'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Breadcrumbs'),
+    '#group' => 'bootstrap',
+  );
+  $form['breadcrumbs']['bootstrap_breadcrumb'] = array(
+    '#type' => 'select',
+    '#title' => t('Breadcrumb visibility'),
+    '#default_value' => theme_get_setting('bootstrap_breadcrumb'),
+    '#options' => array(
+      0 => t('Hidden'),
+      1 => t('Visible'),
+      2 => t('Only in admin areas'),
+    ),
+  );
+  $form['breadcrumbs']['bootstrap_breadcrumb_home'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show "Home" breadcrumb link'),
+    '#default_value' => theme_get_setting('bootstrap_breadcrumb_home'),
+    '#description' => t('If your site has a module dedicated to handling breadcrumbs already, ensure this setting is <strong>enabled</strong>.'),
+    '#states' => array(
+      'invisible' => array(
+        ':input[name="bootstrap_breadcrumb"]' => array('value' => 0),
+      ),
+    ),
+  );
+  $form['breadcrumbs']['bootstrap_breadcrumb_title'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show current page title at end'),
+    '#default_value' => theme_get_setting('bootstrap_breadcrumb_title'),
+    '#description' => t('If your site has a module dedicated to handling breadcrumbs already, ensure this setting is <strong>disabled</strong>.'),
+    '#states' => array(
+      'invisible' => array(
+        ':input[name="bootstrap_breadcrumb"]' => array('value' => 0),
+      ),
+    ),
+  );
+
+  // Advanced settings.
   $form['advanced'] = array(
     '#type' => 'fieldset',
     '#title' => t('Advanced'),
@@ -89,36 +130,4 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
     )),
   );
 
-  $form['bootstrap']['bootstrap_breadcrumb'] = array(
-    '#type' => 'select',
-    '#title' => t('Display breadcrumb'),
-    '#default_value' => theme_get_setting('bootstrap_breadcrumb'),
-    '#options' => array(
-      0 => t('No'),
-      1 => t('Yes'),
-      2 => t('Only in admin section'),
-    ),
-  );
-  $form['bootstrap']['bootstrap_breadcrumb_home'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Show home page link in breadcrumb'),
-    '#default_value' => theme_get_setting('bootstrap_breadcrumb_home'),
-    '#description' => t('If your site has a module dedicated to handling breadcrumbs already, ensure this setting is <strong>enabled</strong>.'),
-    '#states' => array(
-      'invisible' => array(
-        ':input[name="bootstrap_breadcrumb"]' => array('value' => 0),
-      ),
-    ),
-  );
-  $form['bootstrap']['bootstrap_breadcrumb_title'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Append the content title to the end of the breadcrumb'),
-    '#default_value' => theme_get_setting('bootstrap_breadcrumb_title'),
-    '#description' => t('If your site has a module dedicated to handling breadcrumbs already, ensure this setting is <strong>disabled</strong>.'),
-    '#states' => array(
-      'invisible' => array(
-        ':input[name="bootstrap_breadcrumb"]' => array('value' => 0),
-      ),
-    ),
-  );
 }
