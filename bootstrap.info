@@ -1,6 +1,9 @@
 name = Bootstrap
 description = Built to use Bootstrap, a sleek, intuitive, and powerful front-end framework for faster and easier web development.
 core = 7.x
+simplytest_dependencies[] = jquery_update
+
+; Regions
 regions[navigation]     = 'Navigation'
 regions[header]         = 'Top Bar'
 regions[highlighted]    = 'Highlighted'
@@ -10,6 +13,7 @@ regions[sidebar_first]  = 'Primary'
 regions[sidebar_second] = 'Secondary'
 regions[footer]         = 'Footer'
 
+; Settings
 settings[toggle_name] = 0
 settings[toggle_search] = 1
 settings[bootstrap_cdn] = 3.0.0
@@ -17,11 +21,10 @@ settings[bootstrap_breadcrumb] = 1
 settings[bootstrap_breadcrumb_home] = 0
 settings[bootstrap_breadcrumb_title] = 1
 
-;Exclude
-;javascript
+;Exclude JavaScript
 ;exclude[js][] = 'modules/contextual/contextual.js'
 
-;css
+;Exclude CSS
 ;exclude[css][] = 'misc/vertical-tabs.css'
 exclude[css][] = 'modules/aggregator/aggregator.css'
 exclude[css][] = 'modules/block/block.css'
