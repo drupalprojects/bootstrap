@@ -327,3 +327,12 @@ function bootstrap_preprocess_icon(&$variables) {
     $variables['attributes']['class'][] = 'glyphicon';
   }
 }
+
+function bootstrap_preprocess_links(&$variables) {
+  if (isset($variables['attributes']) && isset($variables['attributes']['class'])) {
+    $inline_key = array_search('inline', $variables['attributes']['class']);
+    if ($inline_key) {
+      $variables['attributes']['class'][$inline_key] = 'list-inline';
+    }
+  }
+}
