@@ -31,11 +31,7 @@ html {
     }
     // Throbbers.
     input.form-autocomplete {
-      background-position: 100% 8px; /* LTR */
-      background-repeat: no-repeat;
-    }
-    input.throbbing {
-      background-position: 100% -13px; /* LTR */
+      background-image: none;
     }
   }
 }
@@ -303,5 +299,76 @@ div.password-suggestions ul {
     margin: 0 -0.25em 0 0.5em;
     position: relative;
     top: 1px;
+  }
+}
+
+// Autocomplete and throbber
+.form-autocomplete {
+  .glyphicon {
+    color: @gray-light;
+    font-size: 120%;
+    margin: -.25em 0;
+    height: 1.15em;
+    top: 2px;
+    &.glyphicon-spin {
+      color: @brand-primary;
+    }
+  }
+}
+
+#autocomplete li.selected {
+  color: @dropdown-link-hover-color;
+  background: @dropdown-link-hover-bg;
+}
+
+.glyphicon-spin {
+  display: inline-block;
+  -moz-animation: spin 1s infinite linear;
+  -o-animation: spin 1s infinite linear;
+  -webkit-animation: spin 1s infinite linear;
+  animation: spin 1s infinite linear;
+}
+a .glyphicon-spin {
+  display: inline-block;
+  text-decoration: none;
+}
+@-moz-keyframes spin {
+  0% {
+    -moz-transform: rotate(0deg);
+  }
+  100% {
+    -moz-transform: rotate(359deg);
+  }
+}
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+  }
+}
+@-o-keyframes spin {
+  0% {
+    -o-transform: rotate(0deg);
+  }
+  100% {
+    -o-transform: rotate(359deg);
+  }
+}
+@-ms-keyframes spin {
+  0% {
+    -ms-transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(359deg);
+  }
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
   }
 }

@@ -100,6 +100,9 @@ function bootstrap_form_element(&$variables) {
   if (!empty($element['#attributes']['disabled'])) {
     $attributes['class'][] = 'form-disabled';
   }
+  if (!empty($element['#autocomplete_path']) && drupal_valid_path($element['#autocomplete_path'])) {
+    $attributes['class'][] = 'form-autocomplete';
+  }
   $attributes['class'][] = 'form-item';
 
   // See http://getbootstrap.com/css/#forms-controls.
@@ -339,6 +342,36 @@ function bootstrap_preprocess_button(&$vars) {
       }
     }
   }
+}
+
+/**
+ * Returns HTML for a textfield form element.
+ */
+function bootstrap_textfield($variables) {
+  $element = $variables['element'];
+  $element['#attributes']['type'] = 'text';
+  element_set_attributes($element, array('id', 'name', 'value', 'size', 'maxlength'));
+  _form_set_class($element, array('form-text'));
+
+  $output = '<input' . drupal_attributes($element['#attributes']) . ' />';
+
+  $extra = '';
+  if ($element['#autocomplete_path'] && drupal_valid_path($element['#autocomplete_path'])) {
+    drupal_add_library('system', 'drupal.autocomplete');
+    drupal_add_js(drupal_get_path('theme', 'bootstrap') . '/js/bootstrap.autocomplete.js');
+    $element['#attributes']['class'][] = 'form-autocomplete';
+
+    $attributes = array();
+    $attributes['type'] = 'hidden';
+    $attributes['id'] = $element['#attributes']['id'] . '-autocomplete';
+    $attributes['value'] = url($element['#autocomplete_path'], array('absolute' => TRUE));
+    $attributes['disabled'] = 'disabled';
+    $attributes['class'][] = 'autocomplete';
+    $output = '<div class="input-group">' . $output . '<span class="input-group-btn"><button class="btn btn-default" type="button" disabled><span class="glyphicon glyphicon-refresh"></span></button></span></div>';
+    $extra = '<input' . drupal_attributes($attributes) . ' />';
+  }
+
+  return $output . $extra;
 }
 
 /**
