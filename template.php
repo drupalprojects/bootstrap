@@ -42,7 +42,7 @@ function bootstrap_theme(&$existing, $type, $theme, $path) {
     flood_register_event($GLOBALS['theme'] . '_rebuild_registry_warning');
     drupal_set_message(t('For easier theme development, the theme registry is being rebuilt on every page request. It is <em>extremely</em> important to <a href="!link">turn off this feature</a> on production websites.', array('!link' => url('admin/appearance/settings/' . $GLOBALS['theme']))), 'warning', FALSE);
   }
-  
+
   return array(
     'bootstrap_links' => array(
       'variables' => array(
@@ -83,6 +83,17 @@ function bootstrap_theme(&$existing, $type, $theme, $path) {
       'render element' => 'element',
       'path' => $path . '/templates',
       'template' => 'bootstrap-panel',
+    ),
+    'bootstrap_vertical_tabs_labels' => array(
+      'variables' => array(
+        'id' => '',
+        'element' => array(),
+      ),
+    ),
+    'bootstrap_vertical_tabs_pane' => array(
+      'render element' => 'element',
+      'path' => $path . '/templates',
+      'template' => 'bootstrap-vertical-tabs-pane',
     ),
   );
 }
@@ -253,7 +264,7 @@ function bootstrap_preprocess_region(&$variables, $hook) {
   if ($variables['region'] == 'content') {
     $variables['theme_hook_suggestions'][] = 'region__no_wrapper';
   }
-  
+
   if ($variables['region'] == "sidebar_first") {
     $variables['classes_array'][] = 'well';
   }

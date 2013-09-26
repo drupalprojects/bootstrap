@@ -230,6 +230,7 @@ function bootstrap_element_info_alter(&$elements) {
 function bootstrap_form_process_fieldset(&$element, &$form_state) {
   $parents = implode('][', $element['#parents']);
 
+
   // Each fieldset forms a new group. The #type 'vertical_tabs' basically only
   // injects a new fieldset.
   // @todo figure out how to deal with this in Bootstrap.
@@ -240,6 +241,8 @@ function bootstrap_form_process_fieldset(&$element, &$form_state) {
   if (isset($element['#group'])) {
     // Add this fieldset to the defined group (by reference).
     $group = $element['#group'];
+    $element['#vertical_tabs'] = TRUE;
+    $element['#theme_wrappers'] = array('bootstrap_vertical_tabs_pane');;
     $form_state['groups'][$group][] = &$element;
   }
 
@@ -497,4 +500,44 @@ function bootstrap_bootstrap_append_element(&$variables) {
   $output .= "</div>\n";
 
   return $output;
+}
+
+/**
+ * Returns HTML for an element's children fieldsets as vertical tabs.
+ *
+ * @param $variables
+ *     An associative array containing:
+ *   - element: An associative array containing the properties and children of
+ *     the fieldset. Properties used: #children.
+ *
+ * @ingroup themeable
+ * @return string
+ */
+function bootstrap_vertical_tabs($variables) {
+  $element = $variables['element'];
+  // Add required JavaScript and Stylesheet.
+  //drupal_add_library('system', 'drupal.vertical-tabs');
+
+  $output = '<h2 class="element-invisible">' . t('Vertical Tabs') . '</h2>';
+  $output .= '<div class="tabbable tabs-left">';
+
+  $output .= theme('bootstrap_vertical_tabs_labels', array(
+    'element' => $variables['element'],
+    'id' => $variables['element']['#id'],
+  ));
+
+  //$output .= '</div>';
+
+  $output .= '<div class="tab-content">' . $element['#children'] . '</div></div>';
+  return $output;
+}
+
+function bootstrap_preprocess_vertical_tabs(&$variables, $hook) {
+  $variables['element']['#tab_titles'] = array();
+  foreach (element_children($variables['element']['group']) as $element_id) {
+    $variables['element']['#tab_titles'][$element_id] = array(
+      'id' => $variables['element']['group'][$element_id]['#id'],
+      'title' => $variables['element']['group'][$element_id]['#title'],
+    );
+  }
 }

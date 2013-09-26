@@ -463,3 +463,35 @@ function bootstrap_preprocess_table(&$variables) {
   }
 
 }
+
+/**
+ * Returns HTML for Bootstrap's vertical tabs labesl.
+ */
+function bootstrap_bootstrap_vertical_tabs_labels($variables) {
+  $element = $variables['element'];
+  if (empty($variables['id'])) {
+    $tab_id = 'tab-' . md5($element);
+  }
+  else {
+    $tab_id = check_plain($variables['id']);
+  }
+
+  $output = '<ul class="nav nav-tabs" id="' . $tab_id . '">';
+
+  foreach ($element['#tab_titles'] as $item) {
+    $output .= '<li><a href="#' . $item['id'] . '" data-toggle="tab">' . check_plain($item['title']) . '</a></li>';
+  }
+
+  $output .= '</ul>';
+
+  return $output;
+}
+
+function bootstrap_preprocess_bootstrap_vertical_tabs_pane(&$variables) {
+  $element = & $variables['element'];
+  $variables['collapsible'] = $element['#collapsible'];
+  $variables['collapsed'] = $element['#collapsed'];
+  $variables['id'] = $element['#id'];
+  $variables['title'] = !empty($element['#title']) ? $element['#title'] : FALSE;
+  $variables['content'] = $element['#children'];
+}
