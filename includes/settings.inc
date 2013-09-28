@@ -15,12 +15,6 @@
  *   The form ID.
  */
 function _bootstrap_settings_form(&$form, $form_state, $form_id = NULL) {
-  // Work-around for a core bug affecting admin themes.
-  // @see https://drupal.org/node/943212
-  if (isset($form_id)) {
-    return;
-  }
-
   $theme_path = drupal_get_path('theme', 'bootstrap');
 
   $form['bootstrap'] = array(
