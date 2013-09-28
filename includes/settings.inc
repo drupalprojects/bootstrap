@@ -1,17 +1,20 @@
 <?php
 /**
  * @file
- * theme-settings.php
- *
- * Contains the form settings for this theme.
+ * settings.inc
  */
-
-include_once dirname(__FILE__) . '/includes/bootstrap.inc';
 
 /**
- * Implements THEME_form_system_theme_settings_alter().
+ * Contains the form for the theme settings.
+ *
+ * @param array $form
+ *   The form array, passed by reference.
+ * @param array $form_state
+ *   The form state array, passed by reference.
+ * @param string $form_id
+ *   The form ID.
  */
-function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_id = NULL) {
+function _bootstrap_settings_form(&$form, $form_state, $form_id = NULL) {
   // Work-around for a core bug affecting admin themes.
   // @see https://drupal.org/node/943212
   if (isset($form_id)) {

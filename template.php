@@ -57,111 +57,17 @@ function bootstrap_theme(&$existing, $type, $theme, $path) {
 }
 
 /**
- * Alter breadcrumbs before processing according to theme settings.
+ * Include common functions for theme.
  */
-function bootstrap_preprocess_breadcrumb(&$variables) {
-  $breadcrumb = &$variables['breadcrumb'];
-
-  // Optionally get rid of the homepage link.
-  $show_breadcrumb_home = theme_get_setting('bootstrap_breadcrumb_home');
-  if (!$show_breadcrumb_home) {
-    array_shift($breadcrumb);
-  }
-
-  if (theme_get_setting('bootstrap_breadcrumb_title') && !empty($breadcrumb)) {
-    $item = menu_get_item();
-    if (!empty($item['tab_parent'])) {
-      // If we are on a non-default tab, use the tab's title.
-      $breadcrumb[] = check_plain($item['title']);
-    }
-    else {
-      $breadcrumb[] = drupal_get_title();
-    }
-  }
-}
+bootstrap_include('bootstrap', 'includes/common.inc');
 
 /**
- * Override theme_breadrumb().
+ * Implement various hook_*_alter() hooks.
  *
- * Print breadcrumbs as a list, with separators.
+ * hook_*_alter() implementations must live (via include) inside this file so
+ * they can be detected properly from drupal_alter().
  */
-function bootstrap_breadcrumb($variables) {
-  $breadcrumb = $variables['breadcrumb'];
-
-  // Determine if we are to display the breadcrumb.
-  $bootstrap_breadcrumb = theme_get_setting('bootstrap_breadcrumb');
-  if (($bootstrap_breadcrumb == 1 || ($bootstrap_breadcrumb == 2 && arg(0) == 'admin')) && !empty($breadcrumb)) {
-    return theme('item_list', array('items' => $breadcrumb, 'type' => 'ol', 'attributes' => array('class' => array('breadcrumb'))));
-  }
-}
-
-/**
- * Override or insert variables in the html_tag theme function.
- */
-function bootstrap_process_html_tag(&$variables) {
-  $tag = &$variables['element'];
-
-  if ($tag['#tag'] == 'style' || $tag['#tag'] == 'script') {
-    // Remove redundant type attribute and CDATA comments.
-    unset($tag['#attributes']['type'], $tag['#value_prefix'], $tag['#value_suffix']);
-
-    // Remove media="all" but leave others unaffected.
-    if (isset($tag['#attributes']['media']) && $tag['#attributes']['media'] === 'all') {
-      unset($tag['#attributes']['media']);
-    }
-  }
-}
-
-/**
- * Preprocess variables for page.tpl.php
- *
- * @see page.tpl.php
- */
-function bootstrap_preprocess_page(&$variables) {
-  // Add information about the number of sidebars.
-  if (!empty($variables['page']['sidebar_first']) && !empty($variables['page']['sidebar_second'])) {
-    $variables['content_column_class'] = ' class="col-sm-6"';
-  }
-  elseif (!empty($variables['page']['sidebar_first']) || !empty($variables['page']['sidebar_second'])) {
-    $variables['content_column_class'] = ' class="col-sm-9"';
-  }
-  else {
-    $variables['content_column_class'] = NULL;
-  }
-
-  // Primary nav
-  $variables['primary_nav'] = FALSE;
-  if ($variables['main_menu']) {
-    // Build links
-    $variables['primary_nav'] = menu_tree(variable_get('menu_main_links_source', 'main-menu'));
-    // Provide default theme wrapper function
-    $variables['primary_nav']['#theme_wrappers'] = array('menu_tree__primary');
-  }
-
-  // Secondary nav
-  $variables['secondary_nav'] = FALSE;
-  if ($variables['secondary_menu']) {
-    // Build links
-    $variables['secondary_nav'] = menu_tree(variable_get('menu_secondary_links_source', 'user-menu'));
-    // Provide default theme wrapper function
-    $variables['secondary_nav']['#theme_wrappers'] = array('menu_tree__secondary');
-  }
-
-}
-
-/**
- * Bootstrap theme wrapper function for the primary menu links
- */
-function bootstrap_menu_tree__primary(&$variables) {
-  return '<ul class="menu nav navbar-nav">' . $variables['tree'] . '</ul>';
-}
-
-/**
- * Bootstrap theme wrapper function for the secondary menu links
- */
-function bootstrap_menu_tree__secondary(&$variables) {
-  return '<ul class="menu nav navbar-nav pull-right">' . $variables['tree'] . '</ul>';
-}
+bootstrap_include('bootstrap', 'includes/alter.inc');
 
 /**
  * Returns HTML for a single local action link.

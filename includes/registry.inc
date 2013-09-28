@@ -99,9 +99,6 @@ function _bootstrap_theme(&$existing, $type, $theme, $path) {
     'bootstrap_search_form_wrapper' => array(
       'render element' => 'element',
     ),
-    'bootstrap_append_element' => array(
-      'render element' => 'element',
-    ),
     'bootstrap_panel' => array(
       'render element' => 'element',
       'path' => $path . '/templates',
