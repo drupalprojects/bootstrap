@@ -200,21 +200,17 @@ table tr.error {
 }
 
 // Lists
+.nav-tabs {
+  margin-bottom: 10px;
+}
 ul li.collapsed,
 ul li.expanded,
 ul li.leaf {
   list-style: none;
   list-style-image: none;
 }
-
-// Vertical tabs.
-.vertical-tabs {
-  .form-type-textfield input {
-    width: auto;
-  }
-  .form-item{
-    margin: 1em 0;
-  }
+.tabs--secondary {
+  margin: 0 15px 10px;
 }
 
 // Submitted
@@ -289,11 +285,6 @@ div.password-suggestions ul {
   &.progress-disabled {
     float: left;
   }
-  .throbber {
-    margin: 0 -0.25em 0 0.5em;
-    position: relative;
-    top: 1px;
-  }
 }
 
 // Autocomplete and throbber
@@ -301,15 +292,20 @@ div.password-suggestions ul {
   .glyphicon {
     color: @gray-light;
     font-size: 120%;
-    margin: -.25em 0;
-    height: 1.15em;
-    top: 2px;
     &.glyphicon-spin {
       color: @brand-primary;
     }
   }
   .input-group-addon {
     background-color: rgb(255, 255, 255);
+  }
+}
+
+// AJAX "Throbber".
+.ajax-progress {
+  .glyphicon {
+    font-size: 90%;
+    margin: 0 -.25em 0 0.5em;
   }
 }
 
@@ -363,6 +359,13 @@ a .glyphicon-spin {
   100% {
     transform: rotate(359deg);
   }
+}
+.glyphicon-refresh {
+  -webkit-transform-origin: 50% 57%;
+  -moz-transform-origin: 50% 57%;
+  -ms-transform-origin: 50% 57%;
+  -o-transform-origin: 50% 57%;
+  transform-origin: 50% 57%;
 }
 
 /**

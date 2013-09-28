@@ -303,6 +303,10 @@ function bootstrap_pre_render_fieldset($element) {
  * Replace core's form_process_vertical_tabs().
  */
 function bootstrap_process_vertical_tabs($element, &$form_state) {
+  if (!isset($element['#parents'])) {
+    return;
+  }
+
   // Show vertical tabs as "left" bootstrap tabs.
   if (empty($element['#tab_alignment'])) {
     $element['#tab_alignment'] = 'left';
