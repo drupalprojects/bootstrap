@@ -1,17 +1,16 @@
 <?php
 /**
  * @file
- * boostrap-panel.tpl.php
+ * bootstrap-panel.tpl.php
  *
  * Markup for Bootstrap panels ([collapsible] fieldsets).
- * @todo Figure out how to deal with vertical_tab fieldsets.
  */
 
 ?>
 <?php if ($prefix): ?>
   <?php print $prefix; ?>
 <?php endif; ?>
-<div class="panel panel-default">
+<div<?php print $attributes; ?>>
   <?php if ($title): ?>
     <?php if ($collapsible): ?>
       <a href="#<?php print $id; ?>" class="panel-heading" data-toggle="collapse" data-target="#<?php print $id; ?>">

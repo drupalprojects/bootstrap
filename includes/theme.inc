@@ -5,6 +5,13 @@
  */
 
 /**
+ * Helper theme function for returning the element's children with no wrapper.
+ */
+function bootstrap_bootstrap_bare($variables) {
+  return $variables['element']['#children'];
+}
+
+/**
  * Returns HTML for a set of links.
  */
 function theme_bootstrap_links($variables) {
@@ -465,33 +472,74 @@ function bootstrap_preprocess_table(&$variables) {
 }
 
 /**
- * Returns HTML for Bootstrap's vertical tabs labesl.
+ * Implements hook_preprocess_bootstrap_tabs().
  */
-function bootstrap_bootstrap_vertical_tabs_labels($variables) {
-  $element = $variables['element'];
-  if (empty($variables['id'])) {
-    $tab_id = 'tab-' . md5($element);
+function bootstrap_preprocess_bootstrap_tabs(&$variables) {
+  // Attributes for the tabs container.
+  $attributes = array('class' => array('tabbable'));
+
+  // Process form vertical tabs.
+  if (!isset($variables['tabs'])) {
+    $variables['tabs'] = array();
+    if (isset($variables['element']) && ($element = &$variables['element'])) {
+      if (!empty($element['#tab_alignment'])) {
+        $attributes['class'][] = 'tabs-' . $element['#tab_alignment'];
+      }
+      $tabs = array();
+      $children = element_children($element['group']);
+      foreach ($children as $key) {
+        $child = $element['group'][$key];
+        // Create an item_list item data structure.
+        $tabs[$key] = array(
+          'data' => l($child['#title'], '#' . $child['#id'], array(
+            'external' => TRUE,
+            'attributes' => array(
+              'data-toggle' => 'tab',
+            ),
+          )),
+        );
+        // Use first tab if no default tab available.
+        if (empty($element['#default_tab'])) {
+          $tab_keys = array_keys($children);
+          $element['#default_tab'] = $element['group'][array_shift($tab_keys)]['#id'];
+        }
+        // Set the active tab.
+        if ($element['#default_tab'] === $child['#id']) {
+          $tabs[$key]['class'][] = 'active';
+        }
+      }
+      $variables['tabs'] = $tabs;
+      $variables['content'] = $element['#children'];
+
+      // Iterate over optional variables.
+      $keys = array(
+        'prefix',
+        'suffix',
+      );
+      foreach ($keys as $key) {
+        $variables[$key] = !empty($element["#$key"]) ? $element["#$key"] : FALSE;
+      }
+    }
   }
-  else {
-    $tab_id = check_plain($variables['id']);
-  }
 
-  $output = '<ul class="nav nav-tabs" id="' . $tab_id . '">';
+  // Add attributes for the tabs container.
+  $variables['attributes'] = drupal_attributes($attributes);
 
-  foreach ($element['#tab_titles'] as $item) {
-    $output .= '<li><a href="#' . $item['id'] . '" data-toggle="tab">' . check_plain($item['title']) . '</a></li>';
-  }
-
-  $output .= '</ul>';
-
-  return $output;
 }
 
-function bootstrap_preprocess_bootstrap_vertical_tabs_pane(&$variables) {
-  $element = & $variables['element'];
-  $variables['collapsible'] = $element['#collapsible'];
-  $variables['collapsed'] = $element['#collapsed'];
-  $variables['id'] = $element['#id'];
-  $variables['title'] = !empty($element['#title']) ? $element['#title'] : FALSE;
-  $variables['content'] = $element['#children'];
+/**
+ * Implements hook_process_bootstrap_tabs().
+ */
+function bootstrap_process_bootstrap_tabs(&$variables) {
+  // Render tabs.
+  if (is_array($variables['tabs']) && !isset($variables['tabs']['#theme'])) {
+    $tabs = array(
+      '#theme' => 'item_list__bootstrap_tabs',
+      '#items' => $variables['tabs'],
+      '#attributes' => array(
+        'class' => array('nav', 'nav-tabs'),
+      ),
+    );
+    $variables['tabs'] = drupal_render($tabs);
+  }
 }

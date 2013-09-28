@@ -13,13 +13,20 @@ regions[sidebar_first]  = 'Primary'
 regions[sidebar_second] = 'Secondary'
 regions[footer]         = 'Footer'
 
-; Settings
+; Core Settings
 settings[toggle_name] = 0
 settings[toggle_search] = 1
+
+; CDN
 settings[bootstrap_cdn] = 3.0.0
+
+; Breadcrumbs
 settings[bootstrap_breadcrumb] = 1
 settings[bootstrap_breadcrumb_home] = 0
 settings[bootstrap_breadcrumb_title] = 1
+
+; Visual Effects
+settings[bootstrap_fade_tabs] = 1
 
 ;Exclude JavaScript
 ;exclude[js][] = 'modules/contextual/contextual.js'

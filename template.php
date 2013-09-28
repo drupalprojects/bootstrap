@@ -44,6 +44,9 @@ function bootstrap_theme(&$existing, $type, $theme, $path) {
   }
 
   return array(
+    'bootstrap_bare' => array(
+      'render element' => 'element',
+    ),
     'bootstrap_links' => array(
       'variables' => array(
         'links' => array(),
@@ -84,16 +87,20 @@ function bootstrap_theme(&$existing, $type, $theme, $path) {
       'path' => $path . '/templates',
       'template' => 'bootstrap-panel',
     ),
-    'bootstrap_vertical_tabs_labels' => array(
-      'variables' => array(
-        'id' => '',
-        'element' => array(),
-      ),
-    ),
-    'bootstrap_vertical_tabs_pane' => array(
+    // D7 BUG: we must explicitly define the "suggestion" template. This is
+    // exactly what Views does, but in a more dynamic approach.
+    // @see: https://api.drupal.org/comment/15119#comment-15119
+    // @see: https://drupal.org/node/342350
+    'bootstrap_panel__tab_pane' => array(
       'render element' => 'element',
       'path' => $path . '/templates',
-      'template' => 'bootstrap-vertical-tabs-pane',
+      'template' => 'bootstrap-panel--tab-pane',
+      'base hook' => 'bootstrap_panel',
+    ),
+    'bootstrap_tabs' => array(
+      'render element' => 'element',
+      'path' => $path . '/templates',
+      'template' => 'bootstrap-tabs',
     ),
   );
 }

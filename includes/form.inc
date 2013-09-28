@@ -210,12 +210,28 @@ function bootstrap_form_element_label(&$variables) {
  */
 function bootstrap_element_info_alter(&$elements) {
   foreach ($elements as &$element) {
+
+    // Bootstrap tabs and replaces core vertical tabs.
+    if ('bootstrap_tabs' === $element['#type'] || 'vertical_tabs' === $element['#type']) {
+      if ('vertical_tabs' === $element['#type']) {
+        $element['#theme_wrappers'] = array('bootstrap_tabs');
+      }
+      // Replace core's #process function.
+      if (($key = array_search('form_process_vertical_tabs', $element['#process'])) !== FALSE) {
+        $element['#process'][$key] = 'bootstrap_process_vertical_tabs';
+      }
+    }
+
     // Replace core fieldsets with Bootstrap panels.
     if ('fieldset' === $element['#type']) {
       $element['#theme_wrappers'] = array('bootstrap_panel');
-      // Replace core's process function.
+      // Replace core's #process function.
       if (($key = array_search('form_process_fieldset', $element['#process'])) !== FALSE) {
         $element['#process'][$key] = 'bootstrap_form_process_fieldset';
+      }
+      // Replace core's #pre_render function.
+      if (($key = array_search('form_pre_render_fieldset', $element['#pre_render'])) !== FALSE) {
+        $element['#pre_render'][$key] = 'bootstrap_pre_render_fieldset';
       }
     }
     if (!empty($element['#input'])) {
@@ -225,7 +241,101 @@ function bootstrap_element_info_alter(&$elements) {
 }
 
 /**
- * Replaces form_process_fieldset().
+ * Replace core's form_pre_render_fieldset().
+ */
+function bootstrap_pre_render_fieldset($element) {
+  // Fieldsets may be rendered outside of a Form API context.
+  if (!isset($element['#parents']) || !isset($element['#groups'])) {
+    return $element;
+  }
+  // Inject group member elements belonging to this group.
+  $parents = implode('][', $element['#parents']);
+  $children = element_children($element['#groups'][$parents]);
+  if (!empty($children)) {
+    $element['#theme_wrappers'] = array('bootstrap_bare');
+    if (empty($element['#default_tab'])) {
+      $children_keys = array_values($children);
+      $element['#default_tab'] = $element['#groups'][$parents][array_shift($children_keys)]['#id'];
+    }
+    foreach ($children as $key) {
+      // Break references and indicate that the element should be rendered as
+      // group member.
+      $child = (array) $element['#groups'][$parents][$key];
+      $child['#attributes']['id'] = $child['#id'];
+      $child['#group_fieldset'] = TRUE;
+      if ($element['#default_tab'] === $child['#id']) {
+        $child['#attributes']['class'][] = 'active';
+        $child['#attributes']['class'][] = 'in';
+      }
+      // Inject the element as new child element.
+      $element[] = $child;
+
+      $sort = TRUE;
+    }
+    // Re-sort the element's children if we injected group member elements.
+    if (isset($sort)) {
+      $element['#sorted'] = FALSE;
+    }
+  }
+
+  if (isset($element['#group'])) {
+    $group = $element['#group'];
+    // If this element belongs to a group, but the group-holding element does
+    // not exist, we need to render it (at its original location).
+    if (!isset($element['#groups'][$group]['#group_exists'])) {
+      // Intentionally empty to clarify the flow; we simply return $element.
+    }
+    // If we injected this element into the group, then we want to render it.
+    elseif (!empty($element['#group_fieldset'])) {
+      // Intentionally empty to clarify the flow; we simply return $element.
+    }
+    // Otherwise, this element belongs to a group and the group exists, so we do
+    // not render it.
+    elseif (element_children($element['#groups'][$group])) {
+      $element['#printed'] = TRUE;
+    }
+  }
+
+  return $element;
+}
+
+/**
+ * Replace core's form_process_vertical_tabs().
+ */
+function bootstrap_process_vertical_tabs($element, &$form_state) {
+  // Show vertical tabs as "left" bootstrap tabs.
+  if (empty($element['#tab_alignment'])) {
+    $element['#tab_alignment'] = 'left';
+  }
+
+  // Inject a new fieldset as child, so that form_process_fieldset() processes
+  // this fieldset like any other fieldset.
+  $element['group'] = array(
+    '#type' => 'fieldset',
+    '#theme_wrappers' => array(),
+    '#parents' => $element['#parents'],
+    '#vertical_tabs' => TRUE,
+  );
+
+  // The JavaScript stores the currently selected tab in this hidden
+  // field so that the active tab can be restored the next time the
+  // form is rendered, e.g. on preview pages or when form validation
+  // fails.
+  $name = implode('__', $element['#parents']);
+  if (isset($form_state['values'][$name . '__active_tab'])) {
+    $element['#default_tab'] = $form_state['values'][$name . '__active_tab'];
+  }
+  $element[$name . '__active_tab'] = array(
+    '#type' => 'hidden',
+    '#default_value' => $element['#default_tab'],
+    '#attributes' => array('class' => array('vertical-tabs-active-tab')),
+  );
+
+  return $element;
+}
+
+/**
+ * Replace core's form_process_fieldset().
  */
 function bootstrap_form_process_fieldset(&$element, &$form_state) {
   $parents = implode('][', $element['#parents']);
@@ -233,17 +343,23 @@ function bootstrap_form_process_fieldset(&$element, &$form_state) {
 
   // Each fieldset forms a new group. The #type 'vertical_tabs' basically only
   // injects a new fieldset.
-  // @todo figure out how to deal with this in Bootstrap.
   $form_state['groups'][$parents]['#group_exists'] = TRUE;
   $element['#groups'] = &$form_state['groups'];
 
   // Process vertical tabs group member fieldsets.
   if (isset($element['#group'])) {
     // Add this fieldset to the defined group (by reference).
+    $element['#theme_wrappers'] = array('bootstrap_panel__tab_pane');
+    $element['#attributes']['class'][] = 'tab-pane';
+    if (theme_get_setting('bootstrap_fade_tabs')) {
+      $element['#attributes']['class'][] = 'fade';
+    }
     $group = $element['#group'];
-    $element['#vertical_tabs'] = TRUE;
-    $element['#theme_wrappers'] = array('bootstrap_vertical_tabs_pane');;
     $form_state['groups'][$group][] = &$element;
+  }
+  else {
+    $element['#attributes']['class'][] = 'panel';
+    $element['#attributes']['class'][] = 'panel-default';
   }
 
   // Contains form element summary functionalities.
@@ -263,6 +379,8 @@ function bootstrap_form_process_fieldset(&$element, &$form_state) {
  */
 function bootstrap_preprocess_bootstrap_panel(&$variables) {
   $element = &$variables['element'];
+  $attributes = !empty($element['#attributes']) ? $element['#attributes'] : array();
+  $variables['attributes'] = drupal_attributes($attributes);
   $variables['collapsible'] = $element['#collapsible'];
   $variables['collapsed'] = $element['#collapsed'];
   $variables['id'] = $element['#id'];
@@ -278,7 +396,6 @@ function bootstrap_preprocess_bootstrap_panel(&$variables) {
   foreach ($keys as $key) {
     $variables[$key] = !empty($element["#$key"]) ? $element["#$key"] : FALSE;
   }
-
 }
 
 /**
@@ -500,44 +617,4 @@ function bootstrap_bootstrap_append_element(&$variables) {
   $output .= "</div>\n";
 
   return $output;
-}
-
-/**
- * Returns HTML for an element's children fieldsets as vertical tabs.
- *
- * @param $variables
- *     An associative array containing:
- *   - element: An associative array containing the properties and children of
- *     the fieldset. Properties used: #children.
- *
- * @ingroup themeable
- * @return string
- */
-function bootstrap_vertical_tabs($variables) {
-  $element = $variables['element'];
-  // Add required JavaScript and Stylesheet.
-  //drupal_add_library('system', 'drupal.vertical-tabs');
-
-  $output = '<h2 class="element-invisible">' . t('Vertical Tabs') . '</h2>';
-  $output .= '<div class="tabbable tabs-left">';
-
-  $output .= theme('bootstrap_vertical_tabs_labels', array(
-    'element' => $variables['element'],
-    'id' => $variables['element']['#id'],
-  ));
-
-  //$output .= '</div>';
-
-  $output .= '<div class="tab-content">' . $element['#children'] . '</div></div>';
-  return $output;
-}
-
-function bootstrap_preprocess_vertical_tabs(&$variables, $hook) {
-  $variables['element']['#tab_titles'] = array();
-  foreach (element_children($variables['element']['group']) as $element_id) {
-    $variables['element']['#tab_titles'][$element_id] = array(
-      'id' => $variables['element']['group'][$element_id]['#id'],
-      'title' => $variables['element']['group'][$element_id]['#title'],
-    );
-  }
 }
