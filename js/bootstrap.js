@@ -25,13 +25,13 @@ var Drupal = Drupal || {};
         var $wrapper = $(this);
         var $tabs = $wrapper.find('.nav-tabs');
         var $content = $wrapper.find('.tab-content');
-        var borderRadius = parseInt($content.css('borderTopRightRadius'), 10);
+        var borderRadius = parseInt($content.css('borderBottomRightRadius'), 10);
 
         var bootstrapTabResize = function() {
           if ($wrapper.hasClass('tabs-left') || $wrapper.hasClass('tabs-right')) {
             $content.css('min-height', $tabs.outerHeight());
           }
-        }
+        };
 
         // Provide summary support.
         $tabs.find('a').append($('<div class="summary"></div>'));
@@ -45,15 +45,27 @@ var Drupal = Drupal || {};
         bootstrapTabResize();
 
         // Detect tab switch.
-        $tabs.on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
-          bootstrapTabResize();
-          if ($(e.target).parent().is(':first-child')) {
-            $content.css('borderTopLeftRadius', '0');
-          }
-          else {
-            $content.css('borderTopLeftRadius', borderRadius + 'px');
-          }
-        });
+        if ($wrapper.hasClass('tabs-left') || $wrapper.hasClass('tabs-right')) {
+          $tabs.on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
+            bootstrapTabResize();
+            if ($wrapper.hasClass('tabs-left')) {
+              if ($(e.target).parent().is(':first-child')) {
+                $content.css('borderTopLeftRadius', '0');
+              }
+              else {
+                $content.css('borderTopLeftRadius', borderRadius + 'px');
+              }
+            }
+            else {
+              if ($(e.target).parent().is(':first-child')) {
+                $content.css('borderTopRightRadius', '0');
+              }
+              else {
+                $content.css('borderTopRightRadius', borderRadius + 'px');
+              }
+            }
+          });
+        }
 
       });
 

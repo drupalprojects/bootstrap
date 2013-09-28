@@ -327,38 +327,49 @@ function bootstrap_js_alter(&$js) {
   // Load excluded JS files from theme.
   $excludes = _bootstrap_alter(bootstrap_theme_get_info('exclude'), 'js');
 
-  // If bootstrap_ui available, we should not add js from theme info file.
-  if (module_exists('bootstrap_ui')) {
-    libraries_load('bootstrap', 'minified');
-  }
-
   $theme_path = drupal_get_path('theme', 'bootstrap');
 
-  // Inject default the base theme's default bootstrap JS file.
+  // Add or replace JavaScript files when matching paths are detected.
+  // Replacement files must begin with '_', like '_node.js'.
+  $files = file_scan_directory($theme_path . '/js', '/\.js$/');
+  foreach ($files as $file) {
+    $path = str_replace($theme_path . '/js/', '', $file->uri);
+    // Detect if this is a replacement file.
+    $replace = FALSE;
+    if (preg_match('/^[_]/', $file->filename)) {
+      $replace = TRUE;
+      $path = dirname($path) . '/' . preg_replace('/^[_]/', '', $file->filename);
+    }
+    $matches = array();
+    if (preg_match('/^modules\/([^\/]*)/', $path, $matches)) {
+      if (!module_exists($matches[1])) {
+        continue;
+      }
+      else {
+        $path = str_replace('modules/' . $matches[1], drupal_get_path('module', $matches[1]), $path);
+      }
+    }
+    // Path should always exist to either add or replace JavaScript file.
+    if (!empty($js[$path])) {
+      // Replace file.
+      if ($replace) {
+        $js[$file->uri] = $js[$path];
+        $js[$file->uri]['data'] = $file->uri;
+        unset($js[$path]);
+      }
+      // Add file.
+      else {
+        $js[$file->uri] = drupal_js_defaults($file->uri);
+        $js[$file->uri]['group'] = JS_THEME;
+      }
+    }
+  }
+
+  // Always add bootstrap.js last.
   $bootstrap = $theme_path . '/js/bootstrap.js';
   $js[$bootstrap] = drupal_js_defaults($bootstrap);
   $js[$bootstrap]['group'] = JS_THEME;
   $js[$bootstrap]['scope'] = 'footer';
-
-  // Replace core progress bar JS with the Bootstrap equivilent.
-  if (isset($js['misc/progress.js']) && !empty($js['misc/progress.js'])) {
-    unset($js['misc/progress.js']);
-    $progress = $theme_path . '/js/progress.js';
-    $js[$progress] = drupal_js_defaults($progress);
-  }
-
-  // Fix broken Views AJAX pagers.
-  if (module_exists('views') && !empty($js[drupal_get_path('module', 'views') . '/js/ajax_view.js'])) {
-    // Override core ajax prototype function to append throbber inside links,
-    // instead of after it (floating issues).
-    $ajax = $theme_path . '/js/bootstrap_ajax.js';
-    $js[$ajax] = drupal_js_defaults($ajax);
-    $js[$ajax]['group'] = JS_THEME;
-    // Override views prototype function to bind to Bootstrap pagination.
-    $ajax_view = $theme_path . '/js/bootstrap_ajax_view.js';
-    $js[$ajax_view] = drupal_js_defaults($ajax_view);
-    $js[$ajax_view]['group'] = JS_THEME;
-  }
 
   $js = array_diff_key($js, $excludes);
 

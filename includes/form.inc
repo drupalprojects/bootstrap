@@ -478,7 +478,6 @@ function bootstrap_textfield($variables) {
   $extra = '';
   if ($element['#autocomplete_path'] && drupal_valid_path($element['#autocomplete_path'])) {
     drupal_add_library('system', 'drupal.autocomplete');
-    drupal_add_js(drupal_get_path('theme', 'bootstrap') . '/js/bootstrap.autocomplete.js');
     $element['#attributes']['class'][] = 'form-autocomplete';
 
     $attributes = array();
