@@ -68,9 +68,9 @@ function bootstrap_theme(&$existing, $type, $theme, $path) {
 bootstrap_include('bootstrap', 'includes/common.inc');
 
 /**
- * Implement various hook_*_alter() hooks.
+ * Declare various hook_*_alter() hooks.
  *
  * hook_*_alter() implementations must live (via include) inside this file so
- * they can be detected properly from drupal_alter().
+ * they are properly detected when drupal_alter() is invoked.
  */
 bootstrap_include('bootstrap', 'includes/alter.inc');
