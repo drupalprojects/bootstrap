@@ -1,23 +1,16 @@
 <?php
-
-// Provide < PHP 5.3 support for the __DIR__ constant.
-if (!defined('__DIR__')) {
-  define('__DIR__', dirname(__FILE__));
-}
-require_once __DIR__ . '/includes/bootstrap.inc';
-require_once __DIR__ . '/includes/theme.inc';
-require_once __DIR__ . '/includes/pager.inc';
-require_once __DIR__ . '/includes/form.inc';
-require_once __DIR__ . '/includes/admin.inc';
-require_once __DIR__ . '/includes/menu.inc';
-
-// Load module specific files in the modules directory.
-$includes = file_scan_directory(__DIR__ . '/includes/modules', '/\.inc$/');
-foreach ($includes as $include) {
-  if (module_exists($include->name)) {
-    require_once $include->uri;
-  }
-}
+/**
+ * @file
+ * template.php
+ *
+ * This file should only contain light helper functions and stubs pointing to
+ * other files containing more complex functions.
+ *
+ * The stubs should point to files within the `includes` folder named after
+ * the function itself minus the theme prefix. If the stub contains a group
+ * of functions, then please organize them so they are related in some way
+ * and name the file appropriately to at least hint at what it contains.
+ */
 
 // Auto-rebuild the theme registry during theme development.
 if (theme_get_setting('bootstrap_rebuild_registry') && !defined('MAINTENANCE_MODE')) {
@@ -28,81 +21,39 @@ if (theme_get_setting('bootstrap_rebuild_registry') && !defined('MAINTENANCE_MOD
 }
 
 /**
+ * Helper function for including theme files.
+ *
+ * @param string $theme
+ *   Name of the theme to use for base path.
+ * @param string $path
+ *   Path relative to $theme.
+ */
+function bootstrap_include($theme, $path) {
+  static $themes = array();
+  if (!isset($themes[$theme])) {
+    $themes[$theme] = drupal_get_path('theme', $theme);
+  }
+  if ($themes[$theme] && ($file = DRUPAL_ROOT . '/' . $themes[$theme] . '/' . $path) && file_exists($file)) {
+    include_once $file;
+  }
+}
+
+/**
  * Implements hook_theme().
+ *
+ * Register theme hook implementations.
+ *
+ * The implementations declared by this hook have two purposes: either they
+ * specify how a particular render array is to be rendered as HTML (this is
+ * usually the case if the theme function is assigned to the render array's
+ * #theme property), or they return the HTML that should be returned by an
+ * invocation of theme().
+ *
+ * @see _bootstrap_theme()
  */
 function bootstrap_theme(&$existing, $type, $theme, $path) {
-  // If we are auto-rebuilding the theme registry, warn about the feature.
-  if (
-    // Only display for site config admins.
-    isset($GLOBALS['user']) && function_exists('user_access') && user_access('administer site configuration')
-    && theme_get_setting('bootstrap_rebuild_registry')
-    // Always display in the admin section, otherwise limit to three per hour.
-    && (arg(0) == 'admin' || flood_is_allowed($GLOBALS['theme'] . '_rebuild_registry_warning', 3))
-  ) {
-    flood_register_event($GLOBALS['theme'] . '_rebuild_registry_warning');
-    drupal_set_message(t('For easier theme development, the theme registry is being rebuilt on every page request. It is <em>extremely</em> important to <a href="!link">turn off this feature</a> on production websites.', array('!link' => url('admin/appearance/settings/' . $GLOBALS['theme']))), 'warning', FALSE);
-  }
-
-  return array(
-    'bootstrap_bare' => array(
-      'render element' => 'element',
-    ),
-    'bootstrap_links' => array(
-      'variables' => array(
-        'links' => array(),
-        'attributes' => array(),
-        'heading' => NULL
-      ),
-    ),
-    'bootstrap_btn_dropdown' => array(
-      'variables' => array(
-        'links' => array(),
-        'attributes' => array(),
-        'type' => NULL
-      ),
-    ),
-    'bootstrap_modal' => array(
-      'variables' => array(
-        'heading' => '',
-        'body' => '',
-        'footer' => '',
-        'attributes' => array(),
-        'html_heading' => FALSE,
-      ),
-    ),
-    'bootstrap_accordion' => array(
-      'variables' => array(
-        'id' => '',
-        'elements' => array(),
-      ),
-    ),
-    'bootstrap_search_form_wrapper' => array(
-      'render element' => 'element',
-    ),
-    'bootstrap_append_element' => array(
-      'render element' => 'element',
-    ),
-    'bootstrap_panel' => array(
-      'render element' => 'element',
-      'path' => $path . '/templates',
-      'template' => 'bootstrap-panel',
-    ),
-    // D7 BUG: we must explicitly define the "suggestion" template. This is
-    // exactly what Views does, but in a more dynamic approach.
-    // @see: https://api.drupal.org/comment/15119#comment-15119
-    // @see: https://drupal.org/node/342350
-    'bootstrap_panel__tab_pane' => array(
-      'render element' => 'element',
-      'path' => $path . '/templates',
-      'template' => 'bootstrap-panel--tab-pane',
-      'base hook' => 'bootstrap_panel',
-    ),
-    'bootstrap_tabs' => array(
-      'render element' => 'element',
-      'path' => $path . '/templates',
-      'template' => 'bootstrap-tabs',
-    ),
-  );
+  bootstrap_include($theme, 'includes/registry.inc');
+  return _bootstrap_theme($existing, $type, $theme, $path);
 }
 
 /**
