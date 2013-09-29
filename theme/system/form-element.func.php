@@ -65,30 +65,40 @@ function bootstrap_form_element(&$variables) {
   if (!isset($element['#title'])) {
     $element['#title_display'] = 'none';
   }
-  $wrapper = isset($element['#field_prefix']) || isset($element['#field_suffix']) ? '<div class="input-group">' : '';
-  $prefix = isset($element['#field_prefix']) ? '<span class="input-group-addon">' . $element['#field_prefix'] . '</span> ' : '';
-  $suffix = isset($element['#field_suffix']) ? ' <span class="input-group-addon">' . $element['#field_suffix'] . '</span>' : '';
+
+  $prefix = '';
+  $suffix = '';
+  if (isset($element['#field_prefix']) || isset($element['#field_suffix'])) {
+    // Determine if "#input_group" was specified.
+    if (!empty($element['#input_group'])) {
+      $prefix .= '<div class="input-group">';
+      $prefix .= isset($element['#field_prefix']) ? '<span class="input-group-addon">' . $element['#field_prefix'] . '</span>' : '';
+      $suffix .= isset($element['#field_suffix']) ? '<span class="input-group-addon">' . $element['#field_suffix'] . '</span>' : '';
+      $suffix .= '</div>';
+    }
+    else {
+      $prefix .= isset($element['#field_prefix']) ? $element['#field_prefix'] : '';
+      $suffix .= isset($element['#field_suffix']) ? $element['#field_suffix'] : '';
+    }
+  }
 
   switch ($element['#title_display']) {
     case 'before':
     case 'invisible':
       $output .= ' ' . theme('form_element_label', $variables);
-      $output .= ' ' . $wrapper . $prefix . $element['#children'] . $suffix . "\n";
+      $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
       break;
 
     case 'after':
-      $variables['#children'] = ' ' . $wrapper . $prefix . $element['#children'] . $suffix;
+      $variables['#children'] = ' ' . $prefix . $element['#children'] . $suffix;
       $output .= ' ' . theme('form_element_label', $variables) . "\n";
       break;
 
     case 'none':
     case 'attribute':
       // Output no label and no required marker, only the children.
-      $output .= ' ' . $wrapper . $prefix . $element['#children'] . $suffix . "\n";
+      $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
       break;
-  }
-  if (isset($element['#field_prefix']) || isset($element['#field_suffix'])) {
-    $output .= "</div>";
   }
 
   if (!empty($element['#description'])) {
