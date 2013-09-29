@@ -65,26 +65,30 @@ function bootstrap_form_element(&$variables) {
   if (!isset($element['#title'])) {
     $element['#title_display'] = 'none';
   }
-  $prefix = isset($element['#field_prefix']) ? '<span class="field-prefix">' . $element['#field_prefix'] . '</span> ' : '';
-  $suffix = isset($element['#field_suffix']) ? ' <span class="field-suffix">' . $element['#field_suffix'] . '</span>' : '';
+  $wrapper = isset($element['#field_prefix']) || isset($element['#field_suffix']) ? '<div class="input-group">' : '';
+  $prefix = isset($element['#field_prefix']) ? '<span class="input-group-addon">' . $element['#field_prefix'] . '</span> ' : '';
+  $suffix = isset($element['#field_suffix']) ? ' <span class="input-group-addon">' . $element['#field_suffix'] . '</span>' : '';
 
   switch ($element['#title_display']) {
     case 'before':
     case 'invisible':
       $output .= ' ' . theme('form_element_label', $variables);
-      $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
+      $output .= ' ' . $wrapper . $prefix . $element['#children'] . $suffix . "\n";
       break;
 
     case 'after':
-      $variables['#children'] = ' ' . $prefix . $element['#children'] . $suffix;
+      $variables['#children'] = ' ' . $wrapper . $prefix . $element['#children'] . $suffix;
       $output .= ' ' . theme('form_element_label', $variables) . "\n";
       break;
 
     case 'none':
     case 'attribute':
       // Output no label and no required marker, only the children.
-      $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
+      $output .= ' ' . $wrapper . $prefix . $element['#children'] . $suffix . "\n";
       break;
+  }
+  if (isset($element['#field_prefix']) || isset($element['#field_suffix'])) {
+    $output .= "</div>";
   }
 
   if (!empty($element['#description'])) {
