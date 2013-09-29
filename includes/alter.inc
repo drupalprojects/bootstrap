@@ -47,7 +47,7 @@ function bootstrap_css_alter(&$css) {
     );
   }
   if (!empty($excludes)) {
-    $css = array_diff_key($css, $excludes);
+    $css = array_diff_key($css, drupal_map_assoc($excludes));
   }
 }
 
@@ -201,7 +201,7 @@ function bootstrap_js_alter(&$js) {
   $js[$bootstrap]['scope'] = 'footer';
 
   if (!empty($excludes)) {
-    $js = array_diff_key($js, $excludes);
+    $js = array_diff_key($js, drupal_map_assoc($excludes));
   }
 
   // Add CDN.
@@ -213,22 +213,6 @@ function bootstrap_js_alter(&$js) {
     $js[$cdn]['every_page'] = TRUE;
     $js[$cdn]['weight'] = -100;
   }
-}
-
-/**
- * Helper function to alter CSS/JS arrays.
- */
-function _bootstrap_alter($files, $type) {
-  $output = array();
-
-  foreach($files as $key => $value) {
-    if (isset($files[$key][$type])) {
-      foreach ($files[$key][$type] as $file => $name) {
-        $output[$name] = FALSE;
-      }
-    }
-  }
-  return $output;
 }
 
 /**
