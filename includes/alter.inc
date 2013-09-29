@@ -11,8 +11,8 @@
  */
 function bootstrap_css_alter(&$css) {
   $theme_path = drupal_get_path('theme', 'bootstrap');
-  // Load excluded CSS files from theme.
-  $excludes = _bootstrap_alter(bootstrap_theme_get_info('exclude'), 'css');
+  // Exclude specified CSS files from theme.
+  $excludes = bootstrap_get_theme_info(NULL, 'exclude][css');
   // Add Bootstrap CDN file and overrides.
   $bootstrap_cdn = theme_get_setting('bootstrap_cdn');
   if ($bootstrap_cdn) {
@@ -46,7 +46,9 @@ function bootstrap_css_alter(&$css) {
       'weight' => -1,
     );
   }
-  $css = array_diff_key($css, $excludes);
+  if (!empty($excludes)) {
+    $css = array_diff_key($css, $excludes);
+  }
 }
 
 /**
@@ -107,7 +109,7 @@ function bootstrap_form_alter(array &$form, array &$form_state = array(), $form_
       case 'system_theme_settings':
         // Include the settings form here.
         bootstrap_include('bootstrap', 'includes/settings.inc');
-        _bootstrap_settings_form($form, $form_state, $form_id);
+        _bootstrap_settings_form($form, $form_state);
         break;
 
       case 'search_form':
@@ -151,8 +153,8 @@ function bootstrap_form_alter(array &$form, array &$form_state = array(), $form_
  * Implements hook_js_alter().
  */
 function bootstrap_js_alter(&$js) {
-  // Load excluded JS files from theme.
-  $excludes = _bootstrap_alter(bootstrap_theme_get_info('exclude'), 'js');
+  // Exclude specified JavaScript files from theme.
+  $excludes = bootstrap_get_theme_info(NULL, 'exclude][js');
 
   $theme_path = drupal_get_path('theme', 'bootstrap');
 
@@ -198,7 +200,9 @@ function bootstrap_js_alter(&$js) {
   $js[$bootstrap]['group'] = JS_THEME;
   $js[$bootstrap]['scope'] = 'footer';
 
-  $js = array_diff_key($js, $excludes);
+  if (!empty($excludes)) {
+    $js = array_diff_key($js, $excludes);
+  }
 
   // Add CDN.
   if (theme_get_setting('bootstrap_cdn')) {

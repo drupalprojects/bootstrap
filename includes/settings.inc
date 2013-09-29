@@ -11,16 +11,26 @@
  *   The form array, passed by reference.
  * @param array $form_state
  *   The form state array, passed by reference.
- * @param string $form_id
- *   The form ID.
  */
-function _bootstrap_settings_form(&$form, $form_state, $form_id = NULL) {
-  $theme_path = drupal_get_path('theme', 'bootstrap');
+function _bootstrap_settings_form(&$form, $form_state) {
+  // Don't modify global settings.
+  if (empty($form_state['build_info']['args'][0])) {
+    return;
+  }
+
+  // Don't modify non-bootstrap based theme settings.
+  $theme = $form_state['build_info']['args'][0];
+  if ($theme !== 'bootstrap') {
+    $base_theme = bootstrap_get_theme_info($theme, 'base theme');
+    if (!$base_theme || (!is_array($base_theme) && $base_theme !== 'bootstrap') || (is_array($base_theme) && !in_array('bootstrap', $base_theme))) {
+      return;
+    }
+  }
 
   $form['bootstrap'] = array(
     '#type' => 'vertical_tabs',
     '#attached' => array(
-      'js'  => array($theme_path . '/js/bootstrap.admin.js'),
+      'js'  => array(drupal_get_path('theme', 'bootstrap') . '/js/bootstrap.admin.js'),
     ),
   );
 
