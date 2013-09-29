@@ -132,6 +132,6 @@ function bootstrap_pager($variables) {
       //'attributes' => array('class' => array('pager')),
     )) . '</div>';
   }
-  
+
   return $output;
 }

@@ -2,17 +2,17 @@
 
 /**
  * A wrapper function for bootstrap_theme_get_settings().
- * 
+ *
  * @param $name
- *   The name of the setting that you want to retrieve. 
+ *   The name of the setting that you want to retrieve.
  * @param $default (optional)
  *   The name (key) of the theme that you want to fetch the
- *   setting for. Defaults to NULL.   
+ *   setting for. Defaults to NULL.
  * @param $theme (optional)
  *   The key (machin-readable name) of a theme. Defaults to the key of the
  *   current theme if not defined.
- *   
- * @see 
+ *
+ * @see
  *   bootstrap_theme_get_setting().
  */
 function bootstrap_theme_get_setting($name, $theme = NULL) {
@@ -25,7 +25,7 @@ function bootstrap_theme_get_setting($name, $theme = NULL) {
       break;
   }
 
-  return isset($setting) ? $setting : NULL; 
+  return isset($setting) ? $setting : NULL;
 }
 
 function bootstrap_get_settings($theme = NULL) {
@@ -68,7 +68,7 @@ function bootstrap_theme_get_info($setting_name, $theme = NULL) {
       }
     }
   }
-  
+
   return $output;
 }
 
@@ -98,7 +98,7 @@ function bootstrap_menu_navigation_links($tree, $lvl = 0) {
       }
     }
   }
-  
+
   return $result;
 }
 
@@ -110,7 +110,7 @@ function bootstrap_menu_navigation_links($tree, $lvl = 0) {
  */
 function bootstrap_bootstrap_progress_bar($variables) {
   $variables['attributes']['class'][] = 'progress';
-  
+
   return "<div". drupal_attributes($variables['attributes']) .">
   <div class=\"bar\"
        style=\"width: ". $variables['percent'] ."%;\"></div>

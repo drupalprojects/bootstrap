@@ -32,4 +32,4 @@ to modify this file unless you need to add or remove imported files. For
 example, if you do not want your site to have responsive capabilities, free to
 comment or remove that line. If you are a file hierarchy wizard and need to
 separate your theme into multiple files, insert additional `@import '...';`
-lines. 
+lines.

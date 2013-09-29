@@ -59,7 +59,7 @@ function bootstrap_menu_tree(&$variables) {
 function bootstrap_menu_link(array $variables) {
   $element = $variables['element'];
   $sub_menu = '';
-  
+
   if ($element['#below']) {
 
     // Prevent dropdown functions from being added to management menu as to not affect navbar module.

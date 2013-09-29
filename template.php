@@ -42,7 +42,7 @@ function bootstrap_theme(&$existing, $type, $theme, $path) {
     flood_register_event($GLOBALS['theme'] . '_rebuild_registry_warning');
     drupal_set_message(t('For easier theme development, the theme registry is being rebuilt on every page request. It is <em>extremely</em> important to <a href="!link">turn off this feature</a> on production websites.', array('!link' => url('admin/appearance/settings/' . $GLOBALS['theme']))), 'warning', FALSE);
   }
-  
+
   return array(
     'bootstrap_links' => array(
       'variables' => array(
@@ -92,7 +92,7 @@ function bootstrap_breadcrumb($variables) {
 
   if (!empty($breadcrumb)) {
     $breadcrumbs = '<ul class="breadcrumb">';
-    
+
     $count = count($breadcrumb) - 1;
     foreach ($breadcrumb as $key => $value) {
       if ($count != $key) {
@@ -103,7 +103,7 @@ function bootstrap_breadcrumb($variables) {
       }
     }
     $breadcrumbs .= '</ul>';
-    
+
     return $breadcrumbs;
   }
 }
@@ -238,7 +238,7 @@ function bootstrap_preprocess_region(&$variables, $hook) {
   if ($variables['region'] == 'content') {
     $variables['theme_hook_suggestions'][] = 'region__no_wrapper';
   }
-  
+
   if ($variables['region'] == "sidebar_first") {
     $variables['classes_array'][] = 'well';
   }
@@ -276,7 +276,7 @@ function bootstrap_process_block(&$variables, $hook) {
  */
 function _bootstrap_content_span($columns = 1) {
   $class = FALSE;
-  
+
   switch($columns) {
     case 1:
       $class = 'span12';
@@ -288,7 +288,7 @@ function _bootstrap_content_span($columns = 1) {
       $class = 'span6';
       break;
   }
-  
+
   return $class;
 }
 
