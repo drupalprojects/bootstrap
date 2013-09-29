@@ -101,8 +101,6 @@ function _bootstrap_theme(&$existing, $type, $theme, $path) {
     ),
     'bootstrap_panel' => array(
       'render element' => 'element',
-      'path' => $path . '/templates',
-      'template' => 'bootstrap-panel',
     ),
     // Due to a Drupal 7 bug, theme hook "suggestions" that use templates must
     // be explicitly defined. This is exactly what Views does.
@@ -110,14 +108,10 @@ function _bootstrap_theme(&$existing, $type, $theme, $path) {
     // @see: https://drupal.org/node/342350
     'bootstrap_panel__tab_pane' => array(
       'render element' => 'element',
-      'path' => $path . '/templates',
-      'template' => 'bootstrap-panel--tab-pane',
       'base hook' => 'bootstrap_panel',
     ),
     'bootstrap_tabs' => array(
       'render element' => 'element',
-      'path' => $path . '/templates',
-      'template' => 'bootstrap-tabs',
     ),
   );
 
