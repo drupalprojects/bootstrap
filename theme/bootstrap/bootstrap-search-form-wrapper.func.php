@@ -12,12 +12,9 @@ function bootstrap_bootstrap_search_form_wrapper($variables) {
   $output .= $variables['element']['#children'];
   $output .= '<span class="input-group-btn">';
   $output .= '<button type="submit" class="btn btn-default">';
-  if (module_exists('icon')) {
-    $output .= theme('icon', array('bundle' => 'bootstrap', 'icon' => 'glyphicon-search'));
-  }
   // We can be sure that the font icons exist in CDN.
-  elseif (theme_get_setting('bootstrap_cdn')) {
-    $output .= '<i class="glyphicon glyphicon-search" aria-hidden="true"></i>';
+  if (theme_get_setting('bootstrap_cdn')) {
+    $output .= _bootstrap_icon('search');
   }
   else {
     $output .= t('Search');

@@ -32,7 +32,7 @@ function bootstrap_textfield($variables) {
     $attributes['value'] = url($element['#autocomplete_path'], array('absolute' => TRUE));
     $attributes['disabled'] = 'disabled';
     $attributes['class'][] = 'autocomplete';
-    $output = '<div class="input-group">' . $output . '<span class="input-group-addon"><span class="glyphicon glyphicon-refresh"></span></span></div>';
+    $output = '<div class="input-group">' . $output . '<span class="input-group-addon">' . _bootstrap_icon('refresh') . '</span></div>';
     $extra = '<input' . drupal_attributes($attributes) . ' />';
   }
 

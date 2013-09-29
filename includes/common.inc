@@ -94,3 +94,24 @@ function bootstrap_get_theme_info($theme_key = NULL, $key = NULL, $base_themes =
   }
   return FALSE;
 }
+
+/**
+ * Theme a Bootstrap Glyphicon.
+ *
+ * @param string $name
+ *   The icon name, minus the "glyphicon-" prefix.
+ *
+ * @return string
+ *   The icon HTML markup.
+ */
+function _bootstrap_icon($name) {
+  if (module_exists('icon')) {
+    return theme('icon', array('bundle' => 'bootstrap', 'icon' => 'glyphicon-' . $name));
+  }
+  // Mimic the Icon API markup.
+  $attributes = array(
+    'class' => array('icon', 'glyphicon', 'glyphicon-' . $name),
+    'aria-hidden' => 'true',
+  );
+  return '<i' . drupal_attributes($attributes) . '></i>';
+}
