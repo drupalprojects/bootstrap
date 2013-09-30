@@ -95,12 +95,13 @@ body {
 
 // Branding.
 .navbar .logo {
-  margin-top: 5px;
-  margin-right: 10px;
-}
-#site-name {
-  line-height: 1;
-  margin: 0;
+  margin-right: -15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  @media @tablet, @normal, @wide {
+    margin-right: 0;
+    padding-left: 0;
+  }
 }
 
 // Page header.

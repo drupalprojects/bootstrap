@@ -2,13 +2,13 @@
   <div class="container">
     <div class="navbar-header">
       <?php if ($logo): ?>
-      <a id="site-logo" class="navbar-left navbar-btn" href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>">
+      <a class="logo navbar-btn pull-left" href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>">
         <img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" />
       </a>
       <?php endif; ?>
 
       <?php if (!empty($site_name)): ?>
-      <a id="site-name" class="navbar-brand" href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>"><?php print $site_name; ?></a>
+      <a class="name navbar-brand" href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>"><?php print $site_name; ?></a>
       <?php endif; ?>
 
       <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
