@@ -22,5 +22,5 @@ function bootstrap_menu_tree__primary(&$variables) {
  * Bootstrap theme wrapper function for the secondary menu links.
  */
 function bootstrap_menu_tree__secondary(&$variables) {
-  return '<ul class="menu nav navbar-nav pull-right">' . $variables['tree'] . '</ul>';
+  return '<ul class="menu nav navbar-nav secondary">' . $variables['tree'] . '</ul>';
 }

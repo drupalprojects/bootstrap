@@ -2,10 +2,9 @@
 @import 'variables.less';
 
 // Media query variables.
-@mobile:  ~"(max-width: 767px)";
-@tablet:  ~"(min-width: 768px) and (max-width: 991px)";
-@normal:  ~"(min-width: 992px) and (max-width: 1199px)";
-@wide:    ~"(min-width: 1200px)";
+@tablet:  ~"(min-width: @{screen-tablet})";
+@normal:  ~"(min-width: @{screen-md})";
+@wide:    ~"(min-width: @{screen-lg})";
 
 // Drop shadows.
 .box-shadow(@shadow) {
@@ -30,12 +29,11 @@ html {
   }
 }
 body {
-  @media @mobile {
-    // Fix horizontal scrolling on iOS devices.
-    // http://drupal.org/node/1870076
-    position: relative;
-  }
-  @media @normal, @wide {
+  // Fix horizontal scrolling on iOS devices.
+  // http://drupal.org/node/1870076
+  position: relative;
+
+  @media @normal {
     padding-top: 60px;
   }
   // Core admin toolbar.
@@ -52,7 +50,7 @@ body {
   div#admin-toolbar {
     z-index: 500;
   }
-  @media @normal, @wide {
+  @media @normal {
     &.toolbar {
       padding-top: 94px !important;
     }
@@ -138,10 +136,10 @@ form#search-block-form {
   margin: 0;
 }
 .navbar #block-search-form {
-  float: right;
+  float: none;
   margin: 5px 0 5px 5px;
-  @media @mobile, @tablet {
-    float: none;
+  @media @normal {
+    float: right;
   }
 }
 fieldset.search-advanced {
@@ -393,6 +391,7 @@ a .glyphicon-spin {
     transform: rotate(359deg);
   }
 }
+
 .glyphicon-refresh {
   -webkit-transform-origin: 50% 57%;
   -moz-transform-origin: 50% 57%;
@@ -519,5 +518,14 @@ a .glyphicon-spin {
     > .active > a:focus {
       border-color: @nav-tabs-border-color @nav-tabs-border-color @nav-tabs-border-color transparent;
     }
+  }
+}
+
+ul.secondary {
+  float: left;
+}
+@media @tablet {
+  ul.secondary {
+    float: right;
   }
 }
