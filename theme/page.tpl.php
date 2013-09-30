@@ -1,6 +1,16 @@
 <header id="navbar" role="banner" class="navbar navbar-default navbar-fixed-top">
   <div class="container">
     <div class="navbar-header">
+      <?php if ($logo): ?>
+      <a id="site-logo" class="navbar-left navbar-btn" href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>">
+        <img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" />
+      </a>
+      <?php endif; ?>
+
+      <?php if (!empty($site_name)): ?>
+      <a id="site-name" class="navbar-brand" href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>"><?php print $site_name; ?></a>
+      <?php endif; ?>
+
       <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
         <span class="sr-only">Toggle navigation</span>
@@ -8,18 +18,6 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-
-      <?php if (!empty($logo)): ?>
-        <a class="logo pull-left" href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>">
-          <img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" />
-        </a>
-      <?php endif; ?>
-
-      <?php if (!empty($site_name)): ?>
-        <h1 id="site-name" class="pull-left">
-          <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" class="navbar-brand"><?php print $site_name; ?></a>
-        </h1>
-      <?php endif; ?>
     </div>
 
     <?php if (!empty($primary_nav) || !empty($secondary_nav) || !empty($page['navigation'])): ?>
