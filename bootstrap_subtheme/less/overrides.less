@@ -96,9 +96,17 @@ body {
   margin-right: -15px;
   padding-left: 15px;
   padding-right: 15px;
-  @media @tablet, @normal, @wide {
+  @media @tablet {
     margin-right: 0;
     padding-left: 0;
+  }
+}
+
+// Navigation.
+ul.secondary {
+  float: left;
+  @media @tablet {
+    float: right;
   }
 }
 
@@ -518,14 +526,5 @@ a .glyphicon-spin {
     > .active > a:focus {
       border-color: @nav-tabs-border-color @nav-tabs-border-color @nav-tabs-border-color transparent;
     }
-  }
-}
-
-ul.secondary {
-  float: left;
-}
-@media @tablet {
-  ul.secondary {
-    float: right;
   }
 }
