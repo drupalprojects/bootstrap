@@ -32,7 +32,7 @@ settings[bootstrap_fade_tabs] = 1
 ;exclude[js][] = 'modules/contextual/contextual.js'
 
 ;Exclude CSS
-;exclude[css][] = 'misc/vertical-tabs.css'
+exclude[css][] = 'misc/vertical-tabs.css'
 exclude[css][] = 'modules/aggregator/aggregator.css'
 exclude[css][] = 'modules/block/block.css'
 exclude[css][] = 'modules/book/book.css'

@@ -33,14 +33,6 @@ var Drupal = Drupal || {};
           }
         };
 
-        // Provide summary support.
-        $tabs.find('a').append($('<div class="summary"></div>'));
-        $content.on('summaryUpdated', '.tab-pane', function () {
-          $tabs.find('a[href="#' + $(this).attr('id') + '"]').parent().find('.summary').html($(this).drupalGetSummary());
-          bootstrapTabResize();
-        });
-        $content.find('.tab-pane').trigger('summaryUpdated');
-
         // Add min-height on content for left and right tabs.
         bootstrapTabResize();
 

@@ -13,12 +13,23 @@
  *   The form state array, passed by reference.
  */
 function _bootstrap_settings_form(&$form, $form_state) {
-  // Don't modify global settings.
+  // Wrap global setting fieldsets in vertical tabs.
+  $form['general'] = array(
+    '#type' => 'vertical_tabs',
+    '#prefix' => '<h2><small>' . t('Override Global Settings') . '</small></h2>',
+    '#weight' => -9,
+  );
+  $form['theme_settings']['#group'] = 'general';
+  $form['logo']['#group'] = 'general';
+  $form['favicon']['#group'] = 'general';
+
+  // Do not add Bootstrap specific settings to global settings.
   if (empty($form_state['build_info']['args'][0])) {
+    unset($form['general']['#prefix']);
     return;
   }
 
-  // Don't modify non-bootstrap based theme settings.
+  // Do not add Bootstrap specific settings to non-bootstrap based themes.
   $theme = $form_state['build_info']['args'][0];
   if ($theme !== 'bootstrap') {
     $base_theme = bootstrap_get_theme_info($theme, 'base theme');
@@ -32,6 +43,8 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#attached' => array(
       'js'  => array(drupal_get_path('theme', 'bootstrap') . '/js/bootstrap.admin.js'),
     ),
+    '#prefix' => '<h2><small>' . t('Bootstrap Settings') . '</small></h2>',
+    '#weight' => -10,
   );
 
   // BootstrapCDN.

@@ -18,7 +18,6 @@ function _bootstrap_pre_render_fieldset($element) {
   $parents = implode('][', $element['#parents']);
   $children = element_children($element['#groups'][$parents]);
   if (!empty($children)) {
-    $element['#theme_wrappers'] = array('bootstrap_bare');
     if (empty($element['#default_tab'])) {
       $children_keys = array_values($children);
       $element['#default_tab'] = $element['#groups'][$parents][array_shift($children_keys)]['#id'];
@@ -29,10 +28,6 @@ function _bootstrap_pre_render_fieldset($element) {
       $child = (array) $element['#groups'][$parents][$key];
       $child['#attributes']['id'] = $child['#id'];
       $child['#group_fieldset'] = TRUE;
-      if ($element['#default_tab'] === $child['#id']) {
-        $child['#attributes']['class'][] = 'active';
-        $child['#attributes']['class'][] = 'in';
-      }
       // Inject the element as new child element.
       $element[] = $child;
 

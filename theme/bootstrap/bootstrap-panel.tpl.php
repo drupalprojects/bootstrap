@@ -10,20 +10,20 @@
 <?php if ($prefix): ?>
   <?php print $prefix; ?>
 <?php endif; ?>
-<div<?php print $attributes; ?>>
+<fieldset<?php print $attributes; ?>>
   <?php if ($title): ?>
     <?php if ($collapsible): ?>
-      <a href="#<?php print $id; ?>" class="panel-heading" data-toggle="collapse" data-target="#<?php print $id; ?>">
-        <span class="panel-title">
+      <legend class="panel-heading">
+        <a href="#<?php print $id; ?>" class="panel-title fieldset-legend" data-toggle="collapse" data-target="#<?php print $id; ?>">
           <?php print $title; ?>
-        </span>
-      </a>
+        </a>
+      </legend>
     <?php else: ?>
-      <div class="panel-heading">
-        <div class="panel-title">
+      <legend class="panel-heading">
+        <div class="panel-title fieldset-legend">
           <?php print $title; ?>
         </div>
-      </div>
+      </legend>
     <?php endif; ?>
   <?php endif; ?>
   <?php if ($collapsible): ?>
@@ -38,7 +38,7 @@
   <?php if ($collapsible): ?>
     </div>
   <?php endif; ?>
-</div>
+</fieldset>
 <?php if ($suffix): ?>
   <?php print $suffix; ?>
 <?php endif; ?>

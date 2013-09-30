@@ -172,11 +172,26 @@ input.error {
   color: @state-danger-text;
   border-color: @state-danger-border;
 }
+fieldset legend.panel-heading {
+  float: left;
+  margin: 0;
+}
+fieldset .panel-body {
+  clear: both;
+}
 .form-actions{
   clear: both;
 }
 .resizable-textarea textarea {
   border-radius: @border-radius-base @border-radius-base 0 0;
+}
+.radio, .checkbox {
+  &:first-child {
+    margin-top: 0;
+  }
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 .help-block, .control-group .help-inline {
   color: @gray-light;
@@ -402,6 +417,9 @@ a .glyphicon-spin {
     }
   }
 }
+.tab-pane .panel-heading {
+  display: none;
+}
 .tab-content > .active {
   display: block;
 }
@@ -440,9 +458,15 @@ a .glyphicon-spin {
     width: 220px;
     > li {
       float: none;
+      &:focus {
+        outline: 0;
+      }
       > a {
         margin-right: 0;
         margin-bottom: 3px;
+        &:focus {
+          outline: 0;
+        }
       }
     }
   }

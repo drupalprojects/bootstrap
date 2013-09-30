@@ -61,17 +61,6 @@ function bootstrap_element_info_alter(&$elements) {
       $element['#process'][] = '_bootstrap_process_input';
     }
 
-    // Process bootstrap_tabs and vertical_tabs elements.
-    if ('bootstrap_tabs' === $element['#type'] || 'vertical_tabs' === $element['#type']) {
-      if ('vertical_tabs' === $element['#type']) {
-        $element['#theme_wrappers'] = array('bootstrap_tabs');
-      }
-      // Replace core's #process function.
-      if (($key = array_search('form_process_vertical_tabs', $element['#process'])) !== FALSE) {
-        $element['#process'][$key] = '_bootstrap_process_vertical_tabs';
-      }
-    }
-
     // Process fieldset element.
     if ('fieldset' === $element['#type']) {
       $element['#theme_wrappers'] = array('bootstrap_panel');

@@ -64,9 +64,6 @@ function _bootstrap_theme(&$existing, $type, $theme, $path) {
   // Custom theme hooks:
   // Do not define the `path` or `template`.
   $hook_theme = array(
-    'bootstrap_bare' => array(
-      'render element' => 'element',
-    ),
     'bootstrap_links' => array(
       'variables' => array(
         'links' => array(),
@@ -100,17 +97,6 @@ function _bootstrap_theme(&$existing, $type, $theme, $path) {
       'render element' => 'element',
     ),
     'bootstrap_panel' => array(
-      'render element' => 'element',
-    ),
-    // Due to a Drupal 7 bug, theme hook "suggestions" that use templates must
-    // be explicitly defined. This is exactly what Views does.
-    // @see: https://api.drupal.org/comment/15119#comment-15119
-    // @see: https://drupal.org/node/342350
-    'bootstrap_panel__tab_pane' => array(
-      'render element' => 'element',
-      'base hook' => 'bootstrap_panel',
-    ),
-    'bootstrap_tabs' => array(
       'render element' => 'element',
     ),
   );
