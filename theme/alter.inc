@@ -97,7 +97,7 @@ function bootstrap_form_alter(array &$form, array &$form_state = array(), $form_
     switch ($form_id) {
       case 'system_theme_settings':
         // Include the settings form here.
-        bootstrap_include('bootstrap', 'includes/settings.inc');
+        bootstrap_include('bootstrap', 'theme/settings.inc');
         _bootstrap_settings_form($form, $form_state);
         break;
 
@@ -207,9 +207,9 @@ function bootstrap_js_alter(&$js) {
 /**
  * Include #pre_render callbacks for elements.
  */
-bootstrap_include('bootstrap', 'includes/pre-render.inc');
+bootstrap_include('bootstrap', 'theme/pre-render.inc');
 
 /**
  * Include #process callbacks for elements.
  */
-bootstrap_include('bootstrap', 'includes/process.inc');
+bootstrap_include('bootstrap', 'theme/process.inc');
