@@ -13,6 +13,11 @@
  *   The form state array, passed by reference.
  */
 function _bootstrap_settings_form(&$form, $form_state) {
+  // Display a warning if jquery_update isn't enabled.
+  if (!function_exists('jquery_update_library')) {
+    drupal_set_message(t('jQuery Update is not enabled, Bootstrap requires a minimum jQuery version of 1.7 or higher. <br>Please enable <a href="https://drupal.org/project/jquery_update">jQuery Update module</a> 7.x-2.3 or higher, you must manually set this in the configuration after it is installed.'), 'error');
+  }
+
   // Wrap global setting fieldsets in vertical tabs.
   $form['general'] = array(
     '#type' => 'vertical_tabs',
