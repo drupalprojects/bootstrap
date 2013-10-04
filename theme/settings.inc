@@ -13,6 +13,15 @@
  *   The form state array, passed by reference.
  */
 function _bootstrap_settings_form(&$form, $form_state) {
+  // Do not add Bootstrap specific settings to non-bootstrap based themes.
+  $theme = $form_state['build_info']['args'][0];
+  if ($theme !== 'bootstrap') {
+    $base_theme = bootstrap_get_theme_info($theme, 'base theme');
+    if (!$base_theme || (!is_array($base_theme) && $base_theme !== 'bootstrap') || (is_array($base_theme) && !in_array('bootstrap', $base_theme))) {
+      return;
+    }
+  }
+
   // Display a warning if jquery_update isn't enabled.
   if (!function_exists('jquery_update_library')) {
     drupal_set_message(t('jQuery Update is not enabled, Bootstrap requires a minimum jQuery version of 1.7 or higher. <br>Please enable <a href="https://drupal.org/project/jquery_update">jQuery Update module</a> 7.x-2.3 or higher, you must manually set this in the configuration after it is installed.'), 'error');
@@ -32,15 +41,6 @@ function _bootstrap_settings_form(&$form, $form_state) {
   if (empty($form_state['build_info']['args'][0])) {
     unset($form['general']['#prefix']);
     return;
-  }
-
-  // Do not add Bootstrap specific settings to non-bootstrap based themes.
-  $theme = $form_state['build_info']['args'][0];
-  if ($theme !== 'bootstrap') {
-    $base_theme = bootstrap_get_theme_info($theme, 'base theme');
-    if (!$base_theme || (!is_array($base_theme) && $base_theme !== 'bootstrap') || (is_array($base_theme) && !in_array('bootstrap', $base_theme))) {
-      return;
-    }
   }
 
   $form['bootstrap'] = array(
