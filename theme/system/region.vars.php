@@ -8,6 +8,14 @@
  * Implements hook_preprocess_region().
  */
 function bootstrap_preprocess_region(&$variables) {
+  global $theme;
+  static $wells;
+  if (!isset($wells)) {
+    foreach (system_region_list($theme) as $name => $title) {
+      $wells[$name] = theme_get_setting('bootstrap_region_well-' . $name);
+    }
+  }
+
   switch ($variables['region']) {
     // @todo is this actually used properly?
     case 'content':
@@ -19,10 +27,8 @@ function bootstrap_preprocess_region(&$variables) {
       $variables['classes_array'][] = 'alert';
       $variables['classes_array'][] = 'alert-info';
       break;
-
-    // @todo do we still want this? It makes this look ugly.
-    case 'sidebar_first':
-      $variables['classes_array'][] = 'well';
-      break;
+  }
+  if (!empty($wells[$variables['region']])) {
+    $variables['classes_array'][] = $wells[$variables['region']];
   }
 }

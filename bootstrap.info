@@ -28,6 +28,16 @@ settings[bootstrap_breadcrumb_title] = 1
 ; Visual Effects
 settings[bootstrap_fade_tabs] = 1
 
+; Region Wells
+settings[bootstrap_region_well-navigation] = ''
+settings[bootstrap_region_well-header] = ''
+settings[bootstrap_region_well-highlighted] = ''
+settings[bootstrap_region_well-help] = ''
+settings[bootstrap_region_well-content] = ''
+settings[bootstrap_region_well-sidebar_first] = 'well'
+settings[bootstrap_region_well-sidebar_second] = ''
+settings[bootstrap_region_well-footer] = ''
+
 ;Exclude JavaScript
 ;exclude[js][] = 'modules/contextual/contextual.js'
 

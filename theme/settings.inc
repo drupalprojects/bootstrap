@@ -144,6 +144,37 @@ function _bootstrap_settings_form(&$form, $form_state) {
     ),
   );
 
+  // Region wells.
+  $wells = array(
+    '' => t('None'),
+    'well' => t('.well (normal)'),
+    'well-sm' => t('.well-sm (small)'),
+    'well-lg' => t('.well-lg (large)'),
+  );
+  $form['region_wells'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Region wells'),
+    '#description' => t('Enable the <code>.well</code>, <code>.well-sm</code> or <code>.well-lg</code> classes for specified regions. See: documentation on !wells.', array(
+      '!wells' => l(t('Bootstrap Wells'), 'http://getbootstrap.com/components/#wells'),
+    )),
+    '#group' => 'bootstrap',
+  );
+  foreach (system_region_list($theme) as $name => $title) {
+    // Skip core's "dashboard" regions.
+    if (preg_match('/^dashboard/', $name)) {
+      continue;
+    }
+    $form['region_wells']['bootstrap_region_well-' . $name] = array(
+      '#title' => $title,
+      '#type' => 'select',
+      '#attributes' => array(
+        'class' => array('input-sm'),
+      ),
+      '#options' => $wells,
+      '#default_value' => theme_get_setting('bootstrap_region_well-' . $name),
+    );
+  }
+
   // Advanced settings.
   $form['advanced'] = array(
     '#type' => 'fieldset',

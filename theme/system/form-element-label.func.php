@@ -14,7 +14,7 @@ function bootstrap_form_element_label(&$variables) {
   $t = get_t();
 
   // Determine if certain things should skip for checkbox or radio elements.
-  $skip = ('checkbox' === $element['#type'] || 'radio' === $element['#type']);
+  $skip = (isset($element['#type']) && ('checkbox' === $element['#type'] || 'radio' === $element['#type']));
 
   // If title and required marker are both empty, output no label.
   if ((!isset($element['#title']) || $element['#title'] === '' && !$skip) && empty($element['#required'])) {
