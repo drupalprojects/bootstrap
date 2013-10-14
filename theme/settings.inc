@@ -14,8 +14,13 @@
  */
 function _bootstrap_settings_form(&$form, $form_state) {
   // Do not add Bootstrap specific settings to non-bootstrap based themes.
-  $theme = $form_state['build_info']['args'][0];
-  if ($theme !== 'bootstrap') {
+  $theme = !empty($form_state['build_info']['args'][0]) ? $form_state['build_info']['args'][0] : FALSE;
+  // Global settings.
+  if ($theme === FALSE) {
+    return;
+  }
+  // Other theme settings.
+  elseif ($theme !== 'bootstrap') {
     $base_theme = bootstrap_get_theme_info($theme, 'base theme');
     if (!$base_theme || (!is_array($base_theme) && $base_theme !== 'bootstrap') || (is_array($base_theme) && !in_array('bootstrap', $base_theme))) {
       return;

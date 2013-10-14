@@ -25,22 +25,9 @@
  */
 
 /**
- * Helper function for including theme files.
- *
- * @param string $theme
- *   Name of the theme to use for base path.
- * @param string $path
- *   Path relative to $theme.
+ * Include common functions used through out theme.
  */
-function bootstrap_include($theme, $path) {
-  static $themes = array();
-  if (!isset($themes[$theme])) {
-    $themes[$theme] = drupal_get_path('theme', $theme);
-  }
-  if ($themes[$theme] && ($file = DRUPAL_ROOT . '/' . $themes[$theme] . '/' . $path) && file_exists($file)) {
-    include_once $file;
-  }
-}
+include_once dirname(__FILE__) . '/theme/common.inc';
 
 /**
  * Implements hook_theme().
@@ -59,11 +46,6 @@ function bootstrap_theme(&$existing, $type, $theme, $path) {
   bootstrap_include($theme, 'theme/registry.inc');
   return _bootstrap_theme($existing, $type, $theme, $path);
 }
-
-/**
- * Include common functions for theme.
- */
-bootstrap_include('bootstrap', 'theme/common.inc');
 
 /**
  * Declare various hook_*_alter() hooks.
