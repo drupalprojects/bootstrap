@@ -20,8 +20,11 @@ Drupal.progressBar = function (id, updateCallback, method, errorCallback) {
   // The WAI-ARIA setting aria-live="polite" will announce changes after users
   // have completed their current activity and not interrupt the screen reader.
   this.element = $('<div class="progress-wrapper" aria-live="polite"></div>');
-  this.element.html('<div id ="' + id + '" class="progress progress-striped progress-info active"><div class="bar"></div></div>' +
-                    '<div class="percentage pull-right"></div>' +
+  this.element.html('<div id ="' + id + '" class="progress progress-striped active">' +
+                    '<div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">' +
+                    '<div class="percentage sr-only"></div>' +
+                    '</div></div>' +
+                    '</div><div class="percentage pull-right"></div>' +
                     '<div class="message">&nbsp;</div>');
 };
 
@@ -30,7 +33,8 @@ Drupal.progressBar = function (id, updateCallback, method, errorCallback) {
  */
 Drupal.progressBar.prototype.setProgress = function (percentage, message) {
   if (percentage >= 0 && percentage <= 100) {
-    $('div.bar', this.element).css('width', percentage + '%');
+    $('div.progress-bar', this.element).css('width', percentage + '%');
+    $('div.progress-bar', this.element).attr('aria-valuenow', percentage);
     $('div.percentage', this.element).html(percentage + '%');
   }
   $('div.message', this.element).html(message);
