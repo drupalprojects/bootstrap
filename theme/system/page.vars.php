@@ -39,4 +39,21 @@ function bootstrap_preprocess_page(&$variables) {
     $variables['secondary_nav']['#theme_wrappers'] = array('menu_tree__secondary');
   }
 
+  $variables['navbar_classes_array'] = array('navbar', 'navbar-default');
+
+  if (theme_get_setting('bootstrap_navbar_position') !== '') {
+    $variables['navbar_classes_array'][] = 'navbar-' . theme_get_setting('bootstrap_navbar_position');
+  }
+  if (theme_get_setting('bootstrap_navbar_inverse')) {
+    $variables['navbar_classes_array'][] = 'navbar-inverse';
+  }
+}
+
+/**
+ * Implements hook_process_page().
+ *
+ * @see page.tpl.php
+ */
+function bootstrap_process_page(&$variables) {
+  $variables['navbar_classes'] = implode(' ', $variables['navbar_classes_array']);
 }
