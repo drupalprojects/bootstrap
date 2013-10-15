@@ -18,7 +18,7 @@ function bootstrap_preprocess_page(&$variables) {
     $variables['content_column_class'] = ' class="col-sm-9"';
   }
   else {
-    $variables['content_column_class'] = NULL;
+    $variables['content_column_class'] = ' class="col-sm-12"';
   }
 
   // Primary nav.
