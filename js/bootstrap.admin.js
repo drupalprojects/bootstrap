@@ -54,11 +54,36 @@
         var $navbar_preview = $('#edit-navbar', context);
         $navbar_preview.once('navbar', function () {
           $navbar_preview.find('select[name="bootstrap_navbar_position"]').bind('change', function () {
-            $("#navbar").removeClass();
-            $('#navbar').addClass('navbar navbar-default').addClass('navbar-'+ $('select[name="bootstrap_navbar_position"] :selected', context).val());
+            var $navbar_position = $('select[name="bootstrap_navbar_position"] :selected', context).val();
+            var $navbar = $('#navbar');
+            var $inverse = $navbar.hasClass('navbar-inverse');
+
+            $navbar.removeClass();
+            $navbar.addClass('navbar');
+            if ($navbar_position !== '') {
+              $navbar.addClass('navbar-'+ $navbar_position);
+            }
+            if ($inverse) {
+              $navbar.addClass('navbar-inverse');
+            } else  {
+              $navbar.addClass('navbar-default');
+            }
+
+            $('body').removeClass('navbar-is-fixed-top navbar-is-fixed-bottom navbar-is-static-top');
+            switch ($navbar_position) {
+              case 'fixed-top':
+                $('body').addClass('navbar-is-fixed-top');
+                break;
+              case 'fixed-bottom':
+                $('body').addClass('navbar-is-fixed-bottom');
+                break;
+              case 'static-top':
+                $('body').addClass('navbar-is-static-top');
+                break;
+            }
           });
           $navbar_preview.find('input[name="bootstrap_navbar_inverse"]').bind('change', function () {
-            $('#navbar').toggleClass('navbar-inverse');
+            $('#navbar').toggleClass('navbar-inverse navbar-default');
           });
         });
       }

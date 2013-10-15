@@ -13,6 +13,14 @@
           box-shadow: @shadow;
 }
 
+.anchorfix() {
+  a[name] {
+    padding-top: 50px;
+    margin-top: -50px;
+    display: inline-block; /* required for webkit browsers */
+  }
+}
+
 html {
   &.overlay-open .navbar-fixed-top {
     z-index: 400;
@@ -33,16 +41,6 @@ body {
   // http://drupal.org/node/1870076
   position: relative;
 
-  @media @normal {
-    padding-top: 60px;
-  }
-  // Core admin toolbar.
-  &.toolbar .navbar-fixed-top {
-   top: 30px;
-  }
-  &.toolbar-drawer .navbar-fixed-top {
-   top: 65px;
-  }
   &.admin-expanded.admin-vertical.admin-nw .navbar,
   &.admin-expanded.admin-vertical.admin-sw .navbar {
     margin-left: 260px;
@@ -50,33 +48,52 @@ body {
   div#admin-toolbar {
     z-index: 500;
   }
-  @media @normal {
-    &.toolbar {
-      padding-top: 94px !important;
-    }
-    &.toolbar-drawer {
-      padding-top: 129px !important;
-    }
+ 
+  // Add padding to body if various toolbar or navbars are fixed on top.
+  &.navbar-is-fixed-top {
+    padding-top: 64px !important;
+    .anchorfix();
+  }
+  &.navbar-is-fixed-bottom {
+    padding-bottom: 64px !important;
+  }
+  &.toolbar {
+    padding-top: 30px !important;
+  }
+  &.toolbar-drawer {
+    padding-top: 64px !important;
+  }
+  &.toolbar.navbar-is-fixed-top {
+    padding-top: 94px !important;
+  }
+  &.toolbar-drawer.navbar-is-fixed-top {
+    padding-top: 128px !important;
+    .anchorfix();
   }
   // Admin_menu toolbar.
-  #admin-menu {
-    .box-shadow(none);
-    margin: 0;
-    padding: 0;
-    position: fixed;
-    z-index: 1100;
-    .dropdown li {
-      line-height: normal;
-    }
-  }
   &.admin-menu {
-    html & {
-      margin-top: 28px !important;
-    }
+    padding-top: 93px !important;
+
     .navbar-fixed-top {
-      top: 28px;
+      top: 29px;
     }
   }
+  // Push navbar down when core toolbar is enabled.
+  &.toolbar .navbar-fixed-top {
+    top: 30px;
+  }
+  &.toolbar-drawer .navbar-fixed-top {
+    top: 64px;
+  }
+
+}
+// Adjust z-index of core components.
+#overlay-container,
+.overlay-modal-background,
+.overlay-element,
+#toolbar
+{
+  z-index: 1500;
 }
 .footer {
   margin-top: 45px;
@@ -544,3 +561,15 @@ td.radio {
     margin:4px 0 0 0;
   }
 }
+
+// Override admin_menu style.
+  #admin-menu {
+    .box-shadow(none);
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    z-index: 1100;
+    .dropdown li {
+      line-height: normal;
+    }
+  }
