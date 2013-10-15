@@ -39,13 +39,16 @@ function bootstrap_preprocess_page(&$variables) {
     $variables['secondary_nav']['#theme_wrappers'] = array('menu_tree__secondary');
   }
 
-  $variables['navbar_classes_array'] = array('navbar', 'navbar-default');
+  $variables['navbar_classes_array'] = array('navbar');
 
   if (theme_get_setting('bootstrap_navbar_position') !== '') {
     $variables['navbar_classes_array'][] = 'navbar-' . theme_get_setting('bootstrap_navbar_position');
   }
   if (theme_get_setting('bootstrap_navbar_inverse')) {
     $variables['navbar_classes_array'][] = 'navbar-inverse';
+  }
+  else {
+    $variables['navbar_classes_array'][] = 'navbar-default';
   }
 }
 
