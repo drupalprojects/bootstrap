@@ -90,7 +90,7 @@ function bootstrap_form_alter(array &$form, array &$form_state = array(), $form_
       'node_delete_confirm',
     );
     // Only wrap in container for certain form.
-    if (!in_array($form_id, $form_ids) && !isset($form['#node_edit_form']) && isset($form['actions']) && ($form['actions']['#type'] == 'actions')) {
+    if (!in_array($form_id, $form_ids) && !isset($form['#node_edit_form']) && isset($form['actions']) && isset($form['actions']['#type']) && ($form['actions']['#type'] == 'actions')) {
       $form['actions']['#theme_wrappers'] = array();
     }
 
