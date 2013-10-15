@@ -18,12 +18,10 @@ function bootstrap_preprocess_breadcrumb(&$variables) {
 
   if (theme_get_setting('bootstrap_breadcrumb_title') && !empty($breadcrumb)) {
     $item = menu_get_item();
-    if (!empty($item['tab_parent'])) {
+    $breadcrumb[] = array(
       // If we are on a non-default tab, use the tab's title.
-      $breadcrumb[] = check_plain($item['title']);
-    }
-    else {
-      $breadcrumb[] = drupal_get_title();
-    }
+      'data' => !empty($item['tab_parent']) ? check_plain($item['title']) : drupal_get_title(),
+      'class' => array('active'),
+    );
   }
 }
