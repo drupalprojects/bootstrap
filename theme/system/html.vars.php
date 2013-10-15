@@ -31,11 +31,13 @@ function bootstrap_preprocess_html(&$variables) {
     case 'fixed-top':
       $variables['classes_array'][] = 'navbar-is-fixed-top';
       break;
+
     case 'fixed-bottom':
       $variables['classes_array'][] = 'navbar-is-fixed-bottom';
       break;
+
     case 'static-top':
       $variables['classes_array'][] = 'navbar-is-static-top';
-    break;
+      break;
   }
 }

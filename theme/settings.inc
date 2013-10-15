@@ -144,6 +144,31 @@ function _bootstrap_settings_form(&$form, $form_state) {
     ),
   );
 
+  // Navbar.
+  $form['navbar'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Navbar'),
+    '#group' => 'bootstrap',
+  );
+  $form['navbar']['bootstrap_navbar_position'] = array(
+    '#type' => 'select',
+    '#title' => t('Navbar Position'),
+    '#description' => t('Select your Navbar position.'),
+    '#default_value' => theme_get_setting('bootstrap_navbar_position'),
+    '#options' => array(
+      'static-top' => t('Static Top'),
+      'fixed-top' => t('Fixed Top'),
+      'fixed-bottom' => t('Fixed Bottom'),
+    ),
+    '#empty_option' => t('Normal'),
+  );
+  $form['navbar']['bootstrap_navbar_inverse'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Inverse navbar style'),
+    '#description' => t('Select if you want the inverse navbar style.'),
+    '#default_value' => theme_get_setting('bootstrap_navbar_inverse'),
+  );
+
   // Region wells.
   $wells = array(
     '' => t('None'),
@@ -174,31 +199,6 @@ function _bootstrap_settings_form(&$form, $form_state) {
       '#default_value' => theme_get_setting('bootstrap_region_well-' . $name),
     );
   }
-
-  // Navbar.
-  $form['navbar'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Navbar'),
-    '#group' => 'bootstrap',
-  );
-  $form['navbar']['bootstrap_navbar_position'] = array(
-    '#type' => 'select',
-    '#title' => t('Navbar Position'),
-    '#description' => t('Select your Navbar position.'),
-    '#default_value' => theme_get_setting('bootstrap_navbar_position'),
-    '#options' => array(
-      'static-top' => t('Static Top'),
-      'fixed-top' => t('Fixed Top'),
-      'fixed-bottom' => t('Fixed Bottom'),
-    ),
-    '#empty_option' => t('Default'),
-  );
-  $form['navbar']['bootstrap_navbar_inverse'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Inverse navbar style'),
-    '#description' => t('Select if you want the inverse navbar style.'),
-    '#default_value' => theme_get_setting('bootstrap_navbar_inverse'),
-  );
 
   // Advanced settings.
   $form['advanced'] = array(

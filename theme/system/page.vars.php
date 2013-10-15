@@ -44,6 +44,9 @@ function bootstrap_preprocess_page(&$variables) {
   if (theme_get_setting('bootstrap_navbar_position') !== '') {
     $variables['navbar_classes_array'][] = 'navbar-' . theme_get_setting('bootstrap_navbar_position');
   }
+  else {
+    $variables['navbar_classes_array'][] = 'container';
+  }
   if (theme_get_setting('bootstrap_navbar_inverse')) {
     $variables['navbar_classes_array'][] = 'navbar-inverse';
   }

@@ -13,11 +13,26 @@
           box-shadow: @shadow;
 }
 
-.anchorfix() {
-  a[name] {
-    padding-top: 50px;
-    margin-top: -50px;
-    display: inline-block; /* required for webkit browsers */
+// Fixes anchors when using fixed position elements.
+// @see: http://stackoverflow.com/a/13881860
+.anchor-fix(@top) {
+  @px: (@top - 5px);
+  h1, h2, h3, h4, h5, h6, a {
+    &[name], &[id] {
+      // Required by webkit.
+      display: inline-block;
+      margin-top: -@px;
+      padding-top: @px;
+    }
+  }
+
+  // Headers must sit below the rest of the content, negative margins makes the
+  // preceeding elsements (above) it un-clickable.
+  h1, h2, h3, h4, h5, h6 {
+    &[name], &[id] {
+      position: relative;
+      z-index: -1;
+    }
   }
 }
 
@@ -40,59 +55,111 @@ body {
   // Fix horizontal scrolling on iOS devices.
   // http://drupal.org/node/1870076
   position: relative;
-
   &.admin-expanded.admin-vertical.admin-nw .navbar,
   &.admin-expanded.admin-vertical.admin-sw .navbar {
     margin-left: 260px;
   }
-  div#admin-toolbar {
-    z-index: 500;
-  }
- 
   // Add padding to body if various toolbar or navbars are fixed on top.
   &.navbar-is-fixed-top {
     padding-top: 64px !important;
-    .anchorfix();
+    .main-container {
+      .anchor-fix(64px);
+    }
   }
   &.navbar-is-fixed-bottom {
     padding-bottom: 64px !important;
   }
   &.toolbar {
     padding-top: 30px !important;
+    .navbar-fixed-top {
+      top: 30px;
+    }
+    .main-container {
+      .anchor-fix(30px);
+    }
+    &.navbar-is-fixed-top {
+      padding-top: 94px !important;
+      .main-container {
+        .anchor-fix(94px);
+      }
+    }
+    &.navbar-is-fixed-bottom {
+      padding-top: 50px !important;
+      .main-container {
+        .anchor-fix(50px);
+      }
+    }
   }
   &.toolbar-drawer {
     padding-top: 64px !important;
-  }
-  &.toolbar.navbar-is-fixed-top {
-    padding-top: 94px !important;
-  }
-  &.toolbar-drawer.navbar-is-fixed-top {
-    padding-top: 128px !important;
-    .anchorfix();
+    .navbar-fixed-top {
+      top: 64px;
+    }
+    .main-container {
+      .anchor-fix(64px);
+    }
+    &.navbar-is-fixed-top {
+      padding-top: 128px !important;
+      .main-container {
+        .anchor-fix(128px);
+      }
+    }
+    &.navbar-is-fixed-bottom {
+      padding-top: 84px !important;
+      .main-container {
+        .anchor-fix(84px);
+      }
+    }
   }
   // Admin_menu toolbar.
   &.admin-menu {
     padding-top: 93px !important;
-
+    .main-container {
+      .anchor-fix(93px);
+    }
     .navbar-fixed-top {
       top: 29px;
     }
+    &.navbar-is-fixed-top {
+      .main-container {
+        .anchor-fix(29px);
+      }
+    }
   }
-  // Push navbar down when core toolbar is enabled.
-  &.toolbar .navbar-fixed-top {
-    top: 30px;
+  div#admin-toolbar {
+    z-index: 500;
   }
-  &.toolbar-drawer .navbar-fixed-top {
-    top: 64px;
+  // Override box-shadow styles on all "admin" menus.
+  #toolbar, #admin-menu, #admin-toolbar {
+    .box-shadow(none);
   }
-
+  // Override #admin-menu style.
+  #admin-menu {
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    z-index: 1100;
+    .dropdown li {
+      line-height: normal;
+    }
+  }
 }
+
+// Default navbar.
+.navbar.container {
+  margin-top: 20px;
+  > .container {
+    margin: 0;
+    padding: 0;
+    width: auto;
+  }
+}
+
 // Adjust z-index of core components.
 #overlay-container,
 .overlay-modal-background,
 .overlay-element,
-#toolbar
-{
+#toolbar {
   z-index: 1500;
 }
 .footer {
@@ -561,15 +628,3 @@ td.radio {
     margin:4px 0 0 0;
   }
 }
-
-// Override admin_menu style.
-  #admin-menu {
-    .box-shadow(none);
-    margin: 0;
-    padding: 0;
-    position: fixed;
-    z-index: 1100;
-    .dropdown li {
-      line-height: normal;
-    }
-  }
