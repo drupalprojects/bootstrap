@@ -219,14 +219,31 @@ function _bootstrap_iconize_button($text) {
   $specific_strings = array();
   // Text values containing these generic strings, which are matches last.
   $generic_strings = array(
-    'plus' => array(
-      t('Add'),
+    'cog' => array(
+      t('Manage'),
+      t('Configure'),
+    ),
+    'download' => array(
+      t('Download'),
+    ),
+    'export' => array(
+      t('Export'),
+    ),
+    'import' => array(
+      t('Import'),
     ),
     'pencil' => array(
       t('Edit'),
     ),
-    'cog' => array(
-      t('Configure'),
+    'plus' => array(
+      t('Add'),
+    ),
+    'trash' => array(
+      t('Delete'),
+      t('Remove'),
+    ),
+    'upload' => array(
+      t('Upload'),
     ),
   );
   // Specific matching first.
