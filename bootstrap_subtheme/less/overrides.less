@@ -253,12 +253,14 @@ fieldset.search-advanced {
 
 // Action Links
 ul.action-links {
-  margin-bottom: 2em;
+  margin: @padding-base-horizontal 0;
+  padding: 0;
   li {
     display: inline;
-    padding-right: 1.5em;
+    margin: 0;
+    padding: 0 @padding-base-vertical 0 0;
   }
-  [class^="icon-"], [class*=" icon-"] {
+  .glyphicon {
     padding-right: 0.5em;
   }
 }

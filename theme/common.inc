@@ -133,3 +133,117 @@ function _bootstrap_icon($name) {
   );
   return '<i' . drupal_attributes($attributes) . '></i>';
 }
+
+/**
+ * Colorize buttons based on the text value.
+ *
+ * @param string $text
+ *   Button text to search against.
+ *
+ * @return string
+ *   The specific button class to use or FALSE if not matched.
+ */
+function _bootstrap_colorize_button($text) {
+  // Text values containing these specific strings, which are matched first.
+  $specific_strings = array(
+    'btn-primary' => array(
+      t('Download feature'),
+    ),
+    'btn-success' => array(
+      t('Add effect'),
+      t('Add and configure'),
+    ),
+    'btn-info' => array(
+      t('Save and add'),
+      t('Add another item'),
+      t('Update style'),
+    ),
+  );
+  // Text values containing these generic strings, which are matches last.
+  $generic_strings = array(
+    'btn-primary' => array(
+      t('Save'),
+      t('Confirm'),
+      t('Submit'),
+      t('Search'),
+    ),
+    'btn-success' => array(
+      t('Add'),
+      t('Create'),
+    ),
+    'btn-warning' => array(
+      t('Export'),
+      t('Import'),
+      t('Restore'),
+      t('Rebuild'),
+    ),
+    'btn-info' => array(
+      t('Apply'),
+      t('Update'),
+    ),
+    'btn-danger' => array(
+      t('Delete'),
+      t('Remove'),
+    ),
+  );
+  // Specific matching first.
+  foreach ($specific_strings as $class => $strings) {
+    foreach ($strings as $string) {
+      if (strpos(drupal_strtolower($text), drupal_strtolower($string)) !== FALSE) {
+        return $class;
+      }
+    }
+  }
+  // Generic matching last.
+  foreach ($generic_strings as $class => $strings) {
+    foreach ($strings as $string) {
+      if (strpos(drupal_strtolower($text), drupal_strtolower($string)) !== FALSE) {
+        return $class;
+      }
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Iconize buttons based on the text value.
+ *
+ * @param string $text
+ *   Button text to search against.
+ *
+ * @return string
+ *   The icon markup or FALSE if not matched.
+ */
+function _bootstrap_iconize_button($text) {
+  // Text values containing these specific strings, which are matched first.
+  $specific_strings = array();
+  // Text values containing these generic strings, which are matches last.
+  $generic_strings = array(
+    'plus' => array(
+      t('Add'),
+    ),
+    'pencil' => array(
+      t('Edit'),
+    ),
+    'cog' => array(
+      t('Configure'),
+    ),
+  );
+  // Specific matching first.
+  foreach ($specific_strings as $icon => $strings) {
+    foreach ($strings as $string) {
+      if (strpos(drupal_strtolower($text), drupal_strtolower($string)) !== FALSE) {
+        return _bootstrap_icon($icon);
+      }
+    }
+  }
+  // Generic matching last.
+  foreach ($generic_strings as $icon => $strings) {
+    foreach ($strings as $string) {
+      if (strpos(drupal_strtolower($text), drupal_strtolower($string)) !== FALSE) {
+        return _bootstrap_icon($icon);
+      }
+    }
+  }
+  return FALSE;
+}

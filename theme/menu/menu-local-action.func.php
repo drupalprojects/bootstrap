@@ -10,31 +10,30 @@
 function bootstrap_menu_local_action($variables) {
   $link = $variables['element']['#link'];
 
-  // Build the icon rendering element.
-  if (empty($link['icon'])) {
-    $link['icon'] = 'plus-sign';
+  $options = isset($link['localized_options']) ? $link['localized_options'] : array();
+
+  // If the title is not HTML, sanitize it.
+  if (empty($options['html'])) {
+    $link['title'] = check_plain($link['title']);
   }
-  $icon = '<i class="' . drupal_clean_css_identifier('icon-' . $link['icon']) . '"></i>';
+
+  $icon = _bootstrap_iconize_button($link['title']);
 
   // Format the action link.
   $output = '<li>';
   if (isset($link['href'])) {
-    $options = isset($link['localized_options']) ? $link['localized_options'] : array();
-
-    // If the title is not HTML, sanitize it.
-    if (empty($link['localized_options']['html'])) {
-      $link['title'] = check_plain($link['title']);
+    // Turn link into a mini-button and colorize based on title.
+    if ($class = _bootstrap_colorize_button($link['title'])) {
+      $options['attributes']['class'][] = 'btn';
+      $options['attributes']['class'][] = 'btn-xs';
+      $options['attributes']['class'][] = $class;
     }
-
     // Force HTML so we can add the icon rendering element.
     $options['html'] = TRUE;
     $output .= l($icon . $link['title'], $link['href'], $options);
   }
-  elseif (!empty($link['localized_options']['html'])) {
-    $output .= $icon . $link['title'];
-  }
   else {
-    $output .= $icon . check_plain($link['title']);
+    $output .= $icon . $link['title'];
   }
   $output .= "</li>\n";
 
