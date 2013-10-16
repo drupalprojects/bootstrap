@@ -82,9 +82,12 @@ function _bootstrap_settings_form(&$form, $form_state) {
   // Bootswatch.
   $bootswatch_themes = array();
   $request = drupal_http_request('http://api.bootswatch.com/3/');
-  $api = drupal_json_decode($request->data);
-  foreach ($api['themes'] as $bootswatch_theme) {
-    $bootswatch_themes[strtolower($bootswatch_theme['name'])] = $bootswatch_theme['name'];
+  if ($request && $request->code === '200' && !empty($request->data)) {
+    if (($api = drupal_json_decode($request->data)) && is_array($api) && !empty($api['themes'])) {
+      foreach ($api['themes'] as $bootswatch_theme) {
+        $bootswatch_themes[strtolower($bootswatch_theme['name'])] = $bootswatch_theme['name'];
+      }
+    }
   }
   $form['bootswatch'] = array(
     '#type' => 'fieldset',
@@ -104,6 +107,10 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#empty_value' => NULL,
     '#suffix' => '<div id="bootswatch-preview"></div>',
   );
+
+  if (empty($bootswatch_themes)) {
+    $form['bootswatch']['bootstrap_bootswatch']['#prefix'] = '<div class="alert alert-danger messages error"><strong>' . t('ERROR') . ':</strong> ' . t('Unable to reach Bootswatch API. Please ensure the server your website is hosted on is able to initiate HTTP requests.') . '</div>';
+  }
 
   // Breadcrumbs.
   $form['breadcrumbs'] = array(
