@@ -66,7 +66,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
       '!bootstrapcdn' => l(t('BootstrapCDN'), 'http://bootstrapcdn.com', array(
         'external' => TRUE,
       )),
-      '!warning' => '<div class="alert alert-danger"><strong>' . t('WARNING') . ':</strong> ' . t('Using this content distribution network will give you a performance boost but will also make you dependant on a third party who has no obligations towards you concerning uptime and service quality.') . '</div>',
+      '!warning' => '<div class="alert alert-warning messages warning"><strong>' . t('WARNING') . ':</strong> ' . t('Using this content distribution network will give you a performance boost but will also make you dependant on a third party who has no obligations towards you concerning uptime and service quality.') . '</div>',
     )),
   );
   $form['bootstrap_cdn']['bootstrap_cdn'] = array(
@@ -219,7 +219,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#default_value' => theme_get_setting('bootstrap_rebuild_registry'),
     '#description' => t('During theme development, it can be very useful to continuously !rebuild. !warning', array(
       '!rebuild' => l(t('rebuild the theme registry'), 'http://drupal.org/node/173880#theme-registry'),
-      '!warning' => '<div class="alert alert-danger"><strong>' . t('WARNING') . ':</strong> ' . t('This is a huge performance penalty and must be turned off on production websites. ') . '</div>',
+      '!warning' => '<div class="alert alert-warning messages warning"><strong>' . t('WARNING') . ':</strong> ' . t('This is a huge performance penalty and must be turned off on production websites. ') . '</div>',
     )),
   );
 
