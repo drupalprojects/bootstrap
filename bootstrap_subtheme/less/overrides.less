@@ -2,9 +2,9 @@
 @import 'variables.less';
 
 // Media query variables.
-@tablet:  ~"(min-width: @{screen-tablet})";
-@normal:  ~"(min-width: @{screen-md})";
-@wide:    ~"(min-width: @{screen-lg})";
+@tablet:  ~"screen and (min-width: @{screen-sm-min})";
+@normal:  ~"screen and (min-width: @{screen-md-min})";
+@wide:    ~"screen and (min-width: @{screen-lg-min})";
 
 // Drop shadows.
 .box-shadow(@shadow) {
@@ -16,13 +16,12 @@
 // Fixes anchors when using fixed position elements.
 // @see: http://stackoverflow.com/a/13881860
 .anchor-fix(@top) {
-  @px: (@top - 5px);
   h1, h2, h3, h4, h5, h6, a {
     &[name], &[id] {
       // Required by webkit.
       display: inline-block;
-      margin-top: -@px;
-      padding-top: @px;
+      margin-top: -((@top - 5px));
+      padding-top: ((@top - 5px));
     }
   }
 
@@ -147,6 +146,15 @@ body {
 
 // Default navbar.
 .navbar.container {
+  @media @tablet {
+    max-width: ((@container-sm - 30px));
+  }
+  @media @normal {
+    max-width: ((@container-md - 30px));
+  }
+  @media @wide {
+    max-width: ((@container-lg - 30px));
+  }
   margin-top: 20px;
   > .container {
     margin: 0;
