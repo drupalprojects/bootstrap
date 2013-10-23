@@ -18,10 +18,11 @@
 .anchor-fix(@top) {
   h1, h2, h3, h4, h5, h6, a {
     &[name], &[id] {
-      // Required by webkit.
-      display: inline-block;
+      float: left;
+      display: inline-block; // Required by webkit.
       margin-top: -((@top - 5px));
       padding-top: ((@top - 5px));
+      width: 100%;
     }
   }
 
@@ -82,12 +83,6 @@ body {
         .anchor-fix(94px);
       }
     }
-    &.navbar-is-fixed-bottom {
-      padding-top: 50px !important;
-      .main-container {
-        .anchor-fix(50px);
-      }
-    }
   }
   &.toolbar-drawer {
     padding-top: 64px !important;
@@ -103,25 +98,19 @@ body {
         .anchor-fix(128px);
       }
     }
-    &.navbar-is-fixed-bottom {
-      padding-top: 84px !important;
-      .main-container {
-        .anchor-fix(84px);
-      }
-    }
   }
   // Admin_menu toolbar.
   &.admin-menu {
-    padding-top: 93px !important;
-    .main-container {
-      .anchor-fix(93px);
-    }
     .navbar-fixed-top {
       top: 29px;
     }
+    .main-container {
+      .anchor-fix(29px);
+    }
     &.navbar-is-fixed-top {
+      padding-top: 93px !important;
       .main-container {
-        .anchor-fix(29px);
+        .anchor-fix(93px);
       }
     }
   }
