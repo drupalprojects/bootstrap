@@ -56,7 +56,7 @@ Drupal.ajax.prototype.beforeSend = function (xmlhttprequest, options) {
     this.progress.element = $('<div class="ajax-progress ajax-progress-throbber"><i class="glyphicon glyphicon-refresh glyphicon-spin"></i></div>');
     // If progress type has the Bootstrap pagination parent, then append the
     // throbber instead of attaching it after the link.
-    if ($(this.element).parents('.pagination')) {
+    if ($(this.element).parents('.pagination').length != 0) {
       if (this.progress.message) {
         $('.throbber', this.progress.element).append('<div class="message">' + this.progress.message + '</div>');
       }

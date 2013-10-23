@@ -9,6 +9,8 @@
  */
 function bootstrap_form_element(&$variables) {
   $element = &$variables['element'];
+  $is_checkbox = false;
+  $is_radio = false;
 
   // This function is invoked as theme wrapper, but the rendered form element
   // may not necessarily have been processed by form_builder().
@@ -50,9 +52,11 @@ function bootstrap_form_element(&$variables) {
   if (isset($element['#type'])) {
     if ($element['#type'] == "radio") {
       $attributes['class'][] = 'radio';
+      $is_radio = true;
     }
     elseif ($element['#type'] == "checkbox") {
       $attributes['class'][] = 'checkbox';
+      $is_checkbox = true;
     }
     else {
       $attributes['class'][] = 'form-group';
@@ -90,7 +94,12 @@ function bootstrap_form_element(&$variables) {
       break;
 
     case 'after':
-      $variables['#children'] = ' ' . $prefix . $element['#children'] . $suffix;
+      if ($is_radio || $is_checkbox) {
+        $output .= ' ' . $prefix . $element['#children'] . $suffix;
+      }
+      else {
+        $variables['#children'] = ' ' . $prefix . $element['#children'] . $suffix;
+      }
       $output .= ' ' . theme('form_element_label', $variables) . "\n";
       break;
 
