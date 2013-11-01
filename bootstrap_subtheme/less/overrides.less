@@ -115,7 +115,7 @@ body {
     }
   }
   div#admin-toolbar {
-    z-index: 500;
+    z-index: 1600;
   }
   // Override box-shadow styles on all "admin" menus.
   #toolbar, #admin-menu, #admin-toolbar {
@@ -126,7 +126,7 @@ body {
     margin: 0;
     padding: 0;
     position: fixed;
-    z-index: 1100;
+    z-index: 1600;
     .dropdown li {
       line-height: normal;
     }
@@ -155,9 +155,21 @@ body {
 // Adjust z-index of core components.
 #overlay-container,
 .overlay-modal-background,
-.overlay-element,
-#toolbar {
+.overlay-element {
   z-index: 1500;
+}
+#toolbar {
+  z-index: 1600;
+}
+// Adjust z-index of bootstrap modals
+.modal {
+  z-index: 1620;
+}
+.modal-dialog {
+  z-index: 1630;
+}
+.modal-backdrop {
+  z-index: 1610;
 }
 .footer {
   margin-top: 45px;
