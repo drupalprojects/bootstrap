@@ -53,11 +53,6 @@ function _bootstrap_process_fieldset(&$element, &$form_state) {
   $element['#attributes']['class'][] = 'panel';
   $element['#attributes']['class'][] = 'panel-default';
 
-  $key = array_search('container-inline', $element['#attributes']['class']);
-  if ($key !== FALSE) {
-    $element['#attributes']['class'][$key] = 'form-inline';
-  }
-
   // Contains form element summary functionalities.
   $element['#attached']['library'][] = array('system', 'drupal.form');
 
