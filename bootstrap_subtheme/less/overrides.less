@@ -646,6 +646,14 @@ td.radio {
   }
 }
 
+// Radio and checkbox in table fixes
+table {
+  .radio input[type="radio"],
+  .checkbox input[type="checkbox"] {
+    max-width: inherit;
+  }
+}
+
 // Treat all links inside alert as .alert-link
 .alert a {
   font-weight: @alert-link-font-weight;
