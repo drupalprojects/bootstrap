@@ -28,7 +28,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
   }
 
   // Display a warning if jquery_update isn't enabled.
-  if (!module_exists('jquery_update') || !version_compare(variable_get('jquery_update_jquery_version', 0), 1.7, '>=')) {
+  if ((!module_exists('jquery_update') || !version_compare(variable_get('jquery_update_jquery_version', 0), 1.7, '>=')) && !theme_get_setting('bootstrap_toggle_jquery_error')) {
     drupal_set_message(t('jQuery Update is not enabled, Bootstrap requires a minimum jQuery version of 1.7 or higher. <br>Please enable <a href="https://drupal.org/project/jquery_update">jQuery Update module</a> 7.x-2.3 or higher, you must manually set this in the configuration after it is installed.'), 'error');
   }
 
@@ -220,6 +220,15 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#description' => t('During theme development, it can be very useful to continuously !rebuild. !warning', array(
       '!rebuild' => l(t('rebuild the theme registry'), 'http://drupal.org/node/173880#theme-registry'),
       '!warning' => '<div class="alert alert-warning messages warning"><strong>' . t('WARNING') . ':</strong> ' . t('This is a huge performance penalty and must be turned off on production websites. ') . '</div>',
+    )),
+  );
+  $form['advanced']['bootstrap_toggle_jquery_error'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Suppress the jQuery version error message'),
+    '#default_value' => theme_get_setting('bootstrap_toggle_jquery_error'),
+    '#description' => t('Select this if you have updated jQuery to version 1.7+ using a method other than the !jquery_update module. See !theme_jquery_update to see how to do this in the sub-theme template.php file.', array(
+      '!jquery_update' => l(t('jQuery Update'), 'https://drupal.org/project/jquery_update'),
+      '!theme_jquery_update' => l(t('Sub-theme jQuery update example'), 'https://drupal.org/comment/8011593#comment-8011593'),
     )),
   );
 
