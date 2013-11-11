@@ -170,6 +170,7 @@ function _bootstrap_colorize_button($text) {
     'btn-success' => array(
       t('Add'),
       t('Create'),
+      t('Write')
     ),
     'btn-warning' => array(
       t('Export'),
@@ -237,6 +238,7 @@ function _bootstrap_iconize_button($text) {
     ),
     'plus' => array(
       t('Add'),
+      t('Write'),
     ),
     'trash' => array(
       t('Delete'),
