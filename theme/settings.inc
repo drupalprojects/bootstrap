@@ -180,8 +180,8 @@ function _bootstrap_settings_form(&$form, $form_state) {
   $wells = array(
     '' => t('None'),
     'well' => t('.well (normal)'),
-    'well-sm' => t('.well-sm (small)'),
-    'well-lg' => t('.well-lg (large)'),
+    'well well-sm' => t('.well-sm (small)'),
+    'well well-lg' => t('.well-lg (large)'),
   );
   $form['region_wells'] = array(
     '#type' => 'fieldset',
