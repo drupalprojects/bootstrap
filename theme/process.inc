@@ -12,12 +12,17 @@
 function _bootstrap_process_input(&$element, &$form_state) {
   // Only add the "form-control" class for specific input types.
   $types = array(
-    'textfield',
-    'textarea',
+    'password',
+    'password_confirm',
     'select',
+    'textarea',
+    'textfield',
   );
-  if (!empty($element['#type']) && in_array($element['#type'], $types)) {
+  if (!empty($element['#type']) && (in_array($element['#type'], $types) || ($element['#type'] === 'file' && empty($element['#managed_file'])))) {
     $element['#attributes']['class'][] = 'form-control';
+  }
+  if (!empty($element['#attributes']['class']) && is_array($element['#attributes']['class']) && ($key = array_search('container-inline', $element['#attributes']['class'])) !== FALSE) {
+    $element['#attributes']['class'][$key] = 'form-inline';
   }
   return $element;
 }
@@ -39,14 +44,6 @@ function _bootstrap_process_fieldset(&$element, &$form_state) {
     $element['#theme_wrappers'] = array('bootstrap_panel');
     $group = $element['#group'];
     $form_state['groups'][$group][] = &$element;
-  }
-
-  $element['#attributes']['class'][] = 'panel';
-  $element['#attributes']['class'][] = 'panel-default';
-
-  $key = array_search('container-inline', $element['#attributes']['class']);
-  if ($key !== FALSE) {
-    $element['#attributes']['class'][$key] = 'form-inline';
   }
 
   // Contains form element summary functionalities.

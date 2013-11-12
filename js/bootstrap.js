@@ -62,7 +62,7 @@ var Drupal = Drupal || {};
     attach: function(context, settings) {
       $scrollableElement = this.scrollableElement('html', 'body');
 
-      if (!settings.bootstrap.anchorsFix || (parseInt($scrollableElement.css('paddingTop'), 10) <= 0 && settings.bootstrap.anchorsFix && !settings.bootstrap.anchorsSmoothScrolling)) {
+      if (!settings.bootstrap || !settings.bootstrap.anchorsFix || (parseInt($scrollableElement.css('paddingTop'), 10) <= 0 && settings.bootstrap.anchorsFix && !settings.bootstrap.anchorsSmoothScrolling)) {
         return;
       }
       var $anchors = $(context).find('a');
