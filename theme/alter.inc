@@ -199,6 +199,12 @@ function bootstrap_js_alter(&$js) {
     $js = array_diff_key($js, drupal_map_assoc($excludes));
   }
 
+  // Add Bootstrap settings.
+  $js['settings']['data'][]['bootstrap'] = array(
+    'anchorsFix' => theme_get_setting('bootstrap_anchors_fix'),
+    'anchorsSmoothScrolling' => theme_get_setting('bootstrap_anchors_smooth_scrolling'),
+  );
+
   // Add CDN.
   if (theme_get_setting('bootstrap_cdn')) {
     $cdn = '//netdna.bootstrapcdn.com/bootstrap/' . theme_get_setting('bootstrap_cdn')  . '/js/bootstrap.min.js';

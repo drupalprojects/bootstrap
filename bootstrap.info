@@ -48,9 +48,11 @@ settings[bootstrap_region_well-sidebar_first] = 'well'
 settings[bootstrap_region_well-sidebar_second] = ''
 settings[bootstrap_region_well-footer] = ''
 
-; Visual Effects
-; @todo create an actual theme setting for this
-settings[bootstrap_effects_fade] = 1
+; Visual Enhancements
+settings[bootstrap_anchors_fix] = 1
+settings[bootstrap_anchors_smooth_scrolling] = 1
+; @todo create an actual theme setting for fade effect
+settings[bootstrap_fade_effect] = 1
 
 ; Global settings
 settings[toggle_name] = 1

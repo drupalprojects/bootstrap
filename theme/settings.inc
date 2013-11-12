@@ -209,6 +209,34 @@ function _bootstrap_settings_form(&$form, $form_state) {
     );
   }
 
+  // Visual Effects.
+  $form['effects'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Visual Enhancements'),
+    '#group' => 'bootstrap',
+  );
+  $form['effects']['anchors'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Anchor links'),
+  );
+  $form['effects']['anchors']['bootstrap_anchors_fix'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Fix anchor positions with JavaScript'),
+    '#default_value' => theme_get_setting('bootstrap_anchors_fix'),
+    '#description' => t('Ensures anchors are correctly positioned only when there is padding detected on the BODY element. This is useful when fixed navigation is used.'),
+  );
+  $form['effects']['anchors']['bootstrap_anchors_smooth_scrolling'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable smooth scrolling'),
+    '#default_value' => theme_get_setting('bootstrap_anchors_smooth_scrolling'),
+    '#description' => t('Animates page by scrolling to an anchor link target smoothly when clicked.'),
+    '#states' => array(
+      'invisible' => array(
+        ':input[name="bootstrap_anchors_fix"]' => array('checked' => FALSE),
+      ),
+    ),
+  );
+
   // Advanced settings.
   $form['advanced'] = array(
     '#type' => 'fieldset',

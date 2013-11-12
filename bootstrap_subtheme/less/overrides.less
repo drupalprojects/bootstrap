@@ -13,29 +13,6 @@
           box-shadow: @shadow;
 }
 
-// Fixes anchors when using fixed position elements.
-// @see: http://stackoverflow.com/a/13881860
-.anchor-fix(@top) {
-  h1, h2, h3, h4, h5, h6, a {
-    &[name], &[id] {
-      float: left;
-      display: inline-block; // Required by webkit.
-      margin-top: -((@top - 5px));
-      padding-top: ((@top - 5px));
-      width: 100%;
-    }
-  }
-
-  // Headers must sit below the rest of the content, negative margins makes the
-  // preceeding elsements (above) it un-clickable.
-  h1, h2, h3, h4, h5, h6 {
-    &[name], &[id] {
-      position: relative;
-      z-index: -1;
-    }
-  }
-}
-
 html {
   &.overlay-open .navbar-fixed-top {
     z-index: 400;
@@ -62,9 +39,6 @@ body {
   // Add padding to body if various toolbar or navbars are fixed on top.
   &.navbar-is-fixed-top {
     padding-top: 64px !important;
-    .main-container {
-      .anchor-fix(64px);
-    }
   }
   &.navbar-is-fixed-bottom {
     padding-bottom: 64px !important;
@@ -74,14 +48,8 @@ body {
     .navbar-fixed-top {
       top: 30px;
     }
-    .main-container {
-      .anchor-fix(30px);
-    }
     &.navbar-is-fixed-top {
       padding-top: 94px !important;
-      .main-container {
-        .anchor-fix(94px);
-      }
     }
   }
   &.toolbar-drawer {
@@ -89,14 +57,8 @@ body {
     .navbar-fixed-top {
       top: 64px;
     }
-    .main-container {
-      .anchor-fix(64px);
-    }
     &.navbar-is-fixed-top {
       padding-top: 128px !important;
-      .main-container {
-        .anchor-fix(128px);
-      }
     }
   }
   // Admin_menu toolbar.
@@ -104,14 +66,8 @@ body {
     .navbar-fixed-top {
       top: 29px;
     }
-    .main-container {
-      .anchor-fix(29px);
-    }
     &.navbar-is-fixed-top {
       padding-top: 93px !important;
-      .main-container {
-        .anchor-fix(93px);
-      }
     }
   }
   div#admin-toolbar {

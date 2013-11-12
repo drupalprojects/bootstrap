@@ -10,6 +10,97 @@ var Drupal = Drupal || {};
 (function($, Drupal){
   "use strict";
 
+  var $scrollableElement = $();
+
+  var BootstrapAnchor = function (element) {
+    this.element = element;
+    this.valid = (location.hostname === element.hostname || !element.hostname) && element.hash.replace(/#/,'').length && $(element).is(':not([data-toggle],[data-target])');
+    return this;
+  };
+  BootstrapAnchor.prototype.scrollTo = function(event) {
+    if (!this.valid) {
+      return;
+    }
+    if (event) {
+      event.preventDefault();
+    }
+    var hash = this.element.hash;
+    var attr = 'id';
+    var $target = $(hash);
+    if (!$target.length) {
+      attr = 'name';
+      $target = $('[name="' + hash.replace('#', '') + '"');
+    }
+    var offset = $target.offset().top - parseInt($scrollableElement.css('paddingTop'), 10);
+    if ($target.length && offset >= 0) {
+      var $fakeAnchor = $('<div/>')
+        .addClass('element-invisible')
+        .attr(attr, $target.attr(attr))
+        .css({
+          position: 'absolute',
+          top: offset + 'px',
+          zIndex: -1000
+        })
+        .appendTo(document);
+      $target.removeAttr(attr);
+      var complete = function () {
+        location.hash = hash;
+        $fakeAnchor.remove();
+        $target.attr(attr, hash.replace('#', ''));
+      };
+      if (Drupal.settings.bootstrap.anchorsSmoothScrolling) {
+        $scrollableElement.animate({ scrollTop: offset, avoidTransforms: true }, 400, complete);
+      }
+      else {
+        $scrollableElement.css({ scrollTop: offset });
+        complete();
+      }
+    }
+  };
+
+  Drupal.behaviors.bootstrapAnchors = {
+    attach: function(context, settings) {
+      $scrollableElement = this.scrollableElement('html', 'body');
+
+      if (!settings.bootstrap.anchorsFix || (parseInt($scrollableElement.css('paddingTop'), 10) <= 0 && settings.bootstrap.anchorsFix && !settings.bootstrap.anchorsSmoothScrolling)) {
+        return;
+      }
+      var $anchors = $(context).find('a');
+      for (var i = 0; i < $anchors.length; i++) {
+        var a = $anchors[i];
+        a.bootstrapAnchor = new BootstrapAnchor(a);
+      }
+      $scrollableElement.once('bootstrap-anchors', function () {
+        $scrollableElement.on('click.bootstrap-anchors', 'a[href*="#"]', function(e) {
+          var a = this;
+          if (typeof a.bootstrapAnchor === 'undefined') {
+            a.bootstrapAnchor = new BootstrapAnchor(a);
+          }
+          a.bootstrapAnchor.scrollTo(e);
+        });
+      });
+    },
+    scrollableElement: function () {
+      var $element = $();
+      for (var i = 0; i < arguments.length; i++) {
+        var $scrollElement = $(arguments[i]);
+        if ($scrollElement.scrollTop() > 0) {
+          $element = $scrollElement;
+          break;
+        }
+        else {
+          $scrollElement.scrollTop(1);
+          if ($scrollElement.scrollTop() > 0) {
+            $scrollElement.scrollTop(0);
+            $element = $scrollElement;
+            break;
+          }
+        }
+      }
+      return $element;
+    }
+};
+
   Drupal.behaviors.bootstrap = {
     attach: function(context) {
 
