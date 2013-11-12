@@ -24,7 +24,10 @@ function bootstrap_menu_local_action($variables) {
   if (isset($link['href'])) {
     // Turn link into a mini-button and colorize based on title.
     if ($class = _bootstrap_colorize_button($link['title'])) {
-      $string = is_string($variables['attributes']['class']);
+      if (!isset($options['attributes']['class'])) {
+        $options['attributes']['class'] = array();
+      }
+      $string = is_string($options['attributes']['class']);
       if ($string) {
         $options['attributes']['class'] = explode(' ', $options['attributes']['class']);
       }
@@ -32,7 +35,7 @@ function bootstrap_menu_local_action($variables) {
       $options['attributes']['class'][] = 'btn-xs';
       $options['attributes']['class'][] = $class;
       if ($string) {
-        $options['attributes']['class'] = join(' ', $options['attributes']['class']);
+        $options['attributes']['class'] = implode(' ', $options['attributes']['class']);
       }
     }
     // Force HTML so we can add the icon rendering element.
