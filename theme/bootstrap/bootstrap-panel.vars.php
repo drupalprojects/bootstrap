@@ -11,9 +11,9 @@ function bootstrap_preprocess_bootstrap_panel(&$variables) {
   $element = &$variables['element'];
   $attributes = !empty($element['#attributes']) ? $element['#attributes'] : array();
   $variables['attributes'] = drupal_attributes($attributes);
-  $variables['collapsible'] = $element['#collapsible'];
-  $variables['collapsed'] = $element['#collapsed'];
-  $variables['id'] = $element['#id'];
+  $variables['collapsible'] = $element['#collapsible'] || FALSE;
+  $variables['collapsed'] = $element['#collapsed'] || FALSE;
+  $variables['id'] = $element['#id'] || '';
   $variables['content'] = $element['#children'];
 
   // Iterate over optional variables.

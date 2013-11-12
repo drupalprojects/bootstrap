@@ -10,24 +10,15 @@
  * Process input elements.
  */
 function _bootstrap_process_input(&$element, &$form_state) {
-
-  // Don't inject the "form-control" class on these input types.
-  $ignore_types = array(
-    'checkbox',
-    'checkboxes',
-    'file',
-    'hidden',
-    'image_button',
-    'radio',
-    'radios',
-    'submit',
-    'tableselect',
+  // Only add the "form-control" class for specific input types.
+  $types = array(
+    'textfield',
+    'textarea',
+    'select',
   );
-
-  if (!in_array($element['#type'], $ignore_types)) {
+  if (!empty($element['#type']) && in_array($element['#type'], $types)) {
     $element['#attributes']['class'][] = 'form-control';
   }
-
   return $element;
 }
 

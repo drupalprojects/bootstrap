@@ -60,18 +60,24 @@ function bootstrap_element_info_alter(&$elements) {
     if (!empty($element['#input'])) {
       $element['#process'][] = '_bootstrap_process_input';
     }
-
-    // Process fieldset element.
-    if ('fieldset' === $element['#type']) {
+    // Process core's fieldset element.
+    if (!empty($element['#type']) && $element['#type'] === 'fieldset') {
       $element['#theme_wrappers'] = array('bootstrap_panel');
-      // Replace core's #pre_render function.
-      if (($key = array_search('form_pre_render_fieldset', $element['#pre_render'])) !== FALSE) {
-        $element['#pre_render'][$key] = '_bootstrap_pre_render_fieldset';
-      }
-      // Replace core's #process function.
-      if (($key = array_search('form_process_fieldset', $element['#process'])) !== FALSE) {
-        $element['#process'][$key] = '_bootstrap_process_fieldset';
-      }
+    }
+    if (!empty($element['#theme']) && $element['#theme'] === 'fieldset') {
+      $element['#theme'] = 'bootstrap_panel';
+    }
+    // Replace #process function.
+    if (!empty($element['#process']) && ($key = array_search('form_process_fieldset', $element['#process'])) !== FALSE) {
+      $element['#process'][$key] = '_bootstrap_process_fieldset';
+    }
+    // Replace #pre_render function.
+    if (!empty($element['#pre_render']) && ($key = array_search('form_pre_render_fieldset', $element['#pre_render'])) !== FALSE) {
+      $element['#pre_render'][$key] = '_bootstrap_pre_render_fieldset';
+    }
+    // Replace #theme_wrappers function.
+    if (!empty($element['#theme_wrappers']) && ($key = array_search('fieldset', $element['#theme_wrappers'])) !== FALSE) {
+      $element['#theme_wrappers'][$key] = 'bootstrap_panel';
     }
   }
 }

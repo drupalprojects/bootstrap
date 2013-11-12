@@ -27,7 +27,7 @@
     <?php endif; ?>
   <?php endif; ?>
   <?php if ($collapsible): ?>
-    <div id="<?php print $id; ?>" class="panel-collapse collapse<?php print (!$collapsed ? ' in' : ''); ?>">
+    <div id="<?php print $id; ?>" class="panel-collapse collapse fade<?php print (!$collapsed ? ' in' : ''); ?>">
   <?php endif; ?>
   <div class="panel-body">
     <?php if ($description): ?>

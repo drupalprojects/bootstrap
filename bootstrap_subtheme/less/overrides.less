@@ -277,10 +277,20 @@ input.error {
 }
 fieldset legend.panel-heading {
   float: left;
+  line-height: 1em;
   margin: 0;
 }
 fieldset .panel-body {
   clear: both;
+}
+fieldset .panel-heading a.panel-title {
+  color: inherit;
+  display: block;
+  margin: -10px -15px;
+  padding: 10px 15px;
+  &:hover {
+    text-decoration: none;
+  }
 }
 .form-actions{
   clear: both;
