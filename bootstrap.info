@@ -24,7 +24,7 @@ regions[page_bottom]    = 'Page bottom'
 ;;;;;;;;;;;;;;;;;;;;;
 
 ; CDN
-settings[bootstrap_cdn] = 3.0.0
+settings[bootstrap_cdn] = 3.0.2
 
 ; Bootswatch
 settings[bootstrap_bootswatch] = ''
