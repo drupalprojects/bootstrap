@@ -12,12 +12,6 @@ var Drupal = Drupal || {};
 
   Drupal.behaviors.bootstrap = {
     attach: function(context) {
-      // Fix collapsible links prevent the default click behavior.
-      $(context).find('a[data-toggle="collapse"]').once('bootstrap-collapse', function () {
-        $(this).on('click', function (e) {
-          e.preventDefault();
-        });
-      });
       // Provide some Bootstrap tab/Drupal integration.
       $(context).find('.tabbable').once('bootstrap-tabs', function () {
         var $wrapper = $(this);
