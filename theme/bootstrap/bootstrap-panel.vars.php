@@ -12,7 +12,8 @@ function bootstrap_preprocess_bootstrap_panel(&$variables) {
   $attributes = !empty($element['#attributes']) ? $element['#attributes'] : array();
   $attributes['class'][] = 'panel';
   $attributes['class'][] = 'panel-default';
-  $variables['attributes'] = drupal_attributes($attributes);
+  // states.js requires form-wrapper on fieldset to work properly.
+  $attributes['class'][] = 'form-wrapper';
   $variables['collapsible'] = FALSE;
   if (isset($element['#collapsible'])) {
     $variables['collapsible'] = $element['#collapsible'];
@@ -23,7 +24,12 @@ function bootstrap_preprocess_bootstrap_panel(&$variables) {
   }
   $variables['id'] = '';
   if (isset($element['#id'])) {
-    $variables['id'] = $element['#id'];
+    if ($variables['collapsible']) {
+      $variables['id'] = $element['#id'];
+    }
+    else {
+      $attributes['id'] = $element['#id'];
+    }
   }
   $variables['content'] = $element['#children'];
 
@@ -37,4 +43,12 @@ function bootstrap_preprocess_bootstrap_panel(&$variables) {
   foreach ($keys as $key) {
     $variables[$key] = !empty($element["#$key"]) ? $element["#$key"] : FALSE;
   }
+  $variables['attributes'] = $attributes;
+}
+
+/**
+ * Implements hook_process_bootstrap_panel().
+ */
+function bootstrap_process_bootstrap_panel(&$variables) {
+  $variables['attributes'] = drupal_attributes($variables['attributes']);
 }
