@@ -10,7 +10,7 @@
 <?php if ($prefix): ?>
   <?php print $prefix; ?>
 <?php endif; ?>
-<fieldset<?php print $attributes; ?>>
+<fieldset <?php print $attributes; ?>>
   <?php if ($title): ?>
     <?php if ($collapsible): ?>
       <legend class="panel-heading">
@@ -31,7 +31,9 @@
   <?php endif; ?>
   <div class="panel-body">
     <?php if ($description): ?>
-      <?php print $description; ?>
+      <p class="help-block">
+        <?php print $description; ?>
+      </p>
     <?php endif; ?>
     <?php print $content; ?>
   </div>

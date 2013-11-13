@@ -54,6 +54,33 @@ settings[bootstrap_anchors_smooth_scrolling] = 1
 ; @todo create an actual theme setting for fade effect
 settings[bootstrap_fade_effect] = 1
 
+; JavaScript
+; Popovers
+settings[bootstrap_popover_enabled] = 1
+settings[bootstrap_popover_animation] = 1
+settings[bootstrap_popover_html] = 0
+settings[bootstrap_popover_placement] = 'right'
+settings[bootstrap_popover_selector] = ''
+settings[bootstrap_popover_trigger]['hover'] = 0
+settings[bootstrap_popover_trigger]['focus'] = 0
+settings[bootstrap_popover_trigger]['click'] = 'click'
+settings[bootstrap_popover_title] = ''
+settings[bootstrap_popover_content] = ''
+settings[bootstrap_popover_delay] = 0
+settings[bootstrap_popover_container] = 'body'
+; Tooltips
+settings[bootstrap_tooltip_enabled] = 1
+settings[bootstrap_tooltip_descriptions] = 1
+settings[bootstrap_tooltip_animation] = 1
+settings[bootstrap_tooltip_html] = 0
+settings[bootstrap_tooltip_placement] = 'auto left'
+settings[bootstrap_tooltip_selector] = ''
+settings[bootstrap_tooltip_trigger]['hover'] = 'hover'
+settings[bootstrap_tooltip_trigger]['focus'] = 'focus'
+settings[bootstrap_tooltip_trigger]['click'] = 0
+settings[bootstrap_tooltip_delay] = 0
+settings[bootstrap_tooltip_container] = 'body'
+
 ; Global settings
 settings[toggle_name] = 1
 settings[toggle_search] = 1

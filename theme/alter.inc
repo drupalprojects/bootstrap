@@ -203,6 +203,28 @@ function bootstrap_js_alter(&$js) {
   $js['settings']['data'][]['bootstrap'] = array(
     'anchorsFix' => theme_get_setting('bootstrap_anchors_fix'),
     'anchorsSmoothScrolling' => theme_get_setting('bootstrap_anchors_smooth_scrolling'),
+    'popoverEnabled' => theme_get_setting('bootstrap_popover_enabled'),
+    'popoverOptions' => array(
+      'animation' => (int) theme_get_setting('bootstrap_popover_animation'),
+      'html' => (int) theme_get_setting('bootstrap_popover_html'),
+      'placement' => theme_get_setting('bootstrap_popover_placement'),
+      'selector' => theme_get_setting('bootstrap_popover_selector'),
+      'trigger' => implode(' ', array_filter(array_values((array) theme_get_setting('bootstrap_popover_trigger')))),
+      'title' => theme_get_setting('bootstrap_popover_title'),
+      'content' => theme_get_setting('bootstrap_popover_content'),
+      'delay' => (int) theme_get_setting('bootstrap_popover_delay'),
+      'container' => theme_get_setting('bootstrap_popover_container'),
+    ),
+    'tooltipEnabled' => theme_get_setting('bootstrap_tooltip_enabled'),
+    'tooltipOptions' => array(
+      'animation' => (int) theme_get_setting('bootstrap_tooltip_animation'),
+      'html' => (int) theme_get_setting('bootstrap_tooltip_html'),
+      'placement' => theme_get_setting('bootstrap_tooltip_placement'),
+      'selector' => theme_get_setting('bootstrap_tooltip_selector'),
+      'trigger' => implode(' ', array_filter(array_values((array) theme_get_setting('bootstrap_tooltip_trigger')))),
+      'delay' => (int) theme_get_setting('bootstrap_tooltip_delay'),
+      'container' => theme_get_setting('bootstrap_tooltip_container'),
+    ),
   );
 
   // Add CDN.

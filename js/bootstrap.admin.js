@@ -53,6 +53,18 @@
         return summary.join(', ');
       });
 
+      // Javascript.
+      $context.find('#edit-javascript').drupalSetSummary(function () {
+        var summary = [];
+        if ($context.find('input[name="bootstrap_popover_enabled"]').is(':checked')) {
+          summary.push(Drupal.t('Popovers'));
+        }
+        if ($context.find('input[name="bootstrap_tooltip_enabled"]').is(':checked')) {
+          summary.push(Drupal.t('Tooltips'));
+        }
+        return summary.join(', ');
+      });
+
       // Advanced.
       $context.find('#edit-advanced').drupalSetSummary(function () {
         var summary = [];

@@ -237,6 +237,223 @@ function _bootstrap_settings_form(&$form, $form_state) {
     ),
   );
 
+  // JavaScript settings.
+  $form['javascript'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('JavaScript'),
+    '#group' => 'bootstrap',
+  );
+  // Popovers.
+  $form['javascript']['popovers'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Popovers'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+    '#description' => t('Add small overlays of content, like those on the iPad, to any element for housing secondary information.'),
+  );
+  $form['javascript']['popovers']['bootstrap_popover_enabled'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable popovers.'),
+    '#description' => t('Elements that have the !code attribute set will automatically initialize the popover upon page load. !warning', array(
+      '!code' => '<code>data-toggle="popover"</code>',
+      '!warning' => '<strong class="error text-error">WARNING: This feature can sometimes impact performance. Disable if pages appear to "hang" after initial load.</strong>',
+    )),
+    '#default_value' => theme_get_setting('bootstrap_popover_enabled'),
+  );
+  $form['javascript']['popovers']['options'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Options'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#description' => t('These are global options. Each popover can independently override desired settings by appending the option name to !data. Example: !data-animation.', array(
+      '!data' => '<code>data-</code>',
+      '!data-animation' => '<code>data-animation="false"</code>',
+    )),
+    '#states' => array(
+      'visible' => array(
+        ':input[name="bootstrap_popover_enabled"]' => array('checked' => TRUE),
+      ),
+    ),
+  );
+  $form['javascript']['popovers']['options']['bootstrap_popover_animation'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('animate'),
+    '#description' => t('Apply a CSS fade transition to the popover.'),
+    '#default_value' => theme_get_setting('bootstrap_popover_animation'),
+  );
+  $form['javascript']['popovers']['options']['bootstrap_popover_html'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('HTML'),
+    '#description' => t("Insert HTML into the popover. If false, jQuery's text method will be used to insert content into the DOM. Use text if you're worried about XSS attacks."),
+    '#default_value' => theme_get_setting('bootstrap_popover_html'),
+  );
+  $form['javascript']['popovers']['options']['bootstrap_popover_placement'] = array(
+    '#type' => 'select',
+    '#title' => t('placement'),
+    '#description' => t('Where to position the popover. When "auto" is specified, it will dynamically reorient the popover. For example, if placement is "auto left", the popover will display to the left when possible, otherwise it will display right.'),
+    '#default_value' => theme_get_setting('bootstrap_popover_placement'),
+    '#options' => drupal_map_assoc(array(
+      'top',
+      'bottom',
+      'left',
+      'right',
+      'auto',
+      'auto top',
+      'auto bottom',
+      'auto left',
+      'auto right',
+    )),
+  );
+  $form['javascript']['popovers']['options']['bootstrap_popover_selector'] = array(
+    '#type' => 'textfield',
+    '#title' => t('selector'),
+    '#description' => t('If a selector is provided, tooltip objects will be delegated to the specified targets. In practice, this is used to enable dynamic HTML content to have popovers added. See !this and !example.', array(
+      '!this' => l(t('this'), 'https://github.com/twbs/bootstrap/issues/4215'),
+      '!example' => l(t('an informative example'), 'http://jsfiddle.net/fScua/'),
+    )),
+    '#default_value' => theme_get_setting('bootstrap_popover_selector'),
+  );
+  $form['javascript']['popovers']['options']['bootstrap_popover_trigger'] = array(
+    '#type' => 'checkboxes',
+    '#title' => t('trigger'),
+    '#description' => t('How a popover is triggered.'),
+    '#default_value' => theme_get_setting('bootstrap_popover_trigger'),
+    '#options' => drupal_map_assoc(array(
+      'click',
+      'hover',
+      'focus',
+      'manual',
+    )),
+  );
+  $form['javascript']['popovers']['options']['bootstrap_popover_title'] = array(
+    '#type' => 'textfield',
+    '#title' => t('title'),
+    '#description' => t("Default title value if \"title\" attribute isn't present."),
+    '#default_value' => theme_get_setting('bootstrap_popover_title'),
+  );
+  $form['javascript']['popovers']['options']['bootstrap_popover_content'] = array(
+    '#type' => 'textfield',
+    '#title' => t('content'),
+    '#description' => t("Default content value if \"data-content\" attribute isn't present."),
+    '#default_value' => theme_get_setting('bootstrap_popover_content'),
+  );
+  $form['javascript']['popovers']['options']['bootstrap_popover_delay'] = array(
+    '#type' => 'textfield',
+    '#title' => t('delay'),
+    '#description' => t('The amount of time to delay showing and hiding the popover (in milliseconds). Does not apply to manual trigger type.'),
+    '#default_value' => theme_get_setting('bootstrap_popover_delay'),
+  );
+  $form['javascript']['popovers']['options']['bootstrap_popover_container'] = array(
+    '#type' => 'textfield',
+    '#title' => t('container'),
+    '#description' => t('Appends the popover to a specific element. Example: "body". This option is particularly useful in that it allows you to position the popover in the flow of the document near the triggering element - which will prevent the popover from floating away from the triggering element during a window resize.'),
+    '#default_value' => theme_get_setting('bootstrap_popover_container'),
+  );
+  // Tooltips.
+  $form['javascript']['tooltips'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Tooltips'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+    '#description' => t("Inspired by the excellent jQuery.tipsy plugin written by Jason Frame; Tooltips are an updated version, which don't rely on images, use CSS3 for animations, and data-attributes for local title storage. See !link for more documentation.", array(
+      '!link' => l(t('Bootstrap tooltips'), 'http://getbootstrap.com/javascript/#tooltips'),
+    )),
+  );
+  $form['javascript']['tooltips']['bootstrap_tooltip_enabled'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable tooltips'),
+    '#description' => t('Elements that have the !code attribute set will automatically initialize the tooltip upon page load. !warning', array(
+      '!code' => '<code>data-toggle="tooltip"</code>',
+      '!warning' => '<strong class="error text-error">WARNING: This feature can sometimes impact performance. Disable if pages appear to "hang" after initial load.</strong>',
+    )),
+    '#default_value' => theme_get_setting('bootstrap_tooltip_enabled'),
+  );
+  $form['javascript']['tooltips']['bootstrap_tooltip_descriptions'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Convert simple form descriptions'),
+    '#description' => t('Form items that contain simple descriptions (no HTML and shorter than 200 characters) will be converted into tooltips. This helps reduce the sometimes unnecessary noise of form item descriptions. By treating descriptions that contain longer text or HTML as actionable descriptions, we ensure it is always visible so its usability remains intact.'),
+    '#default_value' => theme_get_setting('bootstrap_tooltip_descriptions'),
+    '#states' => array(
+      'visible' => array(
+        ':input[name="bootstrap_tooltip_enabled"]' => array('checked' => TRUE),
+      ),
+    ),
+  );
+  $form['javascript']['tooltips']['options'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Options'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#description' => t('These are global options. Each tooltip can independently override desired settings by appending the option name to !data. Example: !data-animation.', array(
+      '!data' => '<code>data-</code>',
+      '!data-animation' => '<code>data-animation="false"</code>',
+    )),
+    '#states' => array(
+      'visible' => array(
+        ':input[name="bootstrap_tooltip_enabled"]' => array('checked' => TRUE),
+      ),
+    ),
+  );
+  $form['javascript']['tooltips']['options']['bootstrap_tooltip_animation'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('animate'),
+    '#description' => t('Apply a CSS fade transition to the tooltip.'),
+    '#default_value' => theme_get_setting('bootstrap_tooltip_animation'),
+  );
+  $form['javascript']['tooltips']['options']['bootstrap_tooltip_html'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('HTML'),
+    '#description' => t("Insert HTML into the tooltip. If false, jQuery's text method will be used to insert content into the DOM. Use text if you're worried about XSS attacks."),
+    '#default_value' => theme_get_setting('bootstrap_tooltip_html'),
+  );
+  $form['javascript']['tooltips']['options']['bootstrap_tooltip_placement'] = array(
+    '#type' => 'select',
+    '#title' => t('placement'),
+    '#description' => t('Where to position the tooltip. When "auto" is specified, it will dynamically reorient the tooltip. For example, if placement is "auto left", the tooltip will display to the left when possible, otherwise it will display right.'),
+    '#default_value' => theme_get_setting('bootstrap_tooltip_placement'),
+    '#options' => drupal_map_assoc(array(
+      'top',
+      'bottom',
+      'left',
+      'right',
+      'auto',
+      'auto top',
+      'auto bottom',
+      'auto left',
+      'auto right',
+    )),
+  );
+  $form['javascript']['tooltips']['options']['bootstrap_tooltip_selector'] = array(
+    '#type' => 'textfield',
+    '#title' => t('selector'),
+    '#description' => t('If a selector is provided, tooltip objects will be delegated to the specified targets.'),
+    '#default_value' => theme_get_setting('bootstrap_tooltip_selector'),
+  );
+  $form['javascript']['tooltips']['options']['bootstrap_tooltip_trigger'] = array(
+    '#type' => 'checkboxes',
+    '#title' => t('trigger'),
+    '#description' => t('How a tooltip is triggered.'),
+    '#default_value' => theme_get_setting('bootstrap_tooltip_trigger'),
+    '#options' => drupal_map_assoc(array(
+      'click',
+      'hover',
+      'focus',
+      'manual',
+    )),
+  );
+  $form['javascript']['tooltips']['options']['bootstrap_tooltip_delay'] = array(
+    '#type' => 'textfield',
+    '#title' => t('delay'),
+    '#description' => t('The amount of time to delay showing and hiding the tooltip (in milliseconds). Does not apply to manual trigger type.'),
+    '#default_value' => theme_get_setting('bootstrap_tooltip_delay'),
+  );
+  $form['javascript']['tooltips']['options']['bootstrap_tooltip_container'] = array(
+    '#type' => 'textfield',
+    '#title' => t('container'),
+    '#description' => t('Appends the tooltip to a specific element. Example: "body"'),
+    '#default_value' => theme_get_setting('bootstrap_tooltip_container'),
+  );
+
   // Advanced settings.
   $form['advanced'] = array(
     '#type' => 'fieldset',

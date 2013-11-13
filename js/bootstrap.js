@@ -58,6 +58,38 @@ var Drupal = Drupal || {};
   };
 
   /**
+   * Bootstrap Popovers.
+   */
+  Drupal.behaviors.bootstrapPopovers = {
+    attach: function (context, settings) {
+      if (settings.bootstrap && settings.bootstrap.popoverEnabled) {
+        var elements = $(context).find('[data-toggle="popover"]').toArray();
+        for (var i = 0; i < elements.length; i++) {
+          var $element = $(elements[i]);
+          var options = $.extend(true, {}, settings.bootstrap.popoverOptions, $element.data());
+          $element.popover(options);
+        }
+      }
+    }
+  };
+
+  /**
+   * Bootstrap Tooltips.
+   */
+  Drupal.behaviors.bootstrapTooltips = {
+    attach: function (context, settings) {
+      if (settings.bootstrap && settings.bootstrap.tooltipEnabled) {
+        var elements = $(context).find('[data-toggle="tooltip"]').toArray();
+        for (var i = 0; i < elements.length; i++) {
+          var $element = $(elements[i]);
+          var options = $.extend(true, {}, settings.bootstrap.tooltipOptions, $element.data());
+          $element.tooltip(options);
+        }
+      }
+    }
+  };
+
+  /**
    * Anchor fixes.
    */
   var $scrollableElement = $();
