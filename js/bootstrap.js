@@ -117,13 +117,13 @@ var Drupal = Drupal || {};
         }
       }
       $scrollableElement.once('bootstrap-anchors', function () {
-        $scrollableElement.on('click.bootstrap-anchors', 'a[href*="#"]', function(e) {
+        $scrollableElement.on('click.bootstrap-anchors', 'a[href*="#"]:not([data-toggle],[data-target])', function(e) {
           this.scrollTo(e);
         });
       });
     },
     bootstrapAnchor: function (element) {
-      element.validAnchor = element.nodeName === 'A' && (location.hostname === element.hostname || !element.hostname) && element.hash.replace(/#/,'').length && $(element).is(':not([data-toggle],[data-target])');
+      element.validAnchor = element.nodeName === 'A' && (location.hostname === element.hostname || !element.hostname) && element.hash.replace(/#/,'').length;
       element.scrollTo = function(event) {
         var attr = 'id';
         var $target = $(element.hash);
@@ -131,7 +131,7 @@ var Drupal = Drupal || {};
           attr = 'name';
           $target = $('[name="' + element.hash.replace('#', '') + '"');
         }
-        var offset = $target.offset().top - parseInt($scrollableElement.css('paddingTop'), 10);
+        var offset = $target.offset().top - parseInt($scrollableElement.css('paddingTop'), 10) - parseInt($scrollableElement.css('marginTop'), 10);
         if (this.validAnchor && $target.length && offset > 0) {
           if (event) {
             event.preventDefault();
