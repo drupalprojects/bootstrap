@@ -40,11 +40,11 @@ Drupal.behaviors.verticalTabs = {
           .removeClass('collapsible collapsed panel panel-default')
           .addClass('tab-pane vertical-tabs-pane')
           .data('verticalTab', vertical_tab);
-        if ($(this).find('legend a').length) {
-          $(this).find('legend').append('<div class="panel-title fieldset-legend">' + $(this).find('legend a').html() + '</div>');
-          $(this).find('legend a').remove();
-          $(this).append($(this).find('.panel-collapse').html());
-          $(this).find('.panel-collapse').remove();
+        if ($(this).children('legend a').length) {
+          $(this).children('legend').append('<div class="panel-title fieldset-legend">' + $(this).children('legend a').html() + '</div>');
+          $(this).children('legend a').remove();
+          $(this).append($(this).children('.panel-collapse').html());
+          $(this).children('.panel-collapse').remove();
         }
         if (this.id == focusID) {
           tab_focus = $(this);
