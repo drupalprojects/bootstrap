@@ -1,4 +1,7 @@
-(function ($) {
+(function ($, Drupal) {
+  /*global jQuery:false */
+  /*global Drupal:false */
+  "use strict";
 
   /**
    * Provide vertical tab summaries for Bootstrap settings.
@@ -7,55 +10,29 @@
     attach: function (context) {
       var $context = $(context);
 
-      // BootstrapCDN.
-      $context.find('#edit-bootstrap-cdn').drupalSetSummary(function () {
-        var version = $context.find('select[name="bootstrap_cdn"]').val();
-        if (version.length) {
-          return version;
-        }
-        else {
-          return Drupal.t('Disabled');
-        }
-      });
-
-      // Bootswatch.
-      $context.find('#edit-bootswatch').drupalSetSummary(function () {
-        var theme = $context.find('select[name="bootstrap_bootswatch"]').val();
-        if (theme.length) {
-          return $context.find('select[name="bootstrap_bootswatch"] :selected').text();
-        }
-        else {
-          return Drupal.t('Disabled');
-        }
-      });
-
-      // Breadcrumbs.
-      $context.find('#edit-breadcrumbs').drupalSetSummary(function () {
-        var summary = [$context.find('select[name="bootstrap_breadcrumb"] :selected').text()];
+      // Components.
+      $context.find('#edit-components').drupalSetSummary(function () {
+        var summary = [];
+        // Breadcrumbs.
         var breadcrumb = parseInt($context.find('select[name="bootstrap_breadcrumb"]').val(), 10);
         if (breadcrumb) {
-          if ($context.find('input[name="bootstrap_breadcrumb_home"]').is(':checked')) {
-            summary.push(Drupal.t('Home breadcrumb link'));
-          }
-          if ($context.find('input[name="bootstrap_breadcrumb_title"]').is(':checked')) {
-            summary.push(Drupal.t('Current page title'));
-          }
+          summary.push(Drupal.t('Breadcrumbs'));
         }
-        return summary.join(', ');
-      });
-
-      // Navbar.
-      $context.find('#edit-navbar').drupalSetSummary(function () {
-        var summary = [$context.find('select[name="bootstrap_navbar_position"] :selected').text()];
+        // Navbar.
+        var navbar = 'Navbar: ' + $context.find('select[name="bootstrap_navbar_position"] :selected').text();
         if ($context.find('input[name="bootstrap_navbar_inverse"]').is(':checked')) {
-          summary.push(Drupal.t('Inverse'));
+          navbar += ' (' + Drupal.t('Inverse') + ')';
         }
+        summary.push(navbar);
         return summary.join(', ');
       });
 
       // Javascript.
       $context.find('#edit-javascript').drupalSetSummary(function () {
         var summary = [];
+        if ($context.find('input[name="bootstrap_anchors_fix"]').is(':checked')) {
+          summary.push(Drupal.t('Anchors'));
+        }
         if ($context.find('input[name="bootstrap_popover_enabled"]').is(':checked')) {
           summary.push(Drupal.t('Popovers'));
         }
@@ -68,6 +45,17 @@
       // Advanced.
       $context.find('#edit-advanced').drupalSetSummary(function () {
         var summary = [];
+        // BootstrapCDN.
+        var bootstrapCDN = $context.find('select[name="bootstrap_cdn"]').val();
+        if (bootstrapCDN.length) {
+          bootstrapCDN = 'BootstrapCDN v' + bootstrapCDN;
+          // Bootswatch.
+          if ($context.find('select[name="bootstrap_bootswatch"]').val().length) {
+            bootstrapCDN += ' (' + $context.find('select[name="bootstrap_bootswatch"] :selected').text() + ')';
+          }
+          summary.push(bootstrapCDN);
+        }
+        // Rebuild registry.
         if ($context.find('input[name="bootstrap_rebuild_registry"]').is(':checked')) {
           summary.push(Drupal.t('Rebuild Registry'));
         }
@@ -153,4 +141,4 @@
     }
   };
 
-})(jQuery);
+})(jQuery, Drupal);

@@ -57,70 +57,20 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#weight' => -10,
   );
 
-  // BootstrapCDN.
-  $form['bootstrap_cdn'] = array(
+  // Components.
+  $form['components'] = array(
     '#type' => 'fieldset',
-    '#title' => t('BootstrapCDN'),
+    '#title' => t('Components'),
     '#group' => 'bootstrap',
-    '#description' => t('Use !bootstrapcdn to serve the Bootstrap framework files. Enabling this setting will prevent this theme from attempting to load any Bootstrap framework files locally. !warning', array(
-      '!bootstrapcdn' => l(t('BootstrapCDN'), 'http://bootstrapcdn.com', array(
-        'external' => TRUE,
-      )),
-      '!warning' => '<div class="alert alert-warning messages warning"><strong>' . t('WARNING') . ':</strong> ' . t('Using this content distribution network will give you a performance boost but will also make you dependant on a third party who has no obligations towards you concerning uptime and service quality.') . '</div>',
-    )),
   );
-  $form['bootstrap_cdn']['bootstrap_cdn'] = array(
-    '#type' => 'select',
-    '#options' => drupal_map_assoc(array(
-      '3.0.0',
-      '3.0.1',
-      '3.0.2',
-    )),
-    '#default_value' => theme_get_setting('bootstrap_cdn'),
-    '#empty_option' => t('Disabled'),
-    '#empty_value' => NULL,
-  );
-
-  // Bootswatch.
-  $bootswatch_themes = array();
-  $request = drupal_http_request('http://api.bootswatch.com/3/');
-  if ($request && $request->code === '200' && !empty($request->data)) {
-    if (($api = drupal_json_decode($request->data)) && is_array($api) && !empty($api['themes'])) {
-      foreach ($api['themes'] as $bootswatch_theme) {
-        $bootswatch_themes[strtolower($bootswatch_theme['name'])] = $bootswatch_theme['name'];
-      }
-    }
-  }
-  $form['bootswatch'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Bootswatch'),
-    '#group' => 'bootstrap',
-    '#description' => t('Use !bootstrapcdn to serve a Bootswatch Theme. Choose Bootswatch theme here.', array(
-      '!bootstrapcdn' => l(t('BootstrapCDN'), 'http://bootstrapcdn.com', array(
-        'external' => TRUE,
-      )),
-    )),
-  );
-  $form['bootswatch']['bootstrap_bootswatch'] = array(
-    '#type' => 'select',
-    '#default_value' => theme_get_setting('bootstrap_bootswatch'),
-    '#options' => $bootswatch_themes,
-    '#empty_option' => t('Disabled'),
-    '#empty_value' => NULL,
-    '#suffix' => '<div id="bootswatch-preview"></div>',
-  );
-
-  if (empty($bootswatch_themes)) {
-    $form['bootswatch']['bootstrap_bootswatch']['#prefix'] = '<div class="alert alert-danger messages error"><strong>' . t('ERROR') . ':</strong> ' . t('Unable to reach Bootswatch API. Please ensure the server your website is hosted on is able to initiate HTTP requests.') . '</div>';
-  }
-
   // Breadcrumbs.
-  $form['breadcrumbs'] = array(
+  $form['components']['breadcrumbs'] = array(
     '#type' => 'fieldset',
     '#title' => t('Breadcrumbs'),
-    '#group' => 'bootstrap',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
   );
-  $form['breadcrumbs']['bootstrap_breadcrumb'] = array(
+  $form['components']['breadcrumbs']['bootstrap_breadcrumb'] = array(
     '#type' => 'select',
     '#title' => t('Breadcrumb visibility'),
     '#default_value' => theme_get_setting('bootstrap_breadcrumb'),
@@ -130,36 +80,36 @@ function _bootstrap_settings_form(&$form, $form_state) {
       2 => t('Only in admin areas'),
     ),
   );
-  $form['breadcrumbs']['bootstrap_breadcrumb_home'] = array(
+  $form['components']['breadcrumbs']['bootstrap_breadcrumb_home'] = array(
     '#type' => 'checkbox',
     '#title' => t('Show "Home" breadcrumb link'),
     '#default_value' => theme_get_setting('bootstrap_breadcrumb_home'),
-    '#description' => t('If your site has a module dedicated to handling breadcrumbs already, ensure this setting is <strong>enabled</strong>.'),
+    '#description' => t('If your site has a module dedicated to handling breadcrumbs already, ensure this setting is enabled.'),
     '#states' => array(
       'invisible' => array(
         ':input[name="bootstrap_breadcrumb"]' => array('value' => 0),
       ),
     ),
   );
-  $form['breadcrumbs']['bootstrap_breadcrumb_title'] = array(
+  $form['components']['breadcrumbs']['bootstrap_breadcrumb_title'] = array(
     '#type' => 'checkbox',
     '#title' => t('Show current page title at end'),
     '#default_value' => theme_get_setting('bootstrap_breadcrumb_title'),
-    '#description' => t('If your site has a module dedicated to handling breadcrumbs already, ensure this setting is <strong>disabled</strong>.'),
+    '#description' => t('If your site has a module dedicated to handling breadcrumbs already, ensure this setting is disabled.'),
     '#states' => array(
       'invisible' => array(
         ':input[name="bootstrap_breadcrumb"]' => array('value' => 0),
       ),
     ),
   );
-
   // Navbar.
-  $form['navbar'] = array(
+  $form['components']['navbar'] = array(
     '#type' => 'fieldset',
     '#title' => t('Navbar'),
-    '#group' => 'bootstrap',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
   );
-  $form['navbar']['bootstrap_navbar_position'] = array(
+  $form['components']['navbar']['bootstrap_navbar_position'] = array(
     '#type' => 'select',
     '#title' => t('Navbar Position'),
     '#description' => t('Select your Navbar position.'),
@@ -171,7 +121,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     ),
     '#empty_option' => t('Normal'),
   );
-  $form['navbar']['bootstrap_navbar_inverse'] = array(
+  $form['components']['navbar']['bootstrap_navbar_inverse'] = array(
     '#type' => 'checkbox',
     '#title' => t('Inverse navbar style'),
     '#description' => t('Select if you want the inverse navbar style.'),
@@ -185,20 +135,17 @@ function _bootstrap_settings_form(&$form, $form_state) {
     'well well-sm' => t('.well-sm (small)'),
     'well well-lg' => t('.well-lg (large)'),
   );
-  $form['region_wells'] = array(
+  $form['components']['region_wells'] = array(
     '#type' => 'fieldset',
     '#title' => t('Region wells'),
     '#description' => t('Enable the <code>.well</code>, <code>.well-sm</code> or <code>.well-lg</code> classes for specified regions. See: documentation on !wells.', array(
       '!wells' => l(t('Bootstrap Wells'), 'http://getbootstrap.com/components/#wells'),
     )),
-    '#group' => 'bootstrap',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
   );
   foreach (system_region_list($theme) as $name => $title) {
-    // Skip core's "dashboard" regions.
-    if (preg_match('/^dashboard/', $name)) {
-      continue;
-    }
-    $form['region_wells']['bootstrap_region_well-' . $name] = array(
+    $form['components']['region_wells']['bootstrap_region_well-' . $name] = array(
       '#title' => $title,
       '#type' => 'select',
       '#attributes' => array(
@@ -209,23 +156,26 @@ function _bootstrap_settings_form(&$form, $form_state) {
     );
   }
 
-  // Visual Effects.
-  $form['effects'] = array(
+  // JavaScript settings.
+  $form['javascript'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Visual Enhancements'),
+    '#title' => t('JavaScript'),
     '#group' => 'bootstrap',
   );
-  $form['effects']['anchors'] = array(
+  // Anchors.
+  $form['javascript']['anchors'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Anchor links'),
+    '#title' => t('Anchors'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
   );
-  $form['effects']['anchors']['bootstrap_anchors_fix'] = array(
+  $form['javascript']['anchors']['bootstrap_anchors_fix'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Fix anchor positions with JavaScript'),
+    '#title' => t('Fix anchor positions'),
     '#default_value' => theme_get_setting('bootstrap_anchors_fix'),
-    '#description' => t('Ensures anchors are correctly positioned only when there is padding detected on the BODY element. This is useful when fixed navigation is used.'),
+    '#description' => t('Ensures anchors are correctly positioned only when there is margin or padding detected on the BODY element. This is useful when fixed navbar or administration menus are used.'),
   );
-  $form['effects']['anchors']['bootstrap_anchors_smooth_scrolling'] = array(
+  $form['javascript']['anchors']['bootstrap_anchors_smooth_scrolling'] = array(
     '#type' => 'checkbox',
     '#title' => t('Enable smooth scrolling'),
     '#default_value' => theme_get_setting('bootstrap_anchors_smooth_scrolling'),
@@ -236,20 +186,13 @@ function _bootstrap_settings_form(&$form, $form_state) {
       ),
     ),
   );
-
-  // JavaScript settings.
-  $form['javascript'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('JavaScript'),
-    '#group' => 'bootstrap',
-  );
   // Popovers.
   $form['javascript']['popovers'] = array(
     '#type' => 'fieldset',
     '#title' => t('Popovers'),
-    '#collapsible' => TRUE,
-    '#collapsed' => FALSE,
     '#description' => t('Add small overlays of content, like those on the iPad, to any element for housing secondary information.'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
   );
   $form['javascript']['popovers']['bootstrap_popover_enabled'] = array(
     '#type' => 'checkbox',
@@ -263,12 +206,12 @@ function _bootstrap_settings_form(&$form, $form_state) {
   $form['javascript']['popovers']['options'] = array(
     '#type' => 'fieldset',
     '#title' => t('Options'),
-    '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
     '#description' => t('These are global options. Each popover can independently override desired settings by appending the option name to !data. Example: !data-animation.', array(
       '!data' => '<code>data-</code>',
       '!data-animation' => '<code>data-animation="false"</code>',
     )),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
     '#states' => array(
       'visible' => array(
         ':input[name="bootstrap_popover_enabled"]' => array('checked' => TRUE),
@@ -353,11 +296,11 @@ function _bootstrap_settings_form(&$form, $form_state) {
   $form['javascript']['tooltips'] = array(
     '#type' => 'fieldset',
     '#title' => t('Tooltips'),
-    '#collapsible' => TRUE,
-    '#collapsed' => FALSE,
     '#description' => t("Inspired by the excellent jQuery.tipsy plugin written by Jason Frame; Tooltips are an updated version, which don't rely on images, use CSS3 for animations, and data-attributes for local title storage. See !link for more documentation.", array(
       '!link' => l(t('Bootstrap tooltips'), 'http://getbootstrap.com/javascript/#tooltips'),
     )),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
   );
   $form['javascript']['tooltips']['bootstrap_tooltip_enabled'] = array(
     '#type' => 'checkbox',
@@ -382,12 +325,12 @@ function _bootstrap_settings_form(&$form, $form_state) {
   $form['javascript']['tooltips']['options'] = array(
     '#type' => 'fieldset',
     '#title' => t('Options'),
-    '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
     '#description' => t('These are global options. Each tooltip can independently override desired settings by appending the option name to !data. Example: !data-animation.', array(
       '!data' => '<code>data-</code>',
       '!data-animation' => '<code>data-animation="false"</code>',
     )),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
     '#states' => array(
       'visible' => array(
         ':input[name="bootstrap_tooltip_enabled"]' => array('checked' => TRUE),
@@ -460,6 +403,64 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#title' => t('Advanced'),
     '#group' => 'bootstrap',
   );
+  // BootstrapCDN.
+  $form['advanced']['bootstrap_cdn'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('BootstrapCDN'),
+    '#description' => t('Use !bootstrapcdn to serve the Bootstrap framework files. Enabling this setting will prevent this theme from attempting to load any Bootstrap framework files locally. !warning', array(
+      '!bootstrapcdn' => l(t('BootstrapCDN'), 'http://bootstrapcdn.com', array(
+        'external' => TRUE,
+      )),
+      '!warning' => '<div class="alert alert-info messages info"><strong>' . t('NOTE') . ':</strong> ' . t('While BootstrapCDN (content distribution network) is the preferred method for providing huge performance gains in load time, this method does depend on using this third party service. BootstrapCDN is under no obligation or commitment to provide guaranteed up-time or service quality for this theme. If you choose to disable this setting, you must provide your own Bootstrap source and/or optional CDN delivery implementation.') . '</div>',
+    )),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['advanced']['bootstrap_cdn']['bootstrap_cdn'] = array(
+    '#type' => 'select',
+    '#title' => t('BootstrapCDN version'),
+    '#options' => drupal_map_assoc(array(
+      '3.0.0',
+      '3.0.1',
+      '3.0.2',
+    )),
+    '#default_value' => theme_get_setting('bootstrap_cdn'),
+    '#empty_option' => t('Disabled'),
+    '#empty_value' => NULL,
+  );
+  // Bootswatch.
+  $bootswatch_themes = array();
+  $request = drupal_http_request('http://api.bootswatch.com/3/');
+  if ($request && $request->code === '200' && !empty($request->data)) {
+    if (($api = drupal_json_decode($request->data)) && is_array($api) && !empty($api['themes'])) {
+      foreach ($api['themes'] as $bootswatch_theme) {
+        $bootswatch_themes[strtolower($bootswatch_theme['name'])] = $bootswatch_theme['name'];
+      }
+    }
+  }
+  $form['advanced']['bootstrap_cdn']['bootstrap_bootswatch'] = array(
+    '#type' => 'select',
+    '#title' => t('Bootswatch theme'),
+    '#description' => t('Use !bootstrapcdn to serve a Bootswatch Theme. Choose Bootswatch theme here.', array(
+      '!bootstrapcdn' => l(t('BootstrapCDN'), 'http://bootstrapcdn.com', array(
+        'external' => TRUE,
+      )),
+    )),
+    '#default_value' => theme_get_setting('bootstrap_bootswatch'),
+    '#options' => $bootswatch_themes,
+    '#empty_option' => t('Disabled'),
+    '#empty_value' => NULL,
+    '#suffix' => '<div id="bootswatch-preview"></div>',
+    '#states' => array(
+      'invisible' => array(
+        ':input[name="bootstrap_cdn"]' => array('value' => ''),
+      ),
+    ),
+  );
+  if (empty($bootswatch_themes)) {
+    $form['advanced']['bootstrap_cdn']['bootstrap_bootswatch']['#prefix'] = '<div class="alert alert-danger messages error"><strong>' . t('ERROR') . ':</strong> ' . t('Unable to reach Bootswatch API. Please ensure the server your website is hosted on is able to initiate HTTP requests.') . '</div>';
+  }
+  // Rebuild registry.
   $form['advanced']['bootstrap_rebuild_registry'] = array(
     '#type' => 'checkbox',
     '#title' => t('Rebuild theme registry on every page.'),
@@ -469,13 +470,13 @@ function _bootstrap_settings_form(&$form, $form_state) {
       '!warning' => '<div class="alert alert-warning messages warning"><strong>' . t('WARNING') . ':</strong> ' . t('This is a huge performance penalty and must be turned off on production websites. ') . '</div>',
     )),
   );
+  // Suppress jQuery message.
   $form['advanced']['bootstrap_toggle_jquery_error'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Suppress the jQuery version error message'),
+    '#title' => t('Suppress jQuery version error message'),
     '#default_value' => theme_get_setting('bootstrap_toggle_jquery_error'),
-    '#description' => t('Select this if you have updated jQuery to version 1.7+ using a method other than the !jquery_update module. See !theme_jquery_update to see how to do this in the sub-theme template.php file.', array(
+    '#description' => t('Enable this if the version of jQuery has been upgraded to 1.7+ using a method other than the !jquery_update module.', array(
       '!jquery_update' => l(t('jQuery Update'), 'https://drupal.org/project/jquery_update'),
-      '!theme_jquery_update' => l(t('Sub-theme jQuery update example'), 'https://drupal.org/comment/8011593#comment-8011593'),
     )),
   );
 
