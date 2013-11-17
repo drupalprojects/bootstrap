@@ -10,13 +10,21 @@
  * Process input elements.
  */
 function _bootstrap_process_input(&$element, &$form_state) {
-  // Only add the "form-control" class for specific input types.
+  // Only add the "form-control" class for specific element input types.
   $types = array(
+    // Core.
     'password',
     'password_confirm',
     'select',
     'textarea',
     'textfield',
+    // Elements module.
+    'emailfield',
+    'numberfield',
+    'rangefield',
+    'searchfield',
+    'telfield',
+    'urlfield',
   );
   if (!empty($element['#type']) && (in_array($element['#type'], $types) || ($element['#type'] === 'file' && empty($element['#managed_file'])))) {
     $element['#attributes']['class'][] = 'form-control';
