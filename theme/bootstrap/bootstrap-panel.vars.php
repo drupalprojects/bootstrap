@@ -22,6 +22,11 @@ function bootstrap_preprocess_bootstrap_panel(&$variables) {
   if (isset($element['#collapsed'])) {
     $variables['collapsed'] = $element['#collapsed'];
   }
+  // Force grouped fieldsets to not be collapsible (for vertical tabs).
+  if (!empty($element['#group'])) {
+    $variables['collapsible'] = FALSE;
+    $variables['collapsed'] = FALSE;
+  }
   $variables['id'] = '';
   if (isset($element['#id'])) {
     if ($variables['collapsible']) {
