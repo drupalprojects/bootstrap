@@ -96,7 +96,8 @@ settings[toggle_search] = 1
 ; CSS
 exclude[css][] = 'misc/vertical-tabs.css'
 exclude[css][] = 'modules/aggregator/aggregator.css'
-exclude[css][] = 'modules/block/block.css'
+; Necessary administrative block CSS.
+; exclude[css][] = 'modules/block/block.css'
 exclude[css][] = 'modules/book/book.css'
 exclude[css][] = 'modules/comment/comment.css'
 exclude[css][] = 'modules/dblog/dblog.css'
