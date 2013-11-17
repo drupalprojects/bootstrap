@@ -56,6 +56,8 @@ function bootstrap_css_alter(&$css) {
  */
 function bootstrap_element_info_alter(&$elements) {
   foreach ($elements as &$element) {
+    // Process all elements.
+    $element['#process'][] = '_bootstrap_process_element';
     // Process input elements.
     if (!empty($element['#input'])) {
       $element['#process'][] = '_bootstrap_process_input';

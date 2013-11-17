@@ -7,6 +7,16 @@
  */
 
 /**
+ * Process all elements.
+ */
+function _bootstrap_process_element(&$element, &$form_state) {
+  if (!empty($element['#attributes']['class']) && is_array($element['#attributes']['class']) && ($key = array_search('container-inline', $element['#attributes']['class'])) !== FALSE) {
+    $element['#attributes']['class'][$key] = 'form-inline';
+  }
+  return $element;
+}
+
+/**
  * Process input elements.
  */
 function _bootstrap_process_input(&$element, &$form_state) {
@@ -28,9 +38,6 @@ function _bootstrap_process_input(&$element, &$form_state) {
   );
   if (!empty($element['#type']) && (in_array($element['#type'], $types) || ($element['#type'] === 'file' && empty($element['#managed_file'])))) {
     $element['#attributes']['class'][] = 'form-control';
-  }
-  if (!empty($element['#attributes']['class']) && is_array($element['#attributes']['class']) && ($key = array_search('container-inline', $element['#attributes']['class'])) !== FALSE) {
-    $element['#attributes']['class'][$key] = 'form-inline';
   }
   return $element;
 }
