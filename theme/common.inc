@@ -123,15 +123,20 @@ function bootstrap_include($theme, $path) {
  *   The icon HTML markup.
  */
 function _bootstrap_icon($name) {
+  $output = '';
+  // Attempt to use the Icon API module, if enabled and it generates output.
   if (module_exists('icon')) {
-    return theme('icon', array('bundle' => 'bootstrap', 'icon' => 'glyphicon-' . $name));
+    $output = theme('icon', array('bundle' => 'bootstrap', 'icon' => 'glyphicon-' . $name));
   }
-  // Mimic the Icon API markup.
-  $attributes = array(
-    'class' => array('icon', 'glyphicon', 'glyphicon-' . $name),
-    'aria-hidden' => 'true',
-  );
-  return '<i' . drupal_attributes($attributes) . '></i>';
+  if (empty($output)) {
+    // Mimic the Icon API markup.
+    $attributes = array(
+      'class' => array('icon', 'glyphicon', 'glyphicon-' . $name),
+      'aria-hidden' => 'true',
+    );
+    $output = '<i' . drupal_attributes($attributes) . '></i>';
+  }
+  return $output;
 }
 
 /**
