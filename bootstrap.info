@@ -20,25 +20,22 @@ regions[page_bottom]    = 'Page bottom'
 
 
 ;;;;;;;;;;;;;;;;;;;;;
-;; Settings
+;; Theme Settings
 ;;;;;;;;;;;;;;;;;;;;;
 
-; CDN
-settings[bootstrap_cdn] = 3.0.2
-
-; Bootswatch
-settings[bootstrap_bootswatch] = ''
-
 ; Breadcrumbs
+; --------------
 settings[bootstrap_breadcrumb] = 1
 settings[bootstrap_breadcrumb_home] = 0
 settings[bootstrap_breadcrumb_title] = 1
 
 ; Navbar
+; --------------
 settings[bootstrap_navbar_position] = ''
 settings[bootstrap_navbar_inverse] = 0
 
 ; Region Wells
+; --------------
 settings[bootstrap_region_well-navigation] = ''
 settings[bootstrap_region_well-header] = ''
 settings[bootstrap_region_well-highlighted] = ''
@@ -48,14 +45,13 @@ settings[bootstrap_region_well-sidebar_first] = 'well'
 settings[bootstrap_region_well-sidebar_second] = ''
 settings[bootstrap_region_well-footer] = ''
 
-; Visual Enhancements
+; Anchors
+; --------------
 settings[bootstrap_anchors_fix] = 1
 settings[bootstrap_anchors_smooth_scrolling] = 1
-; @todo create an actual theme setting for fade effect
-settings[bootstrap_fade_effect] = 1
 
-; JavaScript
 ; Popovers
+; --------------
 settings[bootstrap_popover_enabled] = 1
 settings[bootstrap_popover_animation] = 1
 settings[bootstrap_popover_html] = 0
@@ -68,7 +64,9 @@ settings[bootstrap_popover_title] = ''
 settings[bootstrap_popover_content] = ''
 settings[bootstrap_popover_delay] = 0
 settings[bootstrap_popover_container] = 'body'
+
 ; Tooltips
+; --------------
 settings[bootstrap_tooltip_enabled] = 1
 settings[bootstrap_tooltip_descriptions] = 1
 settings[bootstrap_tooltip_animation] = 1
@@ -81,7 +79,13 @@ settings[bootstrap_tooltip_trigger]['click'] = 0
 settings[bootstrap_tooltip_delay] = 0
 settings[bootstrap_tooltip_container] = 'body'
 
-; Global settings
+; Advanced
+; --------------
+settings[bootstrap_cdn] = 3.0.2
+settings[bootstrap_bootswatch] = ''
+
+; Global
+; --------------
 settings[toggle_name] = 1
 settings[toggle_search] = 1
 
@@ -91,9 +95,11 @@ settings[toggle_search] = 1
 ;;;;;;;;;;;;;;;;;;;;;
 
 ; JavaScript
-;exclude[js][] = 'modules/contextual/contextual.js'
+; --------------
+; exclude[js][] = 'modules/contextual/contextual.js'
 
 ; CSS
+; --------------
 exclude[css][] = 'misc/vertical-tabs.css'
 exclude[css][] = 'modules/aggregator/aggregator.css'
 ; Necessary administrative block CSS.
@@ -126,7 +132,9 @@ exclude[css][] = 'modules/user/user.css'
 ;exclude[css][] = 'modules/system/system.admin.css'
 ;exclude[css][] = 'modules/system/system.base.css'
 
+
 ;;;;;;;;;;;;;;;;;;;;;
 ;; SimplyTest.me
 ;;;;;;;;;;;;;;;;;;;;;
+
 simplytest_dependencies[] = jquery_update
