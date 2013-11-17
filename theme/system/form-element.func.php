@@ -131,4 +131,3 @@ function bootstrap_form_element(&$variables) {
 
   return $output;
 }
-

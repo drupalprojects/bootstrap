@@ -10,7 +10,7 @@
 function bootstrap_preprocess_links(&$variables) {
   if (isset($variables['attributes']) && isset($variables['attributes']['class'])) {
     $string = is_string($variables['attributes']['class']);
-    if($string) {
+    if ($string) {
       $variables['attributes']['class'] = explode(' ', $variables['attributes']['class']);
     }
 
@@ -18,8 +18,8 @@ function bootstrap_preprocess_links(&$variables) {
       $variables['attributes']['class'][$key] = 'list-inline';
     }
 
-    if($string) {
-      $variables['attributes']['class'] = join(' ', $variables['attributes']['class']);
+    if ($string) {
+      $variables['attributes']['class'] = implode(' ', $variables['attributes']['class']);
     }
   }
 }
