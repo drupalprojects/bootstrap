@@ -10,8 +10,13 @@
  * Process all elements.
  */
 function _bootstrap_process_element(&$element, &$form_state) {
-  if (!empty($element['#attributes']['class']) && is_array($element['#attributes']['class']) && ($key = array_search('container-inline', $element['#attributes']['class'])) !== FALSE) {
-    $element['#attributes']['class'][$key] = 'form-inline';
+  if (!empty($element['#attributes']['class']) && is_array($element['#attributes']['class'])) {
+    if (in_array('container-inline', $element['#attributes']['class'])) {
+      $element['#attributes']['class'][] = 'form-inline';
+    }
+    if (in_array('form-wrapper', $element['#attributes']['class'])) {
+      $element['#attributes']['class'][] = 'form-group';
+    }
   }
   return $element;
 }
