@@ -33,6 +33,10 @@ function _bootstrap_process_input(&$element, &$form_state) {
     'select',
     'textarea',
     'textfield',
+    // HTML5.
+    'email',
+    // Webform module.
+    'webform_email',
     // Elements module.
     'emailfield',
     'numberfield',
