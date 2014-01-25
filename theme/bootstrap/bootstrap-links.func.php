@@ -4,6 +4,8 @@
  * bootstrap-links.func.php
  */
 
+use Drupal\Core\Template\Attribute;
+
 /**
  * Implements theme_bootstrap_links().
  */
@@ -17,7 +19,7 @@ function theme_bootstrap_links($variables) {
 
   if (count($links) > 0) {
     $output = '';
-    $output .= '<ul' . drupal_attributes($attributes) . '>';
+    $output .= '<ul' . new Attribute($attributes) . '>';
 
     // Treat the heading first if it is present to prepend it to the
     // list of links.
@@ -33,7 +35,7 @@ function theme_bootstrap_links($variables) {
       }
       $output .= '<' . $heading['level'];
       if (!empty($heading['class'])) {
-        $output .= drupal_attributes(array('class' => $heading['class']));
+        $output .= new Attribute(array('class' => $heading['class']));
       }
       $output .= '>' . check_plain($heading['text']) . '</' . $heading['level'] . '>';
     }
@@ -75,13 +77,13 @@ function theme_bootstrap_links($variables) {
         $link['attributes']['class'][] = 'dropdown';
       }
 
-      $output .= '<li' . drupal_attributes($attributes) . '>';
+      $output .= '<li' . new Attribute($attributes) . '>';
 
       if (isset($link['href'])) {
         if (count($children) > 0) {
           $link['html'] = TRUE;
           $link['title'] .= ' <span class="caret"></span>';
-          $output .= '<a' . drupal_attributes($link['attributes']) . ' href="#">' . $link['title'] . '</a>';
+          $output .= '<a' . new Attribute($link['attributes']) . ' href="#">' . $link['title'] . '</a>';
         }
         else {
           // Pass in $link as $options, they share the same keys.
@@ -96,7 +98,7 @@ function theme_bootstrap_links($variables) {
         }
         $span_attributes = '';
         if (isset($link['attributes'])) {
-          $span_attributes = drupal_attributes($link['attributes']);
+          $span_attributes = new Attribute($link['attributes']);
         }
         $output .= '<span' . $span_attributes . '>' . $link['title'] . '</span>';
       }

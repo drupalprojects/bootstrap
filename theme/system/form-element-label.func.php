@@ -4,6 +4,8 @@
  * form-element-label.func.php
  */
 
+use Drupal\Core\Template\Attribute;
+
 /**
  * Overrides theme_form_element_label().
  */
@@ -48,5 +50,5 @@ function bootstrap_form_element_label(&$variables) {
   $output .= t('!title !required', array('!title' => $title, '!required' => $required));
 
   // The leading whitespace helps visually separate fields from inline labels.
-  return ' <label' . drupal_attributes($attributes) . '>' . $output . "</label>\n";
+  return ' <label' . new Attribute($attributes) . '>' . $output . "</label>\n";
 }

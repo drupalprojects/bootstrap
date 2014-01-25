@@ -4,6 +4,8 @@
  * bootstrap-btn-dropdown.func.php
  */
 
+use Drupal\Core\Template\Attribute;
+
 /**
  * Implements theme_bootstrap_btn_dropdown().
  */
@@ -21,7 +23,7 @@ function theme_bootstrap_btn_dropdown($variables) {
   }
 
   // Start markup.
-  $output = '<div' . drupal_attributes($variables['attributes']) . '>';
+  $output = '<div' . new Attribute($variables['attributes']) . '>';
 
   // Add as string if its not a link.
   if (is_array($variables['label'])) {

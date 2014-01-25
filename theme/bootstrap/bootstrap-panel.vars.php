@@ -4,6 +4,8 @@
  * bootstrap-panel.vars.php
  */
 
+use Drupal\Core\Template\Attribute;
+
 /**
  * Implements hook_preprocess_bootstrap_panel().
  */
@@ -55,5 +57,5 @@ function bootstrap_preprocess_bootstrap_panel(&$variables) {
  * Implements hook_process_bootstrap_panel().
  */
 function bootstrap_process_bootstrap_panel(&$variables) {
-  $variables['attributes'] = drupal_attributes($variables['attributes']);
+  $variables['attributes'] = new Attribute($variables['attributes']);
 }

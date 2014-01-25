@@ -4,6 +4,8 @@
  * form-element.func.php
  */
 
+use Drupal\Core\Template\Attribute;
+
 /**
  * Overrides theme_form_element().
  */
@@ -76,7 +78,7 @@ function bootstrap_form_element(&$variables) {
     }
   }
 
-  $output = '<div' . drupal_attributes($attributes) . '>' . "\n";
+  $output = '<div' . new Attribute($attributes) . '>' . "\n";
 
   // If #title is not set, we don't display any label or required marker.
   if (!isset($element['#title'])) {

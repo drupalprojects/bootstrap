@@ -4,6 +4,8 @@
  * item-list.func.php
  */
 
+use Drupal\Core\Template\Attribute;
+
 /**
  * Overrides theme_item_list().
  */
@@ -19,7 +21,7 @@ function bootstrap_item_list($variables) {
   }
 
   if (!empty($items)) {
-    $output .= "<$type" . drupal_attributes($attributes) . '>';
+    $output .= "<$type" . new Attribute($attributes) . '>';
     $num_items = count($items);
     $i = 0;
     foreach ($items as $item) {
@@ -58,7 +60,7 @@ function bootstrap_item_list($variables) {
       if ($i == $num_items) {
         $attributes['class'][] = 'last';
       }
-      $output .= '<li' . drupal_attributes($attributes) . '>' . $data . "</li>\n";
+      $output .= '<li' . new Attribute($attributes) . '>' . $data . "</li>\n";
     }
     $output .= "</$type>";
   }

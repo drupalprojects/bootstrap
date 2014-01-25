@@ -4,6 +4,8 @@
  * file-managed-file.func.php
  */
 
+use Drupal\Core\Template\Attribute;
+
 /**
  * Overrides theme_file_managed_file().
  */
@@ -40,7 +42,7 @@ function bootstrap_file_managed_file($variables) {
 
   // This wrapper is required to apply JS behaviors and CSS styling.
   $output = '';
-  $output .= '<div' . drupal_attributes($attributes) . '>';
+  $output .= '<div' . new Attribute($attributes) . '>';
   $output .= drupal_render_children($element);
   $output .= '</div>';
   $output .= render($hidden_elements);

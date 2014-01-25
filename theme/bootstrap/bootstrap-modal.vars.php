@@ -4,6 +4,8 @@
  * bootstrap-modal.vars.php
  */
 
+use Drupal\Core\Template\Attribute;
+
 /**
  * Implements theme_preprocess_bootstrap_modal().
  *
@@ -26,7 +28,7 @@ function bootstrap_preprocess_bootstrap_modal(&$variables) {
  * Implements theme_process_bootstrap_modal().
  */
 function bootstrap_process_bootstrap_modal(&$variables) {
-  $variables['attributes'] = drupal_attributes($variables['attributes']);
+  $variables['attributes'] = new Attribute($variables['attributes']);
   $variables['body'] = render($variables['body']);
   $variables['footer'] = render($variables['footer']);
 }

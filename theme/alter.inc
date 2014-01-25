@@ -6,6 +6,8 @@
  * Contains various implementations of hook_*_alter().
  */
 
+use Drupal\Core\Template\Attribute;
+
 /**
  * Implements hook_css_alter().
  */

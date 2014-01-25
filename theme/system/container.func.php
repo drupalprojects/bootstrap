@@ -4,6 +4,8 @@
  * container.func.php
  */
 
+use Drupal\Core\Template\Attribute;
+
 /**
  * Overrides theme_container().
  */
@@ -21,5 +23,5 @@ function bootstrap_container($variables) {
     $element['#attributes']['class'][] = 'form-group';
   }
 
-  return '<div' . drupal_attributes($element['#attributes']) . '>' . $element['#children'] . '</div>';
+  return '<div' . new Attribute($element['#attributes']) . '>' . $element['#children'] . '</div>';
 }

@@ -4,6 +4,8 @@
  * date.func.php
  */
 
+use Drupal\Core\Template\Attribute;
+
 /**
  * Overrides theme_date().
  */
@@ -19,5 +21,5 @@ function bootstrap_date($variables) {
   }
   $attributes['class'][] = 'form-inline';
 
-  return '<div' . drupal_attributes($attributes) . '>' . drupal_render_children($element) . '</div>';
+  return '<div' . new Attribute($attributes) . '>' . drupal_render_children($element) . '</div>';
 }

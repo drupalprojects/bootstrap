@@ -6,6 +6,8 @@
  * Contains common functionality for the entire base theme.
  */
 
+use Drupal\Core\Template\Attribute;
+
 /**
  * Auto-rebuild the theme registry during theme development.
  */
@@ -134,7 +136,7 @@ function _bootstrap_icon($name) {
       'class' => array('icon', 'glyphicon', 'glyphicon-' . $name),
       'aria-hidden' => 'true',
     );
-    $output = '<i' . drupal_attributes($attributes) . '></i>';
+    $output = '<i' . new Attribute($attributes) . '></i>';
   }
   return $output;
 }

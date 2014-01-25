@@ -4,6 +4,8 @@
  * button.func.php
  */
 
+use Drupal\Core\Template\Attribute;
+
 /**
  * Overrides theme_button().
  */
@@ -31,5 +33,5 @@ function bootstrap_button($variables) {
   $element['#attributes']['class'][] = 'form-' . $element['#button_type'];
 
   // This line break adds inherent margin between multiple buttons.
-  return '<button' . drupal_attributes($element['#attributes']) . '>' . $label . "</button>\n";
+  return '<button' . new Attribute($element['#attributes']) . '>' . $label . "</button>\n";
 }

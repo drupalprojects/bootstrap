@@ -4,6 +4,8 @@
  * textfield.func.php
  */
 
+use Drupal\Core\Template\Attribute;
+
 /**
  * Overrides theme_textfield().
  */
@@ -19,7 +21,7 @@ function bootstrap_textfield($variables) {
   ));
   _form_set_class($element, array('form-text'));
 
-  $output = '<input' . drupal_attributes($element['#attributes']) . ' />';
+  $output = '<input' . new Attribute($element['#attributes']) . ' />';
 
   $extra = '';
   if ($element['#autocomplete_path'] && drupal_valid_path($element['#autocomplete_path'])) {
@@ -33,7 +35,7 @@ function bootstrap_textfield($variables) {
     $attributes['disabled'] = 'disabled';
     $attributes['class'][] = 'autocomplete';
     $output = '<div class="input-group">' . $output . '<span class="input-group-addon">' . _bootstrap_icon('refresh') . '</span></div>';
-    $extra = '<input' . drupal_attributes($attributes) . ' />';
+    $extra = '<input' . new Attribute($attributes) . ' />';
   }
 
   return $output . $extra;
