@@ -46,6 +46,24 @@ function bootstrap_library_info() {
 }
 
 /**
+ * Implements hook_theme().
+ *
+ * Register theme hook implementations.
+ *
+ * The implementations declared by this hook have two purposes: either they
+ * specify how a particular render array is to be rendered as HTML (this is
+ * usually the case if the theme function is assigned to the render array's
+ * #theme property), or they return the HTML that should be returned by an
+ * invocation of theme().
+ *
+ * @see _bootstrap_theme()
+ */
+function bootstrap_theme(&$existing, $type, $theme, $path) {
+  bootstrap_include($theme, 'theme/registry.inc');
+  return _bootstrap_theme($existing, $type, $theme, $path);
+}
+
+/**
  * Declare various hook_*_alter() hooks.
  *
  * hook_*_alter() implementations must live (via include) inside this file so
