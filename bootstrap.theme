@@ -24,21 +24,18 @@
  * from inside the particular extension's directory.
  * @see https://drupal.org/node/2102287
  */
- 
 
- /**
-  * Implements hook_library_info().
-  */
- function bootstrap_library_info() {
-   $path = drupal_get_path('theme', 'bootstrap');
+/**
+ * Implements hook_library_info().
+ */
+function bootstrap_library_info() {
+  $path = drupal_get_path('theme', 'bootstrap');
 
-   $libraries['bootstrap'] = array(
+  $libraries['bootstrap'] = array(
 	 'title' => 'Bootstrap',
 	 'website' => 'http://getbootstrap.com/',
 	 'version' => '3.0.3',
-   );
+  );
 
-   return $libraries;
- }
- 
- 
+  return $libraries;
+}
