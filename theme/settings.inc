@@ -428,16 +428,8 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#empty_option' => t('Disabled'),
     '#empty_value' => NULL,
   );
+
   // Bootswatch.
-  $bootswatch_themes = array();
-  $request = drupal_http_request('http://api.bootswatch.com/3/');
-  if ($request && $request->code === '200' && !empty($request->data)) {
-    if (($api = drupal_json_decode($request->data)) && is_array($api) && !empty($api['themes'])) {
-      foreach ($api['themes'] as $bootswatch_theme) {
-        $bootswatch_themes[strtolower($bootswatch_theme['name'])] = $bootswatch_theme['name'];
-      }
-    }
-  }
   $form['advanced']['bootstrap_cdn']['bootstrap_bootswatch'] = array(
     '#type' => 'select',
     '#title' => t('Bootswatch theme'),
@@ -447,7 +439,6 @@ function _bootstrap_settings_form(&$form, $form_state) {
       )),
     )),
     '#default_value' => theme_get_setting('bootstrap_bootswatch'),
-    '#options' => $bootswatch_themes,
     '#empty_option' => t('Disabled'),
     '#empty_value' => NULL,
     '#suffix' => '<div id="bootswatch-preview"></div>',
@@ -457,9 +448,24 @@ function _bootstrap_settings_form(&$form, $form_state) {
       ),
     ),
   );
-  if (empty($bootswatch_themes)) {
+
+  $request = Drupal::httpClient()->get('http://adadadadadaapi.bootswatch.com/3/');
+  try {
+    $bootswatch_themes = array();
+    $response = $request->send();
+    // Expected result.
+    $data = $response->getBody(TRUE);
+    if (($api = drupal_json_decode($data)) && is_array($api) && !empty($api['themes'])) {
+      foreach ($api['themes'] as $bootswatch_theme) {
+        $bootswatch_themes[strtolower($bootswatch_theme['name'])] = $bootswatch_theme['name'];
+      }
+      $form['advanced']['bootstrap_cdn']['bootstrap_bootswatch']['#options'] = $bootswatch_themes;
+    }
+  }
+  catch (Guzzle\Common\Exception\GuzzleException $e) {
     $form['advanced']['bootstrap_cdn']['bootstrap_bootswatch']['#prefix'] = '<div class="alert alert-danger messages error"><strong>' . t('ERROR') . ':</strong> ' . t('Unable to reach Bootswatch API. Please ensure the server your website is hosted on is able to initiate HTTP requests.') . '</div>';
   }
+
   // Rebuild registry.
   $form['advanced']['bootstrap_rebuild_registry'] = array(
     '#type' => 'checkbox',
