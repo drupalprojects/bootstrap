@@ -449,7 +449,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     ),
   );
 
-  $request = Drupal::httpClient()->get('http://adadadadadaapi.bootswatch.com/3/');
+  $request = Drupal::httpClient()->get('http://api.bootswatch.com/3/');
   try {
     $bootswatch_themes = array();
     $response = $request->send();
