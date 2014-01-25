@@ -42,6 +42,8 @@
  * make it even worse. Use `drupal_get_path('theme', 'bootstrap')` instead.
  */
 
+use Drupal\Component\Utility\NestedArray;
+
 /**
  * Stub implementation for hook_theme().
  *
@@ -121,7 +123,7 @@ function _bootstrap_theme(&$existing, $type, $theme, $path) {
  *  - `template` if template file is found.
  */
 function bootstrap_hook_theme_complete(&$registry, $theme, $path) {
-  $registry = drupal_array_merge_deep(
+  $registry = NestedArray::mergeDeep(
     $registry,
     bootstrap_find_theme_includes($registry, '.vars.php', $path),
     bootstrap_find_theme_includes($registry, '.func.php', $path),
