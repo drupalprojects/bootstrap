@@ -33,6 +33,9 @@
    $path = drupal_get_path('theme', 'bootstrap');
 
    $libraries['bootstrap'] = array(
+	 'title' => 'Bootstrap',
+	 'website' => 'http://getbootstrap.com/',
+	 'version' => '3.0.3',
    );
 
    return $libraries;
