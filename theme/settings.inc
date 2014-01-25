@@ -59,13 +59,13 @@ function _bootstrap_settings_form(&$form, $form_state) {
 
   // Components.
   $form['components'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Components'),
     '#group' => 'bootstrap',
   );
   // Breadcrumbs.
   $form['components']['breadcrumbs'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Breadcrumbs'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
@@ -104,7 +104,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
   );
   // Navbar.
   $form['components']['navbar'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Navbar'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
@@ -136,7 +136,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     'well well-lg' => t('.well-lg (large)'),
   );
   $form['components']['region_wells'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Region wells'),
     '#description' => t('Enable the <code>.well</code>, <code>.well-sm</code> or <code>.well-lg</code> classes for specified regions. See: documentation on !wells.', array(
       '!wells' => l(t('Bootstrap Wells'), 'http://getbootstrap.com/components/#wells'),
@@ -158,13 +158,13 @@ function _bootstrap_settings_form(&$form, $form_state) {
 
   // JavaScript settings.
   $form['javascript'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('JavaScript'),
     '#group' => 'bootstrap',
   );
   // Anchors.
   $form['javascript']['anchors'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Anchors'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
@@ -188,7 +188,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
   );
   // Popovers.
   $form['javascript']['popovers'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Popovers'),
     '#description' => t('Add small overlays of content, like those on the iPad, to any element for housing secondary information.'),
     '#collapsible' => TRUE,
@@ -204,7 +204,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#default_value' => theme_get_setting('bootstrap_popover_enabled'),
   );
   $form['javascript']['popovers']['options'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Options'),
     '#description' => t('These are global options. Each popover can independently override desired settings by appending the option name to !data. Example: !data-animation.', array(
       '!data' => '<code>data-</code>',
@@ -294,7 +294,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
   );
   // Tooltips.
   $form['javascript']['tooltips'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Tooltips'),
     '#description' => t("Inspired by the excellent jQuery.tipsy plugin written by Jason Frame; Tooltips are an updated version, which don't rely on images, use CSS3 for animations, and data-attributes for local title storage. See !link for more documentation.", array(
       '!link' => l(t('Bootstrap tooltips'), 'http://getbootstrap.com/javascript/#tooltips'),
@@ -323,7 +323,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     ),
   );
   $form['javascript']['tooltips']['options'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Options'),
     '#description' => t('These are global options. Each tooltip can independently override desired settings by appending the option name to !data. Example: !data-animation.', array(
       '!data' => '<code>data-</code>',
@@ -399,13 +399,13 @@ function _bootstrap_settings_form(&$form, $form_state) {
 
   // Advanced settings.
   $form['advanced'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Advanced'),
     '#group' => 'bootstrap',
   );
   // BootstrapCDN.
   $form['advanced']['bootstrap_cdn'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('BootstrapCDN'),
     '#description' => t('Use !bootstrapcdn to serve the Bootstrap framework files. Enabling this setting will prevent this theme from attempting to load any Bootstrap framework files locally. !warning', array(
       '!bootstrapcdn' => l(t('BootstrapCDN'), 'http://bootstrapcdn.com', array(
