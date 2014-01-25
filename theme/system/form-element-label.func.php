@@ -10,9 +10,6 @@
 function bootstrap_form_element_label(&$variables) {
   $element = $variables['element'];
 
-  // This is also used in the installer, pre-database setup.
-  $t = get_t();
-
   // Determine if certain things should skip for checkbox or radio elements.
   $skip = (isset($element['#type']) && ('checkbox' === $element['#type'] || 'radio' === $element['#type']));
 
@@ -48,7 +45,7 @@ function bootstrap_form_element_label(&$variables) {
   }
 
   // Append label.
-  $output .= $t('!title !required', array('!title' => $title, '!required' => $required));
+  $output .= t('!title !required', array('!title' => $title, '!required' => $required));
 
   // The leading whitespace helps visually separate fields from inline labels.
   return ' <label' . drupal_attributes($attributes) . '>' . $output . "</label>\n";
