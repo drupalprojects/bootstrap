@@ -23,6 +23,8 @@ function bootstrap_preprocess_region(&$variables) {
     $variables['content'] = _bootstrap_icon('question-sign') . $variables['content'];
     $classes[] = 'alert';
     $classes[] = 'alert-info';
+    $classes[] = 'messages';
+    $classes[] = 'info';
   }
 
   // Support for "well" classes in regions.
