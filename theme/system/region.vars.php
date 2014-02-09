@@ -23,11 +23,11 @@ function bootstrap_preprocess_region(&$variables) {
       break;
 
     case 'help':
-      if ($variables['content']) {
+      if (!empty($variables['content'])) {
         $variables['content'] = _bootstrap_icon('question-sign') . $variables['content'];
+        $variables['classes_array'][] = 'alert';
+        $variables['classes_array'][] = 'alert-info';
       }
-      $variables['classes_array'][] = 'alert';
-      $variables['classes_array'][] = 'alert-info';
       break;
   }
   if (!empty($wells[$variables['region']])) {
