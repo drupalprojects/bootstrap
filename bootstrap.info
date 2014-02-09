@@ -81,7 +81,7 @@ settings[bootstrap_tooltip_container] = 'body'
 
 ; Advanced
 ; --------------
-settings[bootstrap_cdn] = 3.0.2
+settings[bootstrap_cdn] = 3.1.0
 settings[bootstrap_bootswatch] = ''
 
 ; Global
