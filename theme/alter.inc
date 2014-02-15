@@ -241,6 +241,18 @@ function bootstrap_js_alter(&$js) {
 }
 
 /**
+ * Implements hook_icon_bundle_list_alter().
+ */
+function bootstrap_icon_bundle_list_alter(&$build, $bundle) {
+  if (theme_get_setting('bootstrap_tooltip_enabled')) {
+    foreach ($build as &$icon) {
+      $icon['#attributes']['data-toggle'] = 'tooltip';
+      $icon['#attributes']['data-placement'] = 'bottom';
+    }
+  }
+}
+
+/**
  * Include #pre_render callbacks for elements.
  */
 bootstrap_include('bootstrap', 'theme/pre-render.inc');
