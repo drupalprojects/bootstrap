@@ -92,13 +92,13 @@ body {
 // Default navbar.
 .navbar.container {
   @media @tablet {
-    max-width: ((@container-sm - 30px));
+    max-width: ((@container-sm - @grid-gutter-width));
   }
   @media @normal {
-    max-width: ((@container-md - 30px));
+    max-width: ((@container-md - @grid-gutter-width));
   }
   @media @wide {
-    max-width: ((@container-lg - 30px));
+    max-width: ((@container-lg - @grid-gutter-width));
   }
   margin-top: 20px;
   > .container {
