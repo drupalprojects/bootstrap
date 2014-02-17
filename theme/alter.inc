@@ -62,7 +62,7 @@ function bootstrap_element_info_alter(&$elements) {
     if (!empty($element['#input'])) {
       $element['#process'][] = '_bootstrap_process_input';
     }
-    // Process core's fieldset element.
+    // Process fieldset elements.
     if (!empty($element['#type']) && $element['#type'] === 'fieldset') {
       $element['#theme_wrappers'] = array('bootstrap_panel');
     }
@@ -89,7 +89,6 @@ function bootstrap_element_info_alter(&$elements) {
  */
 function bootstrap_form_alter(array &$form, array &$form_state = array(), $form_id = NULL) {
   if ($form_id) {
-
     switch ($form_id) {
       case 'system_theme_settings':
         // Include the settings form here.
@@ -128,6 +127,14 @@ function bootstrap_form_alter(array &$form, array &$form_state = array(), $form_
 
         // Apply a clearfix so the results don't overflow onto the form.
         $form['#attributes']['class'][] = 'content-search';
+        break;
+
+      case 'image_style_form':
+        $form['effects']['new']['new']['#input_group_button'] = TRUE;
+        break;
+
+      case 'path_admin_filter_form':
+        $form['basic']['filter']['#input_group_button'] = TRUE;
         break;
     }
 

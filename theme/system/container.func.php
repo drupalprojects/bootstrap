@@ -17,7 +17,6 @@ function bootstrap_container($variables) {
       $element['#attributes']['id'] = $element['#id'];
     }
     // Add classes.
-    $element['#attributes']['class'][] = 'form-wrapper';
     $element['#attributes']['class'][] = 'form-group';
   }
 
