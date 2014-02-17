@@ -11,11 +11,50 @@
  */
 function _bootstrap_process_element(&$element, &$form_state) {
   if (!empty($element['#attributes']['class']) && is_array($element['#attributes']['class'])) {
-    if (in_array('container-inline', $element['#attributes']['class'])) {
-      $element['#attributes']['class'][] = 'form-inline';
+    $key = array_search('container-inline', $element['#attributes']['class']);
+    if ($key !== FALSE) {
+      $element['#attributes']['class'][$key] = 'form-inline';
     }
     if (in_array('form-wrapper', $element['#attributes']['class'])) {
       $element['#attributes']['class'][] = 'form-group';
+    }
+  }
+  // Process form actions.
+  if (!empty($element['#type']) && $element['#type'] === 'actions') {
+    foreach (element_children($element) as $child) {
+      _bootstrap_iconize_button($element[$child]);
+    }
+  }
+  // Automatically inject the nearest button found after this element if
+  // #input_group_button exists.
+  if (!empty($element['#input_group_button'])) {
+    // Obtain the parent array to limit search.
+    $array_parents = array();
+    if (!empty($element['#array_parents'])) {
+      $array_parents += $element['#array_parents'];
+      // Remove the current element from the array.
+      array_pop($array_parents);
+    }
+    // If element is nested, return the referenced parent from the form.
+    if (!empty($array_parents)) {
+      $parent = &drupal_array_get_nested_value($form_state['complete form'], $array_parents);
+    }
+    // Otherwise return the complete form.
+    else {
+      $parent = &$form_state['complete form'];
+    }
+    // Ignore buttons before we find the element in the form.
+    $found_current_element = FALSE;
+    foreach (element_children($parent) as $child) {
+      if ($parent[$child] === $element) {
+        $found_current_element = TRUE;
+        continue;
+      }
+      if ($found_current_element && _bootstrap_is_button($parent[$child])) {
+        _bootstrap_iconize_button($parent[$child]);
+        $element['#field_suffix'] = drupal_render($parent[$child]);
+        break;
+      }
     }
   }
   return $element;
