@@ -420,6 +420,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#type' => 'select',
     '#title' => t('BootstrapCDN version'),
     '#options' => drupal_map_assoc(array(
+      '3.1.1',
       '3.1.0',
       '3.0.3',
       '3.0.2',
