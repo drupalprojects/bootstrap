@@ -234,6 +234,7 @@ fieldset legend.panel-heading {
 }
 fieldset .panel-body {
   clear: both;
+  display: inherit;
 }
 fieldset .panel-heading a.panel-title {
   color: inherit;
@@ -243,6 +244,10 @@ fieldset .panel-heading a.panel-title {
   &:hover {
     text-decoration: none;
   }
+}
+.form-horizontal .form-group {
+  margin-left: 0;
+  margin-right: 0;
 }
 .form-actions{
   clear: both;
@@ -648,4 +653,20 @@ table {
 }
 .alert-danger a {
   color: darken(@alert-danger-text, 10%);
+}
+
+// Override image module.
+div.image-style-new,
+div.image-style-new div {
+  display: block;
+}
+div.image-style-new div.input-group {
+  display: table;
+}
+
+td.module,
+.table-striped>tbody>tr:nth-child(odd)>td.module,
+.table>tbody>tr>td.module {
+  background: @table-border-color;
+  font-weight: 700;
 }
