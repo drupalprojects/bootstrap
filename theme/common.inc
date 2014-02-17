@@ -140,25 +140,75 @@ function _bootstrap_icon($name) {
 }
 
 /**
- * Colorize buttons based on the text value.
+ * Helper function for determining whether an element is a button.
+ *
+ * @param array $element
+ *   A renderable element.
+ *
+ * @return bool
+ *   TRUE or FALSE.
+ */
+function _bootstrap_is_button($element) {
+  return
+    !empty($element['#type']) &&
+    !empty($element['#value']) && (
+      $element['#type'] === 'button' ||
+      $element['#type'] === 'submit' ||
+      $element['#type'] === 'image_button'
+    );
+}
+
+/**
+ * Helper function for adding colors to button elements.
+ *
+ * @param array $element
+ *   The form element, passed by reference.
+ */
+function _bootstrap_colorize_button(&$element) {
+  if (_bootstrap_is_button($element)) {
+    // Do not add the class if one is already present in the array.
+    $button_classes = array(
+      'btn-default',
+      'btn-primary',
+      'btn-success',
+      'btn-info',
+      'btn-warning',
+      'btn-danger',
+      'btn-link',
+    );
+    $class_intersection = array_intersect($button_classes, $element['#attributes']['class']);
+    if (empty($class_intersection)) {
+      // Get the matched class.
+      $class = _bootstrap_colorize_text($element['#value']);
+      // If no particular class matched, use the default style.
+      if (!$class) {
+        $class = 'default';
+      }
+      $element['#attributes']['class'][] = 'btn-' . $class;
+    }
+  }
+}
+
+/**
+ * Helper function for associating Bootstrap classes on text.
  *
  * @param string $text
- *   Button text to search against.
+ *   Text string to search against.
  *
  * @return string
- *   The specific button class to use or FALSE if not matched.
+ *   The Bootstrap class associated with text matching or FALSE if no match.
  */
-function _bootstrap_colorize_button($text) {
+function _bootstrap_colorize_text($text) {
   // Text values containing these specific strings, which are matched first.
   $specific_strings = array(
-    'btn-primary' => array(
+    'primary' => array(
       t('Download feature'),
     ),
-    'btn-success' => array(
+    'success' => array(
       t('Add effect'),
       t('Add and configure'),
     ),
-    'btn-info' => array(
+    'info' => array(
       t('Save and add'),
       t('Add another item'),
       t('Update style'),
@@ -166,29 +216,29 @@ function _bootstrap_colorize_button($text) {
   );
   // Text values containing these generic strings, which are matches last.
   $generic_strings = array(
-    'btn-primary' => array(
+    'primary' => array(
       t('Confirm'),
       t('Filter'),
       t('Submit'),
       t('Search'),
     ),
-    'btn-success' => array(
+    'success' => array(
       t('Add'),
       t('Create'),
       t('Save'),
       t('Write'),
     ),
-    'btn-warning' => array(
+    'warning' => array(
       t('Export'),
       t('Import'),
       t('Restore'),
       t('Rebuild'),
     ),
-    'btn-info' => array(
+    'info' => array(
       t('Apply'),
       t('Update'),
     ),
-    'btn-danger' => array(
+    'danger' => array(
       t('Delete'),
       t('Remove'),
     ),
@@ -213,15 +263,27 @@ function _bootstrap_colorize_button($text) {
 }
 
 /**
- * Iconize buttons based on the text value.
+ * Helper function for adding icons to button elements.
+ *
+ * @param array $element
+ *   The form element, passed by reference.
+ */
+function _bootstrap_iconize_button(&$element) {
+  if (_bootstrap_is_button($element) && ($icon = _bootstrap_iconize_text($element['#value']))) {
+    $element['#value'] = $icon . ' ' . $element['#value'];
+  }
+}
+
+/**
+ * Helper function for associating Bootstrap icons with text.
  *
  * @param string $text
- *   Button text to search against.
+ *   Text string to search against.
  *
  * @return string
- *   The icon markup or FALSE if not matched.
+ *   The Bootstrap icon associated with text matching or FALSE if no match.
  */
-function _bootstrap_iconize_button($text) {
+function _bootstrap_iconize_text($text) {
   // Text values containing these specific strings, which are matched first.
   $specific_strings = array();
   // Text values containing these generic strings, which are matches last.
