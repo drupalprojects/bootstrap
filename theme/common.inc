@@ -167,14 +167,15 @@ function _bootstrap_colorize_button($text) {
   // Text values containing these generic strings, which are matches last.
   $generic_strings = array(
     'btn-primary' => array(
-      t('Save'),
       t('Confirm'),
+      t('Filter'),
       t('Submit'),
       t('Search'),
     ),
     'btn-success' => array(
       t('Add'),
       t('Create'),
+      t('Save'),
       t('Write'),
     ),
     'btn-warning' => array(
@@ -235,8 +236,15 @@ function _bootstrap_iconize_button($text) {
     'export' => array(
       t('Export'),
     ),
+    'filter' => array(
+      t('Filter'),
+    ),
     'import' => array(
       t('Import'),
+    ),
+    'ok' => array(
+      t('Save'),
+      t('Update'),
     ),
     'pencil' => array(
       t('Edit'),
@@ -244,6 +252,9 @@ function _bootstrap_iconize_button($text) {
     'plus' => array(
       t('Add'),
       t('Write'),
+    ),
+    'remove' => array(
+      t('Cancel'),
     ),
     'trash' => array(
       t('Delete'),
