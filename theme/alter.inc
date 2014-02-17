@@ -89,18 +89,6 @@ function bootstrap_element_info_alter(&$elements) {
  */
 function bootstrap_form_alter(array &$form, array &$form_state = array(), $form_id = NULL) {
   if ($form_id) {
-    // IDs of forms that should be ignored. Make this configurable?
-    // @todo is this still needed?
-    $form_ids = array(
-      'node_form',
-      'system_site_information_settings',
-      'user_profile_form',
-      'node_delete_confirm',
-    );
-    // Only wrap in container for certain form.
-    if (!in_array($form_id, $form_ids) && !isset($form['#node_edit_form']) && isset($form['actions']) && isset($form['actions']['#type']) && ($form['actions']['#type'] == 'actions')) {
-      $form['actions']['#theme_wrappers'] = array();
-    }
 
     switch ($form_id) {
       case 'system_theme_settings':
