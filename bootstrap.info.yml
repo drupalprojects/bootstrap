@@ -1,15 +1,9 @@
-###############
-# Declaration #
-###############
-name: Bootstrap
 type: theme
+name: Bootstrap
 description: 'Built to use Bootstrap, a sleek, intuitive, and powerful front-end framework for faster and easier web development.'
 package: Bootstrap
 version: VERSION
 core: 8.x
-###########
-# Regions #
-###########
 regions:
   navigation: Navigation
   header: Top Bar
@@ -21,61 +15,3 @@ regions:
   footer: Footer
   page_top: Page top
   page_bottom: Page bottom
-##################
-# Theme Settings #
-##################
-settings:
-  bootstrap_breadcrumb: '1'
-  bootstrap_breadcrumb_home: '0'
-  bootstrap_breadcrumb_title: '1'
-# Navbar #
-  bootstrap_navbar_position: ''
-  bootstrap_navbar_inverse: '0'
-# Region Wells #
-  bootstrap_region_well-navigation: ''
-  bootstrap_region_well-header: ''
-  bootstrap_region_well-highlighted: ''
-  bootstrap_region_well-help: ''
-  bootstrap_region_well-content: ''
-  bootstrap_region_well-sidebar_first: 'well'
-  bootstrap_region_well-sidebar_second: ''
-  bootstrap_region_well-footer: ''
-# Anchors #
-  bootstrap_anchors_fix: '1'
-  bootstrap_anchors_smooth_scrolling: '1'
-# Popovers #
-  bootstrap_popover_enabled: '1'
-  bootstrap_popover_animation: '1'
-  bootstrap_popover_html: '0'
-  bootstrap_popover_placement: 'right'
-  bootstrap_popover_selector: ''
-  bootstrap_popover_trigger:
-    hover: '0'
-    focus: '0'
-    click: 'click'
-  bootstrap_popover_title: ''
-  bootstrap_popover_content: ''
-  bootstrap_popover_delay: '0'
-  bootstrap_popover_container: 'body'
-# Tooltips #
-  bootstrap_tooltip_enabled: '1'
-  bootstrap_tooltip_descriptions: '1'
-  bootstrap_tooltip_animation: '1'
-  bootstrap_tooltip_html: '0'
-  bootstrap_tooltip_placement: 'auto left'
-  bootstrap_tooltip_selector: ''
-  bootstrap_tooltip_trigger:
-    hover: 'hover'
-    focus: 'focus'
-    click: '0'
-  bootstrap_tooltip_delay: '0'
-  bootstrap_tooltip_container: 'body'
-# Advanced #
-  bootstrap_cdn: '3.0.2'
-  bootstrap_bootswatch: ''
-# Global #
-  toggle_name: '1'
-  toggle_search: '1'
-#######################
-# TODO: exclude files #
-#######################

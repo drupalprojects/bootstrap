@@ -10,6 +10,9 @@
  * @see page.tpl.php
  */
 function bootstrap_preprocess_page(&$variables) {
+  $bootstrap_config = \Drupal::config('bootstrap.settings');
+  $menu_config = \Drupal::config('menu.settings');
+
   // Add information about the number of sidebars.
   if (!empty($variables['page']['sidebar_first']) && !empty($variables['page']['sidebar_second'])) {
     $variables['content_column_class'] = ' class="col-sm-6"';
@@ -25,7 +28,7 @@ function bootstrap_preprocess_page(&$variables) {
   $variables['primary_nav'] = FALSE;
   if ($variables['main_menu']) {
     // Build links.
-    $variables['primary_nav'] = menu_tree(variable_get('menu_main_links_source', 'main-menu'));
+    $variables['primary_nav'] = menu_tree($menu_config->get('main_links'));
     // Provide default theme wrapper function.
     $variables['primary_nav']['#theme_wrappers'] = array('menu_tree__primary');
   }
@@ -34,20 +37,20 @@ function bootstrap_preprocess_page(&$variables) {
   $variables['secondary_nav'] = FALSE;
   if ($variables['secondary_menu']) {
     // Build links.
-    $variables['secondary_nav'] = menu_tree(variable_get('menu_secondary_links_source', 'user-menu'));
+    $variables['secondary_nav'] = menu_tree($menu_config->get('secondary_links'));
     // Provide default theme wrapper function.
     $variables['secondary_nav']['#theme_wrappers'] = array('menu_tree__secondary');
   }
 
   $variables['navbar_classes_array'] = array('navbar');
 
-  if (theme_get_setting('bootstrap_navbar_position') !== '') {
-    $variables['navbar_classes_array'][] = 'navbar-' . theme_get_setting('bootstrap_navbar_position');
+  if ($bootstrap_config->get('navbar_position') !== '') {
+    $variables['navbar_classes_array'][] = 'navbar-' . $bootstrap_config->get('navbar_position');
   }
   else {
     $variables['navbar_classes_array'][] = 'container';
   }
-  if (theme_get_setting('bootstrap_navbar_inverse')) {
+  if ($bootstrap_config->get('navbar_inverse')) {
     $variables['navbar_classes_array'][] = 'navbar-inverse';
   }
   else {

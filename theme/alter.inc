@@ -12,18 +12,18 @@ use Drupal\Core\Template\Attribute;
  * Implements hook_css_alter().
  */
 function bootstrap_css_alter(&$css) {
+  $config = \Drupal::config('bootstrap.settings');
   $theme_path = drupal_get_path('theme', 'bootstrap');
   // Exclude specified CSS files from theme.
-  $excludes = bootstrap_get_theme_info(NULL, 'exclude][css');
+  $excludes = $config->get('excludes.css');
   // Add Bootstrap CDN file and overrides.
-  $bootstrap_cdn = theme_get_setting('bootstrap_cdn');
-  if ($bootstrap_cdn) {
+  if ($config->get('cdn')) {
     // Add CDN.
-    if (theme_get_setting('bootstrap_bootswatch')) {
-      $cdn = '//netdna.bootstrapcdn.com/bootswatch/' . $bootstrap_cdn  . '/' . theme_get_setting('bootstrap_bootswatch') . '/bootstrap.min.css';
+    if ($config->get('bootswatch')) {
+      $cdn = '//netdna.bootstrapcdn.com/bootswatch/' . $config->get('cdn')  . '/' . $config->get('bootswatch') . '/bootstrap.min.css';
     }
     else {
-      $cdn = '//netdna.bootstrapcdn.com/bootstrap/' . $bootstrap_cdn  . '/css/bootstrap.min.css';
+      $cdn = '//netdna.bootstrapcdn.com/bootstrap/' . $config->get('cdn')  . '/css/bootstrap.min.css';
     }
     $css[$cdn] = array(
       'data' => $cdn,
@@ -152,8 +152,9 @@ function bootstrap_form_alter(array &$form, array &$form_state = array(), $form_
  * Implements hook_js_alter().
  */
 function bootstrap_js_alter(&$js) {
+  $config = \Drupal::config('bootstrap.settings');
   // Exclude specified JavaScript files from theme.
-  $excludes = bootstrap_get_theme_info(NULL, 'exclude][js');
+  $excludes = $config->get('excludes.js');
 
   $theme_path = drupal_get_path('theme', 'bootstrap');
 
@@ -205,35 +206,35 @@ function bootstrap_js_alter(&$js) {
 
   // Add Bootstrap settings.
   $js['settings']['data'][]['bootstrap'] = array(
-    'anchorsFix' => theme_get_setting('bootstrap_anchors_fix'),
-    'anchorsSmoothScrolling' => theme_get_setting('bootstrap_anchors_smooth_scrolling'),
-    'popoverEnabled' => theme_get_setting('bootstrap_popover_enabled'),
+    'anchorsFix' => $config->get('anchors_fix'),
+    'anchorsSmoothScrolling' => $config->get('anchors_smooth_scrolling'),
+    'popoverEnabled' => $config->get('popover_enabled'),
     'popoverOptions' => array(
-      'animation' => (int) theme_get_setting('bootstrap_popover_animation'),
-      'html' => (int) theme_get_setting('bootstrap_popover_html'),
-      'placement' => theme_get_setting('bootstrap_popover_placement'),
-      'selector' => theme_get_setting('bootstrap_popover_selector'),
-      'trigger' => implode(' ', array_filter(array_values((array) theme_get_setting('bootstrap_popover_trigger')))),
-      'title' => theme_get_setting('bootstrap_popover_title'),
-      'content' => theme_get_setting('bootstrap_popover_content'),
-      'delay' => (int) theme_get_setting('bootstrap_popover_delay'),
-      'container' => theme_get_setting('bootstrap_popover_container'),
+      'animation' => (int) $config->get('popover_animation'),
+      'html' => (int) $config->get('popover_html'),
+      'placement' => $config->get('popover_placement'),
+      'selector' => $config->get('popover_selector'),
+      'trigger' => implode(' ', array_filter(array_values((array) $config->get('popover_trigger')))),
+      'title' => $config->get('popover_title'),
+      'content' => $config->get('popover_content'),
+      'delay' => (int) $config->get('popover_delay'),
+      'container' => $config->get('popover_container'),
     ),
-    'tooltipEnabled' => theme_get_setting('bootstrap_tooltip_enabled'),
+    'tooltipEnabled' => $config->get('tooltip_enabled'),
     'tooltipOptions' => array(
-      'animation' => (int) theme_get_setting('bootstrap_tooltip_animation'),
-      'html' => (int) theme_get_setting('bootstrap_tooltip_html'),
-      'placement' => theme_get_setting('bootstrap_tooltip_placement'),
-      'selector' => theme_get_setting('bootstrap_tooltip_selector'),
-      'trigger' => implode(' ', array_filter(array_values((array) theme_get_setting('bootstrap_tooltip_trigger')))),
-      'delay' => (int) theme_get_setting('bootstrap_tooltip_delay'),
-      'container' => theme_get_setting('bootstrap_tooltip_container'),
+      'animation' => (int) $config->get('tooltip_animation'),
+      'html' => (int) $config->get('tooltip_html'),
+      'placement' => $config->get('tooltip_placement'),
+      'selector' => $config->get('tooltip_selector'),
+      'trigger' => implode(' ', array_filter(array_values((array) $config->get('tooltip_trigger')))),
+      'delay' => (int) $config->get('tooltip_delay'),
+      'container' => $config->get('tooltip_container'),
     ),
   );
 
   // Add CDN.
-  if (theme_get_setting('bootstrap_cdn')) {
-    $cdn = '//netdna.bootstrapcdn.com/bootstrap/' . theme_get_setting('bootstrap_cdn')  . '/js/bootstrap.min.js';
+  if ($config->get('cdn')) {
+    $cdn = '//netdna.bootstrapcdn.com/bootstrap/' . $config->get('cdn')  . '/js/bootstrap.min.js';
     $js[$cdn] = drupal_js_defaults();
     $js[$cdn]['data'] = $cdn;
     $js[$cdn]['type'] = 'external';

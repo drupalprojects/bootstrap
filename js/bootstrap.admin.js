@@ -14,13 +14,13 @@
       $context.find('#edit-components').drupalSetSummary(function () {
         var summary = [];
         // Breadcrumbs.
-        var breadcrumb = parseInt($context.find('select[name="bootstrap_breadcrumb"]').val(), 10);
+        var breadcrumb = parseInt($context.find('select[name="breadcrumb"]').val(), 10);
         if (breadcrumb) {
           summary.push(Drupal.t('Breadcrumbs'));
         }
         // Navbar.
-        var navbar = 'Navbar: ' + $context.find('select[name="bootstrap_navbar_position"] :selected').text();
-        if ($context.find('input[name="bootstrap_navbar_inverse"]').is(':checked')) {
+        var navbar = 'Navbar: ' + $context.find('select[name="navbar_position"] :selected').text();
+        if ($context.find('input[name="navbar_inverse"]').is(':checked')) {
           navbar += ' (' + Drupal.t('Inverse') + ')';
         }
         summary.push(navbar);
@@ -30,13 +30,13 @@
       // Javascript.
       $context.find('#edit-javascript').drupalSetSummary(function () {
         var summary = [];
-        if ($context.find('input[name="bootstrap_anchors_fix"]').is(':checked')) {
+        if ($context.find('input[name="anchors_fix"]').is(':checked')) {
           summary.push(Drupal.t('Anchors'));
         }
-        if ($context.find('input[name="bootstrap_popover_enabled"]').is(':checked')) {
+        if ($context.find('input[name="popover_enabled"]').is(':checked')) {
           summary.push(Drupal.t('Popovers'));
         }
-        if ($context.find('input[name="bootstrap_tooltip_enabled"]').is(':checked')) {
+        if ($context.find('input[name="tooltip_enabled"]').is(':checked')) {
           summary.push(Drupal.t('Tooltips'));
         }
         return summary.join(', ');
@@ -46,17 +46,17 @@
       $context.find('#edit-advanced').drupalSetSummary(function () {
         var summary = [];
         // BootstrapCDN.
-        var bootstrapCDN = $context.find('select[name="bootstrap_cdn"]').val();
+        var bootstrapCDN = $context.find('select[name="cdn"]').val();
         if (bootstrapCDN.length) {
           bootstrapCDN = 'BootstrapCDN v' + bootstrapCDN;
           // Bootswatch.
-          if ($context.find('select[name="bootstrap_bootswatch"]').val().length) {
-            bootstrapCDN += ' (' + $context.find('select[name="bootstrap_bootswatch"] :selected').text() + ')';
+          if ($context.find('select[name="bootswatch"]').val().length) {
+            bootstrapCDN += ' (' + $context.find('select[name="bootswatch"] :selected').text() + ')';
           }
           summary.push(bootstrapCDN);
         }
         // Rebuild registry.
-        if ($context.find('input[name="bootstrap_rebuild_registry"]').is(':checked')) {
+        if ($context.find('input[name="rebuild_registry"]').is(':checked')) {
           summary.push(Drupal.t('Rebuild Registry'));
         }
         return summary.join(', ');
@@ -88,7 +88,7 @@
             )
             .appendTo($preview);
           }
-          $preview.parent().find('select[name="bootstrap_bootswatch"]').bind('change', function () {
+          $preview.parent().find('select[name="bootswatch"]').bind('change', function () {
             $preview.find('.bootswatch-preview').addClass('element-invisible');
             if ($(this).val().length) {
               $preview.find('#' + $(this).val()).removeClass('element-invisible');
@@ -109,7 +109,7 @@
       $preview.once('navbar', function () {
         var $body = $context.find('body');
         var $navbar = $context.find('#navbar.navbar');
-        $preview.find('select[name="bootstrap_navbar_position"]').bind('change', function () {
+        $preview.find('select[name="navbar_position"]').bind('change', function () {
           var $position = $(this).find(':selected').val();
           $navbar.removeClass('navbar-fixed-bottom navbar-fixed-top navbar-static-top container');
           if ($position.length) {
@@ -134,7 +134,7 @@
               break;
           }
         });
-        $preview.find('input[name="bootstrap_navbar_inverse"]').bind('change', function () {
+        $preview.find('input[name="navbar_inverse"]').bind('change', function () {
           $navbar.toggleClass('navbar-inverse navbar-default');
         });
       });

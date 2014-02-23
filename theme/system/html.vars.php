@@ -10,7 +10,8 @@
  * Implements hook_preprocess_html().
  */
 function bootstrap_preprocess_html(&$variables) {
-  switch (theme_get_setting('bootstrap_navbar_position')) {
+  $config = \Drupal::config('bootstrap.settings');
+  switch ($config->get('navbar_position')) {
     case 'fixed-top':
       $variables['classes_array'][] = 'navbar-is-fixed-top';
       break;

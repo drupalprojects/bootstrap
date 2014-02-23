@@ -11,7 +11,8 @@ use Drupal\Core\Template\Attribute;
 /**
  * Auto-rebuild the theme registry during theme development.
  */
-if (theme_get_setting('bootstrap_rebuild_registry') && !defined('MAINTENANCE_MODE')) {
+$config = \Drupal::config('bootstrap.settings');
+if ($config->get('rebuild_registry') && !defined('MAINTENANCE_MODE')) {
   // Rebuild .info data.
   system_rebuild_theme_data();
   // Rebuild theme registry.

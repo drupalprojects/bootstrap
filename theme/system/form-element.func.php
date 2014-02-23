@@ -10,6 +10,7 @@ use Drupal\Core\Template\Attribute;
  * Overrides theme_form_element().
  */
 function bootstrap_form_element(&$variables) {
+  $config = \Drupal::config('bootstrap.settings');
   $element = &$variables['element'];
   $is_checkbox = FALSE;
   $is_radio = FALSE;
@@ -71,7 +72,7 @@ function bootstrap_form_element(&$variables) {
   // @see bootstrap_tooltip_descriptions setting in _bootstrap_settings_form()
   if (!empty($element['#description'])) {
     $description = $element['#description'];
-    if (theme_get_setting('bootstrap_tooltip_enabled') && theme_get_setting('bootstrap_tooltip_descriptions') && $description === strip_tags($description) && strlen($description) <= 200) {
+    if ($config->get('tooltip_enabled') && $config->get('tooltip_descriptions') && $description === strip_tags($description) && strlen($description) <= 200) {
       $tooltip = TRUE;
       $attributes['data-toggle'] = 'tooltip';
       $attributes['title'] = $description;

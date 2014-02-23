@@ -8,15 +8,16 @@
  * Implements hook_preprocess_breadcrumb().
  */
 function bootstrap_preprocess_breadcrumb(&$variables) {
+  $config = \Drupal::config('bootstrap.settings');
   $breadcrumb = &$variables['breadcrumb'];
 
   // Optionally get rid of the homepage link.
-  $show_breadcrumb_home = theme_get_setting('bootstrap_breadcrumb_home');
+  $show_breadcrumb_home = $config->get('breadcrumb_home');
   if (!$show_breadcrumb_home) {
     array_shift($breadcrumb);
   }
 
-  if (theme_get_setting('bootstrap_breadcrumb_title') && !empty($breadcrumb)) {
+  if ($config->get('breadcrumb_title') && !empty($breadcrumb)) {
     $item = menu_get_item();
     $breadcrumb[] = array(
       // If we are on a non-default tab, use the tab's title.

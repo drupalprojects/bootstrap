@@ -8,11 +8,12 @@
  * Implements hook_preprocess_region().
  */
 function bootstrap_preprocess_region(&$variables) {
+  $config = \Drupal::config('bootstrap.settings');
   global $theme;
   static $wells;
   if (!isset($wells)) {
     foreach (system_region_list($theme) as $name => $title) {
-      $wells[$name] = theme_get_setting('bootstrap_region_well-' . $name);
+      $wells[$name] = $config->get('region_well-' . $name);
     }
   }
 

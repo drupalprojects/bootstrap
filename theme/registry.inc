@@ -51,11 +51,12 @@ use Drupal\Component\Utility\NestedArray;
  * @see hook_theme()
  */
 function _bootstrap_theme(&$existing, $type, $theme, $path) {
+  $config = \Drupal::config('bootstrap.settings');
   // If we are auto-rebuilding the theme registry, warn about the feature.
   if (
     // Only display for site config admins.
     isset($GLOBALS['user']) && function_exists('user_access') && user_access('administer site configuration')
-    && theme_get_setting('bootstrap_rebuild_registry')
+    && $config->get('rebuild_registry')
     // Always display in the admin section, otherwise limit to three per hour.
     && (arg(0) == 'admin' || flood_is_allowed($GLOBALS['theme'] . '_rebuild_registry_warning', 3))
   ) {
