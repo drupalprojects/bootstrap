@@ -64,18 +64,18 @@ function _bootstrap_theme(&$existing, $type, $theme, $path) {
   // Custom theme hooks:
   // Do not define the `path` or `template`.
   $hook_theme = array(
-    'bootstrap_links' => array(
-      'variables' => array(
-        'links' => array(),
-        'attributes' => array(),
-        'heading' => NULL,
-      ),
-    ),
     'bootstrap_btn_dropdown' => array(
       'variables' => array(
         'links' => array(),
         'attributes' => array(),
         'type' => NULL,
+      ),
+    ),
+    'bootstrap_links' => array(
+      'variables' => array(
+        'links' => array(),
+        'attributes' => array(),
+        'heading' => NULL,
       ),
     ),
     'bootstrap_modal' => array(
@@ -87,16 +87,10 @@ function _bootstrap_theme(&$existing, $type, $theme, $path) {
         'html_heading' => FALSE,
       ),
     ),
-    'bootstrap_accordion' => array(
-      'variables' => array(
-        'id' => '',
-        'elements' => array(),
-      ),
-    ),
-    'bootstrap_search_form_wrapper' => array(
+    'bootstrap_panel' => array(
       'render element' => 'element',
     ),
-    'bootstrap_panel' => array(
+    'bootstrap_search_form_wrapper' => array(
       'render element' => 'element',
     ),
   );
