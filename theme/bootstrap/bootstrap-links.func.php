@@ -7,7 +7,7 @@
 /**
  * Implements theme_bootstrap_links().
  */
-function theme_bootstrap_links($variables) {
+function bootstrap_bootstrap_links($variables) {
   $links = $variables['links'];
   $attributes = $variables['attributes'];
   $heading = $variables['heading'];

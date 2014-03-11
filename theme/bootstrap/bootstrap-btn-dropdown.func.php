@@ -7,7 +7,7 @@
 /**
  * Implements theme_bootstrap_btn_dropdown().
  */
-function theme_bootstrap_btn_dropdown($variables) {
+function bootstrap_bootstrap_btn_dropdown($variables) {
   $type_class = '';
   $sub_links = '';
 
