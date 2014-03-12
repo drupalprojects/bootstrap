@@ -30,7 +30,7 @@ function bootstrap_form_element(&$variables) {
 
   // Check for errors and set correct error class.
   if (isset($element['#parents']) && form_get_error($element)) {
-    $wrapper_attributes['class'][] = 'error';
+    $wrapper_attributes['class'][] = 'has-error';
   }
 
   if (!empty($element['#type'])) {
