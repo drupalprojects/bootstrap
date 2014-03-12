@@ -64,19 +64,8 @@ function _bootstrap_theme(&$existing, $type, $theme, $path) {
   // Custom theme hooks:
   // Do not define the `path` or `template`.
   $hook_theme = array(
-    'bootstrap_btn_dropdown' => array(
-      'variables' => array(
-        'links' => array(),
-        'attributes' => array(),
-        'type' => NULL,
-      ),
-    ),
-    'bootstrap_links' => array(
-      'variables' => array(
-        'links' => array(),
-        'attributes' => array(),
-        'heading' => NULL,
-      ),
+    'bootstrap_dropdown' => array(
+      'render element' => 'element',
     ),
     'bootstrap_modal' => array(
       'variables' => array(
