@@ -76,6 +76,7 @@ function _bootstrap_process_input(&$element, &$form_state) {
     'email',
     // Webform module.
     'webform_email',
+    'webform_number',
     // Elements module.
     'emailfield',
     'numberfield',
