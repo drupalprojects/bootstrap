@@ -37,6 +37,9 @@ function bootstrap_preprocess_bootstrap_panel(&$variables) {
     }
   }
   $variables['content'] = $element['#children'];
+  if (isset($element['#value'])) {
+    $variables['content'] .= $element['#value'];
+  }
 
   // Iterate over optional variables.
   $keys = array(
