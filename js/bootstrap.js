@@ -123,16 +123,22 @@ var Drupal = Drupal || {};
       });
     },
     bootstrapAnchor: function (element) {
-      element.validAnchor = element.nodeName === 'A' && (location.hostname === element.hostname || !element.hostname) && element.hash.replace(/#/,'').length;
+      element.validAnchor = element.nodeName === 'A' && (location.hostname === element.hostname || !element.hostname) && (element.hash.replace(/#/,'').length > 0);
       element.scrollTo = function(event) {
         var attr = 'id';
         var $target = $(element.hash);
+        // Check for anchors that use the name attribute instead.
         if (!$target.length) {
           attr = 'name';
           $target = $('[name="' + element.hash.replace('#', '') + '"');
         }
+        // Immediately stop if no anchors are found.
+        if (!this.validAnchor && !$target.length) {
+          return;
+        }
+        // Anchor is valid, continue if there is an offset.
         var offset = $target.offset().top - parseInt($scrollableElement.css('paddingTop'), 10) - parseInt($scrollableElement.css('marginTop'), 10);
-        if (this.validAnchor && $target.length && offset > 0) {
+        if (offset > 0) {
           if (event) {
             event.preventDefault();
           }
@@ -144,7 +150,7 @@ var Drupal = Drupal || {};
               top: offset + 'px',
               zIndex: -1000
             })
-            .appendTo(document);
+            .appendTo($scrollableElement);
           $target.removeAttr(attr);
           var complete = function () {
             location.hash = element.hash;
