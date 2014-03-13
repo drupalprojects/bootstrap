@@ -457,76 +457,91 @@ function _bootstrap_colorize_button(&$element) {
 }
 
 /**
- * Helper function for associating Bootstrap classes on text.
+ * Helper function for associating Bootstrap classes based on a string's value.
  *
- * @param string $text
- *   Text string to search against.
+ * @param string $string
+ *   The string to match classes against.
+ * @param string $default
+ *   The default class to return if no match is found.
  *
  * @return string
- *   The Bootstrap class associated with text matching or FALSE if no match.
+ *   The Bootstrap class matched against the value of $haystack or $default if
+ *   no match could be made.
  */
-function _bootstrap_colorize_text($text) {
-  // Text values containing these specific strings, which are matched first.
-  $specific_strings = array(
-    'primary' => array(
-      t('Download feature'),
-    ),
-    'success' => array(
-      t('Add effect'),
-      t('Add and configure'),
-    ),
-    'info' => array(
-      t('Save and add'),
-      t('Add another item'),
-      t('Update style'),
-    ),
-  );
-  // Text values containing these generic strings, which are matches last.
-  $generic_strings = array(
-    'primary' => array(
-      t('Confirm'),
-      t('Filter'),
-      t('Submit'),
-      t('Search'),
-    ),
-    'success' => array(
-      t('Add'),
-      t('Create'),
-      t('Save'),
-      t('Write'),
-    ),
-    'warning' => array(
-      t('Export'),
-      t('Import'),
-      t('Restore'),
-      t('Rebuild'),
-    ),
-    'info' => array(
-      t('Apply'),
-      t('Update'),
-    ),
-    'danger' => array(
-      t('Delete'),
-      t('Remove'),
-    ),
-  );
-  // Specific matching first.
-  foreach ($specific_strings as $class => $strings) {
-    foreach ($strings as $string) {
-      if (strpos(drupal_strtolower($text), drupal_strtolower($string)) !== FALSE) {
-        return $class;
+function _bootstrap_colorize_text($string, $default = '') {
+  static $texts;
+  if (!isset($texts)) {
+    $texts = array(
+      // Text that match these specific strings are checked first.
+      'matches' => array(
+        // Primary class.
+        t('Download feature')   => 'primary',
+
+        // Success class.
+        t('Add effect')         => 'success',
+        t('Add and configure')  => 'success',
+
+        // Info class.
+        t('Save and add')       => 'info',
+        t('Add another item')   => 'info',
+        t('Update style')       => 'info',
+      ),
+
+      // Text that contain these words anywhere in the string are checked last.
+      'contains' => array(
+        // Primary class.
+        t('Confirm')            => 'primary',
+        t('Filter')             => 'primary',
+        t('Submit')             => 'primary',
+        t('Search')             => 'primary',
+
+        // Success class.
+        t('Add')                => 'success',
+        t('Create')             => 'success',
+        t('Save')               => 'success',
+        t('Write')              => 'success',
+
+        // Warning class.
+        t('Export')             => 'warning',
+        t('Import')             => 'warning',
+        t('Restore')            => 'warning',
+        t('Rebuild')            => 'warning',
+
+        // Info class.
+        t('Apply')              => 'info',
+        t('Update')             => 'info',
+
+        // Danger class.
+        t('Delete')             => 'danger',
+        t('Remove')             => 'danger',
+      ),
+    );
+
+    // Allow sub-themes to alter this array of patterns.
+    drupal_alter('boostrap_colorize_text', $texts);
+  }
+
+  // Iterate over the array.
+  foreach ($texts as $pattern => $strings) {
+    foreach ($strings as $value => $class) {
+      switch ($pattern) {
+        case 'matches':
+          if ($string === $value) {
+            return $class;
+          }
+          break;
+
+        case 'contains':
+          if (strpos(drupal_strtolower($string), drupal_strtolower($value)) !== FALSE) {
+            return $class;
+          }
+          break;
       }
     }
   }
-  // Generic matching last.
-  foreach ($generic_strings as $class => $strings) {
-    foreach ($strings as $string) {
-      if (strpos(drupal_strtolower($text), drupal_strtolower($string)) !== FALSE) {
-        return $class;
-      }
-    }
-  }
-  return FALSE;
+
+  // Return the default if nothing was matched.
+  return $default;
 }
 
 /**
@@ -544,70 +559,65 @@ function _bootstrap_iconize_button(&$element) {
 /**
  * Helper function for associating Bootstrap icons with text.
  *
- * @param string $text
- *   Text string to search against.
+ * @param string $string
+ *   The string to match classes against.
+ * @param string $default
+ *   The default icon to return if no match is found.
  *
  * @return string
- *   The Bootstrap icon associated with text matching or FALSE if no match.
+ *   The Bootstrap icon matched against the value of $haystack or $default if
+ *   no match could be made.
  */
-function _bootstrap_iconize_text($text) {
-  // Text values containing these specific strings, which are matched first.
-  $specific_strings = array();
-  // Text values containing these generic strings, which are matches last.
-  $generic_strings = array(
-    'cog' => array(
-      t('Manage'),
-      t('Configure'),
-    ),
-    'download' => array(
-      t('Download'),
-    ),
-    'export' => array(
-      t('Export'),
-    ),
-    'filter' => array(
-      t('Filter'),
-    ),
-    'import' => array(
-      t('Import'),
-    ),
-    'ok' => array(
-      t('Save'),
-      t('Update'),
-    ),
-    'pencil' => array(
-      t('Edit'),
-    ),
-    'plus' => array(
-      t('Add'),
-      t('Write'),
-    ),
-    'remove' => array(
-      t('Cancel'),
-    ),
-    'trash' => array(
-      t('Delete'),
-      t('Remove'),
-    ),
-    'upload' => array(
-      t('Upload'),
-    ),
-  );
-  // Specific matching first.
-  foreach ($specific_strings as $icon => $strings) {
-    foreach ($strings as $string) {
-      if (strpos(drupal_strtolower($text), drupal_strtolower($string)) !== FALSE) {
-        return _bootstrap_icon($icon);
+function _bootstrap_iconize_text($string, $default = '') {
+  static $texts;
+  if (!isset($texts)) {
+    $texts = array(
+      // Text that match these specific strings are checked first.
+      'matches' => array(),
+
+      // Text that contain these words anywhere in the string are checked last.
+      'contains' => array(
+        t('Manage')     => 'cog',
+        t('Configure')  => 'cog',
+        t('Download')   => 'download',
+        t('Export')     => 'export',
+        t('Filter')     => 'filter',
+        t('Import')     => 'import',
+        t('Save')       => 'ok',
+        t('Update')     => 'ok',
+        t('Edit')       => 'pencil',
+        t('Add')        => 'plus',
+        t('Write')      => 'plus',
+        t('Cancel')     => 'remove',
+        t('Delete')     => 'trash',
+        t('Remove')     => 'trash',
+        t('Upload')     => 'upload',
+      ),
+    );
+
+    // Allow sub-themes to alter this array of patterns.
+    drupal_alter('boostrap_iconize_text', $texts);
+  }
+
+  // Iterate over the array.
+  foreach ($texts as $pattern => $strings) {
+    foreach ($strings as $value => $icon) {
+      switch ($pattern) {
+        case 'matches':
+          if ($string === $value) {
+            return _bootstrap_icon($icon, $default);
+          }
+          break;
+
+        case 'contains':
+          if (strpos(drupal_strtolower($string), drupal_strtolower($value)) !== FALSE) {
+            return _bootstrap_icon($icon, $default);
+          }
+          break;
       }
     }
   }
-  // Generic matching last.
-  foreach ($generic_strings as $icon => $strings) {
-    foreach ($strings as $string) {
-      if (strpos(drupal_strtolower($text), drupal_strtolower($string)) !== FALSE) {
-        return _bootstrap_icon($icon);
-      }
-    }
-  }
-  return FALSE;
+
+  // Return a default icon if nothing was matched.
+  return _bootstrap_icon($default);
 }
