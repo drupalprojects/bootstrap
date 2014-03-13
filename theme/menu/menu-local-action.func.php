@@ -17,8 +17,7 @@ function bootstrap_menu_local_action($variables) {
     $link['title'] = check_plain($link['title']);
   }
 
-  // Iconize the title.
-  $link['title'] = _bootstrap_iconize_text($link['title']);
+  $icon = _bootstrap_iconize_text($link['title']);
 
   // Format the action link.
   $output = '<li>';
@@ -40,11 +39,11 @@ function bootstrap_menu_local_action($variables) {
       }
     }
     // Force HTML so we can render any icon that may have been added.
-    $options['html'] = TRUE;
-    $output .= l($link['title'], $link['href'], $options);
+    $options['html'] = !empty($options['html']) || !empty($icon) ? TRUE : FALSE;
+    $output .= l($icon . $link['title'], $link['href'], $options);
   }
   else {
-    $output .= $link['title'];
+    $output .= $icon . $link['title'];
   }
   $output .= "</li>\n";
 
