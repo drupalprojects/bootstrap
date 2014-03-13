@@ -689,3 +689,31 @@ td.module,
   background: @table-border-color;
   font-weight: 700;
 }
+
+// Book module.
+.book-toc > .dropdown-menu {
+  overflow: hidden;
+  > .dropdown-header {
+    white-space: nowrap;
+  }
+  > li:nth-child(1) > a {
+    font-weight: bold;
+  }
+  .dropdown-menu {
+    .box-shadow(none);
+    border: 0;
+    display: block;
+    font-size: @font-size-small;
+    margin: 0;
+    padding: 0;
+    position: static;
+    width: 100%;
+    > li {
+      padding-left: 20px;
+      > a {
+        margin-left: -40px;
+        padding-left: 60px;
+      }
+    }
+  }
+}
