@@ -115,17 +115,17 @@ Drupal.jsAC.prototype.found = function (matches) {
 };
 
 Drupal.jsAC.prototype.setStatus = function (status) {
-  var $throbber = $('.glyphicon-refresh', $('#' + this.input.id).parent());
-
+  var $throbber = $('.glyphicon-refresh, .autocomplete-throbber', $('#' + this.input.id).parent()).first();
+  var throbbingClass = $throbber.is('.autocomplete-throbber') ? 'throbbing' : 'glyphicon-spin';
   switch (status) {
     case 'begin':
-      $throbber.addClass('glyphicon-spin');
+      $throbber.addClass(throbbingClass);
       $(this.ariaLive).html(Drupal.t('Searching for matches...'));
       break;
     case 'cancel':
     case 'error':
     case 'found':
-      $throbber.removeClass('glyphicon-spin');
+      $throbber.removeClass(throbbingClass);
       break;
   }
 };

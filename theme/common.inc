@@ -375,7 +375,7 @@ function _bootstrap_glyphicons() {
 function _bootstrap_icon($name, $default = NULL) {
   $output = NULL;
   // Ensure the icon specified is a valid Bootstrap Glyphicon.
-  if (in_array($name, _bootstrap_glyphicons())) {
+  if (_bootstrap_glyphicons_supported() && in_array($name, _bootstrap_glyphicons())) {
     // Attempt to use the Icon API module, if enabled and it generates output.
     if (module_exists('icon')) {
       $output = theme('icon', array('bundle' => 'bootstrap', 'icon' => 'glyphicon-' . $name));
@@ -390,6 +390,20 @@ function _bootstrap_icon($name, $default = NULL) {
     }
   }
   return empty($output) && isset($default) ? $default : $output;
+}
+
+/**
+ * Helper function for determining if Bootstrap Glyphicons can be used.
+ */
+function _bootstrap_glyphicons_supported() {
+  static $supported;
+  if (!isset($supported)) {
+    $theme = variable_get('theme_default', $GLOBALS['theme']);
+    $cdn = theme_get_setting('bootstrap_cdn', $theme);
+    $fonts = _bootstrap_file_scan_directory(drupal_get_path('theme', $theme), '/glyphicons-halflings-regular\.(eot|svg|ttf|woff)$/');
+    $supported = !empty($cdn) || (empty($cdn) && !empty($fonts));
+  }
+  return $supported;
 }
 
 /**

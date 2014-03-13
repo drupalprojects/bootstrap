@@ -26,6 +26,22 @@ html {
     input.form-autocomplete {
       background-image: none;
     }
+    // Autocomplete.
+    input.form-autocomplete {
+      background-image: none;
+    }
+    // Autocomplete (fallback throbber, no icon).
+    .autocomplete-throbber {
+      background-position: 100% 2px;
+      background-repeat: no-repeat;
+      display: inline-block;
+      height: 15px;
+      margin: 2px 0 0 2px;
+      width: 15px;
+    }
+    .autocomplete-throbber.throbbing {
+      background-position: 100% -18px;
+    }
   }
 }
 body {

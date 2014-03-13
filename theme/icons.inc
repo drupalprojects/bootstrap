@@ -23,10 +23,8 @@ function bootstrap_icon_providers() {
  * Implements hook_icon_bundles().
  */
 function bootstrap_icon_bundles() {
-  $theme = variable_get('theme_default', $GLOBALS['theme']);
-  $cdn = theme_get_setting('bootstrap_cdn', $theme);
   $bundles = array();
-  if ($cdn || (!$cdn && file_exists(drupal_get_path('theme', $theme) . '/bootstrap/fonts/glyphicons-halflings-regular.ttf'))) {
+  if (_bootstrap_glyphicons_supported()) {
     $bundles['bootstrap'] = array(
       'render' => 'sprite',
       'provider' => 'bootstrap',
