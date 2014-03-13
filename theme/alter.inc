@@ -152,7 +152,7 @@ function bootstrap_js_alter(&$js) {
 
   // Add or replace JavaScript files when matching paths are detected.
   // Replacement files must begin with '_', like '_node.js'.
-  $files = file_scan_directory($theme_path . '/js', '/\.js$/');
+  $files = _bootstrap_file_scan_directory($theme_path . '/js', '/\.js$/');
   foreach ($files as $file) {
     $path = str_replace($theme_path . '/js/', '', $file->uri);
     // Detect if this is a replacement file.

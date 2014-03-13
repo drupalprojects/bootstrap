@@ -114,6 +114,43 @@ function bootstrap_include($theme, $path) {
 }
 
 /**
+ * Helper function that wraps file_scan_directory().
+ *
+ * Finds all files that match a given mask in a given directory and then caches
+ * the results. A general site cache clear will force new scans to be initiated
+ * for already cached directories.
+ *
+ * @param string $dir
+ *   The base directory or URI to scan, without trailing slash.
+ * @param string $mask
+ *   The preg_match() regular expression of the files to find.
+ * @param array $options
+ *   Additional options to pass to file_scan_directory().
+ *
+ * @return array
+ *   An associative array (keyed on the chosen key) of objects with 'uri',
+ *   'filename', and 'name' members corresponding to the matching files.
+ *
+ * @see file_scan_directory()
+ */
+function _bootstrap_file_scan_directory($dir, $mask, array $options = array()) {
+  // Retrieve cached data.
+  $cid = 'theme_registry:bootstrap:files';
+  $files = array();
+  if ($cache = cache_get($cid)) {
+    $files = $cache->data;
+  }
+  // Generate a unique hash for all parameters passed as a change in any of
+  // them would return different results.
+  $hash = drupal_hash_base64(serialize(func_get_args()));
+  if (!isset($files[$hash])) {
+    $files[$hash] = file_scan_directory($dir, $mask, $options);
+    cache_set($cid, $files);
+  }
+  return $files[$hash];
+}
+
+/**
  * Helper function for returning an array of Bootstrap Glyphicons.
  */
 function _bootstrap_glyphicons() {
