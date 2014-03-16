@@ -19,7 +19,7 @@
  *
  * @see _bootstrap_colorize_text()
  */
-function hook_boostrap_colorize_text_alter(&$texts) {
+function hook_bootstrap_colorize_text_alter(&$texts) {
   // This matches the exact string: "My Unique Button Text".
   $texts['matches'][t('My Unique Button Text')] = 'primary';
 
@@ -43,7 +43,7 @@ function hook_boostrap_colorize_text_alter(&$texts) {
  *
  * @see _bootstrap_iconize_text()
  */
-function hook_bootstrap_iconize_text(&$texts) {
+function hook_bootstrap_iconize_text_alter(&$texts) {
   // This matches the exact string: "My Unique Button Text".
   $texts['matches'][t('My Unique Button Text')] = 'heart';
 

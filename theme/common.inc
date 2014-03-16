@@ -518,7 +518,7 @@ function _bootstrap_colorize_text($string, $default = '') {
     );
 
     // Allow sub-themes to alter this array of patterns.
-    drupal_alter('boostrap_colorize_text', $texts);
+    drupal_alter('bootstrap_colorize_text', $texts);
   }
 
   // Iterate over the array.
@@ -596,7 +596,7 @@ function _bootstrap_iconize_text($string, $default = '') {
     );
 
     // Allow sub-themes to alter this array of patterns.
-    drupal_alter('boostrap_iconize_text', $texts);
+    drupal_alter('bootstrap_iconize_text', $texts);
   }
 
   // Iterate over the array.
