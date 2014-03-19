@@ -268,6 +268,12 @@ function _bootstrap_settings_form(&$form, $form_state) {
       'manual',
     )),
   );
+  $form['javascript']['popovers']['options']['bootstrap_popover_trigger_autoclose'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Auto-close on document click'),
+    '#description' => t('Will automatically close the current popover if a click occurs anywhere else other than the popover element.'),
+    '#default_value' => theme_get_setting('bootstrap_popover_trigger_autoclose'),
+  );
   $form['javascript']['popovers']['options']['bootstrap_popover_title'] = array(
     '#type' => 'textfield',
     '#title' => t('title'),
@@ -277,7 +283,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
   $form['javascript']['popovers']['options']['bootstrap_popover_content'] = array(
     '#type' => 'textfield',
     '#title' => t('content'),
-    '#description' => t("Default content value if \"data-content\" attribute isn't present."),
+    '#description' => t('Default content value if "data-content" or "data-target" attributes are not present.'),
     '#default_value' => theme_get_setting('bootstrap_popover_content'),
   );
   $form['javascript']['popovers']['options']['bootstrap_popover_delay'] = array(

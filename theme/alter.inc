@@ -215,6 +215,7 @@ function bootstrap_js_alter(&$js) {
       'placement' => theme_get_setting('bootstrap_popover_placement'),
       'selector' => theme_get_setting('bootstrap_popover_selector'),
       'trigger' => implode(' ', array_filter(array_values((array) theme_get_setting('bootstrap_popover_trigger')))),
+      'triggerAutoclose' => (int) theme_get_setting('bootstrap_popover_trigger_autoclose'),
       'title' => theme_get_setting('bootstrap_popover_title'),
       'content' => theme_get_setting('bootstrap_popover_content'),
       'delay' => (int) theme_get_setting('bootstrap_popover_delay'),
