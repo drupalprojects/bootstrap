@@ -719,3 +719,43 @@ td.module,
     }
   }
 }
+
+// Features module.
+#features-filter .form-item.form-type-checkbox {
+  padding-left: 20px;
+}
+fieldset.features-export-component {
+  font-size: @font-size-small;
+  html.js #features-export-form &, & {
+    margin: 0 0 (@line-height-computed / 2);
+  }
+  .panel-heading {
+    padding: 5px 10px;
+    a.panel-title {
+      font-size: @font-size-small;
+      font-weight: 500;
+      margin: -5px -10px;
+      padding: 5px 10px;
+    }
+  }
+  .panel-body {
+    padding: 0 10px;
+  }
+}
+div.features-export-list {
+  margin: -11px 0 10px;
+  padding: 0 10px;
+}
+
+fieldset.features-export-component .component-select ,
+div.features-export-list {
+  .form-type-checkbox {
+    line-height: 1em;
+    margin: 5px 5px 5px 0 !important;
+    min-height: 0;
+    padding: 3px 3px 3px 25px!important;
+    input[type=checkbox] {
+      margin-top: 0;
+    }
+  }
+}
