@@ -114,6 +114,32 @@ function bootstrap_include($theme, $path) {
 }
 
 /**
+ * Helper function for returning whether a theme is Bootstrap based.
+ *
+ * @param string $theme_key
+ *   The machine name of the theme to check, if not set the active theme name
+ *   will be used.
+ * @param bool $include_theme_key
+ *   Whether to append the returned list with $theme_key.
+ *
+ * @return array
+ *   An indexed array of base themes.
+ */
+function _bootstrap_get_base_themes($theme_key = NULL, $include_theme_key = FALSE) {
+  static $themes;
+  if (!isset($theme_key)) {
+    $theme_key = $GLOBALS['theme_key'];
+  }
+  if (!isset($themes[$theme_key])) {
+    $themes[$theme_key] = array_unique(array_filter((array) bootstrap_get_theme_info($theme_key, 'base theme')));
+  }
+  if ($include_theme_key) {
+    $themes[$theme_key][] = $theme_key;
+  }
+  return $themes[$theme_key];
+}
+
+/**
  * Helper function that wraps file_scan_directory().
  *
  * Finds all files that match a given mask in a given directory and then caches
@@ -620,4 +646,54 @@ function _bootstrap_iconize_text($string, $default = '') {
 
   // Return a default icon if nothing was matched.
   return _bootstrap_icon($default);
+}
+
+/**
+ * Helper function for invoking a specific suggestion's preprocess functions.
+ *
+ * @param array $variables
+ *   The theme implementation variables array.
+ */
+function _bootstrap_preprocess_theme_suggestion(&$variables) {
+  $registry = theme_get_registry();
+  if (!empty($variables['theme_hook_suggestion']) && !empty($registry[$variables['theme_hook_suggestion']]['preprocess functions'])) {
+    // Save the suggestion as the hook to pass to the function.
+    $hook = $variables['theme_hook_suggestion'];
+
+    // Unset the theme_hook_suggestion so the suggestion's preprocess functions
+    // can provide theme_hook_suggestions if needed.
+    unset($variables['theme_hook_suggestion']);
+
+    // Iterate over the preprocess functions.
+    foreach ($registry[$hook]['preprocess functions'] as $function) {
+      if (function_exists($function)) {
+        $function($variables, $hook);
+      }
+    }
+  }
+}
+
+/**
+ * Helper function for invoking a specific suggestion's process functions.
+ *
+ * @param array $variables
+ *   The theme implementation variables array.
+ */
+function _bootstrap_process_theme_suggestion(&$variables) {
+  $registry = theme_get_registry();
+  if (!empty($variables['theme_hook_suggestion']) && !empty($registry[$variables['theme_hook_suggestion']]['process functions'])) {
+    // Save the suggestion as the hook to pass to the function.
+    $hook = $variables['theme_hook_suggestion'];
+
+    // Unset the theme_hook_suggestion so the suggestion's process functions
+    // can provide theme_hook_suggestions if needed.
+    unset($variables['theme_hook_suggestion']);
+
+    // Iterate over the process functions.
+    foreach ($registry[$hook]['process functions'] as $function) {
+      if (function_exists($function)) {
+        $function($variables, $hook);
+      }
+    }
+  }
 }

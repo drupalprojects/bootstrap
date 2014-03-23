@@ -15,16 +15,9 @@
 function _bootstrap_settings_form(&$form, $form_state) {
   // Do not add Bootstrap specific settings to non-bootstrap based themes.
   $theme = !empty($form_state['build_info']['args'][0]) ? $form_state['build_info']['args'][0] : FALSE;
-  // Global settings.
-  if ($theme === FALSE) {
+  // Global or non Bootstrap based theme settings.
+  if ($theme === FALSE || !in_array('bootstrap', _bootstrap_get_base_themes($theme, TRUE))) {
     return;
-  }
-  // Other theme settings.
-  elseif ($theme !== 'bootstrap') {
-    $base_theme = bootstrap_get_theme_info($theme, 'base theme');
-    if (!$base_theme || (!is_array($base_theme) && $base_theme !== 'bootstrap') || (is_array($base_theme) && !in_array('bootstrap', $base_theme))) {
-      return;
-    }
   }
 
   // Display a warning if jquery_update isn't enabled.
