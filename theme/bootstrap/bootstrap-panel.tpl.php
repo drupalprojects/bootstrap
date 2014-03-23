@@ -7,7 +7,6 @@
  */
 
 ?>
-<?php if ($prefix): print $prefix; endif ?>
 <fieldset <?php print $attributes; ?>>
   <?php if ($title): ?>
     <?php if ($collapsible): ?>
@@ -31,4 +30,3 @@
   </div>
   <?php endif; ?>
 </fieldset>
-<?php if ($suffix): print $suffix; endif ?>
