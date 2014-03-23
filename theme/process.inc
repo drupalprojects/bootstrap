@@ -110,8 +110,17 @@ function _bootstrap_process_fieldset(&$element, &$form_state) {
     $form_state['groups'][$group][] = &$element;
   }
 
-  // Contains form element summary functionalities.
+  // Contains form element summary functionality.
   $element['#attached']['library'][] = array('system', 'drupal.form');
+
+  // Collapsible fieldsets.
+  if (!empty($element['#collapsible'])) {
+    $element['#attached']['library'][] = array('system', 'drupal.collapse');
+    $element['#attributes']['class'][] = 'collapsible';
+    if (!empty($element['#collapsed'])) {
+      $element['#attributes']['class'][] = 'collapsed';
+    }
+  }
 
   // The .form-wrapper class is required for #states to treat fieldsets like
   // containers.

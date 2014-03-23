@@ -27,14 +27,9 @@ function bootstrap_preprocess_bootstrap_panel(&$variables) {
     $variables['collapsible'] = FALSE;
     $variables['collapsed'] = FALSE;
   }
-  $variables['id'] = '';
   if (isset($element['#id'])) {
-    if ($variables['collapsible']) {
-      $variables['id'] = $element['#id'];
-    }
-    else {
-      $attributes['id'] = $element['#id'];
-    }
+    $attributes['id'] = $element['#id'];
+    $variables['target'] = '#' . $element['#id'] . ' .collapse';
   }
   $variables['content'] = $element['#children'];
   if (isset($element['#value'])) {
