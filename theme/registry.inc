@@ -101,6 +101,11 @@ function bootstrap_theme_registry_alter(&$registry) {
     return;
   }
 
+  // Inject the "footer" variable default in the existing "table" hook.
+  // @see https://drupal.org/node/806982
+  // @todo Make this discoverable in some way instead of a manual injection.
+  $registry['table']['variables']['footer'] = NULL;
+
   // Process registered hooks in the theme registry.
   _bootstrap_process_theme_registry($registry, $themes);
 
