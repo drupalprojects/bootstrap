@@ -27,6 +27,10 @@ function bootstrap_preprocess_bootstrap_panel(&$variables) {
     $variables['collapsible'] = FALSE;
     $variables['collapsed'] = FALSE;
   }
+  if (!isset($element['#id']) && $variables['collapsible']) {
+    $element['#id'] = drupal_html_id('bootstrap-panel');
+  }
+  $variables['target'] = NULL;
   if (isset($element['#id'])) {
     $attributes['id'] = $element['#id'];
     $variables['target'] = '#' . $element['#id'] . ' .collapse';
