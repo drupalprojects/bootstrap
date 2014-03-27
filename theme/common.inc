@@ -697,3 +697,40 @@ function _bootstrap_process_theme_suggestion(&$variables) {
     }
   }
 }
+
+
+/**
+ * Helper function for determining if a tooltip can be used for a description.
+ *
+ * @param string $description
+ *   The string of text to process.
+ *
+ * @return bool
+ *   Returns TRUE if the $description can be used as a tooltip, FALSE otherwise.
+ */
+function _bootstrap_tooltip_description($description) {
+  // Use the advanced drupal_static() pattern, since this is called very often.
+  static $drupal_static_fast;
+  if (!isset($drupal_static_fast)) {
+    $drupal_static_fast['descriptions'] = &drupal_static(__FUNCTION__);
+  }
+  // Get static data.
+  $descriptions = &$drupal_static_fast['descriptions'];
+  $tooltip_descriptions = &$drupal_static_fast['tooltip_descriptions'];
+
+  // Determine if tooltips are enabled.
+  if (!isset($tooltip_descriptions)) {
+    $tooltip_descriptions = theme_get_setting('bootstrap_tooltip_enabled') && theme_get_setting('bootstrap_tooltip_descriptions');
+  }
+
+  // Go ahead and return FALSE if not enabled.
+  if (!$tooltip_descriptions) {
+    return FALSE;
+  }
+
+  $id = drupal_hash_base64($description);
+  if (!isset($descriptions[$id])) {
+    $descriptions[$id] = ($description === strip_tags($description) && strlen($description) <= theme_get_setting('bootstrap_tooltip_descriptions_length'));
+  }
+  return $descriptions[$id];
+}

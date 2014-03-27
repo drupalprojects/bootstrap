@@ -68,19 +68,6 @@ function bootstrap_form_element(&$variables) {
     }
   }
 
-  $description = FALSE;
-  $tooltip = FALSE;
-  // Convert some descriptions to tooltips.
-  // @see bootstrap_tooltip_descriptions setting in _bootstrap_settings_form()
-  if (!empty($element['#description'])) {
-    $description = $element['#description'];
-    if (theme_get_setting('bootstrap_tooltip_enabled') && theme_get_setting('bootstrap_tooltip_descriptions') && $description === strip_tags($description) && strlen($description) <= 200) {
-      $tooltip = TRUE;
-      $wrapper_attributes['data-toggle'] = 'tooltip';
-      $wrapper_attributes['title'] = $description;
-    }
-  }
-
   $output = '<div' . drupal_attributes($wrapper_attributes) . '>' . "\n";
 
   // If #title is not set, we don't display any label or required marker.
@@ -135,7 +122,7 @@ function bootstrap_form_element(&$variables) {
       break;
   }
 
-  if ($description && !$tooltip) {
+  if (!empty($element['#description']) && empty($element['#attributes']['title']) && !_bootstrap_tooltip_description($element['#description'])) {
     $output .= '<p class="help-block">' . $element['#description'] . "</p>\n";
   }
 

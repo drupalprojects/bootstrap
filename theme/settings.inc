@@ -312,12 +312,24 @@ function _bootstrap_settings_form(&$form, $form_state) {
   );
   $form['javascript']['tooltips']['bootstrap_tooltip_descriptions'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Convert simple form descriptions'),
-    '#description' => t('Form items that contain simple descriptions (no HTML and shorter than 200 characters) will be converted into tooltips. This helps reduce the sometimes unnecessary noise of form item descriptions. By treating descriptions that contain longer text or HTML as actionable descriptions, we ensure it is always visible so its usability remains intact.'),
+    '#title' => t('Use Tooltips for simple form descriptions'),
+    '#description' => t('Form items that contain simple descriptions (no HTML, no title attribute and are less than the specified length below) will be converted into tooltips. This helps reduce the sometimes unnecessary noise of form item descriptions. Descriptions that contain longer text or HTML as actionable descriptions (user needs to click) will not be converted. This ensures it is always visible so its usability remains intact.'),
     '#default_value' => theme_get_setting('bootstrap_tooltip_descriptions'),
     '#states' => array(
       'visible' => array(
         ':input[name="bootstrap_tooltip_enabled"]' => array('checked' => TRUE),
+      ),
+    ),
+  );
+  $form['javascript']['tooltips']['bootstrap_tooltip_descriptions_length'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Simple form description length'),
+    '#description' => t('The character length limit used to determine when a description makes a sense to be used as a tooltip.'),
+    '#default_value' => theme_get_setting('bootstrap_tooltip_descriptions_length'),
+    '#states' => array(
+      'visible' => array(
+        ':input[name="bootstrap_tooltip_enabled"]' => array('checked' => TRUE),
+        ':input[name="bootstrap_tooltip_descriptions"]' => array('checked' => TRUE),
       ),
     ),
   );

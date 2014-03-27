@@ -70,6 +70,7 @@ settings[bootstrap_popover_container] = 'body'
 ; --------------
 settings[bootstrap_tooltip_enabled] = 1
 settings[bootstrap_tooltip_descriptions] = 1
+settings[bootstrap_tooltip_descriptions_length] = 200
 settings[bootstrap_tooltip_animation] = 1
 settings[bootstrap_tooltip_html] = 0
 settings[bootstrap_tooltip_placement] = 'auto left'

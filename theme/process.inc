@@ -88,6 +88,12 @@ function _bootstrap_process_input(&$element, &$form_state) {
   if (!empty($element['#type']) && (in_array($element['#type'], $types) || ($element['#type'] === 'file' && empty($element['#managed_file'])))) {
     $element['#attributes']['class'][] = 'form-control';
   }
+  if (!empty($element['#description']) && empty($element['#attributes']['title']) && _bootstrap_tooltip_description($element['#description'])) {
+    $element['#attributes']['title'] = $element['#description'];
+  }
+  if (!empty($element['#attributes']['title'])) {
+    $element['#attributes']['data-toggle'] = 'tooltip';
+  }
   return $element;
 }
 
