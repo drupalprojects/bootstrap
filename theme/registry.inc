@@ -60,7 +60,7 @@ function _bootstrap_theme(&$existing, $type, $theme, $path) {
   );
 
   // Bootstrap Modals.
-  $hook['bootstrap_modal'] = array(
+  $hooks['bootstrap_modal'] = array(
     'variables' => array(
       'heading' => '',
       'body' => '',
