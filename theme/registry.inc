@@ -45,47 +45,41 @@
 /**
  * Stub implementation for hook_theme().
  *
+ * This base-theme's custom theme hook implementations. Never define "path"
+ * or "template" as these are detected and automatically added.
+ *
+ * @see bootstrap_theme_registry_alter()
  * @see bootstrap_hook_theme_complete()
  * @see bootstrap_theme()
  * @see hook_theme()
  */
 function _bootstrap_theme(&$existing, $type, $theme, $path) {
-  // If we are auto-rebuilding the theme registry, warn about the feature.
-  if (
-    // Only display for site config admins.
-    isset($GLOBALS['user']) && function_exists('user_access') && user_access('administer site configuration')
-    && theme_get_setting('bootstrap_rebuild_registry')
-    // Always display in the admin section, otherwise limit to three per hour.
-    && (arg(0) == 'admin' || flood_is_allowed($GLOBALS['theme'] . '_rebuild_registry_warning', 3))
-  ) {
-    flood_register_event($GLOBALS['theme'] . '_rebuild_registry_warning');
-    drupal_set_message(t('For easier theme development, the theme registry is being rebuilt on every page request. It is <em>extremely</em> important to <a href="!link">turn off this feature</a> on production websites.', array('!link' => url('admin/appearance/settings/' . $GLOBALS['theme']))), 'warning', FALSE);
-  }
+  // Bootstrap Dropdowns.
+  $hooks['bootstrap_dropdown'] = array(
+    'render element' => 'element',
+  );
 
-  // This base-theme's custom theme hook implementations. Never define "path"
-  // or "template" as these are detected and added automatically in
-  // bootstrap_theme_registry_alter().
-  $hooks = array(
-    'bootstrap_dropdown' => array(
-      'render element' => 'element',
-    ),
-    'bootstrap_modal' => array(
-      'variables' => array(
-        'heading' => '',
-        'body' => '',
-        'footer' => '',
-        'attributes' => array(),
-        'html_heading' => FALSE,
-      ),
-    ),
-    'bootstrap_panel' => array(
-      'render element' => 'element',
-    ),
-    'bootstrap_search_form_wrapper' => array(
-      'render element' => 'element',
+  // Bootstrap Modals.
+  $hook['bootstrap_modal'] = array(
+    'variables' => array(
+      'heading' => '',
+      'body' => '',
+      'footer' => '',
+      'attributes' => array(),
+      'html_heading' => FALSE,
     ),
   );
 
+  // Bootstrap Panels.
+  $hooks['bootstrap_panel'] = array(
+    'render element' => 'element',
+  );
+
+  // Bootstrap search form wrapper.
+  // @todo Remove this as it's not really needed and should use suggestions.
+  $hooks['bootstrap_search_form_wrapper'] = array(
+    'render element' => 'element',
+  );
   return $hooks;
 }
 

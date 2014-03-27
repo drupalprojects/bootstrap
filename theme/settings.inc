@@ -15,6 +15,7 @@
 function _bootstrap_settings_form(&$form, $form_state) {
   // Do not add Bootstrap specific settings to non-bootstrap based themes.
   $theme = !empty($form_state['build_info']['args'][0]) ? $form_state['build_info']['args'][0] : FALSE;
+
   // Global or non Bootstrap based theme settings.
   if ($theme === FALSE || !in_array('bootstrap', _bootstrap_get_base_themes($theme, TRUE))) {
     return;
@@ -56,6 +57,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#title' => t('Components'),
     '#group' => 'bootstrap',
   );
+
   // Breadcrumbs.
   $form['components']['breadcrumbs'] = array(
     '#type' => 'fieldset',
@@ -95,6 +97,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
       ),
     ),
   );
+
   // Navbar.
   $form['components']['navbar'] = array(
     '#type' => 'fieldset',
@@ -155,6 +158,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#title' => t('JavaScript'),
     '#group' => 'bootstrap',
   );
+
   // Anchors.
   $form['javascript']['anchors'] = array(
     '#type' => 'fieldset',
@@ -179,6 +183,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
       ),
     ),
   );
+
   // Popovers.
   $form['javascript']['popovers'] = array(
     '#type' => 'fieldset',
@@ -291,6 +296,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#description' => t('Appends the popover to a specific element. Example: "body". This option is particularly useful in that it allows you to position the popover in the flow of the document near the triggering element - which will prevent the popover from floating away from the triggering element during a window resize.'),
     '#default_value' => theme_get_setting('bootstrap_popover_container'),
   );
+
   // Tooltips.
   $form['javascript']['tooltips'] = array(
     '#type' => 'fieldset',
@@ -414,6 +420,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#title' => t('Advanced'),
     '#group' => 'bootstrap',
   );
+
   // BootstrapCDN.
   $form['advanced']['bootstrap_cdn'] = array(
     '#type' => 'fieldset',
@@ -442,6 +449,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#empty_option' => t('Disabled'),
     '#empty_value' => NULL,
   );
+
   // Bootswatch.
   $bootswatch_themes = array();
   $request = drupal_http_request('http://api.bootswatch.com/3/');
@@ -474,16 +482,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
   if (empty($bootswatch_themes)) {
     $form['advanced']['bootstrap_cdn']['bootstrap_bootswatch']['#prefix'] = '<div class="alert alert-danger messages error"><strong>' . t('ERROR') . ':</strong> ' . t('Unable to reach Bootswatch API. Please ensure the server your website is hosted on is able to initiate HTTP requests.') . '</div>';
   }
-  // Rebuild registry.
-  $form['advanced']['bootstrap_rebuild_registry'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Rebuild theme registry on every page.'),
-    '#default_value' => theme_get_setting('bootstrap_rebuild_registry'),
-    '#description' => t('During theme development, it can be very useful to continuously !rebuild. !warning', array(
-      '!rebuild' => l(t('rebuild the theme registry'), 'http://drupal.org/node/173880#theme-registry'),
-      '!warning' => '<div class="alert alert-warning messages warning"><strong>' . t('WARNING') . ':</strong> ' . t('This is a huge performance penalty and must be turned off on production websites. ') . '</div>',
-    )),
-  );
+
   // Suppress jQuery message.
   $form['advanced']['bootstrap_toggle_jquery_error'] = array(
     '#type' => 'checkbox',
