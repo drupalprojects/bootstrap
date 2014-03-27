@@ -412,14 +412,56 @@ function _bootstrap_icon($name, $default = NULL) {
  * Helper function for determining if Bootstrap Glyphicons can be used.
  */
 function _bootstrap_glyphicons_supported() {
-  static $supported;
-  if (!isset($supported)) {
-    $theme = variable_get('theme_default', $GLOBALS['theme']);
-    $cdn = theme_get_setting('bootstrap_cdn', $theme);
-    $fonts = _bootstrap_file_scan_directory(drupal_get_path('theme', $theme), '/glyphicons-halflings-regular\.(eot|svg|ttf|woff)$/');
-    $supported = !empty($cdn) || (empty($cdn) && !empty($fonts));
+  // Use the advanced drupal_static() pattern, since this has the potential to
+  // be called very often by _bootstrap_icon().
+  static $drupal_static_fast;
+  if (!isset($drupal_static_fast)) {
+    $drupal_static_fast['supported'] = &drupal_static(__FUNCTION__);
+    // Get the active theme.
+    $drupal_static_fast['theme'] = variable_get('theme_default', $GLOBALS['theme']);
   }
-  return $supported;
+
+  // Get static data.
+  $supported = &$drupal_static_fast['supported'];
+  $theme = &$drupal_static_fast['theme'];
+
+  // Retrieve supported themes.
+  if (!isset($supported)) {
+    $supported = array();
+
+    // Retrieve cached data.
+    $cid = 'theme_registry:bootstrap:icon_support';
+    if (($cache = cache_get($cid)) && !empty($cache->data)) {
+      $supported = $cache->data;
+    }
+
+    if (!isset($supported[$theme])) {
+      // Bootstrap based themes are enabled by default to use CDN. Check if
+      // that is the case here so no file discovery is necessary. If the active
+      // theme does not have this setting, it falls back to the base theme that
+      // does.
+      $supported[$theme] = (bool) theme_get_setting('bootstrap_cdn', $theme);
+
+      // CDN not used, iterate over all of the active (base) themes to determine
+      // if they contain glyphicon font files.
+      if (!$supported[$theme]) {
+        foreach (_bootstrap_get_base_themes($theme, TRUE) as $_theme) {
+          // Scan the theme for files.
+          $fonts = _bootstrap_file_scan_directory(drupal_get_path('theme', $_theme), '/glyphicons-halflings-regular\.(eot|svg|ttf|woff)$/');
+
+          // Fonts found, stop the search.
+          if (!empty($fonts)) {
+            $supported[$theme] = TRUE;
+            break;
+          }
+        }
+      }
+
+      // Cache all supported themes now that this theme is added to the array.
+      cache_set($cid, $supported);
+    }
+  }
+  return $supported[$theme];
 }
 
 /**
