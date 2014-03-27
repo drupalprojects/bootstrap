@@ -56,12 +56,24 @@ function bootstrap_css_alter(&$css) {
  */
 function bootstrap_element_info_alter(&$elements) {
   foreach ($elements as &$element) {
+    // Setup a default "icon" variable. This allows #icon to be passed
+    // to every template and theme function.
+    // @see https://drupal.org/node/2219965
+    if (!isset($element['#icon'])) {
+      $element['#icon'] = NULL;
+    }
+    if (!isset($element['#icon_position'])) {
+      $element['#icon_position'] = 'before';
+    }
+
     // Process all elements.
     $element['#process'][] = '_bootstrap_process_element';
+
     // Process input elements.
     if (!empty($element['#input'])) {
       $element['#process'][] = '_bootstrap_process_input';
     }
+
     // Process fieldset elements.
     if (!empty($element['#type']) && $element['#type'] === 'fieldset') {
       $element['#theme_wrappers'] = array('bootstrap_panel');
@@ -69,14 +81,17 @@ function bootstrap_element_info_alter(&$elements) {
     if (!empty($element['#theme']) && $element['#theme'] === 'fieldset') {
       $element['#theme'] = 'bootstrap_panel';
     }
+
     // Replace #process function.
     if (!empty($element['#process']) && ($key = array_search('form_process_fieldset', $element['#process'])) !== FALSE) {
       $element['#process'][$key] = '_bootstrap_process_fieldset';
     }
+
     // Replace #pre_render function.
     if (!empty($element['#pre_render']) && ($key = array_search('form_pre_render_fieldset', $element['#pre_render'])) !== FALSE) {
       $element['#pre_render'][$key] = '_bootstrap_pre_render_fieldset';
     }
+
     // Replace #theme_wrappers function.
     if (!empty($element['#theme_wrappers']) && ($key = array_search('fieldset', $element['#theme_wrappers'])) !== FALSE) {
       $element['#theme_wrappers'][$key] = 'bootstrap_panel';

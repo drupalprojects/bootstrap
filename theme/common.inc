@@ -578,7 +578,7 @@ function _bootstrap_colorize_text($string, $default = '') {
  */
 function _bootstrap_iconize_button(&$element) {
   if (_bootstrap_is_button($element) && ($icon = _bootstrap_iconize_text($element['#value']))) {
-    $element['#value'] = $icon . ' ' . $element['#value'];
+    $element['#icon'] = $icon;
   }
 }
 

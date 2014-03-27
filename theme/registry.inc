@@ -242,6 +242,16 @@ function _bootstrap_process_theme_registry(&$registry, $themes) {
         if (isset($info['variables']) && !isset($info['variables']['context'])) {
           $registry[$hook]['variables']['context'] = array();
         }
+
+        // Setup a default "icon" variable. This allows #icon to be passed
+        // to every template and theme function.
+        // @see https://drupal.org/node/2219965
+        if (isset($info['variables']) && !isset($info['variables']['icon'])) {
+          $registry[$hook]['variables']['icon'] = NULL;
+        }
+        if (isset($info['variables']) && !isset($info['variables']['icon_position'])) {
+          $registry[$hook]['variables']['icon_position'] = 'before';
+        }
       }
     }
   }
