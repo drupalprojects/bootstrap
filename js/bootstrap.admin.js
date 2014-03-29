@@ -10,6 +10,22 @@
     attach: function (context) {
       var $context = $(context);
 
+      // General.
+      $context.find('#edit-general').drupalSetSummary(function () {
+        var summary = [];
+        // Images.
+        var shape = $context.find('select[name="bootstrap_image_shape"] :selected');
+        if (shape.val()) {
+          summary.push(Drupal.t('@shape Images', {
+            '@shape': shape.text()
+          }));
+        }
+        if ($context.find(':input[name="bootstrap_image_responsive"]').is(':checked')) {
+          summary.push(Drupal.t('Responsive Images'));
+        }
+        return summary.join(', ');
+      });
+
       // Components.
       $context.find('#edit-components').drupalSetSummary(function () {
         var summary = [];

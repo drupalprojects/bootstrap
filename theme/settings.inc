@@ -94,6 +94,34 @@ function _bootstrap_settings_form(&$form, $form_state) {
     )),
   );
 
+  // Images.
+  $form['general']['images'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Images'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['general']['images']['bootstrap_image_shape'] = array(
+    '#type' => 'select',
+    '#title' => t('Default image shape'),
+    '#description' => t('Add classes to an <code>&lt;img&gt;</code> element to easily style images in any project. Note: Internet Explorer 8 lacks support for rounded corners. See: <a href="!bootstrap_url" target="_blank">Image Shapes</a>', array(
+      '!bootstrap_url' => 'http://getbootstrap.com/css/#images-shapes',
+    )),
+    '#default_value' => theme_get_setting('bootstrap_image_shape'),
+    '#empty_option' => t('None'),
+    '#options' => array(
+      'img-rounded' => t('Rounded'),
+      'img-circle' => t('Circle'),
+      'img-thumbnail' => t('Thumbnail'),
+    ),
+  );
+  $form['general']['images']['bootstrap_image_responsive'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Responsive Images'),
+    '#default_value' => theme_get_setting('bootstrap_image_responsive'),
+    '#description' => t('Images in Bootstrap 3 can be made responsive-friendly via the addition of the <code>.img-responsive</code> class. This applies <code>max-width: 100%;</code> and <code>height: auto;</code> to the image so that it scales nicely to the parent element.'),
+  );
+
   // Components.
   $form['components'] = array(
     '#type' => 'fieldset',

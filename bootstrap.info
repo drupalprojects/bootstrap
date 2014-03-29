@@ -29,6 +29,11 @@ settings[bootstrap_button_size] = ''
 settings[bootstrap_button_colorize] = 1
 settings[bootstrap_button_iconize] = 1
 
+; Images
+; --------------
+settings[bootstrap_image_shape] = ''
+settings[bootstrap_image_responsive] = 1
+
 ; Breadcrumbs
 ; --------------
 settings[bootstrap_breadcrumb] = 1
