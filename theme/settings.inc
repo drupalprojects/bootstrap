@@ -27,14 +27,14 @@ function _bootstrap_settings_form(&$form, $form_state) {
   }
 
   // Wrap global setting fieldsets in vertical tabs.
-  $form['general'] = array(
+  $form['global'] = array(
     '#type' => 'vertical_tabs',
     '#prefix' => '<h2><small>' . t('Override Global Settings') . '</small></h2>',
     '#weight' => -9,
   );
-  $form['theme_settings']['#group'] = 'general';
-  $form['logo']['#group'] = 'general';
-  $form['favicon']['#group'] = 'general';
+  $form['theme_settings']['#group'] = 'global';
+  $form['logo']['#group'] = 'global';
+  $form['favicon']['#group'] = 'global';
 
   // Do not add Bootstrap specific settings to global settings.
   if (empty($form_state['build_info']['args'][0])) {
@@ -49,6 +49,13 @@ function _bootstrap_settings_form(&$form, $form_state) {
     ),
     '#prefix' => '<h2><small>' . t('Bootstrap Settings') . '</small></h2>',
     '#weight' => -10,
+  );
+
+  // General.
+  $form['general'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('General'),
+    '#group' => 'bootstrap',
   );
 
   // Components.
