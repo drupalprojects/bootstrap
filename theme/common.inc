@@ -504,7 +504,7 @@ function _bootstrap_colorize_button(&$element) {
     $class_intersection = array_intersect($button_classes, $element['#attributes']['class']);
     if (empty($class_intersection)) {
       // Get the matched class.
-      $class = _bootstrap_colorize_text($element['#value']);
+      $class = theme_get_setting('bootstrap_button_colorize') ? _bootstrap_colorize_text($element['#value']) : FALSE;
       // If no particular class matched, use the default style.
       if (!$class) {
         $class = 'default';
@@ -609,7 +609,7 @@ function _bootstrap_colorize_text($string, $default = '') {
  *   The form element, passed by reference.
  */
 function _bootstrap_iconize_button(&$element) {
-  if (_bootstrap_is_button($element) && ($icon = _bootstrap_iconize_text($element['#value']))) {
+  if (theme_get_setting('bootstrap_button_iconize') && _bootstrap_is_button($element) && ($icon = _bootstrap_iconize_text($element['#value']))) {
     $element['#icon'] = $icon;
   }
 }

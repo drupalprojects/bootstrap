@@ -58,6 +58,42 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#group' => 'bootstrap',
   );
 
+  // Buttons.
+  $form['general']['buttons'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Buttons'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['general']['buttons']['bootstrap_button_size'] = array(
+    '#type' => 'select',
+    '#title' => t('Default button size'),
+    '#default_value' => theme_get_setting('bootstrap_button_size'),
+    '#empty_option' => t('Normal'),
+    '#options' => array(
+      'btn-xs' => t('Extra Small'),
+      'btn-sm' => t('Small'),
+      'btn-lg' => t('Large'),
+    ),
+  );
+  $form['general']['buttons']['bootstrap_button_colorize'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Colorize Buttons'),
+    '#default_value' => theme_get_setting('bootstrap_button_colorize'),
+    '#description' => t('Adds classes to buttons based on their text value. See: <a href="!bootstrap_url" target="_blank">Buttons</a> and <a href="!api_url" target="_blank">hook_bootstrap_colorize_text_alter()</a>', array(
+      '!bootstrap_url' => 'http://getbootstrap.com/css/#buttons',
+      '!api_url' => 'http://drupalcode.org/project/bootstrap.git/blob/refs/heads/7.x-3.x:/bootstrap.api.php#l13',
+    )),
+  );
+  $form['general']['buttons']['bootstrap_button_iconize'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Iconize Buttons'),
+    '#default_value' => theme_get_setting('bootstrap_button_iconize'),
+    '#description' => t('Adds icons to buttons based on the text value. See: <a href="!api_url" target="_blank">hook_bootstrap_iconize_text_alter()</a>', array(
+      '!api_url' => 'http://drupalcode.org/project/bootstrap.git/blob/refs/heads/7.x-3.x:/bootstrap.api.php#l37',
+    )),
+  );
+
   // Components.
   $form['components'] = array(
     '#type' => 'fieldset',

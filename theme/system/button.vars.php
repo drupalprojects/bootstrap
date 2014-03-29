@@ -16,6 +16,11 @@ function bootstrap_preprocess_button(&$vars) {
   // Add the base Bootstrap button class.
   $element['#attributes']['class'][] = 'btn';
 
+  // Add button size, if necessary.
+  if ($size = theme_get_setting('bootstrap_button_size')) {
+    $element['#attributes']['class'][] = $size;
+  }
+
   // Colorize button.
   _bootstrap_colorize_button($element);
 
