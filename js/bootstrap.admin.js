@@ -13,6 +13,20 @@
       // General.
       $context.find('#edit-general').drupalSetSummary(function () {
         var summary = [];
+        // Buttons.
+        var size = $context.find('select[name="bootstrap_button_size"] :selected');
+        if (size.val()) {
+          summary.push(Drupal.t('@size Buttons', {
+            '@size': size.text()
+          }));
+        }
+        if ($context.find(':input[name="bootstrap_button_colorize"]').is(':checked')) {
+          summary.push(Drupal.t('Colorize Buttons'));
+        }
+        if ($context.find(':input[name="bootstrap_button_iconize"]').is(':checked')) {
+          summary.push(Drupal.t('Iconize Buttons'));
+        }
+
         // Images.
         var shape = $context.find('select[name="bootstrap_image_shape"] :selected');
         if (shape.val()) {
