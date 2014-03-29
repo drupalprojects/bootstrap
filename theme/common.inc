@@ -692,14 +692,17 @@ function _bootstrap_preprocess_theme_suggestion(&$variables) {
     // Save the suggestion as the hook to pass to the function.
     $hook = $variables['theme_hook_suggestion'];
 
-    // Unset the theme_hook_suggestion so the suggestion's preprocess functions
-    // can provide theme_hook_suggestions if needed.
-    unset($variables['theme_hook_suggestion']);
-
     // Iterate over the preprocess functions.
     foreach ($registry[$hook]['preprocess functions'] as $function) {
       if (function_exists($function)) {
+        // Invoke theme hook suggestion preprocess function.
         $function($variables, $hook);
+
+        // Unset the theme_hook_suggestion so the suggestion's preprocess
+        // functions can provide theme_hook_suggestions if needed.
+        if (!empty($variables['theme_hook_suggestions'])) {
+          unset($variables['theme_hook_suggestion']);
+        }
       }
     }
   }
@@ -717,19 +720,21 @@ function _bootstrap_process_theme_suggestion(&$variables) {
     // Save the suggestion as the hook to pass to the function.
     $hook = $variables['theme_hook_suggestion'];
 
-    // Unset the theme_hook_suggestion so the suggestion's process functions
-    // can provide theme_hook_suggestions if needed.
-    unset($variables['theme_hook_suggestion']);
-
     // Iterate over the process functions.
     foreach ($registry[$hook]['process functions'] as $function) {
       if (function_exists($function)) {
+        // Invoke theme hook suggestion process function.
         $function($variables, $hook);
+
+        // Unset the theme_hook_suggestion so the suggestion's preprocess
+        // functions can provide theme_hook_suggestions if needed.
+        if (!empty($variables['theme_hook_suggestions'])) {
+          unset($variables['theme_hook_suggestion']);
+        }
       }
     }
   }
 }
-
 
 /**
  * Helper function for determining if a tooltip can be used for a description.
