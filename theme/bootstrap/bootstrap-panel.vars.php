@@ -33,7 +33,7 @@ function bootstrap_preprocess_bootstrap_panel(&$variables) {
   $variables['target'] = NULL;
   if (isset($element['#id'])) {
     $attributes['id'] = $element['#id'];
-    $variables['target'] = '#' . $element['#id'] . ' .collapse';
+    $variables['target'] = '#' . $element['#id'] . ' > .collapse';
   }
   $variables['content'] = $element['#children'];
   if (isset($element['#value'])) {

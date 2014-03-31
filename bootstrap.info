@@ -29,6 +29,15 @@ settings[bootstrap_button_size] = ''
 settings[bootstrap_button_colorize] = 1
 settings[bootstrap_button_iconize] = 1
 
+; Grid
+; --------------
+settings[bootstrap_grid_columns] = 12
+settings[bootstrap_grid_class_prefix] = 'col-sm'
+settings[bootstrap_region_grid-sidebar_first] = 3
+settings[bootstrap_region_grid-sidebar_second] = 3
+settings[bootstrap_region_grid_dynamic-content][sidebar_first] = 'sidebar_first'
+settings[bootstrap_region_grid_dynamic-content][sidebar_second] = 'sidebar_second'
+
 ; Images
 ; --------------
 settings[bootstrap_image_shape] = ''
@@ -48,7 +57,7 @@ settings[bootstrap_navbar_inverse] = 0
 ; Region Wells
 ; --------------
 settings[bootstrap_region_well-navigation] = ''
-settings[bootstrap_region_well-header] = ''
+settings[bootstrap_region_well-header] = 'well'
 settings[bootstrap_region_well-highlighted] = ''
 settings[bootstrap_region_well-help] = ''
 settings[bootstrap_region_well-content] = ''

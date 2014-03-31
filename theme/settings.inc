@@ -21,6 +21,9 @@ function _bootstrap_settings_form(&$form, $form_state) {
     return;
   }
 
+  // Get defined regions.
+  $regions = system_region_list($theme);
+
   // Display a warning if jquery_update isn't enabled.
   if ((!module_exists('jquery_update') || !version_compare(variable_get('jquery_update_jquery_version', '1.10'), '1.7', '>=')) && !theme_get_setting('bootstrap_toggle_jquery_error')) {
     drupal_set_message(t('jQuery Update is not enabled, Bootstrap requires a minimum jQuery version of 1.7 or higher.<br/>Please enable <a href="https://drupal.org/project/jquery_update">jQuery Update module</a> 7.x-2.3 or higher, you must manually set this in the configuration after it is installed.'), 'error', FALSE);
@@ -57,6 +60,96 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#title' => t('General'),
     '#group' => 'bootstrap',
   );
+
+  // Grid.
+  $form['general']['grid'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Grid system'),
+    '#description' => t('Bootstrap includes a responsive, mobile first fluid grid system that appropriately scales up to 12 columns (default) as the device or viewport size increases. It includes <a href="!bootstrap_url">predefined classes</a> for easy layout options.', array(
+      '!bootstrap_url' => 'http://getbootstrap.com/css/#grid-example-basic',
+    )),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+  // Grid column.
+  $grid_columns = theme_get_setting('bootstrap_grid_columns');
+  $form['general']['grid']['bootstrap_grid_columns'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Columns'),
+    '#default_value' => $grid_columns,
+    '#description' => t('The number of columns used in this theme.<br /><br /><strong>NOTE:</strong> this setting only facilitates the correlation between the generated theme grid and Drupal. It does not actually change the grid in the theme and must be manually configured, see: <a href="!bootstrap_url" target="_blank">Less mixins and variables</a>.', array(
+      '!bootstrap_url' => 'http://getbootstrap.com/css/#grid-less',
+    )),
+  );
+
+  $grid_prefix = theme_get_setting('bootstrap_grid_class_prefix');
+  $form['general']['grid']['bootstrap_grid_class_prefix'] = array(
+    '#type' => 'select',
+    '#title' => t('Class prefix'),
+    '#description' => t('Defines the default prefix to use through out Drupal when dealing with column classes. See: <a href="!bootstrap_url" target="_blank">Grid options</a>.', array(
+      '!bootstrap_url' => 'http://getbootstrap.com/css/#grid-options',
+    )),
+    '#default_value' => $grid_prefix,
+    '#options' => array(
+      'col-xs' => t('Extra Small'),
+      'col-sm' => t('Small'),
+      'col-md' => t('Medium'),
+      'col-lg' => t('Large'),
+    ),
+  );
+
+  // Grid region columns.
+  $form['general']['grid']['grid_region_columns'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Region column size'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $grid_regions = array();
+  foreach (range(1, $grid_columns) as $column) {
+    $grid_regions[$column] = format_plural($column, '@count column', '@count columns');
+  }
+  foreach ($regions as $name => $title) {
+    $form['general']['grid']['grid_region_columns']['bootstrap_region_grid-' . $name] = array(
+      '#title' => $title,
+      '#type' => 'select',
+      '#empty_option' => t('None'),
+      '#attributes' => array(
+        'class' => array('input-sm'),
+      ),
+      '#prefix' => '<div class="col-sm-3 form-group">',
+      '#suffix' => '</div>',
+      '#options' => $grid_regions,
+    );
+    if ($default_value = theme_get_setting('bootstrap_region_grid-' . $name)) {
+      $form['general']['grid']['grid_region_columns']['bootstrap_region_grid-' . $name]['#default_value'] = $default_value;
+    }
+  }
+
+  // Grid region dynamic.
+  $form['general']['grid']['grid_region_dynamic'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Dynamic regions'),
+    '#description' => t('Select the regions below that should be used when calculating dynamic region columns. If the selected region(s) are present on the page, then the column widths will be subtracted from the region it affects. The best example of what this feature entails is determining the column size of the "content" region when sidebars are or are not present (see: <a href="!url" target="_blank">!url</a>).<br /><br /><strong>NOTE:</strong> When a region is considered "dynamic", it is assumed (and enforced) that the region will be the maximum "Region column size" (above setting) when none of its selected regions are present. This helps to ensure that the subtracted column size (if any) will always be a positive number.</strong>', array(
+      '!url' => 'https://drupal.org/node/2128129',
+    )),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  foreach ($regions as $name => $title) {
+    $form['general']['grid']['grid_region_dynamic']['bootstrap_region_grid_dynamic-' . $name] = array(
+      '#title' => $title,
+      '#type' => 'select',
+      '#multiple' => TRUE,
+      '#prefix' => '<div class="col-sm-3 form-group">',
+      '#suffix' => '</div>',
+      '#options' => $regions,
+    );
+    if ($default_value = theme_get_setting('bootstrap_region_grid_dynamic-' . $name)) {
+      $form['general']['grid']['grid_region_dynamic']['bootstrap_region_grid_dynamic-' . $name]['#default_value'] = $default_value;
+    }
+  }
 
   // Buttons.
   $form['general']['buttons'] = array(
@@ -211,7 +304,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
-  foreach (system_region_list($theme) as $name => $title) {
+  foreach ($regions as $name => $title) {
     $form['components']['region_wells']['bootstrap_region_well-' . $name] = array(
       '#title' => $title,
       '#type' => 'select',

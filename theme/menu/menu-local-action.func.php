@@ -20,7 +20,7 @@ function bootstrap_menu_local_action($variables) {
   $icon = _bootstrap_iconize_text($link['title']);
 
   // Format the action link.
-  $output = '<li>';
+  $output = '';
   if (isset($link['href'])) {
     // Turn link into a mini-button and colorize based on title.
     if ($class = _bootstrap_colorize_text($link['title'])) {
@@ -45,7 +45,6 @@ function bootstrap_menu_local_action($variables) {
   else {
     $output .= $icon . $link['title'];
   }
-  $output .= "</li>\n";
 
   return $output;
 }

@@ -13,6 +13,12 @@
       // General.
       $context.find('#edit-general').drupalSetSummary(function () {
         var summary = [];
+        // Grids.
+        var columns = $context.find(':input[name="bootstrap_grid_columns"]').val();
+        if (columns) {
+          summary.push(Drupal.formatPlural(columns, '@count column', '@count columns'));
+        }
+
         // Buttons.
         var size = $context.find('select[name="bootstrap_button_size"] :selected');
         if (size.val()) {

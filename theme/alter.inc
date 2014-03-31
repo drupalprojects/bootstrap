@@ -272,6 +272,27 @@ function bootstrap_icon_bundle_list_alter(&$build, $bundle) {
 }
 
 /**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function bootstrap_menu_local_tasks_alter(&$data, &$router_item, $root_path) {
+  if (!empty($data['actions']['output'])) {
+    $items = array();
+    foreach ($data['actions']['output'] as $item) {
+      $items[] = array(
+        'data' => $item,
+      );
+    }
+    $data['actions']['output'] = array(
+      '#theme' => 'item_list__action_links',
+      '#items' => $items,
+      '#attributes' => array(
+        'class' => array('action-links'),
+      ),
+    );
+  }
+}
+
+/**
  * Include #pre_render callbacks for elements.
  */
 bootstrap_include('bootstrap', 'theme/pre-render.inc');

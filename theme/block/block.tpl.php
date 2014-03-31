@@ -55,4 +55,4 @@
 
   <?php print $content ?>
 
-</section> <!-- /.block -->
+</section>
