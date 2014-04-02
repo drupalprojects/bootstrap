@@ -18,28 +18,22 @@ function bootstrap_preprocess_page(&$variables) {
     }
   }
 
-  // Secondary nav.
-  if ($variables['secondary_menu']) {
-    // Build links.
-    $secondary_nav = menu_tree(variable_get('menu_secondary_links_source', 'user-menu'));
-    // Provide default theme wrapper function.
-    $secondary_nav['#theme_wrappers'] = array('menu_tree__secondary');
-  }
-
   // Primary menu.
+  $variables['primary_nav'] = array();
   if ($variables['main_menu']) {
     // Build links.
-    $primary_nav = menu_tree(variable_get('menu_main_links_source', 'main-menu'));
+    $variables['primary_nav'] = menu_tree(variable_get('menu_main_links_source', 'main-menu'));
     // Provide default theme wrapper function.
-    $primary_nav['#theme_wrappers'] = array('menu_tree__primary');
+    $variables['primary_nav']['#theme_wrappers'] = array('menu_tree__primary');
   }
 
-  // Add the navigation menus in reverse order.
-  if (isset($secondary_nav)) {
-    array_unshift($variables['page']['navigation'], $secondary_nav);
-  }
-  if (isset($primary_nav)) {
-    array_unshift($variables['page']['navigation'], $primary_nav);
+  // Secondary nav.
+  $variables['secondary_nav'] = array();
+  if ($variables['secondary_menu']) {
+    // Build links.
+    $variables['secondary_nav'] = menu_tree(variable_get('menu_secondary_links_source', 'user-menu'));
+    // Provide default theme wrapper function.
+    $variables['secondary_nav']['#theme_wrappers'] = array('menu_tree__secondary');
   }
 
   // Add the site slogan to the header region.
