@@ -48,7 +48,10 @@ function bootstrap_preprocess_region(&$variables) {
     case 'sidebar_first':
     case 'sidebar_second':
       $variables['attributes_array']['role'] = 'complementary';
-      $variables['theme_hook_suggestions'][] = 'region__sidebar';
+      $variables['theme_hook_suggestions'] = array(
+        'region__sidebar',
+        'region__' . $region,
+      );
       break;
 
     case 'help':
@@ -64,6 +67,35 @@ function bootstrap_preprocess_region(&$variables) {
     case 'footer':
       $attributes['class'][] = 'container';
       break;
+  }
+
+  // Provide a "front" page suggestion for regions.
+  if (drupal_is_front_page()) {
+    foreach ($variables['theme_hook_suggestions'] as $suggestion) {
+      $variables['theme_hook_suggestions'][] = $suggestion . '__front';
+    }
+  }
+
+  // Provide entity based suggestions for regions.
+  static $entities;
+  if (!isset($entities)) {
+    $entities = entity_get_info();
+  }
+  foreach ($entities as $entity_type => $entity_info) {
+    if ($entity = menu_get_object($entity_type)) {
+      $id = $entity_info['entity keys']['id'];
+      $bundle = $entity_info['entity keys']['bundle'];
+      foreach ($variables['theme_hook_suggestions'] as $suggestion) {
+        $variables['theme_hook_suggestions'][] = $suggestion . '__' . $entity_type;
+        if ($bundle) {
+          $variables['theme_hook_suggestions'][] = $suggestion . '__' . $entity_type . '__' . $entity->{$bundle};
+        }
+        if ($id) {
+          $variables['theme_hook_suggestions'][] = $suggestion . '__' . $entity_type . '__' . $entity->{$id};
+        }
+      }
+      break;
+    }
   }
 
   // Add "well" classes to the region content wrapper.
