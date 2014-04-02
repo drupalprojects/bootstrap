@@ -43,6 +43,14 @@ settings[bootstrap_region_grid_dynamic-content][sidebar_second] = 'sidebar_secon
 settings[bootstrap_image_shape] = ''
 settings[bootstrap_image_responsive] = 1
 
+; Tables
+; --------------
+settings[bootstrap_table_bordered] = 0
+settings[bootstrap_table_condensed] = 0
+settings[bootstrap_table_hover] = 1
+settings[bootstrap_table_striped] = 1
+settings[bootstrap_table_responsive] = 1
+
 ; Breadcrumbs
 ; --------------
 settings[bootstrap_breadcrumb] = 1

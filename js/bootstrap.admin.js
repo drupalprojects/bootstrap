@@ -26,12 +26,6 @@
             '@size': size.text()
           }));
         }
-        if ($context.find(':input[name="bootstrap_button_colorize"]').is(':checked')) {
-          summary.push(Drupal.t('Colorize Buttons'));
-        }
-        if ($context.find(':input[name="bootstrap_button_iconize"]').is(':checked')) {
-          summary.push(Drupal.t('Iconize Buttons'));
-        }
 
         // Images.
         var shape = $context.find('select[name="bootstrap_image_shape"] :selected');
@@ -43,7 +37,14 @@
         if ($context.find(':input[name="bootstrap_image_responsive"]').is(':checked')) {
           summary.push(Drupal.t('Responsive Images'));
         }
+
+        // Tables.
+        if ($context.find(':input[name="bootstrap_table_responsive"]').is(':checked')) {
+          summary.push(Drupal.t('Responsive Tables'));
+        }
+
         return summary.join(', ');
+
       });
 
       // Components.
@@ -116,7 +117,7 @@
               $('<img/>').attr({
                 src: themes[i].thumbnail,
                 alt: themes[i].name
-              })
+              }).addClass('img-responsive')
             )
             .appendTo($preview);
           }

@@ -103,6 +103,7 @@ function bootstrap_table($variables) {
   $colgroups = $variables['colgroups'];
   $sticky = $variables['sticky'];
   $empty = $variables['empty'];
+  $responsive = $variables['responsive'];
 
   // Add sticky headers, if applicable.
   if (count($header) && $sticky) {
@@ -112,7 +113,13 @@ function bootstrap_table($variables) {
     $attributes['class'][] = 'sticky-enabled';
   }
 
-  $output = '<table' . drupal_attributes($attributes) . ">\n";
+  $output = '';
+
+  if ($responsive) {
+    $output .= "<div class=\"table-responsive\">\n";
+  }
+
+  $output .= '<table' . drupal_attributes($attributes) . ">\n";
 
   if (isset($caption)) {
     $output .= '<caption>' . $caption . "</caption>\n";
@@ -192,15 +199,12 @@ function bootstrap_table($variables) {
   }
 
   // Format the table rows:
-  $flip = array('even' => 'odd', 'odd' => 'even');
   if (count($rows)) {
     $output .= "<tbody>\n";
-    $class = 'even';
-    foreach ($rows as $number => $row) {
+    foreach ($rows as $row) {
       // Check if we're dealing with a simple or complex row.
       if (isset($row['data'])) {
         $cells = $row['data'];
-        $no_striping = isset($row['no_striping']) ? $row['no_striping'] : FALSE;
 
         // Set the attributes array and exclude 'data' and 'no_striping'.
         $attributes = $row;
@@ -210,15 +214,8 @@ function bootstrap_table($variables) {
       else {
         $cells = $row;
         $attributes = array();
-        $no_striping = FALSE;
       }
       if (count($cells)) {
-        // Add odd/even class.
-        if (!$no_striping) {
-          $class = $flip[$class];
-          $attributes['class'][] = $class;
-        }
-
         // Build row.
         $output .= ' <tr' . drupal_attributes($attributes) . '>';
         $i = 0;
@@ -234,33 +231,21 @@ function bootstrap_table($variables) {
 
   // Format the table footer:
   if (count($footer)) {
-    // HTML requires that the tfoot tag has tr tags in it followed by tbody
-    // tags. Using ternary operator to check and see if we have any rows.
     $output .= "<tfoot>\n";
-    $class = 'even';
-    foreach ($footer as $number => $row) {
+    foreach ($footer as $row) {
       // Check if we're dealing with a simple or complex row.
       if (isset($row['data'])) {
         $cells = $row['data'];
-        $no_striping = isset($row['no_striping']) ? $row['no_striping'] : FALSE;
 
-        // Set the attributes array and exclude 'data' and 'no_striping'.
+        // Set the attributes array and exclude 'data'.
         $attributes = $row;
         unset($attributes['data']);
-        unset($attributes['no_striping']);
       }
       else {
         $cells = $row;
         $attributes = array();
-        $no_striping = FALSE;
       }
       if (count($cells)) {
-        // Add odd/even class.
-        if (!$no_striping) {
-          $class = $flip[$class];
-          $attributes['class'][] = $class;
-        }
-
         // Build row.
         $output .= ' <tr' . drupal_attributes($attributes) . '>';
         $i = 0;
@@ -277,5 +262,10 @@ function bootstrap_table($variables) {
   }
 
   $output .= "</table>\n";
+
+  if ($responsive) {
+    $output .= "</div>\n";
+  }
+
   return $output;
 }

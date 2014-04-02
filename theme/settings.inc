@@ -215,6 +215,44 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#description' => t('Images in Bootstrap 3 can be made responsive-friendly via the addition of the <code>.img-responsive</code> class. This applies <code>max-width: 100%;</code> and <code>height: auto;</code> to the image so that it scales nicely to the parent element.'),
   );
 
+  // Tables.
+  $form['general']['tables'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Tables'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['general']['tables']['bootstrap_table_bordered'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Bordered table'),
+    '#default_value' => theme_get_setting('bootstrap_table_bordered'),
+    '#description' => t('Add borders on all sides of the table and cells.'),
+  );
+  $form['general']['tables']['bootstrap_table_condensed'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Condensed table'),
+    '#default_value' => theme_get_setting('bootstrap_table_condensed'),
+    '#description' => t('Make tables more compact by cutting cell padding in half.'),
+  );
+  $form['general']['tables']['bootstrap_table_hover'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Hover rows'),
+    '#default_value' => theme_get_setting('bootstrap_table_hover'),
+    '#description' => t('Enable a hover state on table rows.'),
+  );
+  $form['general']['tables']['bootstrap_table_striped'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Striped rows'),
+    '#default_value' => theme_get_setting('bootstrap_table_striped'),
+    '#description' => t('Add zebra-striping to any table row within the <code>&lt;tbody&gt;</code>. <strong>Note:</strong> Striped tables are styled via the <code>:nth-child</code> CSS selector, which is not available in Internet Explorer 8.'),
+  );
+  $form['general']['tables']['bootstrap_table_responsive'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Responsive tables'),
+    '#default_value' => theme_get_setting('bootstrap_table_responsive'),
+    '#description' => t('Makes tables responsive by wrapping them in <code>.table-responsive</code> to make them scroll horizontally up to small devices (under 768px). When viewing on anything larger than 768px wide, you will not see any difference in these tables.'),
+  );
+
   // Components.
   $form['components'] = array(
     '#type' => 'fieldset',

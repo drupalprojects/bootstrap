@@ -68,6 +68,12 @@ function bootstrap_form_element(&$variables) {
     }
   }
 
+  $tooltip_description = !empty($element['#description']) && _bootstrap_tooltip_description($element['#description']);
+  if ($tooltip_description && ($element['#type'] === 'checkbox' || $element['#type'] === 'radio' || $element['#type'] === 'checkboxes' || $element['#type'] === 'radios')) {
+    $wrapper_attributes['title'] = $element['#description'];
+    $wrapper_attributes['data-toggle'] = 'tooltip';
+  }
+
   $output = '<div' . drupal_attributes($wrapper_attributes) . '>' . "\n";
 
   // If #title is not set, we don't display any label or required marker.
@@ -122,7 +128,7 @@ function bootstrap_form_element(&$variables) {
       break;
   }
 
-  if (!empty($element['#description']) && empty($element['#attributes']['title']) && !_bootstrap_tooltip_description($element['#description'])) {
+  if (!empty($element['#description']) && !$tooltip_description && empty($element['#attributes']['title'])) {
     $output .= '<p class="help-block">' . $element['#description'] . "</p>\n";
   }
 
