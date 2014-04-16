@@ -16,17 +16,14 @@ function _bootstrap_settings_form(&$form, $form_state) {
   $config = \Drupal::config('bootstrap.settings');
   // Do not add Bootstrap specific settings to non-bootstrap based themes.
   $theme = !empty($form_state['build_info']['args'][0]) ? $form_state['build_info']['args'][0] : FALSE;
-  // Global settings.
-  if ($theme === FALSE) {
+
+  // Global or non Bootstrap based theme settings.
+  if ($theme === FALSE || !in_array('bootstrap', _bootstrap_get_base_themes($theme, TRUE))) {
     return;
   }
-  // Other theme settings.
-  elseif ($theme !== 'bootstrap') {
-    $base_theme = bootstrap_get_theme_info($theme, 'base theme');
-    if (!$base_theme || (!is_array($base_theme) && $base_theme !== 'bootstrap') || (is_array($base_theme) && !in_array('bootstrap', $base_theme))) {
-      return;
-    }
-  }
+
+  // Get defined regions.
+  $regions = system_region_list($theme);
 
   // Wrap global setting details in vertical tabs.
   $form['general'] = array(
@@ -34,9 +31,9 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#prefix' => '<h2><small>' . t('Override Global Settings') . '</small></h2>',
     '#weight' => -9,
   );
-  $form['theme_settings']['#group'] = 'general';
-  $form['logo']['#group'] = 'general';
-  $form['favicon']['#group'] = 'general';
+  $form['theme_settings']['#group'] = 'global';
+  $form['logo']['#group'] = 'global';
+  $form['favicon']['#group'] = 'global';
 
   // Do not add Bootstrap specific settings to global settings.
   if (empty($form_state['build_info']['args'][0])) {
@@ -53,12 +50,212 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#weight' => -10,
   );
 
+  // General.
+  $form['general'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('General'),
+    '#group' => 'bootstrap',
+  );
+
+  // Grid.
+  $form['general']['grid'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Grid system'),
+    '#description' => t('Bootstrap includes a responsive, mobile first fluid grid system that appropriately scales up to 12 columns (default) as the device or viewport size increases. It includes <a href="!bootstrap_url">predefined classes</a> for easy layout options.', array(
+      '!bootstrap_url' => 'http://getbootstrap.com/css/#grid-example-basic',
+    )),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+  // Grid column.
+  $grid_columns = theme_get_setting('bootstrap_grid_columns');
+  $form['general']['grid']['bootstrap_grid_columns'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Columns'),
+    '#default_value' => $grid_columns,
+    '#description' => t('The number of columns used in this theme.<br /><br /><strong>NOTE:</strong> this setting only facilitates the correlation between the generated theme grid and Drupal. It does not actually change the grid in the theme and must be manually configured, see: <a href="!bootstrap_url" target="_blank">Less mixins and variables</a>.', array(
+      '!bootstrap_url' => 'http://getbootstrap.com/css/#grid-less',
+    )),
+  );
+
+  $grid_prefix = theme_get_setting('bootstrap_grid_class_prefix');
+  $form['general']['grid']['bootstrap_grid_class_prefix'] = array(
+    '#type' => 'select',
+    '#title' => t('Class prefix'),
+    '#description' => t('Defines the default prefix to use through out Drupal when dealing with column classes. See: <a href="!bootstrap_url" target="_blank">Grid options</a>.', array(
+      '!bootstrap_url' => 'http://getbootstrap.com/css/#grid-options',
+    )),
+    '#default_value' => $grid_prefix,
+    '#options' => array(
+      'col-xs' => t('Extra Small'),
+      'col-sm' => t('Small'),
+      'col-md' => t('Medium'),
+      'col-lg' => t('Large'),
+    ),
+  );
+
+  // Grid region columns.
+  $form['general']['grid']['grid_region_columns'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Region column size'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $grid_regions = array();
+  foreach (range(1, $grid_columns) as $column) {
+    $grid_regions[$column] = format_plural($column, '@count column', '@count columns');
+  }
+  foreach ($regions as $name => $title) {
+    $form['general']['grid']['grid_region_columns']['bootstrap_region_grid-' . $name] = array(
+      '#title' => $title,
+      '#type' => 'select',
+      '#empty_option' => t('None'),
+      '#attributes' => array(
+        'class' => array('input-sm'),
+      ),
+      '#prefix' => '<div class="col-sm-3 form-group">',
+      '#suffix' => '</div>',
+      '#options' => $grid_regions,
+    );
+    if ($default_value = theme_get_setting('bootstrap_region_grid-' . $name)) {
+      $form['general']['grid']['grid_region_columns']['bootstrap_region_grid-' . $name]['#default_value'] = $default_value;
+    }
+  }
+
+  // Grid region dynamic.
+  $form['general']['grid']['grid_region_dynamic'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Dynamic regions'),
+    '#description' => t('Select the regions below that should be used when calculating dynamic region columns. If the selected region(s) are present on the page, then the column widths will be subtracted from the region it affects. The best example of what this feature entails is determining the column size of the "content" region when sidebars are or are not present (see: <a href="!url" target="_blank">!url</a>).<br /><br /><strong>NOTE:</strong> When a region is considered "dynamic", it is assumed (and enforced) that the region will be the maximum "Region column size" (above setting) when none of its selected regions are present. This helps to ensure that the subtracted column size (if any) will always be a positive number.</strong>', array(
+      '!url' => 'https://drupal.org/node/2128129',
+    )),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  foreach ($regions as $name => $title) {
+    $form['general']['grid']['grid_region_dynamic']['bootstrap_region_grid_dynamic-' . $name] = array(
+      '#title' => $title,
+      '#type' => 'select',
+      '#multiple' => TRUE,
+      '#prefix' => '<div class="col-sm-3 form-group">',
+      '#suffix' => '</div>',
+      '#options' => $regions,
+    );
+    if ($default_value = theme_get_setting('bootstrap_region_grid_dynamic-' . $name)) {
+      $form['general']['grid']['grid_region_dynamic']['bootstrap_region_grid_dynamic-' . $name]['#default_value'] = $default_value;
+    }
+  }
+
+  // Buttons.
+  $form['general']['buttons'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Buttons'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['general']['buttons']['bootstrap_button_size'] = array(
+    '#type' => 'select',
+    '#title' => t('Default button size'),
+    '#default_value' => theme_get_setting('bootstrap_button_size'),
+    '#empty_option' => t('Normal'),
+    '#options' => array(
+      'btn-xs' => t('Extra Small'),
+      'btn-sm' => t('Small'),
+      'btn-lg' => t('Large'),
+    ),
+  );
+  $form['general']['buttons']['bootstrap_button_colorize'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Colorize Buttons'),
+    '#default_value' => theme_get_setting('bootstrap_button_colorize'),
+    '#description' => t('Adds classes to buttons based on their text value. See: <a href="!bootstrap_url" target="_blank">Buttons</a> and <a href="!api_url" target="_blank">hook_bootstrap_colorize_text_alter()</a>', array(
+      '!bootstrap_url' => 'http://getbootstrap.com/css/#buttons',
+      '!api_url' => 'http://drupalcode.org/project/bootstrap.git/blob/refs/heads/7.x-3.x:/bootstrap.api.php#l13',
+    )),
+  );
+  $form['general']['buttons']['bootstrap_button_iconize'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Iconize Buttons'),
+    '#default_value' => theme_get_setting('bootstrap_button_iconize'),
+    '#description' => t('Adds icons to buttons based on the text value. See: <a href="!api_url" target="_blank">hook_bootstrap_iconize_text_alter()</a>', array(
+      '!api_url' => 'http://drupalcode.org/project/bootstrap.git/blob/refs/heads/7.x-3.x:/bootstrap.api.php#l37',
+    )),
+  );
+
+  // Images.
+  $form['general']['images'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Images'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['general']['images']['bootstrap_image_shape'] = array(
+    '#type' => 'select',
+    '#title' => t('Default image shape'),
+    '#description' => t('Add classes to an <code>&lt;img&gt;</code> element to easily style images in any project. Note: Internet Explorer 8 lacks support for rounded corners. See: <a href="!bootstrap_url" target="_blank">Image Shapes</a>', array(
+      '!bootstrap_url' => 'http://getbootstrap.com/css/#images-shapes',
+    )),
+    '#default_value' => theme_get_setting('bootstrap_image_shape'),
+    '#empty_option' => t('None'),
+    '#options' => array(
+      'img-rounded' => t('Rounded'),
+      'img-circle' => t('Circle'),
+      'img-thumbnail' => t('Thumbnail'),
+    ),
+  );
+  $form['general']['images']['bootstrap_image_responsive'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Responsive Images'),
+    '#default_value' => theme_get_setting('bootstrap_image_responsive'),
+    '#description' => t('Images in Bootstrap 3 can be made responsive-friendly via the addition of the <code>.img-responsive</code> class. This applies <code>max-width: 100%;</code> and <code>height: auto;</code> to the image so that it scales nicely to the parent element.'),
+  );
+
+  // Tables.
+  $form['general']['tables'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Tables'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['general']['tables']['bootstrap_table_bordered'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Bordered table'),
+    '#default_value' => theme_get_setting('bootstrap_table_bordered'),
+    '#description' => t('Add borders on all sides of the table and cells.'),
+  );
+  $form['general']['tables']['bootstrap_table_condensed'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Condensed table'),
+    '#default_value' => theme_get_setting('bootstrap_table_condensed'),
+    '#description' => t('Make tables more compact by cutting cell padding in half.'),
+  );
+  $form['general']['tables']['bootstrap_table_hover'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Hover rows'),
+    '#default_value' => theme_get_setting('bootstrap_table_hover'),
+    '#description' => t('Enable a hover state on table rows.'),
+  );
+  $form['general']['tables']['bootstrap_table_striped'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Striped rows'),
+    '#default_value' => theme_get_setting('bootstrap_table_striped'),
+    '#description' => t('Add zebra-striping to any table row within the <code>&lt;tbody&gt;</code>. <strong>Note:</strong> Striped tables are styled via the <code>:nth-child</code> CSS selector, which is not available in Internet Explorer 8.'),
+  );
+  $form['general']['tables']['bootstrap_table_responsive'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Responsive tables'),
+    '#default_value' => theme_get_setting('bootstrap_table_responsive'),
+    '#description' => t('Makes tables responsive by wrapping them in <code>.table-responsive</code> to make them scroll horizontally up to small devices (under 768px). When viewing on anything larger than 768px wide, you will not see any difference in these tables.'),
+  );
+
   // Components.
   $form['components'] = array(
     '#type' => 'details',
     '#title' => t('Components'),
     '#group' => 'bootstrap',
   );
+
   // Breadcrumbs.
   $form['components']['breadcrumbs'] = array(
     '#type' => 'details',
@@ -98,6 +295,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
       ),
     ),
   );
+
   // Navbar.
   $form['components']['navbar'] = array(
     '#type' => 'details',
@@ -140,8 +338,13 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
+<<<<<<< HEAD
   foreach (system_region_list($theme) as $name => $title) {
     $form['components']['region_wells']['region_well-' . $name] = array(
+=======
+  foreach ($regions as $name => $title) {
+    $form['components']['region_wells']['bootstrap_region_well-' . $name] = array(
+>>>>>>> origin/7.x-3.x
       '#title' => $title,
       '#type' => 'select',
       '#attributes' => array(
@@ -158,6 +361,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#title' => t('JavaScript'),
     '#group' => 'bootstrap',
   );
+
   // Anchors.
   $form['javascript']['anchors'] = array(
     '#type' => 'details',
@@ -182,6 +386,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
       ),
     ),
   );
+
   // Popovers.
   $form['javascript']['popovers'] = array(
     '#type' => 'details',
@@ -264,7 +469,17 @@ function _bootstrap_settings_form(&$form, $form_state) {
       'manual',
     )),
   );
+<<<<<<< HEAD
   $form['javascript']['popovers']['options']['popover_title'] = array(
+=======
+  $form['javascript']['popovers']['options']['bootstrap_popover_trigger_autoclose'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Auto-close on document click'),
+    '#description' => t('Will automatically close the current popover if a click occurs anywhere else other than the popover element.'),
+    '#default_value' => theme_get_setting('bootstrap_popover_trigger_autoclose'),
+  );
+  $form['javascript']['popovers']['options']['bootstrap_popover_title'] = array(
+>>>>>>> origin/7.x-3.x
     '#type' => 'textfield',
     '#title' => t('title'),
     '#description' => t("Default title value if \"title\" attribute isn't present."),
@@ -273,8 +488,13 @@ function _bootstrap_settings_form(&$form, $form_state) {
   $form['javascript']['popovers']['options']['popover_content'] = array(
     '#type' => 'textfield',
     '#title' => t('content'),
+<<<<<<< HEAD
     '#description' => t("Default content value if \"data-content\" attribute isn't present."),
     '#default_value' => $config->get('popover_content'),
+=======
+    '#description' => t('Default content value if "data-content" or "data-target" attributes are not present.'),
+    '#default_value' => theme_get_setting('bootstrap_popover_content'),
+>>>>>>> origin/7.x-3.x
   );
   $form['javascript']['popovers']['options']['popover_delay'] = array(
     '#type' => 'textfield',
@@ -288,6 +508,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#description' => t('Appends the popover to a specific element. Example: "body". This option is particularly useful in that it allows you to position the popover in the flow of the document near the triggering element - which will prevent the popover from floating away from the triggering element during a window resize.'),
     '#default_value' => $config->get('popover_container'),
   );
+
   // Tooltips.
   $form['javascript']['tooltips'] = array(
     '#type' => 'details',
@@ -309,12 +530,30 @@ function _bootstrap_settings_form(&$form, $form_state) {
   );
   $form['javascript']['tooltips']['tooltip_descriptions'] = array(
     '#type' => 'checkbox',
+<<<<<<< HEAD
     '#title' => t('Convert simple form descriptions'),
     '#description' => t('Form items that contain simple descriptions (no HTML and shorter than 200 characters) will be converted into tooltips. This helps reduce the sometimes unnecessary noise of form item descriptions. By treating descriptions that contain longer text or HTML as actionable descriptions, we ensure it is always visible so its usability remains intact.'),
     '#default_value' => $config->get('tooltip_descriptions'),
+=======
+    '#title' => t('Use Tooltips for simple form descriptions'),
+    '#description' => t('Form items that contain simple descriptions (no HTML, no title attribute and are less than the specified length below) will be converted into tooltips. This helps reduce the sometimes unnecessary noise of form item descriptions. Descriptions that contain longer text or HTML as actionable descriptions (user needs to click) will not be converted. This ensures it is always visible so its usability remains intact.'),
+    '#default_value' => theme_get_setting('bootstrap_tooltip_descriptions'),
+>>>>>>> origin/7.x-3.x
     '#states' => array(
       'visible' => array(
         ':input[name="tooltip_enabled"]' => array('checked' => TRUE),
+      ),
+    ),
+  );
+  $form['javascript']['tooltips']['bootstrap_tooltip_descriptions_length'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Simple form description length'),
+    '#description' => t('The character length limit used to determine when a description makes a sense to be used as a tooltip.'),
+    '#default_value' => theme_get_setting('bootstrap_tooltip_descriptions_length'),
+    '#states' => array(
+      'visible' => array(
+        ':input[name="bootstrap_tooltip_enabled"]' => array('checked' => TRUE),
+        ':input[name="bootstrap_tooltip_descriptions"]' => array('checked' => TRUE),
       ),
     ),
   );
@@ -399,6 +638,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#title' => t('Advanced'),
     '#group' => 'bootstrap',
   );
+
   // BootstrapCDN.
   $form['advanced']['bootstrap_cdn'] = array(
     '#type' => 'details',
@@ -416,9 +656,12 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#type' => 'select',
     '#title' => t('BootstrapCDN version'),
     '#options' => drupal_map_assoc(array(
-      '3.0.0',
-      '3.0.1',
+      '3.1.1',
+      '3.1.0',
+      '3.0.3',
       '3.0.2',
+      '3.0.1',
+      '3.0.0',
     )),
     '#default_value' => $config->get('cdn'),
     '#empty_option' => t('Disabled'),
@@ -462,6 +705,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     $form['advanced']['bootstrap_cdn']['bootswatch']['#prefix'] = '<div class="alert alert-danger messages error"><strong>' . t('ERROR') . ':</strong> ' . t('Unable to reach Bootswatch API. Please ensure the server your website is hosted on is able to initiate HTTP requests.') . '</div>';
   }
 
+<<<<<<< HEAD
   // Rebuild registry.
   $form['advanced']['rebuild_registry'] = array(
     '#type' => 'checkbox',
@@ -472,6 +716,8 @@ function _bootstrap_settings_form(&$form, $form_state) {
       '!warning' => '<div class="alert alert-warning messages warning"><strong>' . t('WARNING') . ':</strong> ' . t('This is a huge performance penalty and must be turned off on production websites. ') . '</div>',
     )),
   );
+=======
+>>>>>>> origin/7.x-3.x
   // Suppress jQuery message.
   $form['advanced']['toggle_jquery_error'] = array(
     '#type' => 'checkbox',

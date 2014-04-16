@@ -10,6 +10,43 @@
     attach: function (context) {
       var $context = $(context);
 
+      // General.
+      $context.find('#edit-general').drupalSetSummary(function () {
+        var summary = [];
+        // Grids.
+        var columns = $context.find(':input[name="bootstrap_grid_columns"]').val();
+        if (columns) {
+          summary.push(Drupal.formatPlural(columns, '@count column', '@count columns'));
+        }
+
+        // Buttons.
+        var size = $context.find('select[name="bootstrap_button_size"] :selected');
+        if (size.val()) {
+          summary.push(Drupal.t('@size Buttons', {
+            '@size': size.text()
+          }));
+        }
+
+        // Images.
+        var shape = $context.find('select[name="bootstrap_image_shape"] :selected');
+        if (shape.val()) {
+          summary.push(Drupal.t('@shape Images', {
+            '@shape': shape.text()
+          }));
+        }
+        if ($context.find(':input[name="bootstrap_image_responsive"]').is(':checked')) {
+          summary.push(Drupal.t('Responsive Images'));
+        }
+
+        // Tables.
+        if ($context.find(':input[name="bootstrap_table_responsive"]').is(':checked')) {
+          summary.push(Drupal.t('Responsive Tables'));
+        }
+
+        return summary.join(', ');
+
+      });
+
       // Components.
       $context.find('#edit-components').drupalSetSummary(function () {
         var summary = [];
@@ -55,10 +92,6 @@
           }
           summary.push(bootstrapCDN);
         }
-        // Rebuild registry.
-        if ($context.find('input[name="rebuild_registry"]').is(':checked')) {
-          summary.push(Drupal.t('Rebuild Registry'));
-        }
         return summary.join(', ');
       });
     }
@@ -84,7 +117,7 @@
               $('<img/>').attr({
                 src: themes[i].thumbnail,
                 alt: themes[i].name
-              })
+              }).addClass('img-responsive')
             )
             .appendTo($preview);
           }
