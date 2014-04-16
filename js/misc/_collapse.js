@@ -51,7 +51,7 @@ Drupal.behaviors.collapse = {
       // for CSS positioning.
       var $legend = $('> legend .fieldset-legend', this);
 
-      $('<span class="fieldset-legend-prefix element-invisible"></span>')
+      $('<span class="fieldset-legend-prefix visually-hidden"></span>')
         .append($fieldset.hasClass('collapsed') ? Drupal.t('Show') : Drupal.t('Hide'))
         .prependTo($legend);
 

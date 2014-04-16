@@ -16,7 +16,7 @@ Drupal.behaviors.autocomplete = {
         .attr('aria-autocomplete', 'list');
       $($input[0].form).submit(Drupal.autocompleteSubmit);
       $input
-        .after($('<span class="element-invisible" aria-live="assertive"></span>')
+        .after($('<span class="visually-hidden" aria-live="assertive"></span>')
           .attr('id', $input.attr('id') + '-autocomplete-aria-live')
         );
       $input.parent().parent().attr('role', 'application');

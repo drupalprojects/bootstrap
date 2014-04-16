@@ -121,7 +121,7 @@ function bootstrap_form_alter(array &$form, array &$form_state = array(), $form_
         $form['basic']['#attributes']['class'] = array();
 
         // Hide the default button from display.
-        $form['basic']['submit']['#attributes']['class'][] = 'element-invisible';
+        $form['basic']['submit']['#attributes']['class'][] = 'visually-hidden';
 
         // Implement a theme wrapper to add a submit button containing a search
         // icon directly after the input element.
@@ -139,7 +139,7 @@ function bootstrap_form_alter(array &$form, array &$form_state = array(), $form_
         // Hide the default button from display and implement a theme wrapper
         // to add a submit button containing a search icon directly after the
         // input element.
-        $form['actions']['submit']['#attributes']['class'][] = 'element-invisible';
+        $form['actions']['submit']['#attributes']['class'][] = 'visually-hidden';
         $form['search_block_form']['#theme_wrappers'] = array('bootstrap_search_form_wrapper');
 
         // Apply a clearfix so the results don't overflow onto the form.

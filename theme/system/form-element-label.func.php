@@ -33,7 +33,7 @@ function bootstrap_form_element_label(&$variables) {
   }
   // Show label only to screen readers to avoid disruption in visual flows.
   elseif ($element['#title_display'] == 'invisible') {
-    $attributes['class'][] = 'element-invisible';
+    $attributes['class'][] = 'visually-hidden';
   }
 
   if (!empty($element['#id'])) {
