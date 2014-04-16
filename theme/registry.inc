@@ -280,7 +280,7 @@ function _bootstrap_process_theme_registry_suggestions(&$registry, $themes) {
   }
 
   // Merge in normal core detections first.
-  $registry = drupal_array_merge_deep($registry, drupal_find_theme_functions($registry, $themes));
+  $registry = NestedArray::mergeDeep($registry, drupal_find_theme_functions($registry, $themes));
 
   // Processor functions work in two distinct phases with the process
   // functions always being executed after the preprocess functions.
@@ -374,7 +374,7 @@ function _bootstrap_process_theme_registry_suggestions(&$registry, $themes) {
             // since there was no base hook found and a new implementation
             // could not be created.
             if (isset($registry[$hook])) {
-              $registry[$hook] = drupal_array_merge_deep($registry[$hook], array(
+              $registry[$hook] = NestedArray::mergeDeep($registry[$hook], array(
                 $phase_key => array($match),
               ));
             }
