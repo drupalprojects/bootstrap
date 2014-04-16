@@ -215,7 +215,7 @@ function _bootstrap_process_theme_registry(&$registry, $themes) {
       _theme_process_registry($registry, $theme, $GLOBALS['theme_key'] === $theme ? 'theme' : 'base_theme', $theme, $path);
 
       // Find necessary templates in the theme.
-      $registry = drupal_array_merge_deep($registry, drupal_find_theme_templates($registry, '.tpl.php', $path));
+      $registry = NestedArray::mergeDeep($registry, drupal_find_theme_templates($registry, '.tpl.php', $path));
 
       // Iterate over each registered hook.
       foreach ($registry as $hook => $info) {

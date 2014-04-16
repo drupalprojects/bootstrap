@@ -7,6 +7,7 @@
  */
 
 use Drupal\Core\Template\Attribute;
+use Drupal\Component\Utility\NestedArray;
 
 /**
  * Return information from the .info file of a theme (and possible base themes).
@@ -58,7 +59,7 @@ function bootstrap_get_theme_info($theme_key = NULL, $key = NULL, $base_themes =
               if (!is_array($info)) {
                 $info = array($info);
               }
-              $value = drupal_array_merge_deep($value, $info);
+              $value = NestedArray::mergeDeep($value, $info);
             }
           }
           else {
@@ -73,7 +74,7 @@ function bootstrap_get_theme_info($theme_key = NULL, $key = NULL, $base_themes =
                 if (!is_array($info)) {
                   $info = array($info);
                 }
-                $value = drupal_array_merge_deep($value, $info);
+                $value = NestedArray::mergeDeep($value, $info);
               }
             }
           }

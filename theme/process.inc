@@ -6,6 +6,8 @@
  * Contains various implementations for #process callbacks on elements.
  */
 
+use Drupal\Component\Utility\NestedArray;
+
 /**
  * Process all elements.
  */
@@ -37,7 +39,7 @@ function _bootstrap_process_element(&$element, &$form_state) {
     }
     // If element is nested, return the referenced parent from the form.
     if (!empty($array_parents)) {
-      $parent = &drupal_array_get_nested_value($form_state['complete form'], $array_parents);
+      $parent = &NestedArray::getValue($form_state['complete form'], $array_parents);
     }
     // Otherwise return the complete form.
     else {
