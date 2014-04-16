@@ -338,13 +338,8 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
-<<<<<<< HEAD
-  foreach (system_region_list($theme) as $name => $title) {
-    $form['components']['region_wells']['region_well-' . $name] = array(
-=======
   foreach ($regions as $name => $title) {
-    $form['components']['region_wells']['bootstrap_region_well-' . $name] = array(
->>>>>>> origin/7.x-3.x
+    $form['components']['region_wells']['region_well-' . $name] = array(
       '#title' => $title,
       '#type' => 'select',
       '#attributes' => array(
@@ -469,17 +464,13 @@ function _bootstrap_settings_form(&$form, $form_state) {
       'manual',
     )),
   );
-<<<<<<< HEAD
-  $form['javascript']['popovers']['options']['popover_title'] = array(
-=======
-  $form['javascript']['popovers']['options']['bootstrap_popover_trigger_autoclose'] = array(
+  $form['javascript']['popovers']['options']['popover_trigger_autoclose'] = array(
     '#type' => 'checkbox',
     '#title' => t('Auto-close on document click'),
     '#description' => t('Will automatically close the current popover if a click occurs anywhere else other than the popover element.'),
-    '#default_value' => theme_get_setting('bootstrap_popover_trigger_autoclose'),
+    '#default_value' => $config->get('popover_trigger_autoclose'),
   );
-  $form['javascript']['popovers']['options']['bootstrap_popover_title'] = array(
->>>>>>> origin/7.x-3.x
+  $form['javascript']['popovers']['options']['popover_title'] = array(
     '#type' => 'textfield',
     '#title' => t('title'),
     '#description' => t("Default title value if \"title\" attribute isn't present."),
@@ -488,13 +479,8 @@ function _bootstrap_settings_form(&$form, $form_state) {
   $form['javascript']['popovers']['options']['popover_content'] = array(
     '#type' => 'textfield',
     '#title' => t('content'),
-<<<<<<< HEAD
-    '#description' => t("Default content value if \"data-content\" attribute isn't present."),
-    '#default_value' => $config->get('popover_content'),
-=======
     '#description' => t('Default content value if "data-content" or "data-target" attributes are not present.'),
-    '#default_value' => theme_get_setting('bootstrap_popover_content'),
->>>>>>> origin/7.x-3.x
+    '#default_value' => $config->get('popover_content'),
   );
   $form['javascript']['popovers']['options']['popover_delay'] = array(
     '#type' => 'textfield',
@@ -530,26 +516,20 @@ function _bootstrap_settings_form(&$form, $form_state) {
   );
   $form['javascript']['tooltips']['tooltip_descriptions'] = array(
     '#type' => 'checkbox',
-<<<<<<< HEAD
-    '#title' => t('Convert simple form descriptions'),
-    '#description' => t('Form items that contain simple descriptions (no HTML and shorter than 200 characters) will be converted into tooltips. This helps reduce the sometimes unnecessary noise of form item descriptions. By treating descriptions that contain longer text or HTML as actionable descriptions, we ensure it is always visible so its usability remains intact.'),
-    '#default_value' => $config->get('tooltip_descriptions'),
-=======
     '#title' => t('Use Tooltips for simple form descriptions'),
     '#description' => t('Form items that contain simple descriptions (no HTML, no title attribute and are less than the specified length below) will be converted into tooltips. This helps reduce the sometimes unnecessary noise of form item descriptions. Descriptions that contain longer text or HTML as actionable descriptions (user needs to click) will not be converted. This ensures it is always visible so its usability remains intact.'),
-    '#default_value' => theme_get_setting('bootstrap_tooltip_descriptions'),
->>>>>>> origin/7.x-3.x
+    '#default_value' => $config->get('tooltip_descriptions'),
     '#states' => array(
       'visible' => array(
         ':input[name="tooltip_enabled"]' => array('checked' => TRUE),
       ),
     ),
   );
-  $form['javascript']['tooltips']['bootstrap_tooltip_descriptions_length'] = array(
+  $form['javascript']['tooltips']['tooltip_descriptions_length'] = array(
     '#type' => 'textfield',
     '#title' => t('Simple form description length'),
     '#description' => t('The character length limit used to determine when a description makes a sense to be used as a tooltip.'),
-    '#default_value' => theme_get_setting('bootstrap_tooltip_descriptions_length'),
+    '#default_value' => $config->get('tooltip_descriptions_length'),
     '#states' => array(
       'visible' => array(
         ':input[name="bootstrap_tooltip_enabled"]' => array('checked' => TRUE),
@@ -705,19 +685,6 @@ function _bootstrap_settings_form(&$form, $form_state) {
     $form['advanced']['bootstrap_cdn']['bootswatch']['#prefix'] = '<div class="alert alert-danger messages error"><strong>' . t('ERROR') . ':</strong> ' . t('Unable to reach Bootswatch API. Please ensure the server your website is hosted on is able to initiate HTTP requests.') . '</div>';
   }
 
-<<<<<<< HEAD
-  // Rebuild registry.
-  $form['advanced']['rebuild_registry'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Rebuild theme registry on every page.'),
-    '#default_value' => $config->get('rebuild_registry'),
-    '#description' => t('During theme development, it can be very useful to continuously !rebuild. !warning', array(
-      '!rebuild' => l(t('rebuild the theme registry'), 'http://drupal.org/node/173880#theme-registry'),
-      '!warning' => '<div class="alert alert-warning messages warning"><strong>' . t('WARNING') . ':</strong> ' . t('This is a huge performance penalty and must be turned off on production websites. ') . '</div>',
-    )),
-  );
-=======
->>>>>>> origin/7.x-3.x
   // Suppress jQuery message.
   $form['advanced']['toggle_jquery_error'] = array(
     '#type' => 'checkbox',
