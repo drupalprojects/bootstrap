@@ -59,8 +59,9 @@ function bootstrap_library_info() {
  * @see _bootstrap_theme()
  */
 function bootstrap_theme(&$existing, $type, $theme, $path) {
-  bootstrap_include($theme, 'theme/registry.inc');
-  return _bootstrap_theme($existing, $type, $theme, $path);
+  // @todo Rethink theme registry process.
+  /*bootstrap_include($theme, 'theme/registry.inc');
+  return _bootstrap_theme($existing, $type, $theme, $path);*/
 }
 
 /**
