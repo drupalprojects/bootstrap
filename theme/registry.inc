@@ -56,7 +56,9 @@ use Drupal\Component\Utility\NestedArray;
  * @see hook_theme()
  */
 function _bootstrap_theme(&$existing, $type, $theme, $path) {
-  // Bootstrap Dropdowns.
+  // @todo Rethink theme registry process.
+
+  /*// Bootstrap Dropdowns.
   $hooks['bootstrap_dropdown'] = array(
     'render element' => 'element',
   );
@@ -82,14 +84,16 @@ function _bootstrap_theme(&$existing, $type, $theme, $path) {
   $hooks['bootstrap_search_form_wrapper'] = array(
     'render element' => 'element',
   );
-  return $hooks;
+  return $hooks;*/
 }
 
 /**
  * Implements hook_theme_registry_alter().
  */
 function bootstrap_theme_registry_alter(&$registry) {
-  // Retrieve the active theme names.
+  // @todo Rethink theme registry process.
+
+  /*// Retrieve the active theme names.
   $themes = _bootstrap_get_base_themes(NULL, TRUE);
 
   // Return the theme registry unaltered if it is not Bootstrap based.
@@ -103,7 +107,7 @@ function bootstrap_theme_registry_alter(&$registry) {
   $registry['table']['variables']['footer'] = NULL;
 
   // Process registered hooks in the theme registry.
-  _bootstrap_process_theme_registry($registry, $themes);
+  //_bootstrap_process_theme_registry($registry, $themes);
 
   // Process registered hooks in the theme registry to add necessary theme hook
   // suggestion phased function invocations. This must be run after separately
@@ -127,7 +131,7 @@ function bootstrap_theme_registry_alter(&$registry) {
     if (!isset($registry[$hook]['theme path'])) {
       $registry[$hook]['theme path'] = $GLOBALS['theme_path'];
     }
-  }
+  }*/
 }
 
 /**
@@ -164,7 +168,9 @@ function bootstrap_theme_registry_alter(&$registry) {
  * @see _theme_build_registry()
  */
 function _bootstrap_process_theme_registry(&$registry, $themes) {
-  // Convert to an array if needed.
+  // @todo Rethink theme registry process.
+
+  /*// Convert to an array if needed.
   if (is_string($themes)) {
     $themes = array();
   }
@@ -250,7 +256,7 @@ function _bootstrap_process_theme_registry(&$registry, $themes) {
         }
       }
     }
-  }
+  }*/
 }
 
 /**
@@ -274,7 +280,9 @@ function _bootstrap_process_theme_registry(&$registry, $themes) {
  * @see drupal_find_theme_functions()
  */
 function _bootstrap_process_theme_registry_suggestions(&$registry, $themes) {
-  // Convert to an array if needed.
+  // @todo Rethink theme registry process.
+
+  /*// Convert to an array if needed.
   if (is_string($themes)) {
     $themes = array();
   }
@@ -382,5 +390,5 @@ function _bootstrap_process_theme_registry_suggestions(&$registry, $themes) {
         }
       }
     }
-  }
+  }*/
 }
