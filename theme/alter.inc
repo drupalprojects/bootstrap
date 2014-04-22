@@ -49,7 +49,7 @@ function bootstrap_css_alter(&$css) {
     );
   }
   if (!empty($excludes)) {
-    $css = array_diff_key($css, drupal_map_assoc($excludes));
+    //$css = array_diff_key($css, array_combine($excludes));
   }
 }
 
@@ -219,7 +219,7 @@ function bootstrap_js_alter(&$js) {
   $js[$bootstrap]['scope'] = 'footer';
 
   if (!empty($excludes)) {
-    $js = array_diff_key($js, drupal_map_assoc($excludes));
+    $js = array_diff_key($js, array_combine($excludes));
   }
 
   // Add Bootstrap settings.

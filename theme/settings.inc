@@ -431,7 +431,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#title' => t('placement'),
     '#description' => t('Where to position the popover. When "auto" is specified, it will dynamically reorient the popover. For example, if placement is "auto left", the popover will display to the left when possible, otherwise it will display right.'),
     '#default_value' => $config->get('popover_placement'),
-    '#options' => drupal_map_assoc(array(
+    '#options' => array_combine(array(
       'top',
       'bottom',
       'left',
@@ -457,7 +457,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#title' => t('trigger'),
     '#description' => t('How a popover is triggered.'),
     '#default_value' => $config->get('popover_trigger'),
-    '#options' => drupal_map_assoc(array(
+    '#options' => array_combine(array(
       'click',
       'hover',
       'focus',
@@ -569,7 +569,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#title' => t('placement'),
     '#description' => t('Where to position the tooltip. When "auto" is specified, it will dynamically reorient the tooltip. For example, if placement is "auto left", the tooltip will display to the left when possible, otherwise it will display right.'),
     '#default_value' => $config->get('tooltip_placement'),
-    '#options' => drupal_map_assoc(array(
+    '#options' => array_combine(array(
       'top',
       'bottom',
       'left',
@@ -592,7 +592,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#title' => t('trigger'),
     '#description' => t('How a tooltip is triggered.'),
     '#default_value' => $config->get('tooltip_trigger'),
-    '#options' => drupal_map_assoc(array(
+    '#options' => array_combine(array(
       'click',
       'hover',
       'focus',
@@ -635,7 +635,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
   $form['advanced']['bootstrap_cdn']['cdn'] = array(
     '#type' => 'select',
     '#title' => t('BootstrapCDN version'),
-    '#options' => drupal_map_assoc(array(
+    '#options' => array_combine(array(
       '3.1.1',
       '3.1.0',
       '3.0.3',
