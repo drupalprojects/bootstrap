@@ -206,11 +206,11 @@ function bootstrap_js_alter(&$js) {
 
   // Ensure jQuery Once is always loaded.
   // @see https://drupal.org/node/2149561
-  if (empty($js['misc/jquery.once.js'])) {
+  /*if (empty($js['misc/jquery.once.js'])) {
     $jquery_once = drupal_get_library('system', 'jquery.once');
     $js['misc/jquery.once.js'] = $jquery_once['js']['misc/jquery.once.js'];
     $js['misc/jquery.once.js'] += drupal_js_defaults('misc/jquery.once.js');
-  }
+  }*/
 
   // Always add bootstrap.js last.
   $bootstrap = $theme_path . '/js/bootstrap.js';
@@ -218,9 +218,9 @@ function bootstrap_js_alter(&$js) {
   $js[$bootstrap]['group'] = JS_THEME;
   $js[$bootstrap]['scope'] = 'footer';
 
-  if (!empty($excludes)) {
+  /*if (!empty($excludes)) {
     $js = array_diff_key($js, array_combine($excludes));
-  }
+  }*/
 
   // Add Bootstrap settings.
   $js['settings']['data'][]['bootstrap'] = array(
