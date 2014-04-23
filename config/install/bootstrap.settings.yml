@@ -38,7 +38,7 @@ tooltip_trigger:
   click: '0'
 tooltip_delay: '0'
 tooltip_container: 'body'
-cdn: '3.0.2'
+cdn: '3.1.1'
 bootswatch: ''
 toggle_name: '1'
 toggle_search: '1'
