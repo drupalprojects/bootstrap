@@ -33,8 +33,8 @@ include_once dirname(__FILE__) . '/theme/common.inc';
 /**
  * Implements hook_library_info().
  */
-function bootstrap_library_info() {
-  $path = drupal_get_path('theme', 'bootstrap');
+/*function bootstrap_library_info() {
+  /*$path = drupal_get_path('theme', 'bootstrap');
 
   $libraries['bootstrap'] = array(
     'title' => 'Bootstrap',
@@ -43,7 +43,7 @@ function bootstrap_library_info() {
   );
 
   return $libraries;
-}
+}*/
 
 /**
  * Implements hook_theme().
@@ -58,11 +58,11 @@ function bootstrap_library_info() {
  *
  * @see _bootstrap_theme()
  */
-function bootstrap_theme(&$existing, $type, $theme, $path) {
+/*function bootstrap_theme(&$existing, $type, $theme, $path) {
   // @todo Rethink theme registry process.
-  /*bootstrap_include($theme, 'theme/registry.inc');
-  return _bootstrap_theme($existing, $type, $theme, $path);*/
-}
+  bootstrap_include($theme, 'theme/registry.inc');
+  return _bootstrap_theme($existing, $type, $theme, $path);
+}*/
 
 /**
  * Declare various hook_*_alter() hooks.
