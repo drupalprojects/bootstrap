@@ -8,6 +8,7 @@
 
 use Drupal\Core\Template\Attribute;
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Component\Utility\Crypt;
 
 /**
  * Return information from the .info file of a theme (and possible base themes).
@@ -156,15 +157,16 @@ function _bootstrap_file_scan_directory($dir, $mask, array $options = array()) {
   // Retrieve cached data.
   $cid = 'theme_registry:bootstrap:files';
   $files = array();
-  if ($cache = cache_get($cid)) {
-    $files = $cache->data;
+  if ($cached = \Drupal::cache()->get($cid)) {
+    $files = $cached->data;
   }
+
   // Generate a unique hash for all parameters passed as a change in any of
   // them would return different results.
-  $hash = drupal_hash_base64(serialize(func_get_args()));
+  $hash = Crypt::randomBytesBase64(55);
   if (!isset($files[$hash])) {
     $files[$hash] = file_scan_directory($dir, $mask, $options);
-    cache_set($cid, $files);
+    \Drupal::cache()->set($cid, $files);
   }
   return $files[$hash];
 }
@@ -434,7 +436,7 @@ function _bootstrap_glyphicons_supported() {
 
     // Retrieve cached data.
     $cid = 'theme_registry:bootstrap:icon_support';
-    if (($cache = cache_get($cid)) && !empty($cache->data)) {
+    if (($cache = \Drupal::cache()->get($cid)) && !empty($cache->data)) {
       $supported = $cache->data;
     }
 
@@ -461,7 +463,7 @@ function _bootstrap_glyphicons_supported() {
       }
 
       // Cache all supported themes now that this theme is added to the array.
-      cache_set($cid, $supported);
+      \Drupal::cache()->set($cid, $supported);
     }
   }
   return $supported[$theme];
