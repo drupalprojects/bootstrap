@@ -52,14 +52,14 @@ function _bootstrap_settings_form(&$form, $form_state) {
 
   // General.
   $form['general'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('General'),
     '#group' => 'bootstrap',
   );
 
   // Grid.
   $form['general']['grid'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Grid system'),
     '#description' => t('Bootstrap includes a responsive, mobile first fluid grid system that appropriately scales up to 12 columns (default) as the device or viewport size increases. It includes <a href="!bootstrap_url">predefined classes</a> for easy layout options.', array(
       '!bootstrap_url' => 'http://getbootstrap.com/css/#grid-example-basic',
@@ -97,7 +97,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
 
   // Grid region columns.
   $form['general']['grid']['grid_region_columns'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Region column size'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
@@ -125,7 +125,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
 
   // Grid region dynamic.
   $form['general']['grid']['grid_region_dynamic'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Dynamic regions'),
     '#description' => t('Select the regions below that should be used when calculating dynamic region columns. If the selected region(s) are present on the page, then the column widths will be subtracted from the region it affects. The best example of what this feature entails is determining the column size of the "content" region when sidebars are or are not present (see: <a href="!url" target="_blank">!url</a>).<br /><br /><strong>NOTE:</strong> When a region is considered "dynamic", it is assumed (and enforced) that the region will be the maximum "Region column size" (above setting) when none of its selected regions are present. This helps to ensure that the subtracted column size (if any) will always be a positive number.</strong>', array(
       '!url' => 'https://drupal.org/node/2128129',
@@ -149,7 +149,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
 
   // Buttons.
   $form['general']['buttons'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Buttons'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
@@ -185,7 +185,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
 
   // Images.
   $form['general']['images'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Images'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
@@ -213,7 +213,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
 
   // Tables.
   $form['general']['tables'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Tables'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
@@ -613,14 +613,14 @@ function _bootstrap_settings_form(&$form, $form_state) {
   );
 
   // Advanced settings.
-  $form['advanced'] = array(
+  $form['bootstrap_library'] = array(
     '#type' => 'details',
-    '#title' => t('Advanced'),
+    '#title' => t('Bootstrap Library'),
     '#group' => 'bootstrap',
   );
 
   // BootstrapCDN.
-  $form['advanced']['bootstrap_cdn'] = array(
+  $form['bootstrap_library']['bootstrap_cdn'] = array(
     '#type' => 'details',
     '#title' => t('BootstrapCDN'),
     '#description' => t('Use !bootstrapcdn to serve the Bootstrap framework files. Enabling this setting will prevent this theme from attempting to load any Bootstrap framework files locally. !warning', array(
@@ -632,7 +632,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
-  $form['advanced']['bootstrap_cdn']['cdn'] = array(
+  $form['bootstrap_library']['bootstrap_cdn']['cdn'] = array(
     '#type' => 'select',
     '#title' => t('BootstrapCDN version'),
     '#options' => array(
@@ -649,7 +649,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
   );
 
   // Bootswatch.
-  $form['advanced']['bootstrap_cdn']['bootswatch'] = array(
+  $form['bootstrap_library']['bootstrap_cdn']['bootswatch'] = array(
     '#type' => 'select',
     '#title' => t('Bootswatch theme'),
     '#description' => t('Use !bootstrapcdn to serve a Bootswatch Theme. Choose Bootswatch theme here.', array(
@@ -668,12 +668,11 @@ function _bootstrap_settings_form(&$form, $form_state) {
     ),
   );
 
-  $request = Drupal::httpClient()->get('http://api.bootswatch.com/3/');
+  $response = Drupal::httpClient()->get('http://api.bootswatch.com/3/');
   try {
     $bootswatch_themes = array();
-    $response = $request->send();
     // Expected result.
-    $data = $response->getBody(TRUE);
+    $data = $response->getBody();
     if (($api = drupal_json_decode($data)) && is_array($api) && !empty($api['themes'])) {
       foreach ($api['themes'] as $bootswatch_theme) {
         $bootswatch_themes[strtolower($bootswatch_theme['name'])] = $bootswatch_theme['name'];
@@ -684,15 +683,5 @@ function _bootstrap_settings_form(&$form, $form_state) {
   catch (Guzzle\Common\Exception\GuzzleException $e) {
     $form['advanced']['bootstrap_cdn']['bootswatch']['#prefix'] = '<div class="alert alert-danger messages error"><strong>' . t('ERROR') . ':</strong> ' . t('Unable to reach Bootswatch API. Please ensure the server your website is hosted on is able to initiate HTTP requests.') . '</div>';
   }
-
-  // Suppress jQuery message.
-  $form['advanced']['toggle_jquery_error'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Suppress jQuery version error message'),
-    '#default_value' => $config->get('toggle_jquery_error'),
-    '#description' => t('Enable this if the version of jQuery has been upgraded to 1.7+ using a method other than the !jquery_update module.', array(
-      '!jquery_update' => l(t('jQuery Update'), 'https://drupal.org/project/jquery_update'),
-    )),
-  );
 
 }

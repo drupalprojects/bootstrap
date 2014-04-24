@@ -80,7 +80,7 @@
       });
 
       // Advanced.
-      $context.find('#edit-advanced').drupalSetSummary(function () {
+      $context.find('#edit-bootstrap-library').drupalSetSummary(function () {
         var summary = [];
         // BootstrapCDN.
         var bootstrapCDN = $context.find('select[name="cdn"]').val();
