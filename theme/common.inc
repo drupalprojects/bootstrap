@@ -163,7 +163,7 @@ function _bootstrap_file_scan_directory($dir, $mask, array $options = array()) {
 
   // Generate a unique hash for all parameters passed as a change in any of
   // them would return different results.
-  $hash = Crypt::randomBytesBase64(55);
+  $hash = Crypt::hashBase64(serialize(func_get_args()));
   if (!isset($files[$hash])) {
     $files[$hash] = file_scan_directory($dir, $mask, $options);
     \Drupal::cache()->set($cid, $files);
