@@ -431,17 +431,17 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#title' => t('placement'),
     '#description' => t('Where to position the popover. When "auto" is specified, it will dynamically reorient the popover. For example, if placement is "auto left", the popover will display to the left when possible, otherwise it will display right.'),
     '#default_value' => $config->get('popover_placement'),
-    '#options' => array_combine(array(
-      'top',
-      'bottom',
-      'left',
-      'right',
-      'auto',
-      'auto top',
-      'auto bottom',
-      'auto left',
-      'auto right',
-    )),
+    '#options' => array(
+      'top' => 'top',
+      'bottom' => 'bottom',
+      'left' => 'left',
+      'right' => 'right',
+      'auto' => 'auto',
+      'auto top' => 'auto top',
+      'auto bottom' => 'auto bottom',
+      'auto left' => 'auto left',
+      'auto right' => 'auto right',
+    ),
   );
   $form['javascript']['popovers']['options']['popover_selector'] = array(
     '#type' => 'textfield',
@@ -457,12 +457,12 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#title' => t('trigger'),
     '#description' => t('How a popover is triggered.'),
     '#default_value' => $config->get('popover_trigger'),
-    '#options' => array_combine(array(
-      'click',
-      'hover',
-      'focus',
-      'manual',
-    )),
+    '#options' => array(
+      'click' => 'click',
+      'hover' => 'hover',
+      'focus' => 'focus',
+      'manual' => 'manual',
+    ),
   );
   $form['javascript']['popovers']['options']['popover_trigger_autoclose'] = array(
     '#type' => 'checkbox',
@@ -569,17 +569,17 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#title' => t('placement'),
     '#description' => t('Where to position the tooltip. When "auto" is specified, it will dynamically reorient the tooltip. For example, if placement is "auto left", the tooltip will display to the left when possible, otherwise it will display right.'),
     '#default_value' => $config->get('tooltip_placement'),
-    '#options' => array_combine(array(
-      'top',
-      'bottom',
-      'left',
-      'right',
-      'auto',
-      'auto top',
-      'auto bottom',
-      'auto left',
-      'auto right',
-    )),
+    '#options' => array(
+      'top' => 'top',
+      'bottom' => 'bottom',
+      'left' => 'left',
+      'right' => 'right',
+      'auto' => 'auto',
+      'auto top' => 'auto top',
+      'auto bottom' => 'auto bottom',
+      'auto left' => 'auto left',
+      'auto right' => 'auto right',
+    ),
   );
   $form['javascript']['tooltips']['options']['tooltip_selector'] = array(
     '#type' => 'textfield',
@@ -592,12 +592,12 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#title' => t('trigger'),
     '#description' => t('How a tooltip is triggered.'),
     '#default_value' => $config->get('tooltip_trigger'),
-    '#options' => array_combine(array(
-      'click',
-      'hover',
-      'focus',
-      'manual',
-    )),
+    '#options' => array(
+      'click' => 'click',
+      'hover' => 'hover',
+      'focus' => 'focus',
+      'manual' => 'manual',
+    ),
   );
   $form['javascript']['tooltips']['options']['tooltip_delay'] = array(
     '#type' => 'textfield',
@@ -635,14 +635,14 @@ function _bootstrap_settings_form(&$form, $form_state) {
   $form['advanced']['bootstrap_cdn']['cdn'] = array(
     '#type' => 'select',
     '#title' => t('BootstrapCDN version'),
-    '#options' => array_combine(array(
-      '3.1.1',
-      '3.1.0',
-      '3.0.3',
-      '3.0.2',
-      '3.0.1',
-      '3.0.0',
-    )),
+    '#options' => array(
+      '3.1.1' => '3.1.1',
+      '3.1.0' => '3.1.0',
+      '3.0.3' => '3.0.3',
+      '3.0.2' => '3.0.2',
+      '3.0.1' => '3.0.1',
+      '3.0.0' => '3.0.0',
+    ),
     '#default_value' => $config->get('cdn'),
     '#empty_option' => t('Disabled'),
     '#empty_value' => NULL,
