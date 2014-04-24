@@ -49,7 +49,7 @@ function bootstrap_css_alter(&$css) {
     );
   }
   if (!empty($excludes)) {
-    //$css = array_diff_key($css, array_combine($excludes));
+    $css = array_diff_key($css, array_combine($excludes, $excludes));
   }
 }
 
@@ -218,9 +218,9 @@ function bootstrap_js_alter(&$js) {
   $js[$bootstrap]['group'] = JS_THEME;
   $js[$bootstrap]['scope'] = 'footer';
 
-  /*if (!empty($excludes)) {
-    $js = array_diff_key($js, array_combine($excludes));
-  }*/
+  if (!empty($excludes)) {
+    $js = array_diff_key($js, array_combine($excludes, $excludes));
+  }
 
   // Add Bootstrap settings.
   $js['settings']['data'][]['bootstrap'] = array(
