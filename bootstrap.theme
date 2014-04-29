@@ -58,11 +58,10 @@ include_once dirname(__FILE__) . '/theme/common.inc';
  *
  * @see _bootstrap_theme()
  */
-/*function bootstrap_theme(&$existing, $type, $theme, $path) {
-  // @todo Rethink theme registry process.
+function bootstrap_theme(&$existing, $type, $theme, $path) {
   bootstrap_include($theme, 'theme/registry.inc');
   return _bootstrap_theme($existing, $type, $theme, $path);
-}*/
+}
 
 /**
  * Declare various hook_*_alter() hooks.

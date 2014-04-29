@@ -31,7 +31,7 @@ function bootstrap_get_theme_info($theme_key = NULL, $key = NULL, $base_themes =
     $theme_key = !empty($GLOBALS['theme_key']) ? $GLOBALS['theme_key'] : FALSE;
   }
   if ($theme_key) {
-    $themes = list_themes();
+    $themes = \Drupal::service('theme_handler')->listInfo();
     if (!empty($themes[$theme_key])) {
       $theme = $themes[$theme_key];
       // If a key name was specified, return just that array.
