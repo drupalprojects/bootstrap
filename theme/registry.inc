@@ -7,7 +7,7 @@
  *
  * Theme templates, functions and [pre]process functions
  *
- * Theme templates `*.tpl.php` files are stored in the `theme` directory along
+ * Theme templates `*.html.twig` files are stored in the `theme` directory along
  * with `*.func.php` and `*.vars.php` files. The latter two are enabled by the
  * processing done below. The three types of files can be grouped into
  * sub-directories. It is recommended that they are grouped by the modules
@@ -145,10 +145,10 @@ function bootstrap_theme_registry_alter(&$registry) {
  *  - `includes`: When a variables file `*.vars.php` is found.
  *  - `includes`: When a function file `*.func.php` is found.
  *  - `function`: When a specific theme hook function override is found.
- *  - `template`: When a template file `*.tpl.php` is found in. Note, if both
+ *  - `template`: When a template file `*.html.twig` is found in. Note, if both
  *    a function and a template are defined, a template implementation will
  *    always be used and the `function` will be unset.
- *  - `path`: When a template file `*.tpl.php` is found.
+ *  - `path`: When a template file `*.html.twig` is found.
  *  - `preprocess functions`: When a specific theme hook suggestion function
  *    `hook_preprocess_HOOK__SUGGESTION` is found.
  *  - `process functions` When a specific theme hook suggestion function
@@ -215,7 +215,7 @@ function _bootstrap_process_theme_registry(&$registry, $themes) {
       _bootstrap_registry_process_extension($registry, $theme, $GLOBALS['theme_key'] === $theme ? 'theme' : 'base_theme', $theme, $path);
 
       // Find necessary templates in the theme.
-      $registry = NestedArray::mergeDeep($registry, drupal_find_theme_templates($registry, '.tpl.php', $path));
+      $registry = NestedArray::mergeDeep($registry, drupal_find_theme_templates($registry, '.html.twig', $path));
 
       // Iterate over each registered hook.
       foreach ($registry as $hook => $info) {
