@@ -431,7 +431,7 @@ function _bootstrap_glyphicons_supported() {
   if (!isset($drupal_static_fast)) {
     $drupal_static_fast['supported'] = &drupal_static(__FUNCTION__);
     // Get the active theme.
-    $drupal_static_fast['theme'] = variable_get('theme_default', $GLOBALS['theme']);
+    $drupal_static_fast['theme'] = \Drupal::config('system.theme')->get('default');
   }
 
   // Get static data.
