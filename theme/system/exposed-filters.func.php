@@ -23,16 +23,21 @@ function bootstrap_exposed_filters($variables) {
     foreach (element_children($form['current']) as $key) {
       $items[] = drupal_render($form['current'][$key]);
     }
-    $output .= theme('item_list', array(
-      'items' => $items,
-      'attributes' => array(
+
+    $current_filters = array(
+      '#theme' => 'item_list',
+      '#items' => $items,
+      '#attributes' => array(
         'class' => array(
           'clearfix',
           'current-filters',
         ),
       ),
-    ));
+    );
+
+    $output = drupal_render($current_filters);
   }
+
   $output .= drupal_render_children($form);
   return '<div class="form-horizontal">' . $output . '</div>';
 }

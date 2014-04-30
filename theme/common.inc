@@ -398,17 +398,25 @@ function _bootstrap_icon($name, $default = NULL) {
   // Ensure the icon specified is a valid Bootstrap Glyphicon.
   if (_bootstrap_glyphicons_supported() && in_array($name, _bootstrap_glyphicons())) {
     // Attempt to use the Icon API module, if enabled and it generates output.
-    if (module_exists('icon')) {
-      $output = theme('icon', array('bundle' => 'bootstrap', 'icon' => 'glyphicon-' . $name));
-    }
-    if (empty($output)) {
-      // Mimic the Icon API markup.
-      $attributes = array(
-        'class' => array('icon', 'glyphicon', 'glyphicon-' . $name),
-        'aria-hidden' => 'true',
+    if (\Drupal::moduleHandler()->moduleExists('icon')) {
+      $icon = array(
+        '#type' => 'icon',
+        '#bundle' => 'bootstrap',
+        '#icon' => 'glyphicon-' . $name,
       );
-      $output = '<span' . new Attribute($attributes) . '></span>';
     }
+    else {
+      $icon = array(
+        '#type' => 'html_tag',
+        '#tag' => 'span',
+        '#attributes' => array(
+          'class' => array('icon', 'glyphicon', 'glyphicon-' . $name),
+          'aria-hidden' => 'true',
+        ),
+      );
+    }
+
+    $output = drupal_render($icon);
   }
   return empty($output) && isset($default) ? $default : $output;
 }
@@ -581,7 +589,7 @@ function _bootstrap_colorize_text($string, $default = '') {
     );
 
     // Allow sub-themes to alter this array of patterns.
-    drupal_alter('bootstrap_colorize_text', $texts);
+    \Drupal::moduleHandler()->alter('bootstrap_colorize_text', $texts);
   }
 
   // Iterate over the array.
@@ -659,7 +667,7 @@ function _bootstrap_iconize_text($string, $default = '') {
     );
 
     // Allow sub-themes to alter this array of patterns.
-    drupal_alter('bootstrap_iconize_text', $texts);
+    \Drupal::moduleHandler()->alter('bootstrap_iconize_text', $texts);
   }
 
   // Iterate over the array.
@@ -770,7 +778,7 @@ function _bootstrap_tooltip_description($description) {
     return FALSE;
   }
 
-  $id = drupal_hash_base64($description);
+  $id = Crypt::hashBase64($description);
   if (!isset($descriptions[$id])) {
     $descriptions[$id] = ($description === strip_tags($description) && strlen($description) <= theme_get_setting('bootstrap_tooltip_descriptions_length'));
   }

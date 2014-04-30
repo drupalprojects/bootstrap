@@ -110,7 +110,11 @@ function bootstrap_form_element(&$variables) {
   switch ($element['#title_display']) {
     case 'before':
     case 'invisible':
-      $output .= ' ' . theme('form_element_label', $variables);
+      $label = array(
+        '#theme' => 'form_element_label',
+        '#element' => $element
+      );
+      $output .= ' ' . drupal_render($label);
       $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
       break;
 
@@ -121,7 +125,11 @@ function bootstrap_form_element(&$variables) {
       else {
         $variables['#children'] = ' ' . $prefix . $element['#children'] . $suffix;
       }
-      $output .= ' ' . theme('form_element_label', $variables) . "\n";
+      $label = array(
+        '#theme' => 'form_element_label',
+        '#element' => $element
+      );
+      $output .= ' ' . drupal_render($label) . "\n";
       break;
 
     case 'none':

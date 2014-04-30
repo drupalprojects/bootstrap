@@ -21,7 +21,17 @@ function bootstrap_form_element_label(&$variables) {
   }
 
   // If the element is required, a required marker is appended to the label.
-  $required = !empty($element['#required']) ? theme('form_required_marker', array('element' => $element)) : '';
+  if (!empty($element['#required'])) {
+    $required_marker = array(
+      '#theme' => 'form_required_market',
+      '#element' => $element,
+    );
+
+    $required = drupal_render($required_marker);
+  }
+  else {
+    $required = '';
+  }
 
   $title = filter_xss_admin($element['#title']);
 

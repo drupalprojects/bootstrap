@@ -17,13 +17,17 @@ function bootstrap_breadcrumb($variables) {
   // Determine if we are to display the breadcrumb.
   $bootstrap_breadcrumb = $config->get('breadcrumb');
   if (($bootstrap_breadcrumb == 1 || ($bootstrap_breadcrumb == 2 && arg(0) == 'admin')) && !empty($breadcrumb)) {
-    $output = theme('item_list', array(
-      'attributes' => array(
+    $links = array(
+      '#theme' => 'item_list',
+      '#attributes' => array(
         'class' => array('breadcrumb'),
       ),
-      'items' => $breadcrumb,
-      'type' => 'ol',
-    ));
+      '#items' => $breadcrumb,
+      '#list_type' => 'ol',
+    );
+
+    $output = drupal_render($links);
   }
+
   return $output;
 }

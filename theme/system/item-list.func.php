@@ -76,11 +76,15 @@ function bootstrap_item_list($variables) {
               unset($item['children'][$child_key]);
             }
           }
-          $value .= theme('item_list', array(
-            'items' => $item['children'],
-            'type' => $type,
-            'attributes' => $child_list_attributes,
-          ));
+
+          $list = array(
+            '#theme' => 'item_list',
+            '#items' => $item['children'],
+            '#list_type' => $type,
+            '#attributes' => $child_list_attributes,
+          );
+
+          $value .= drupal_render($list);
         }
       }
       else {
