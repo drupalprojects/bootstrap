@@ -4,6 +4,8 @@
  * exposed-filters.func.php
  */
 
+use Drupal\Core\Render\Element;
+
 /**
  * Overrides theme_exposed_filters().
  */
@@ -11,7 +13,7 @@ function bootstrap_exposed_filters($variables) {
   $form = $variables['form'];
   $output = '';
 
-  foreach (element_children($form['status']['filters']) as $key) {
+  foreach (Element::children($form['status']['filters']) as $key) {
     $form['status']['filters'][$key]['#field_prefix'] = '<div class="col-sm-10">';
     $form['status']['filters'][$key]['#field_suffix'] = '</div>';
   }
@@ -20,7 +22,7 @@ function bootstrap_exposed_filters($variables) {
 
   if (isset($form['current'])) {
     $items = array();
-    foreach (element_children($form['current']) as $key) {
+    foreach (Element::children($form['current']) as $key) {
       $items[] = drupal_render($form['current'][$key]);
     }
 

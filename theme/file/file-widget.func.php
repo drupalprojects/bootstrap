@@ -4,6 +4,8 @@
  * file-widget.func.php
  */
 
+use Drupal\Core\Render\Element;
+
 /**
  * Overrides theme_file_widget().
  */
@@ -12,7 +14,7 @@ function bootstrap_file_widget($variables) {
   $output = '';
 
   $hidden_elements = array();
-  foreach (element_children($element) as $child) {
+  foreach (Element::children($element) as $child) {
     if (isset($element[$child]['#type']) && $element[$child]['#type'] === 'hidden') {
       $hidden_elements[$child] = $element[$child];
       unset($element[$child]);

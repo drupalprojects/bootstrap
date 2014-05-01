@@ -4,6 +4,8 @@
  * region.vars.php
  */
 
+use Drupal\Core\Render\Element;
+
 /**
  * Implements hook_preprocess_region().
  */
@@ -122,7 +124,7 @@ function bootstrap_preprocess_region(&$variables) {
         // Enforce the region to have the maximum number of columns.
         $column = $columns;
         foreach ($dynamic_regions as $dynamic_region) {
-          if (element_children($variables['page']['page'][$dynamic_region])) {
+          if (Element::children($variables['page']['page'][$dynamic_region])) {
             $column -= $region_columns[$dynamic_region];
           }
         }

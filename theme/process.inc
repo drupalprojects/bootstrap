@@ -7,6 +7,7 @@
  */
 
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Render\Element;
 
 /**
  * Process all elements.
@@ -23,7 +24,7 @@ function _bootstrap_process_element(&$element, &$form_state) {
   }
   // Process form actions.
   if (!empty($element['#type']) && $element['#type'] === 'actions') {
-    foreach (element_children($element) as $child) {
+    foreach (Element::children($element) as $child) {
       _bootstrap_iconize_button($element[$child]);
     }
   }
@@ -47,7 +48,7 @@ function _bootstrap_process_element(&$element, &$form_state) {
     }
     // Ignore buttons before we find the element in the form.
     $found_current_element = FALSE;
-    foreach (element_children($parent) as $child) {
+    foreach (Element::children($parent) as $child) {
       if ($parent[$child] === $element) {
         $found_current_element = TRUE;
         continue;

@@ -6,6 +6,8 @@
  * Contains various implementations for #pre_render callbacks on elements.
  */
 
+use Drupal\Core\Render\Element;
+
 /**
  * Pre-render fieldset element.
  */
@@ -16,7 +18,7 @@ function _bootstrap_pre_render_fieldset($element) {
   }
   // Inject group member elements belonging to this group.
   $parents = implode('][', $element['#parents']);
-  $children = element_children($element['#groups'][$parents]);
+  $children = Element::children($element['#groups'][$parents]);
   if (!empty($children)) {
     if (empty($element['#default_tab'])) {
       $children_keys = array_values($children);
@@ -52,7 +54,7 @@ function _bootstrap_pre_render_fieldset($element) {
     }
     // Otherwise, this element belongs to a group and the group exists, so we do
     // not render it.
-    elseif (element_children($element['#groups'][$group])) {
+    elseif (Element::children($element['#groups'][$group])) {
       $element['#printed'] = TRUE;
     }
   }

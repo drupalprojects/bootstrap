@@ -4,6 +4,8 @@
  * book-navigation.vars.php
  */
 
+use Drupal\Core\Render\Element;
+
 /**
  * Implements hook_preprocess_book_navigation().
  */
@@ -45,7 +47,7 @@ function _bootstrap_book_children($book_link) {
 function _bootstrap_book_fix_theme_hooks($bid, array &$element, $level = 0) {
   $hook = $level === 0 ? $bid : 'sub_menu__' . $bid;
   $element['#theme_wrappers'] = array('menu_tree__book_toc__' . $hook);
-  foreach (element_children($element) as $child) {
+  foreach (Element::children($element) as $child) {
     $element[$child]['#theme'] = 'menu_link__book_toc__' . $hook;
     // Iterate through all child menu items as well.
     if (!empty($element[$child]['#below'])) {

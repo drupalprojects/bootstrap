@@ -5,6 +5,7 @@
  */
 
 use Drupal\Core\Template\Attribute;
+use Drupal\Core\Render\Element;
 
 /**
  * Overrides theme_file_managed_file().
@@ -33,7 +34,7 @@ function bootstrap_file_managed_file($variables) {
   }
 
   $hidden_elements = array();
-  foreach (element_children($element) as $child) {
+  foreach (Element::children($element) as $child) {
     if ($element[$child]['#type'] === 'hidden') {
       $hidden_elements[$child] = $element[$child];
       unset($element[$child]);
