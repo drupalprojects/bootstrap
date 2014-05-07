@@ -278,7 +278,7 @@ function bootstrap_icon_bundle_list_alter(&$build, $bundle) {
 /**
  * Implements hook_menu_local_tasks_alter().
  */
-function bootstrap_menu_local_tasks_alter(&$data, &$router_item, $root_path) {
+function bootstrap_menu_local_tasks_alter(&$data, $route_name) {
   if (!empty($data['actions']['output'])) {
     $items = array();
     foreach ($data['actions']['output'] as $item) {

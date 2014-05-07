@@ -11,6 +11,8 @@
  */
 function bootstrap_preprocess_page(&$variables) {
   $menu_config = \Drupal::config('menu.settings');
+  /** @var \Drupal\menu_link\MenuTreeInterface $menu_tree */
+  $menu_tree = \Drupal::service('menu_link.tree');
   // Ensure each region has the correct theme wrappers.
   foreach (system_region_list($GLOBALS['theme_key']) as $name => $title) {
     if (!$variables['page'][$name]) {
@@ -23,7 +25,7 @@ function bootstrap_preprocess_page(&$variables) {
   $variables['primary_nav'] = array();
   if ($variables['main_menu']) {
     // Build links.
-    $variables['primary_nav'] = menu_tree($menu_config->get('main_links'));
+    $variables['primary_nav'] = $menu_tree->renderMenu($menu_config->get('main_links'));
     // Provide default theme wrapper function.
     $variables['primary_nav']['#theme_wrappers'] = array('menu_tree__primary');
   }
@@ -32,7 +34,7 @@ function bootstrap_preprocess_page(&$variables) {
   $variables['secondary_nav'] = array();
   if ($variables['secondary_menu']) {
     // Build links.
-    $variables['secondary_nav'] = menu_tree($menu_config->get('secondary_links'));
+    $variables['secondary_nav'] = $menu_tree->renderMenu($menu_config->get('secondary_links'));
     // Provide default theme wrapper function.
     $variables['secondary_nav']['#theme_wrappers'] = array('menu_tree__secondary');
   }

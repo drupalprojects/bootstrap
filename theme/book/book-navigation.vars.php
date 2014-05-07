@@ -9,29 +9,16 @@ use Drupal\Core\Render\Element;
 /**
  * Implements hook_preprocess_book_navigation().
  */
-function bootstrap_process_book_navigation(&$variables) {
-  $variables['tree'] = _bootstrap_book_children($variables['book_link']);
-}
-
-/**
- * Formats the menu links for the child pages of the current page.
- *
- * @param array $book_link
- *   A fully loaded menu link that is part of the book hierarchy.
- *
- * @return string
- *   HTML for the links to the child pages of the current page.
- */
-function _bootstrap_book_children($book_link) {
+function bootstrap_preprocess_book_navigation(&$variables) {
+  /** @var \Drupal\menu_link\MenuTreeInterface $menu_tree */
+  $menu_tree = \Drupal::service('menu_link.tree');
   // Rebuild entire menu tree for the book.
-  $tree = menu_build_tree($book_link['menu_name']);
-  $tree = menu_tree_output($tree);
+  $tree = $menu_tree->renderMenu($variables['book_link']['menu_name']);
 
   // Fix the theme hook suggestions.
-  _bootstrap_book_fix_theme_hooks($book_link['nid'], $tree);
+  _bootstrap_book_fix_theme_hooks($variables['book_link']['nid'], $tree);
 
-  // Return the rendered output.
-  return drupal_render($tree);
+  $variables['tree'] = drupal_render($variables['book_link']);
 }
 
 /**
