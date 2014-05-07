@@ -1,7 +1,11 @@
 {#
 /**
  * @file
- * Default theme implementation to display a block.
+ * Bootstrap theme override to display a block.
+ *
+ * Overrides:
+ * - Change wrapper tag from div to section.
+ * - Remove block content div wrapper.
  *
  * Available variables:
  * - plugin_id: The ID of the block implementation.
@@ -35,18 +39,20 @@
  * - title_suffix: Additional output populated by modules, intended to be
  *   displayed after the main title tag that appears in the template.
  *
+ * @see bootstrap_preprocess_block()
  * @see template_preprocess_block()
  *
  * @ingroup themeable
  */
 #}
-
-<section id="{{ attributes.id }}" class="{{ attributes.class }} clearfix"{{ attributes }}>
+<section{{ attributes }}>
     {{ title_prefix }}
     {% if label %}
         <h2{{ title_attributes }}>{{ label }}</h2>
     {% endif %}
     {{ title_suffix }}
 
+  {% block content %}
     {{ content }}
+  {% endblock %}
 </section>
