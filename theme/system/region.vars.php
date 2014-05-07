@@ -121,7 +121,8 @@ function bootstrap_preprocess_region(&$variables) {
         // Enforce the region to have the maximum number of columns.
         $column = $columns;
         foreach ($dynamic_regions as $dynamic_region) {
-          if (element_children($variables['page']['page'][$dynamic_region])) {
+          if (is_array($variables['page']['page'][$dynamic_region]) &&
+              element_children($variables['page']['page'][$dynamic_region])) {
             $column -= $region_columns[$dynamic_region];
           }
         }
