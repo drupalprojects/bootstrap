@@ -184,7 +184,9 @@ function _bootstrap_process_theme_registry(&$registry, $themes) {
       $path = drupal_get_path('theme', $theme);
 
       // Find theme function overrides.
-      foreach (_bootstrap_file_scan_directory($path, '/\.(func|vars)\.php$/') as $name => $file) {
+      foreach (_bootstrap_file_scan_directory($path, '/\.vars\.php$/') as $file) {
+        $name = $file->name;
+
         // Strip off the extension.
         if (($pos = strpos($name, '.')) !== FALSE) {
           $name = substr($name, 0, $pos);
