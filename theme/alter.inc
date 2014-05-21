@@ -293,6 +293,13 @@ function bootstrap_menu_local_tasks_alter(&$data, &$router_item, $root_path) {
 }
 
 /**
+ * Implements hook_js_callback_filter_xss_alter().
+ */
+function bootstrap_js_callback_filter_xss_alter(array &$allowed_tags = array()) {
+  $allowed_tags[] = 'button';
+}
+
+/**
  * Include #pre_render callbacks for elements.
  */
 bootstrap_include('bootstrap', 'theme/pre-render.inc');
