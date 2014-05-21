@@ -333,19 +333,6 @@ function _bootstrap_process_theme_registry_suggestions(&$registry, $themes) {
 
             // Process specific base hook implementations if necessary.
             if ($base_hook) {
-              // Due to how theme() functions, if a base hook implements
-              // preprocess or process functions, then the base hook info is
-              // used to invoke the necessary phase functions instead of the
-              // suggestion hook info. To get around this, a helper function
-              // must be appended to the base hook info so it can call the
-              // theme suggestion implementation's phase function.
-              if (!empty($registry[$base_hook][$phase_key])) {
-                $function = '_bootstrap_' . $phase . '_theme_suggestion';
-                if (!in_array($function, $registry[$base_hook][$phase_key])) {
-                  $registry[$base_hook][$phase_key][] = $function;
-                }
-              }
-
               // The matched theme implementation does not exist in the
               // registry, one must be created if base hook information was
               // found, otherwise it will be ignored.
@@ -375,6 +362,17 @@ function _bootstrap_process_theme_registry_suggestions(&$registry, $themes) {
               $registry[$hook] = drupal_array_merge_deep($registry[$hook], array(
                 $phase_key => array($match),
               ));
+              
+              // Due to how theme() functions, if a base hook implements
+              // preprocess or process functions, then the base hook info is
+              // used to invoke the necessary phase functions instead of the
+              // suggestion hook info. To get around this, a helper function
+              // must be appended to the base hook info so it can call the
+              // theme suggestion implementation's phase function.
+              $function = '_bootstrap_' . $phase . '_theme_suggestion';
+              if (!in_array($function, $registry[$base_hook][$phase_key])) {
+                $registry[$base_hook][$phase_key][] = $function;
+              }
             }
           }
         }
