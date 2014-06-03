@@ -5,7 +5,7 @@
  */
 
 /**
- * Overrides theme_breadcrumb().
+ * Overrides theme_status_messages().
  */
 function bootstrap_status_messages($variables) {
   $display = $variables['display'];
