@@ -88,7 +88,7 @@ function _bootstrap_process_input(&$element, &$form_state) {
   if (!empty($element['#type']) && (in_array($element['#type'], $types) || ($element['#type'] === 'file' && empty($element['#managed_file'])))) {
     $element['#attributes']['class'][] = 'form-control';
   }
-  if ($element['#type'] !== 'checkbox' || $element['#type'] !== 'radio' || $element['#type'] !== 'checkboxes' || $element['#type'] !== 'radios') {
+  if (!empty($element['#type']) && ($element['#type'] !== 'checkbox' || $element['#type'] !== 'radio' || $element['#type'] !== 'checkboxes' || $element['#type'] !== 'radios')) {
     if (!empty($element['#description']) && empty($element['#attributes']['title']) && _bootstrap_tooltip_description($element['#description'])) {
       $element['#attributes']['title'] = $element['#description'];
     }
