@@ -360,6 +360,7 @@ function _bootstrap_process_theme_registry_suggestions(&$registry, $themes) {
                   $hook_type => $registry[$base_hook][$hook_type],
                   $arg_name => $registry[$base_hook][$arg_name],
                   'base hook' => $base_hook,
+                  'type' => $registry[$base_hook]['type'],
                   'preprocess functions' => array(),
                   'process functions' => array(),
                 );
