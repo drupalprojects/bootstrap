@@ -343,6 +343,7 @@ function _bootstrap_process_theme_registry_suggestions(&$registry, $themes) {
                   $hook_type => $registry[$base_hook][$hook_type],
                   $arg_name => $registry[$base_hook][$arg_name],
                   'base hook' => $base_hook,
+                  'type' => $registry[$base_hook]['type'],
                   'preprocess functions' => array(),
                   'process functions' => array(),
                 );
@@ -362,7 +363,7 @@ function _bootstrap_process_theme_registry_suggestions(&$registry, $themes) {
               $registry[$hook] = drupal_array_merge_deep($registry[$hook], array(
                 $phase_key => array($match),
               ));
-              
+
               // Due to how theme() functions, if a base hook implements
               // preprocess or process functions, then the base hook info is
               // used to invoke the necessary phase functions instead of the
