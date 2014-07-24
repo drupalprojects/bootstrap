@@ -106,7 +106,7 @@ function bootstrap_pager($variables) {
           $items[] = array(
             // Add the active class.
             'class' => array('active'),
-            'data' => l($i, '#', array('fragment' => '', 'external' => TRUE)),
+            'data' => "<span>$i</span>",
           );
         }
         if ($i > $pager_current) {
