@@ -1,7 +1,6 @@
 name = Bootstrap
 description = Built to use Bootstrap, a sleek, intuitive, and powerful front-end framework for faster and easier web development.
 core = 7.x
-php = 5.3.0
 
 
 ;;;;;;;;;;;;;;;;;;;;;
