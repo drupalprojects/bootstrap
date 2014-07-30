@@ -135,9 +135,9 @@ function bootstrap_theme_registry_alter(&$registry) {
  * to _theme_process_registry(), however severely modified for Bootstrap based
  * themes.
  *
- * All additions or modifications must live in `./theme`, relative to the base
- * theme or sub-theme's base folder. These files can be organized in any order
- * using sub-folders as it searches recursively.
+ * All additions or modifications must live in `./templates`, relative to the
+ * base theme or sub-theme's base folder. These files can be organized in any
+ * order using sub-folders as it searches recursively.
  *
  * Adds or modifies the following theme hook keys:
  *  - `includes`: When a variables file `*.vars.php` is found.

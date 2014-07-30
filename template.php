@@ -15,7 +15,7 @@
  * live in the 'theme' folder. This is a highly automated and complex system
  * designed to only load the necessary files when a given theme hook is invoked.
  * @see _bootstrap_theme()
- * @see theme/registry.inc
+ * @see ./includes/registry.inc
  *
  * Due to a bug in Drush, these includes must live inside the 'theme' folder
  * instead of something like 'includes'. If a module or theme has an 'includes'
@@ -27,7 +27,7 @@
 /**
  * Include common functions used through out theme.
  */
-include_once dirname(__FILE__) . '/theme/common.inc';
+include_once dirname(__FILE__) . '/includes/common.inc';
 
 /**
  * Implements hook_theme().
@@ -43,7 +43,7 @@ include_once dirname(__FILE__) . '/theme/common.inc';
  * @see _bootstrap_theme()
  */
 function bootstrap_theme(&$existing, $type, $theme, $path) {
-  bootstrap_include($theme, 'theme/registry.inc');
+  bootstrap_include($theme, 'includes/registry.inc');
   return _bootstrap_theme($existing, $type, $theme, $path);
 }
 
@@ -53,4 +53,4 @@ function bootstrap_theme(&$existing, $type, $theme, $path) {
  * hook_*_alter() implementations must live (via include) inside this file so
  * they are properly detected when drupal_alter() is invoked.
  */
-bootstrap_include('bootstrap', 'theme/alter.inc');
+bootstrap_include('bootstrap', 'includes/alter.inc');
