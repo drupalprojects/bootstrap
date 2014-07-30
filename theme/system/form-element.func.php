@@ -113,10 +113,10 @@ function bootstrap_form_element(&$variables) {
 
     case 'after':
       if ($is_radio || $is_checkbox) {
-        $output .= ' ' . $prefix . $element['#children'] . $suffix;
+        $variables['#children'] = $prefix . $element['#children'] . ' ' . $suffix;
       }
       else {
-        $variables['#children'] = ' ' . $prefix . $element['#children'] . $suffix;
+        $output .= ' ' . $prefix . $element['#children'] . $suffix;
       }
       $output .= ' ' . theme('form_element_label', $variables) . "\n";
       break;
