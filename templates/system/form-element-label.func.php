@@ -37,6 +37,9 @@ function bootstrap_form_element_label(&$variables) {
     $attributes['class'][] = 'element-invisible';
   }
 
+  // Add generic Bootstrap identifier class.
+  $attributes['class'][] = 'control-label';
+
   if (!empty($element['#id'])) {
     $attributes['for'] = $element['#id'];
   }
