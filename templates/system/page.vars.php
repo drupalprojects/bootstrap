@@ -10,16 +10,19 @@
  * @see page.tpl.php
  */
 function bootstrap_preprocess_page(&$variables) {
-  // Ensure each region has the correct theme wrappers.
-  foreach (system_region_list($GLOBALS['theme_key']) as $name => $title) {
-    if (!$variables['page'][$name]) {
-      $variables['page'][$name]['#theme_wrappers'] = array('region');
-      $variables['page'][$name]['#region'] = $name;
-    }
+  // Add information about the number of sidebars.
+  if (!empty($variables['page']['sidebar_first']) && !empty($variables['page']['sidebar_second'])) {
+    $variables['content_column_class'] = ' class="col-sm-6"';
+  }
+  elseif (!empty($variables['page']['sidebar_first']) || !empty($variables['page']['sidebar_second'])) {
+    $variables['content_column_class'] = ' class="col-sm-9"';
+  }
+  else {
+    $variables['content_column_class'] = ' class="col-sm-12"';
   }
 
-  // Primary menu.
-  $variables['primary_nav'] = array();
+  // Primary nav.
+  $variables['primary_nav'] = FALSE;
   if ($variables['main_menu']) {
     // Build links.
     $variables['primary_nav'] = menu_tree(variable_get('menu_main_links_source', 'main-menu'));
@@ -28,7 +31,7 @@ function bootstrap_preprocess_page(&$variables) {
   }
 
   // Secondary nav.
-  $variables['secondary_nav'] = array();
+  $variables['secondary_nav'] = FALSE;
   if ($variables['secondary_menu']) {
     // Build links.
     $variables['secondary_nav'] = menu_tree(variable_get('menu_secondary_links_source', 'user-menu'));
@@ -36,16 +39,19 @@ function bootstrap_preprocess_page(&$variables) {
     $variables['secondary_nav']['#theme_wrappers'] = array('menu_tree__secondary');
   }
 
-  // Add the site slogan to the header region.
-  if ($variables['site_slogan']) {
-    array_unshift($variables['page']['header'], array(
-      '#theme' => 'html_tag__site_slogan',
-      '#tag' => 'p',
-      '#attributes' => array(
-        'class' => array('lead'),
-      ),
-      '#value' => $variables['site_slogan'],
-    ));
+  $variables['navbar_classes_array'] = array('navbar');
+
+  if (theme_get_setting('bootstrap_navbar_position') !== '') {
+    $variables['navbar_classes_array'][] = 'navbar-' . theme_get_setting('bootstrap_navbar_position');
+  }
+  else {
+    $variables['navbar_classes_array'][] = 'container';
+  }
+  if (theme_get_setting('bootstrap_navbar_inverse')) {
+    $variables['navbar_classes_array'][] = 'navbar-inverse';
+  }
+  else {
+    $variables['navbar_classes_array'][] = 'navbar-default';
   }
 }
 
@@ -55,10 +61,5 @@ function bootstrap_preprocess_page(&$variables) {
  * @see page.tpl.php
  */
 function bootstrap_process_page(&$variables) {
-  // Store the page variables in cache so it can be used in region
-  // preprocessing.
-  $page = &drupal_static(__FUNCTION__);
-  if (!isset($page)) {
-    $page = $variables;
-  }
+  $variables['navbar_classes'] = implode(' ', $variables['navbar_classes_array']);
 }
