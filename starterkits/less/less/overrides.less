@@ -312,7 +312,8 @@ table tr.error {
   background-color: @state-danger-bg;
   color: @state-danger-text;
 }
-.control-group.error {
+.form-group.error,
+.form-group.has-error {
   background: none;
   label, .control-label {
     color: @state-danger-text;
@@ -320,10 +321,9 @@ table tr.error {
   }
   input, textarea, select, .uneditable-input {
     color: @input-color;
-    border: 1px solid @input-border;
   }
   .help-block, .help-inline {
-    color: @text-color;
+    color: @text-muted;
   }
 }
 

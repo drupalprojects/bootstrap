@@ -69,6 +69,11 @@ settings[bootstrap_region_well-footer] = ''
 settings[bootstrap_anchors_fix] = 1
 settings[bootstrap_anchors_smooth_scrolling] = 1
 
+; Forms
+; --------------
+settings[bootstrap_forms_required_has_error] = 0
+settings[bootstrap_forms_has_error_value_toggle] = 1
+
 ; Popovers
 ; --------------
 settings[bootstrap_popover_enabled] = 1

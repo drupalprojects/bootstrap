@@ -97,6 +97,20 @@ function _bootstrap_settings_form(&$form, $form_state) {
     )),
   );
 
+  // Forms.
+  $form['general']['forms'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Forms'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['general']['forms']['bootstrap_forms_required_has_error'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Make required elements display as an error'),
+    '#default_value' => theme_get_setting('bootstrap_forms_required_has_error'),
+    '#description' => t('If an element in a form is required, enabling this will always display the element with a <code>.has-error</code> class. This turns the element red and helps in usability for determining which form elements are required to submit the form.  This feature compliments the "JavaScript > Forms > Automatically remove error classes when values have been entered" feature.'),
+  );
+
   // Images.
   $form['general']['images'] = array(
     '#type' => 'fieldset',
@@ -296,6 +310,31 @@ function _bootstrap_settings_form(&$form, $form_state) {
     ),
   );
 
+  // Forms.
+  $form['javascript']['forms'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Forms'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['javascript']['forms']['bootstrap_forms_has_error_value_toggle'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Automatically remove error classes when values have been entered'),
+    '#default_value' => theme_get_setting('bootstrap_forms_has_error_value_toggle'),
+    '#description' => t('If an element has a <code>.has-error</code> class attached to it, enabling this will automatically remove that class when a value is entered. This feature compliments the "General > Forms > Make required elements display as an error" feature.'),
+  );
+  $form['javascript']['forms']['bootstrap_tooltip_descriptions'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use Tooltips for simple form descriptions'),
+    '#description' => t('Form items that contain simple descriptions (no HTML, no title attribute and are less than the specified length below) will be converted into tooltips. This helps reduce the sometimes unnecessary noise of form item descriptions. Descriptions that contain longer text or HTML as actionable descriptions (user needs to click) will not be converted. This ensures it is always visible so its usability remains intact.'),
+    '#default_value' => theme_get_setting('bootstrap_tooltip_descriptions'),
+    '#states' => array(
+      'visible' => array(
+        ':input[name="bootstrap_tooltip_enabled"]' => array('checked' => TRUE),
+      ),
+    ),
+  );
+
   // Popovers.
   $form['javascript']['popovers'] = array(
     '#type' => 'fieldset',
@@ -427,17 +466,6 @@ function _bootstrap_settings_form(&$form, $form_state) {
       '!warning' => '<strong class="error text-error">WARNING: This feature can sometimes impact performance. Disable if pages appear to "hang" after initial load.</strong>',
     )),
     '#default_value' => theme_get_setting('bootstrap_tooltip_enabled'),
-  );
-  $form['javascript']['tooltips']['bootstrap_tooltip_descriptions'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Use Tooltips for simple form descriptions'),
-    '#description' => t('Form items that contain simple descriptions (no HTML, no title attribute and are less than the specified length below) will be converted into tooltips. This helps reduce the sometimes unnecessary noise of form item descriptions. Descriptions that contain longer text or HTML as actionable descriptions (user needs to click) will not be converted. This ensures it is always visible so its usability remains intact.'),
-    '#default_value' => theme_get_setting('bootstrap_tooltip_descriptions'),
-    '#states' => array(
-      'visible' => array(
-        ':input[name="bootstrap_tooltip_enabled"]' => array('checked' => TRUE),
-      ),
-    ),
   );
   $form['javascript']['tooltips']['bootstrap_tooltip_descriptions_length'] = array(
     '#type' => 'textfield',

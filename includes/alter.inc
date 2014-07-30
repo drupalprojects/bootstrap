@@ -223,6 +223,7 @@ function bootstrap_js_alter(&$js) {
   $js['settings']['data'][]['bootstrap'] = array(
     'anchorsFix' => theme_get_setting('bootstrap_anchors_fix'),
     'anchorsSmoothScrolling' => theme_get_setting('bootstrap_anchors_smooth_scrolling'),
+    'formHasError' => (int) theme_get_setting('bootstrap_forms_has_error_value_toggle'),
     'popoverEnabled' => theme_get_setting('bootstrap_popover_enabled'),
     'popoverOptions' => array(
       'animation' => (int) theme_get_setting('bootstrap_popover_animation'),
