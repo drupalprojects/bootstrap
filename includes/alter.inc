@@ -66,13 +66,13 @@ function bootstrap_element_info_alter(&$elements) {
       $element['#icon_position'] = 'before';
     }
 
-    // Process all elements.
-    $element['#process'][] = '_bootstrap_process_element';
-
-    // Process input elements.
+    // Pre-render input elements.
     if (!empty($element['#input'])) {
-      $element['#process'][] = '_bootstrap_process_input';
+      $element['#pre_render'][] = '_bootstrap_pre_render_input';
     }
+
+    // Process all form elements.
+    $element['#process'][] = '_bootstrap_process_element';
 
     // Process fieldset elements.
     if (!empty($element['#type']) && $element['#type'] === 'fieldset') {

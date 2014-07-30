@@ -67,48 +67,6 @@ function _bootstrap_process_element(&$element, &$form_state) {
 }
 
 /**
- * Process input elements.
- */
-function _bootstrap_process_input(&$element, &$form_state) {
-  // Only add the "form-control" class for specific element input types.
-  $types = array(
-    // Core.
-    'password',
-    'password_confirm',
-    'select',
-    'textarea',
-    'textfield',
-    // HTML5.
-    'email',
-    // Webform module.
-    'webform_email',
-    'webform_number',
-    // Elements module.
-    'emailfield',
-    'numberfield',
-    'rangefield',
-    'searchfield',
-    'telfield',
-    'urlfield',
-  );
-
-  if (!empty($element['#type']) && (in_array($element['#type'], $types) || ($element['#type'] === 'file' && empty($element['#managed_file'])))) {
-    $element['#attributes']['class'][] = 'form-control';
-  }
-
-  if (!empty($element['#type']) && ($element['#type'] !== 'checkbox' || $element['#type'] !== 'radio' || $element['#type'] !== 'checkboxes' || $element['#type'] !== 'radios')) {
-    if (!empty($element['#description']) && empty($element['#attributes']['title']) && _bootstrap_tooltip_description($element['#description'])) {
-      $element['#attributes']['title'] = $element['#description'];
-    }
-
-    if (!empty($element['#attributes']['title'])) {
-      $element['#attributes']['data-toggle'] = 'tooltip';
-    }
-  }
-  return $element;
-}
-
-/**
  * Process fieldset element.
  */
 function _bootstrap_process_fieldset(&$element, &$form_state) {
