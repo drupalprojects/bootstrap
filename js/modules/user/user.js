@@ -151,8 +151,7 @@
   Drupal.behaviors.password = {
     attach: function (context) {
       $('input.password-field', context).once('password', function () {
-        var BootstrapPassword = new Drupal.BootstrapPassword(this);
-        BootstrapPassword.validateStrength();
+        new Drupal.BootstrapPassword(this);
       });
     }
   };
