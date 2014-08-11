@@ -4,6 +4,13 @@ core = 7.x
 
 
 ;;;;;;;;;;;;;;;;;;;;;
+;; SimplyTest.me
+;;;;;;;;;;;;;;;;;;;;;
+
+simplytest_dependencies[] = jquery_update
+
+
+;;;;;;;;;;;;;;;;;;;;;
 ;; Regions
 ;;;;;;;;;;;;;;;;;;;;;
 
@@ -160,7 +167,24 @@ exclude[css][] = 'modules/user/user.css'
 
 
 ;;;;;;;;;;;;;;;;;;;;;
-;; SimplyTest.me
+;; Breakpoints
 ;;;;;;;;;;;;;;;;;;;;;
-
-simplytest_dependencies[] = jquery_update
+breakpoints[screen-xs-max] = (max-width: 767px)
+breakpoints[screen-sm-min] = (max-width: 768px)
+breakpoints[screen-sm-max] = (max-width: 991px)
+breakpoints[screen-md-min] = (max-width: 992px)
+breakpoints[screen-md-max] = (max-width: 1199px)
+breakpoints[screen-lg-min] = (min-width: 1200px)
+; Multipiers
+multipliers[screen-xs-max][] = 1.5x
+multipliers[screen-xs-max][] = 2x
+multipliers[screen-sm-min][] = 1.5x
+multipliers[screen-sm-min][] = 2x
+multipliers[screen-sm-max][] = 1.5x
+multipliers[screen-sm-max][] = 2x
+multipliers[screen-md-min][] = 1.5x
+multipliers[screen-md-min][] = 2x
+multipliers[screen-md-max][] = 1.5x
+multipliers[screen-md-max][] = 2x
+multipliers[screen-lg-min][] = 1.5x
+multipliers[screen-lg-min][] = 2x
