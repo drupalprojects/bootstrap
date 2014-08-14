@@ -56,6 +56,9 @@ function bootstrap_css_alter(&$css) {
  */
 function bootstrap_element_info_alter(&$elements) {
   foreach ($elements as &$element) {
+    // Determine if the element has a base type.
+    $base_type = isset($element['#base_type']) && isset($elements[$element['#base_type']]) ? $elements[$element['#base_type']] : FALSE;
+
     // Setup a default "icon" variable. This allows #icon to be passed
     // to every template and theme function.
     // @see https://drupal.org/node/2219965
@@ -67,7 +70,7 @@ function bootstrap_element_info_alter(&$elements) {
     }
 
     // Pre-render input elements.
-    if (!empty($element['#input'])) {
+    if (!empty($element['#input']) || ($base_type && !empty($base_type['#input']))) {
       $element['#pre_render'][] = '_bootstrap_pre_render_input';
     }
 
