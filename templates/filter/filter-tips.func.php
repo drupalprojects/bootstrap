@@ -32,7 +32,7 @@
  * @ingroup themeable
  */
 function bootstrap_filter_tips($variables) {
-  $format_id = isset($_GET['filter']) ? $_GET['filter'] : '';
+  $format_id = arg(2);
   $current_path = current_path();
   $tips = _filter_tips(-1, TRUE);
 
@@ -72,9 +72,6 @@ function bootstrap_filter_tips($variables) {
         ),
         '#options' => array(
           'fragment' => $machine_name,
-          'query' => array(
-            'filter' => $machine_name,
-          ),
         ),
       ),
     );
