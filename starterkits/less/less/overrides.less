@@ -281,6 +281,29 @@ fieldset .panel-heading a.panel-title {
 .resizable-textarea textarea {
   border-radius: @border-radius-base @border-radius-base 0 0;
 }
+.text-format-wrapper > .form-type-textarea {
+  margin-bottom: 0;
+}
+.filter-wrapper {
+  border-radius: 0 0 @border-radius-base @border-radius-base;
+  .form-type-select {
+    min-width: 30%;
+    .filter-list {
+      width: 100%;
+    }
+  }
+}
+.filter-help {
+  margin-top: 5px;
+  text-align: center;
+  @media @tablet {
+    float: right;
+  }
+  .glyphicon {
+    margin: 0 5px 0 0;
+    vertical-align: text-top;
+  }
+}
 .radio, .checkbox {
   &:first-child {
     margin-top: 0;

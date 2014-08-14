@@ -21,6 +21,24 @@ function _bootstrap_process_element(&$element, &$form_state) {
     }
   }
 
+  // Process text_format elements.
+  if (isset($element['#type']) && $element['#type'] === 'text_format') {
+    // Allow the elements inside to be displayed inline.
+    $element['format']['#attributes']['class'][] = 'form-inline';
+
+    // Remove the cluttering guidelines; they can be viewed on a separate page.
+    $element['format']['guidelines']['#access'] = FALSE;
+
+    // Hide the select label.
+    $element['format']['format']['#title_display'] = 'none';
+
+    // Make the select element smaller using a Bootstrap class.
+    $element['format']['format']['#attributes']['class'][] = 'input-sm';
+
+    // Support the Bootstrap Select plugin if it is used.
+    $element['format']['format']['#attributes']['data-style'] = 'btn-sm btn-default';
+  }
+
   // Process form actions.
   if (!empty($element['#type']) && $element['#type'] === 'actions') {
     foreach (element_children($element) as $child) {
