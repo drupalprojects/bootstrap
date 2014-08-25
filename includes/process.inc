@@ -23,6 +23,13 @@ function _bootstrap_process_element(&$element, &$form_state) {
 
   // Process text_format elements.
   if (isset($element['#type']) && $element['#type'] === 'text_format') {
+    // Provide simple tooltip descriptions on the value text area.
+    if (!empty($element['#description']) && _bootstrap_tooltip_description($element['#description'])) {
+      $element['value']['#attributes']['data-toggle'] = 'tooltip';
+      $element['value']['#attributes']['title'] = $element['#description'];
+      unset($element['#description']);
+    }
+
     // Allow the elements inside to be displayed inline.
     $element['format']['#attributes']['class'][] = 'form-inline';
 
