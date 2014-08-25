@@ -278,14 +278,34 @@ fieldset .panel-heading a.panel-title {
 .form-actions{
   clear: both;
 }
+.managed-files.table {
+  td:first-child {
+    width: 100%;
+  }
+}
+div.image-widget-data {
+  float: none;
+  overflow: hidden;
+}
+table.sticky-header {
+  z-index: 1;
+}
 .resizable-textarea textarea {
   border-radius: @border-radius-base @border-radius-base 0 0;
 }
-.text-format-wrapper > .form-type-textarea {
-  margin-bottom: 0;
+.text-format-wrapper {
+  // Use same value as .form-group.
+  margin-bottom: 15px;
+  > .form-type-textarea,
+  .filter-wrapper {
+    margin-bottom: 0;
+  }
 }
 .filter-wrapper {
   border-radius: 0 0 @border-radius-base @border-radius-base;
+  .panel-body {
+    padding: 7px;
+  }
   .form-type-select {
     min-width: 30%;
     .filter-list {
