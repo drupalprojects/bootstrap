@@ -218,7 +218,7 @@ var Drupal = Drupal || {};
    * Tabledrag theming elements.
    */
   Drupal.theme.tableDragChangedMarker = function () {
-    return '<span class="tabledrag-changed glyphicon glyphicon-asterisk text-warning"></span>';
+    return '<span class="tabledrag-changed glyphicon glyphicon-warning-sign text-warning"></span>';
   };
 
   Drupal.theme.tableDragChangedWarning = function () {
