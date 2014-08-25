@@ -54,6 +54,20 @@
  * @see hook_theme()
  */
 function _bootstrap_theme(&$existing, $type, $theme, $path) {
+  // Bootstrap Carousels.
+  $hooks['bootstrap_carousel'] = array(
+    'variables' => array(
+      'attributes' => array(),
+      'items' => array(),
+      'start_index' => 0,
+      'controls' => TRUE,
+      'indicators' => TRUE,
+      'interval' => 5000,
+      'pause' => 'hover',
+      'wrap' => TRUE,
+    ),
+  );
+
   // Bootstrap Dropdowns.
   $hooks['bootstrap_dropdown'] = array(
     'render element' => 'element',
