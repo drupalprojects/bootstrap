@@ -18,9 +18,8 @@ function bootstrap_text_format_wrapper($variables) {
   $output = '<div class="text-format-wrapper">';
   $output .= $element['#children'];
   if (!empty($element['#description'])) {
-    $output .= '<p class="help-block">' . $element['#description'] . '</div>';
+    $output .= '<p class="help-block">' . $element['#description'] . '</p>';
   }
-  $output .= "</p>\n";
-
+  $output .= "</div>\n";
   return $output;
 }
