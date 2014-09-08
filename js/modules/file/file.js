@@ -67,5 +67,39 @@
         $(clickedButton).closest('div.form-managed-file').find('div.ajax-progress-bar').slideDown();
       }, 500);
     };
+
+    /**
+     * Styling invalid file extension error message (Issue #2331595 by NetTantra).
+     */
+    Drupal.file.validateExtension = function (event) {
+      // Remove any previous errors.
+      $('.file-upload-js-error').remove();
+
+      // Add client side validation for the input[type=file].
+      var extensionPattern = event.data.extensions.replace(/,\s*/g, '|');
+      if (extensionPattern.length > 1 && this.value.length > 0) {
+        var acceptableMatch = new RegExp('\\.(' + extensionPattern + ')$', 'gi');
+        if (!acceptableMatch.test(this.value)) {
+          var error = Drupal.t("The selected file %filename cannot be uploaded. Only files with the following extensions are allowed: %extensions.", {
+            // According to the specifications of HTML5, a file upload control
+            // should not reveal the real local path to the file that a user
+            // has selected. Some web browsers implement this restriction by
+            // replacing the local path with "C:\fakepath\", which can cause
+            // confusion by leaving the user thinking perhaps Drupal could not
+            // find the file because it messed up the file path. To avoid this
+            // confusion, therefore, we strip out the bogus fakepath string.
+            '%filename': this.value.replace('C:\\fakepath\\', ''),
+            '%extensions': extensionPattern.replace(/\|/g, ', ')
+          });
+          $(this).closest('div.form-managed-file').prepend('<div class="alert alert-danger alert-dismissible messages error file-upload-js-error" aria-live="polite" role="alert">\
+            <button type="button" class="close" data-dismiss="alert">\
+              <span aria-hidden="true">&times;</span>\
+              <span class="sr-only">Close</span>\
+            </button>' + error + '</div>');
+          this.value = '';
+          return false;
+        }
+      }
+    };
   }
 })(jQuery);
