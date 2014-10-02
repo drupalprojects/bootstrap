@@ -40,8 +40,8 @@ Drupal.ajax.prototype.beforeSend = function (xmlhttprequest, options) {
   $(this.element).addClass('progress-disabled').attr('disabled', true);
 
   // Insert progressbar or throbber.
-  if (this.progress.type == 'bar') {
-    var progressBar = new Drupal.progressBar('ajax-progress-' + this.element.id, eval(this.progress.update_callback), this.progress.method, eval(this.progress.error_callback));
+  if (this.progress.type === 'bar') {
+    var progressBar = new Drupal.progressBar('ajax-progress-' + this.element.id, eval(this.progress.update_callback), this.progress.method, eval(this.progress.error_callback)); // jshint ignore:line
     if (this.progress.message) {
       progressBar.setProgress(-1, this.progress.message);
     }
@@ -52,7 +52,7 @@ Drupal.ajax.prototype.beforeSend = function (xmlhttprequest, options) {
     this.progress.object = progressBar;
     $(this.element).after(this.progress.element);
   }
-  else if (this.progress.type == 'throbber') {
+  else if (this.progress.type === 'throbber') {
     this.progress.element = $('<div class="ajax-progress ajax-progress-throbber"><i class="glyphicon glyphicon-refresh glyphicon-spin"></i></div>');
     // If element is an input type, append after.
     if ($(this.element).is('input')) {

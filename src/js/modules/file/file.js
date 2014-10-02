@@ -91,11 +91,14 @@
             '%filename': this.value.replace('C:\\fakepath\\', ''),
             '%extensions': extensionPattern.replace(/\|/g, ', ')
           });
-          $(this).closest('div.form-managed-file').prepend('<div class="alert alert-danger alert-dismissible messages error file-upload-js-error" aria-live="polite" role="alert">\
-            <button type="button" class="close" data-dismiss="alert">\
-              <span aria-hidden="true">&times;</span>\
-              <span class="sr-only">Close</span>\
-            </button>' + error + '</div>');
+          var markup = '<div class="alert alert-danger alert-dismissible messages error file-upload-js-error" aria-live="polite" role="alert">\n';
+          markup += '  <button type="button" class="close" data-dismiss="alert">\n';
+          markup += '    <span aria-hidden="true">&times;</span>\n';
+          markup += '    <span class="sr-only">Close</span>\n';
+          markup += '  </button>\n';
+          markup += error;
+          markup += '</div>\n';
+          $(this).closest('div.form-managed-file').prepend(markup);
           this.value = '';
           return false;
         }

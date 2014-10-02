@@ -33,7 +33,7 @@ Drupal.behaviors.autocomplete = {
 Drupal.autocompleteSubmit = function () {
   return $('.form-autocomplete > .dropdown').each(function () {
     this.owner.hidePopup();
-  }).length == 0;
+  }).length === 0;
 };
 
 /**
@@ -93,6 +93,7 @@ Drupal.jsAC.prototype.found = function (matches) {
     right: 0
   });
   for (var key in matches) {
+    // jshint ignore:start
     $('<li></li>')
       .html($('<a href="#"></a>').html(matches[key]).click(function (e) { e.preventDefault(); }))
       .mousedown(function () { ac.select(this); })
@@ -100,6 +101,7 @@ Drupal.jsAC.prototype.found = function (matches) {
       .mouseout(function () { ac.unhighlight(this); })
       .data('autocompleteValue', key)
       .appendTo(ul);
+    // jshint ignore:end
   }
 
   // Show popup with matches, if any.

@@ -10,19 +10,22 @@
  * Implements hook_css_alter().
  */
 function bootstrap_css_alter(&$css) {
+  // Determine if the minimized versions should be loaded.
+  $min = (bool) variable_get('preprocess_css', 0) ? '.min' : '';
+  $dir = $min ? 'dist' : 'src';
+
   $theme_path = drupal_get_path('theme', 'bootstrap');
   // Exclude specified CSS files from theme.
   $excludes = bootstrap_get_theme_info(NULL, 'exclude][css');
   // Add Bootstrap CDN file and overrides.
-  $bootstrap_cdn = theme_get_setting('bootstrap_cdn');
-  if ($bootstrap_cdn) {
-    // Add CDN.
-    if (theme_get_setting('bootstrap_bootswatch')) {
-      $cdn = '//netdna.bootstrapcdn.com/bootswatch/' . $bootstrap_cdn  . '/' . theme_get_setting('bootstrap_bootswatch') . '/bootstrap.min.css';
-    }
-    else {
-      $cdn = '//netdna.bootstrapcdn.com/bootstrap/' . $bootstrap_cdn  . '/css/bootstrap.min.css';
-    }
+  $bootstrap_cdn_version = theme_get_setting('bootstrap_cdn');
+  $bootswatch_style = theme_get_setting('bootstrap_bootswatch');
+  if (!$bootswatch_style) {
+    $bootswatch_style = 'css';
+  }
+  // Add CDN.
+  if ($bootstrap_cdn_version) {
+    $cdn = "//netdna.bootstrapcdn.com/bootswatch/$bootstrap_cdn_version/$bootswatch_style/bootstrap$min.css";
     $css[$cdn] = array(
       'data' => $cdn,
       'type' => 'external',
@@ -34,9 +37,9 @@ function bootstrap_css_alter(&$css) {
       'weight' => -2,
     );
     // Add overrides.
-    $override = $theme_path . '/css/overrides.css';
-    $css[$override] = array(
-      'data' => $override,
+    $overrides = "$theme_path/$dir/css/overrides$min.css";
+    $css[$overrides] = array(
+      'data' => $overrides,
       'type' => 'file',
       'every_page' => TRUE,
       'media' => 'all',
@@ -163,6 +166,10 @@ function bootstrap_form_alter(array &$form, array &$form_state = array(), $form_
  * Implements hook_js_alter().
  */
 function bootstrap_js_alter(&$js) {
+  // Determine if the minimized versions should be loaded.
+  $min = (bool) variable_get('preprocess_js', 0) ? '.min' : '';
+  $dir = $min ? 'dist' : 'src';
+
   // Exclude specified JavaScript files from theme.
   $excludes = bootstrap_get_theme_info(NULL, 'exclude][js');
 
@@ -170,9 +177,9 @@ function bootstrap_js_alter(&$js) {
 
   // Add or replace JavaScript files when matching paths are detected.
   // Replacement files must begin with '_', like '_node.js'.
-  $files = _bootstrap_file_scan_directory($theme_path . '/js', '/\.js$/');
+  $files = _bootstrap_file_scan_directory("$theme_path/$dir/js", '/\.js$/');
   foreach ($files as $file) {
-    $path = str_replace($theme_path . '/js/', '', $file->uri);
+    $path = str_replace("$theme_path/$dir/js/", '', $file->uri);
     // Detect if this is a replacement file.
     $replace = FALSE;
     if (preg_match('/^[_]/', $file->filename)) {
@@ -180,8 +187,8 @@ function bootstrap_js_alter(&$js) {
       $path = dirname($path) . '/' . preg_replace('/^[_]/', '', $file->filename);
     }
     $matches = array();
-    if (preg_match('/^modules\/([^\/]*)/', $path, $matches)) {
-      if (!module_exists($matches[1])) {
+    if (preg_match('`^modules/([^/]*)`', $path, $matches)) {
+      if (empty($matches[1]) || !module_exists($matches[1])) {
         continue;
       }
       else {
@@ -213,7 +220,7 @@ function bootstrap_js_alter(&$js) {
   }
 
   // Always add bootstrap.js last.
-  $bootstrap = $theme_path . '/js/bootstrap.js';
+  $bootstrap = "$theme_path/$dir/js/bootstrap$min.js";
   $js[$bootstrap] = drupal_js_defaults($bootstrap);
   $js[$bootstrap]['group'] = JS_THEME;
   $js[$bootstrap]['scope'] = 'footer';
@@ -254,7 +261,7 @@ function bootstrap_js_alter(&$js) {
 
   // Add CDN.
   if (theme_get_setting('bootstrap_cdn')) {
-    $cdn = '//netdna.bootstrapcdn.com/bootstrap/' . theme_get_setting('bootstrap_cdn')  . '/js/bootstrap.min.js';
+    $cdn = '//netdna.bootstrapcdn.com/bootstrap/' . theme_get_setting('bootstrap_cdn')  . "/js/bootstrap$min.js";
     $js[$cdn] = drupal_js_defaults();
     $js[$cdn]['data'] = $cdn;
     $js[$cdn]['type'] = 'external';
