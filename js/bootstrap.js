@@ -175,7 +175,7 @@ var Drupal = Drupal || {};
         // Check for anchors that use the name attribute instead.
         if (!$target.length) {
           attr = 'name';
-          $target = $('[name="' + element.hash.replace('#', '') + '"');
+          $target = $('[name="' + element.hash.replace('#', '') + '"]');
         }
         // Immediately stop if no anchors are found.
         if (!this.validAnchor && !$target.length) {
