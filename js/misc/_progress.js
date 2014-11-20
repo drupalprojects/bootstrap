@@ -79,7 +79,7 @@ Drupal.progressBar.prototype.sendPing = function () {
       dataType: 'json',
       success: function (progress) {
         // Display errors.
-        if (progress.status === 0) {
+        if (progress.status == 0) {
           pb.displayError(progress.data);
           return;
         }
