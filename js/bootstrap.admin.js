@@ -104,7 +104,7 @@
           for (var i = 0, len = themes.length; i < len; i++) {
             $('<a/>').attr({
               id: themes[i].name.toLowerCase(),
-              class: 'bootswatch-preview element-invisible',
+              class: 'bootswatch-preview visually-hidden',
               href: themes[i].preview,
               target: '_blank'
             }).html(
@@ -116,9 +116,9 @@
             .appendTo($preview);
           }
           $preview.parent().find('select[name="bootstrap_bootswatch"]').bind('change', function () {
-            $preview.find('.bootswatch-preview').addClass('element-invisible');
+            $preview.find('.bootswatch-preview').addClass('visually-hidden');
             if ($(this).val().length) {
-              $preview.find('#' + $(this).val()).removeClass('element-invisible');
+              $preview.find('#' + $(this).val()).removeClass('visually-hidden');
             }
           }).change();
         }, "json");

@@ -4,6 +4,10 @@
  * settings.inc
  */
 
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
+use Drupal\Component\Serialization\Json;
+
 /**
  * Contains the form for the theme settings.
  *
@@ -12,9 +16,11 @@
  * @param array $form_state
  *   The form state array, passed by reference.
  */
-function _bootstrap_settings_form(&$form, $form_state) {
+function _bootstrap_settings_form(&$form, FormStateInterface $form_state) {
+  $config = \Drupal::config('bootstrap.settings');
+  $args = $form_state->getBuildInfo()['args'];
   // Do not add Bootstrap specific settings to non-bootstrap based themes.
-  $theme = !empty($form_state['build_info']['args'][0]) ? $form_state['build_info']['args'][0] : FALSE;
+  $theme = !empty($args[0]) ? $args[0] : FALSE;
 
   // Global or non Bootstrap based theme settings.
   if ($theme === FALSE || !in_array('bootstrap', _bootstrap_get_base_themes($theme, TRUE))) {
@@ -22,12 +28,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
   }
 
   // Get defined regions.
-  $regions = system_region_list($theme);
-
-  // Display a warning if jquery_update isn't enabled.
-  if ((!module_exists('jquery_update') || !version_compare(variable_get('jquery_update_jquery_version', '1.10'), '1.7', '>=')) && !theme_get_setting('bootstrap_toggle_jquery_error')) {
-    drupal_set_message(t('jQuery Update is not enabled, Bootstrap requires a minimum jQuery version of 1.7 or higher.<br/>Please enable <a href="https://drupal.org/project/jquery_update">jQuery Update module</a> 7.x-2.3 or higher, you must manually set this in the configuration after it is installed.'), 'error', FALSE);
-  }
+  $regions = system_region_list('bootstrap');
 
   // Wrap global setting fieldsets in vertical tabs.
   $form['global'] = array(
@@ -40,7 +41,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
   $form['favicon']['#group'] = 'global';
 
   // Do not add Bootstrap specific settings to global settings.
-  if (empty($form_state['build_info']['args'][0])) {
+  if (empty($form_state->getBuildInfo()['args'][0])) {
     unset($form['general']['#prefix']);
     return;
   }
@@ -48,7 +49,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
   $form['bootstrap'] = array(
     '#type' => 'vertical_tabs',
     '#attached' => array(
-      'js'  => array(drupal_get_path('theme', 'bootstrap') . '/js/bootstrap.admin.js'),
+      'library'  => array('bootstrap/adminscript'),
     ),
     '#prefix' => '<h2><small>' . t('Bootstrap Settings') . '</small></h2>',
     '#weight' => -10,
@@ -56,14 +57,14 @@ function _bootstrap_settings_form(&$form, $form_state) {
 
   // General.
   $form['general'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('General'),
     '#group' => 'bootstrap',
   );
 
   // Buttons.
   $form['general']['buttons'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Buttons'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
@@ -99,7 +100,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
 
   // Forms.
   $form['general']['forms'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Forms'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
@@ -113,7 +114,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
 
   // Images.
   $form['general']['images'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Images'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
@@ -141,7 +142,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
 
   // Tables.
   $form['general']['tables'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Tables'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
@@ -164,7 +165,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#default_value' => theme_get_setting('bootstrap_table_hover'),
     '#description' => t('Enable a hover state on table rows.'),
   );
-  $form['general']['tables']['bootstrap_table_striped'] = array(
+  $form['general']['tables']['table_striped'] = array(
     '#type' => 'checkbox',
     '#title' => t('Striped rows'),
     '#default_value' => theme_get_setting('bootstrap_table_striped'),
@@ -179,14 +180,14 @@ function _bootstrap_settings_form(&$form, $form_state) {
 
   // Components.
   $form['components'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Components'),
     '#group' => 'bootstrap',
   );
 
   // Breadcrumbs.
   $form['components']['breadcrumbs'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Breadcrumbs'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
@@ -226,7 +227,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
 
   // Navbar.
   $form['components']['navbar'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Navbar'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
@@ -258,10 +259,10 @@ function _bootstrap_settings_form(&$form, $form_state) {
     'well well-lg' => t('.well-lg (large)'),
   );
   $form['components']['region_wells'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Region wells'),
     '#description' => t('Enable the <code>.well</code>, <code>.well-sm</code> or <code>.well-lg</code> classes for specified regions. See: documentation on !wells.', array(
-      '!wells' => l(t('Bootstrap Wells'), 'http://getbootstrap.com/components/#wells'),
+      '!wells' => \Drupal::l(t('Bootstrap Wells'), Url::fromUri('http://getbootstrap.com/components/#wells')),
     )),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
@@ -280,14 +281,14 @@ function _bootstrap_settings_form(&$form, $form_state) {
 
   // JavaScript settings.
   $form['javascript'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('JavaScript'),
     '#group' => 'bootstrap',
   );
 
   // Anchors.
   $form['javascript']['anchors'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Anchors'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
@@ -312,7 +313,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
 
   // Forms.
   $form['javascript']['forms'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Forms'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
@@ -337,7 +338,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
 
   // Popovers.
   $form['javascript']['popovers'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Popovers'),
     '#description' => t('Add small overlays of content, like those on the iPad, to any element for housing secondary information.'),
     '#collapsible' => TRUE,
@@ -353,7 +354,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#default_value' => theme_get_setting('bootstrap_popover_enabled'),
   );
   $form['javascript']['popovers']['options'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Options'),
     '#description' => t('These are global options. Each popover can independently override desired settings by appending the option name to !data. Example: !data-animation.', array(
       '!data' => '<code>data-</code>',
@@ -379,43 +380,45 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#description' => t("Insert HTML into the popover. If false, jQuery's text method will be used to insert content into the DOM. Use text if you're worried about XSS attacks."),
     '#default_value' => theme_get_setting('bootstrap_popover_html'),
   );
+  $options = array(
+    'top',
+    'bottom',
+    'left',
+    'right',
+    'auto',
+    'auto top',
+    'auto bottom',
+    'auto left',
+    'auto right',
+  );
   $form['javascript']['popovers']['options']['bootstrap_popover_placement'] = array(
     '#type' => 'select',
     '#title' => t('placement'),
     '#description' => t('Where to position the popover. When "auto" is specified, it will dynamically reorient the popover. For example, if placement is "auto left", the popover will display to the left when possible, otherwise it will display right.'),
     '#default_value' => theme_get_setting('bootstrap_popover_placement'),
-    '#options' => drupal_map_assoc(array(
-      'top',
-      'bottom',
-      'left',
-      'right',
-      'auto',
-      'auto top',
-      'auto bottom',
-      'auto left',
-      'auto right',
-    )),
+    '#options' => array_combine($options, $options),
   );
   $form['javascript']['popovers']['options']['bootstrap_popover_selector'] = array(
     '#type' => 'textfield',
     '#title' => t('selector'),
     '#description' => t('If a selector is provided, tooltip objects will be delegated to the specified targets. In practice, this is used to enable dynamic HTML content to have popovers added. See !this and !example.', array(
-      '!this' => l(t('this'), 'https://github.com/twbs/bootstrap/issues/4215'),
-      '!example' => l(t('an informative example'), 'http://jsfiddle.net/fScua/'),
+      '!this' => \Drupal::l(t('this'), Url::fromUri('https://github.com/twbs/bootstrap/issues/4215')),
+      '!example' => \Drupal::l(t('an informative example'), Url::fromUri('http://jsfiddle.net/fScua/')),
     )),
     '#default_value' => theme_get_setting('bootstrap_popover_selector'),
+  );
+  $options = array(
+    'click',
+    'hover',
+    'focus',
+    'manual',
   );
   $form['javascript']['popovers']['options']['bootstrap_popover_trigger'] = array(
     '#type' => 'checkboxes',
     '#title' => t('trigger'),
     '#description' => t('How a popover is triggered.'),
     '#default_value' => theme_get_setting('bootstrap_popover_trigger'),
-    '#options' => drupal_map_assoc(array(
-      'click',
-      'hover',
-      'focus',
-      'manual',
-    )),
+    '#options' => array_combine($options, $options),
   );
   $form['javascript']['popovers']['options']['bootstrap_popover_trigger_autoclose'] = array(
     '#type' => 'checkbox',
@@ -450,10 +453,10 @@ function _bootstrap_settings_form(&$form, $form_state) {
 
   // Tooltips.
   $form['javascript']['tooltips'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Tooltips'),
     '#description' => t("Inspired by the excellent jQuery.tipsy plugin written by Jason Frame; Tooltips are an updated version, which don't rely on images, use CSS3 for animations, and data-attributes for local title storage. See !link for more documentation.", array(
-      '!link' => l(t('Bootstrap tooltips'), 'http://getbootstrap.com/javascript/#tooltips'),
+      '!link' => \Drupal::l(t('Bootstrap tooltips'), Url::fromUri('http://getbootstrap.com/javascript/#tooltips')),
     )),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
@@ -480,7 +483,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     ),
   );
   $form['javascript']['tooltips']['options'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Options'),
     '#description' => t('These are global options. Each tooltip can independently override desired settings by appending the option name to !data. Example: !data-animation.', array(
       '!data' => '<code>data-</code>',
@@ -506,22 +509,23 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#description' => t("Insert HTML into the tooltip. If false, jQuery's text method will be used to insert content into the DOM. Use text if you're worried about XSS attacks."),
     '#default_value' => theme_get_setting('bootstrap_tooltip_html'),
   );
+  $options = array(
+    'top',
+    'bottom',
+    'left',
+    'right',
+    'auto',
+    'auto top',
+    'auto bottom',
+    'auto left',
+    'auto right',
+  );
   $form['javascript']['tooltips']['options']['bootstrap_tooltip_placement'] = array(
     '#type' => 'select',
     '#title' => t('placement'),
     '#description' => t('Where to position the tooltip. When "auto" is specified, it will dynamically reorient the tooltip. For example, if placement is "auto left", the tooltip will display to the left when possible, otherwise it will display right.'),
     '#default_value' => theme_get_setting('bootstrap_tooltip_placement'),
-    '#options' => drupal_map_assoc(array(
-      'top',
-      'bottom',
-      'left',
-      'right',
-      'auto',
-      'auto top',
-      'auto bottom',
-      'auto left',
-      'auto right',
-    )),
+    '#options' => array_combine($options, $options),
   );
   $form['javascript']['tooltips']['options']['bootstrap_tooltip_selector'] = array(
     '#type' => 'textfield',
@@ -529,17 +533,18 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#description' => t('If a selector is provided, tooltip objects will be delegated to the specified targets.'),
     '#default_value' => theme_get_setting('bootstrap_tooltip_selector'),
   );
+  $options = array(
+    'click',
+    'hover',
+    'focus',
+    'manual',
+  );
   $form['javascript']['tooltips']['options']['bootstrap_tooltip_trigger'] = array(
     '#type' => 'checkboxes',
     '#title' => t('trigger'),
     '#description' => t('How a tooltip is triggered.'),
     '#default_value' => theme_get_setting('bootstrap_tooltip_trigger'),
-    '#options' => drupal_map_assoc(array(
-      'click',
-      'hover',
-      'focus',
-      'manual',
-    )),
+    '#options' => array_combine($options, $options),
   );
   $form['javascript']['tooltips']['options']['bootstrap_tooltip_delay'] = array(
     '#type' => 'textfield',
@@ -556,17 +561,17 @@ function _bootstrap_settings_form(&$form, $form_state) {
 
   // Advanced settings.
   $form['advanced'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('Advanced'),
     '#group' => 'bootstrap',
   );
 
   // BootstrapCDN.
   $form['advanced']['bootstrap_cdn'] = array(
-    '#type' => 'fieldset',
+    '#type' => 'details',
     '#title' => t('BootstrapCDN'),
     '#description' => t('Use !bootstrapcdn to serve the Bootstrap framework files. Enabling this setting will prevent this theme from attempting to load any Bootstrap framework files locally. !warning', array(
-      '!bootstrapcdn' => l(t('BootstrapCDN'), 'http://bootstrapcdn.com', array(
+      '!bootstrapcdn' => \Drupal::l(t('BootstrapCDN'), Url::fromUri('http://bootstrapcdn.com'), array(
         'external' => TRUE,
       )),
       '!warning' => '<div class="alert alert-info messages info"><strong>' . t('NOTE') . ':</strong> ' . t('While BootstrapCDN (content distribution network) is the preferred method for providing huge performance gains in load time, this method does depend on using this third party service. BootstrapCDN is under no obligation or commitment to provide guaranteed up-time or service quality for this theme. If you choose to disable this setting, you must provide your own Bootstrap source and/or optional CDN delivery implementation.') . '</div>',
@@ -574,43 +579,35 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
+  $options = array(
+    '3.3.1',
+    '3.3.0',
+    '3.2.0',
+    '3.1.1',
+    '3.1.0',
+    '3.0.3',
+    '3.0.2',
+    '3.0.1',
+    '3.0.0',
+  );
   $form['advanced']['bootstrap_cdn']['bootstrap_cdn'] = array(
     '#type' => 'select',
     '#title' => t('BootstrapCDN version'),
-    '#options' => drupal_map_assoc(array(
-      '3.2.0',
-      '3.1.1',
-      '3.1.0',
-      '3.0.3',
-      '3.0.2',
-      '3.0.1',
-      '3.0.0',
-    )),
+    '#options' => array_combine($options, $options),
     '#default_value' => theme_get_setting('bootstrap_cdn'),
     '#empty_option' => t('Disabled'),
     '#empty_value' => NULL,
   );
 
-  // Bootswatch.
-  $bootswatch_themes = array();
-  $request = drupal_http_request('http://api.bootswatch.com/3/');
-  if ($request && $request->code === '200' && !empty($request->data)) {
-    if (($api = drupal_json_decode($request->data)) && is_array($api) && !empty($api['themes'])) {
-      foreach ($api['themes'] as $bootswatch_theme) {
-        $bootswatch_themes[strtolower($bootswatch_theme['name'])] = $bootswatch_theme['name'];
-      }
-    }
-  }
   $form['advanced']['bootstrap_cdn']['bootstrap_bootswatch'] = array(
     '#type' => 'select',
     '#title' => t('Bootswatch theme'),
     '#description' => t('Use !bootstrapcdn to serve a Bootswatch Theme. Choose Bootswatch theme here.', array(
-      '!bootstrapcdn' => l(t('BootstrapCDN'), 'http://bootstrapcdn.com', array(
+      '!bootstrapcdn' => \Drupal::l(t('BootstrapCDN'), Url::fromUri('http://bootstrapcdn.com'), array(
         'external' => TRUE,
       )),
     )),
     '#default_value' => theme_get_setting('bootstrap_bootswatch'),
-    '#options' => $bootswatch_themes,
     '#empty_option' => t('Disabled'),
     '#empty_value' => NULL,
     '#suffix' => '<div id="bootswatch-preview"></div>',
@@ -620,18 +617,20 @@ function _bootstrap_settings_form(&$form, $form_state) {
       ),
     ),
   );
-  if (empty($bootswatch_themes)) {
+
+  $response = Drupal::httpClient()->get('http://api.bootswatch.com/3/');
+  try {
+    $bootswatch_themes = array();
+    // Expected result.
+    $data = $response->getBody();
+    if (($api = Json::decode($data)) && is_array($api) && !empty($api['themes'])) {
+      foreach ($api['themes'] as $bootswatch_theme) {
+        $bootswatch_themes[strtolower($bootswatch_theme['name'])] = $bootswatch_theme['name'];
+      }
+      $form['advanced']['bootstrap_cdn']['bootstrap_bootswatch']['#options'] = $bootswatch_themes;
+    }
+  }
+  catch (Guzzle\Common\Exception\GuzzleException $e) {
     $form['advanced']['bootstrap_cdn']['bootstrap_bootswatch']['#prefix'] = '<div class="alert alert-danger messages error"><strong>' . t('ERROR') . ':</strong> ' . t('Unable to reach Bootswatch API. Please ensure the server your website is hosted on is able to initiate HTTP requests.') . '</div>';
   }
-
-  // Suppress jQuery message.
-  $form['advanced']['bootstrap_toggle_jquery_error'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Suppress jQuery version error message'),
-    '#default_value' => theme_get_setting('bootstrap_toggle_jquery_error'),
-    '#description' => t('Enable this if the version of jQuery has been upgraded to 1.7+ using a method other than the !jquery_update module.', array(
-      '!jquery_update' => l(t('jQuery Update'), 'https://drupal.org/project/jquery_update'),
-    )),
-  );
-
 }

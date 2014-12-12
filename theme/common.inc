@@ -6,6 +6,10 @@
  * Contains common functionality for the entire base theme.
  */
 
+use Drupal\Core\Template\Attribute;
+use Drupal\Component\Utility\NestedArray;
+use Drupal\Component\Utility\Crypt;
+
 /**
  * Return information from the .info file of a theme (and possible base themes).
  *
@@ -27,7 +31,7 @@ function bootstrap_get_theme_info($theme_key = NULL, $key = NULL, $base_themes =
     $theme_key = !empty($GLOBALS['theme_key']) ? $GLOBALS['theme_key'] : FALSE;
   }
   if ($theme_key) {
-    $themes = list_themes();
+    $themes = \Drupal::service('theme_handler')->listInfo();
     if (!empty($themes[$theme_key])) {
       $theme = $themes[$theme_key];
       // If a key name was specified, return just that array.
@@ -56,7 +60,7 @@ function bootstrap_get_theme_info($theme_key = NULL, $key = NULL, $base_themes =
               if (!is_array($info)) {
                 $info = array($info);
               }
-              $value = drupal_array_merge_deep($value, $info);
+              $value = NestedArray::mergeDeep($value, $info);
             }
           }
           else {
@@ -71,7 +75,7 @@ function bootstrap_get_theme_info($theme_key = NULL, $key = NULL, $base_themes =
                 if (!is_array($info)) {
                   $info = array($info);
                 }
-                $value = drupal_array_merge_deep($value, $info);
+                $value = NestedArray::mergeDeep($value, $info);
               }
             }
           }
@@ -286,15 +290,16 @@ function _bootstrap_file_scan_directory($dir, $mask, array $options = array()) {
   // Retrieve cached data.
   $cid = 'theme_registry:bootstrap:files';
   $files = array();
-  if ($cache = cache_get($cid)) {
-    $files = $cache->data;
+  if ($cached = \Drupal::cache()->get($cid)) {
+    $files = $cached->data;
   }
+
   // Generate a unique hash for all parameters passed as a change in any of
   // them would return different results.
-  $hash = drupal_hash_base64(serialize(func_get_args()));
+  $hash = Crypt::hashBase64(serialize(func_get_args()));
   if (!isset($files[$hash])) {
     $files[$hash] = file_scan_directory($dir, $mask, $options);
-    cache_set($cid, $files);
+    \Drupal::cache()->set($cid, $files);
   }
   return $files[$hash];
 }
@@ -526,17 +531,25 @@ function _bootstrap_icon($name, $default = NULL) {
   // Ensure the icon specified is a valid Bootstrap Glyphicon.
   if (_bootstrap_glyphicons_supported() && in_array($name, _bootstrap_glyphicons())) {
     // Attempt to use the Icon API module, if enabled and it generates output.
-    if (module_exists('icon')) {
-      $output = theme('icon', array('bundle' => 'bootstrap', 'icon' => 'glyphicon-' . $name));
-    }
-    if (empty($output)) {
-      // Mimic the Icon API markup.
-      $attributes = array(
-        'class' => array('icon', 'glyphicon', 'glyphicon-' . $name),
-        'aria-hidden' => 'true',
+    if (\Drupal::moduleHandler()->moduleExists('icon')) {
+      $icon = array(
+        '#type' => 'icon',
+        '#bundle' => 'bootstrap',
+        '#icon' => 'glyphicon-' . $name,
       );
-      $output = '<span' . drupal_attributes($attributes) . '></span>';
     }
+    else {
+      $icon = array(
+        '#type' => 'html_tag',
+        '#tag' => 'span',
+        '#attributes' => array(
+          'class' => array('icon', 'glyphicon', 'glyphicon-' . $name),
+          'aria-hidden' => 'true',
+        ),
+      );
+    }
+
+    $output = drupal_render($icon);
   }
   return empty($output) && isset($default) ? $default : $output;
 }
@@ -551,7 +564,7 @@ function _bootstrap_glyphicons_supported() {
   if (!isset($drupal_static_fast)) {
     $drupal_static_fast['supported'] = &drupal_static(__FUNCTION__);
     // Get the active theme.
-    $drupal_static_fast['theme'] = variable_get('theme_default', $GLOBALS['theme']);
+    $drupal_static_fast['theme'] = \Drupal::config('system.theme')->get('default');
   }
 
   // Get static data.
@@ -564,7 +577,7 @@ function _bootstrap_glyphicons_supported() {
 
     // Retrieve cached data.
     $cid = 'theme_registry:bootstrap:icon_support';
-    if (($cache = cache_get($cid)) && !empty($cache->data)) {
+    if (($cache = \Drupal::cache()->get($cid)) && !empty($cache->data)) {
       $supported = $cache->data;
     }
 
@@ -591,7 +604,7 @@ function _bootstrap_glyphicons_supported() {
       }
 
       // Cache all supported themes now that this theme is added to the array.
-      cache_set($cid, $supported);
+      \Drupal::cache()->set($cid, $supported);
     }
   }
   return $supported[$theme];
@@ -709,7 +722,7 @@ function _bootstrap_colorize_text($string, $default = '') {
     );
 
     // Allow sub-themes to alter this array of patterns.
-    drupal_alter('bootstrap_colorize_text', $texts);
+    \Drupal::moduleHandler()->alter('bootstrap_colorize_text', $texts);
   }
 
   // Iterate over the array.
@@ -787,7 +800,7 @@ function _bootstrap_iconize_text($string, $default = '') {
     );
 
     // Allow sub-themes to alter this array of patterns.
-    drupal_alter('bootstrap_iconize_text', $texts);
+    \Drupal::moduleHandler()->alter('bootstrap_iconize_text', $texts);
   }
 
   // Iterate over the array.
@@ -898,7 +911,7 @@ function _bootstrap_tooltip_description($description) {
     return FALSE;
   }
 
-  $id = drupal_hash_base64($description);
+  $id = Crypt::hashBase64($description);
   if (!isset($descriptions[$id])) {
     $descriptions[$id] = ($description === strip_tags($description) && strlen($description) <= theme_get_setting('bootstrap_tooltip_descriptions_length'));
   }

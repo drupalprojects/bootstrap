@@ -6,19 +6,23 @@
  * Contains various implementations of hook_*_alter().
  */
 
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Template\Attribute;
+
 /**
  * Implements hook_css_alter().
  */
 function bootstrap_css_alter(&$css) {
+  $config = \Drupal::config('bootstrap.settings');
   $theme_path = drupal_get_path('theme', 'bootstrap');
   // Exclude specified CSS files from theme.
-  $excludes = bootstrap_get_theme_info(NULL, 'exclude][css');
+  $excludes = $config->get('excludes.css');
   // Add Bootstrap CDN file and overrides.
-  $bootstrap_cdn = theme_get_setting('bootstrap_cdn');
+  $bootstrap_cdn = $config->get('bootstrap_cdn');
   if ($bootstrap_cdn) {
     // Add CDN.
     if (theme_get_setting('bootstrap_bootswatch')) {
-      $cdn = '//netdna.bootstrapcdn.com/bootswatch/' . $bootstrap_cdn  . '/' . theme_get_setting('bootstrap_bootswatch') . '/bootstrap.min.css';
+      $cdn = '//netdna.bootstrapcdn.com/bootswatch/' . $bootstrap_cdn  . '/' . $config->get('bootstrap_bootswatch') . '/bootstrap.min.css';
     }
     else {
       $cdn = '//netdna.bootstrapcdn.com/bootstrap/' . $bootstrap_cdn  . '/css/bootstrap.min.css';
@@ -47,7 +51,7 @@ function bootstrap_css_alter(&$css) {
     );
   }
   if (!empty($excludes)) {
-    $css = array_diff_key($css, drupal_map_assoc($excludes));
+    $css = array_diff_key($css, array_combine($excludes, $excludes));
   }
 }
 
@@ -105,12 +109,12 @@ function bootstrap_element_info_alter(&$elements) {
 /**
  * Implements hook_form_alter().
  */
-function bootstrap_form_alter(array &$form, array &$form_state = array(), $form_id = NULL) {
+function bootstrap_form_alter(&$form, FormStateInterface $form_state, $form_id = NULL) {
   if ($form_id) {
     switch ($form_id) {
       case 'system_theme_settings':
         // Include the settings form here.
-        bootstrap_include('bootstrap', 'includes/settings.inc');
+        bootstrap_include('bootstrap', 'theme/settings.inc');
         _bootstrap_settings_form($form, $form_state);
         break;
 
@@ -140,7 +144,7 @@ function bootstrap_form_alter(array &$form, array &$form_state = array(), $form_
         // Hide the default button from display and implement a theme wrapper
         // to add a submit button containing a search icon directly after the
         // input element.
-        $form['actions']['submit']['#attributes']['class'][] = 'element-invisible';
+        $form['actions']['submit']['#attributes']['class'][] = 'visually-hidden';
         $form['search_block_form']['#theme_wrappers'] = array('bootstrap_search_form_wrapper');
 
         // Apply a clearfix so the results don't overflow onto the form.
@@ -163,8 +167,11 @@ function bootstrap_form_alter(array &$form, array &$form_state = array(), $form_
  * Implements hook_js_alter().
  */
 function bootstrap_js_alter(&$js) {
+  $config = \Drupal::config('bootstrap.settings');
+
   // Exclude specified JavaScript files from theme.
-  $excludes = bootstrap_get_theme_info(NULL, 'exclude][js');
+  // @todo add excludes.
+  $excludes = $config->get('excludes.js');
 
   $theme_path = drupal_get_path('theme', 'bootstrap');
 
@@ -181,7 +188,7 @@ function bootstrap_js_alter(&$js) {
     }
     $matches = array();
     if (preg_match('/^modules\/([^\/]*)/', $path, $matches)) {
-      if (!module_exists($matches[1])) {
+      if (!\Drupal::moduleHandler()->moduleExists($matches[1])) {
         continue;
       }
       else {
@@ -200,65 +207,53 @@ function bootstrap_js_alter(&$js) {
       else {
         $js[$file->uri] = drupal_js_defaults($file->uri);
         $js[$file->uri]['group'] = JS_THEME;
+        $js[$file->uri]['scope'] = 'footer';
       }
     }
   }
 
-  // Ensure jQuery Once is always loaded.
-  // @see https://drupal.org/node/2149561
-  if (empty($js['misc/jquery.once.js'])) {
-    $jquery_once = drupal_get_library('system', 'jquery.once');
-    $js['misc/jquery.once.js'] = $jquery_once['js']['misc/jquery.once.js'];
-    $js['misc/jquery.once.js'] += drupal_js_defaults('misc/jquery.once.js');
-  }
-
-  // Always add bootstrap.js last.
-  $bootstrap = $theme_path . '/js/bootstrap.js';
-  $js[$bootstrap] = drupal_js_defaults($bootstrap);
-  $js[$bootstrap]['group'] = JS_THEME;
-  $js[$bootstrap]['scope'] = 'footer';
-
   if (!empty($excludes)) {
-    $js = array_diff_key($js, drupal_map_assoc($excludes));
+    $js = array_diff_key($js, array_combine($excludes, $excludes));
   }
 
   // Add Bootstrap settings.
   $js['settings']['data'][]['bootstrap'] = array(
-    'anchorsFix' => theme_get_setting('bootstrap_anchors_fix'),
-    'anchorsSmoothScrolling' => theme_get_setting('bootstrap_anchors_smooth_scrolling'),
-    'formHasError' => (int) theme_get_setting('bootstrap_forms_has_error_value_toggle'),
-    'popoverEnabled' => theme_get_setting('bootstrap_popover_enabled'),
+    'anchorsFix' => $config->get('bootstrap_anchors_fix'),
+    'anchorsSmoothScrolling' => $config->get('bootstrap_anchors_smooth_scrolling'),
+    'formHasError' => (int) $config->get('bootstrap_forms_has_error_value_toggle'),
+    'popoverEnabled' => $config->get('bootstrap_popover_enabled'),
     'popoverOptions' => array(
-      'animation' => (int) theme_get_setting('bootstrap_popover_animation'),
-      'html' => (int) theme_get_setting('bootstrap_popover_html'),
-      'placement' => theme_get_setting('bootstrap_popover_placement'),
-      'selector' => theme_get_setting('bootstrap_popover_selector'),
-      'trigger' => implode(' ', array_filter(array_values((array) theme_get_setting('bootstrap_popover_trigger')))),
-      'triggerAutoclose' => (int) theme_get_setting('bootstrap_popover_trigger_autoclose'),
-      'title' => theme_get_setting('bootstrap_popover_title'),
-      'content' => theme_get_setting('bootstrap_popover_content'),
-      'delay' => (int) theme_get_setting('bootstrap_popover_delay'),
-      'container' => theme_get_setting('bootstrap_popover_container'),
+      'animation' => (int) $config->get('bootstrap_popover_animation'),
+      'html' => (int) $config->get('bootstrap_popover_html'),
+      'placement' => $config->get('bootstrap_popover_placement'),
+      'selector' => $config->get('bootstrap_popover_selector'),
+      'trigger' => implode(' ', array_filter(array_values((array) $config->get('bootstrap_popover_trigger')))),
+      'triggerAutoclose' => (int) $config->get('bootstrap_popover_trigger_autoclose'),
+      'title' => $config->get('bootstrap_popover_title'),
+      'content' => $config->get('bootstrap_popover_content'),
+      'delay' => (int) $config->get('bootstrap_popover_delay'),
+      'container' => $config->get('bootstrap_popover_container'),
     ),
-    'tooltipEnabled' => theme_get_setting('bootstrap_tooltip_enabled'),
+    'tooltipEnabled' => $config->get('bootstrap_tooltip_enabled'),
     'tooltipOptions' => array(
-      'animation' => (int) theme_get_setting('bootstrap_tooltip_animation'),
-      'html' => (int) theme_get_setting('bootstrap_tooltip_html'),
-      'placement' => theme_get_setting('bootstrap_tooltip_placement'),
-      'selector' => theme_get_setting('bootstrap_tooltip_selector'),
-      'trigger' => implode(' ', array_filter(array_values((array) theme_get_setting('bootstrap_tooltip_trigger')))),
-      'delay' => (int) theme_get_setting('bootstrap_tooltip_delay'),
-      'container' => theme_get_setting('bootstrap_tooltip_container'),
+      'animation' => (int) $config->get('bootstrap_tooltip_animation'),
+      'html' => (int) $config->get('bootstrap_tooltip_html'),
+      'placement' => $config->get('bootstrap_tooltip_placement'),
+      'selector' => $config->get('bootstrap_tooltip_selector'),
+      'trigger' => implode(' ', array_filter(array_values((array) $config->get('bootstrap_tooltip_trigger')))),
+      'delay' => (int) $config->get('bootstrap_tooltip_delay'),
+      'container' => $config->get('bootstrap_tooltip_container'),
     ),
   );
 
   // Add CDN.
-  if (theme_get_setting('bootstrap_cdn')) {
-    $cdn = '//netdna.bootstrapcdn.com/bootstrap/' . theme_get_setting('bootstrap_cdn')  . '/js/bootstrap.min.js';
+  if ($config->get('bootstrap_cdn')) {
+    $cdn = '//netdna.bootstrapcdn.com/bootstrap/' . $config->get('bootstrap_cdn')  . '/js/bootstrap.min.js';
     $js[$cdn] = drupal_js_defaults();
     $js[$cdn]['data'] = $cdn;
     $js[$cdn]['type'] = 'external';
     $js[$cdn]['every_page'] = TRUE;
+    $js[$cdn]['scope'] = 'footer';
     $js[$cdn]['weight'] = -100;
   }
 }
@@ -267,7 +262,8 @@ function bootstrap_js_alter(&$js) {
  * Implements hook_icon_bundle_list_alter().
  */
 function bootstrap_icon_bundle_list_alter(&$build, $bundle) {
-  if (theme_get_setting('bootstrap_tooltip_enabled')) {
+  $config = \Drupal::config('bootstrap.settings');
+  if ($config->get('bootstrap_tooltip_enabled')) {
     foreach ($build as &$icon) {
       $icon['#attributes']['data-toggle'] = 'tooltip';
       $icon['#attributes']['data-placement'] = 'bottom';
@@ -306,9 +302,9 @@ function bootstrap_js_callback_filter_xss_alter(array &$allowed_tags = array()) 
 /**
  * Include #pre_render callbacks for elements.
  */
-bootstrap_include('bootstrap', 'includes/pre-render.inc');
+bootstrap_include('bootstrap', 'theme/pre-render.inc');
 
 /**
  * Include #process callbacks for elements.
  */
-bootstrap_include('bootstrap', 'includes/process.inc');
+bootstrap_include('bootstrap', 'theme/process.inc');

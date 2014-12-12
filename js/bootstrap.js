@@ -7,12 +7,13 @@
 
 var Drupal = Drupal || {};
 
-(function($, Drupal){
+(function ($, Drupal, drupalSettings) {
   "use strict";
 
   Drupal.behaviors.bootstrap = {
-    attach: function(context) {
+    attach: function (context) {
       // Provide some Bootstrap tab/Drupal integration.
+
       $(context).find('.tabbable').once('bootstrap-tabs', function () {
         var $wrapper = $(this);
         var $tabs = $wrapper.find('.nav-tabs');
@@ -55,8 +56,8 @@ var Drupal = Drupal || {};
    * Behavior for .
    */
   Drupal.behaviors.bootstrapFormHasError = {
-    attach: function (context, settings) {
-      if (settings.bootstrap && settings.bootstrap.formHasError) {
+    attach: function (context) {
+      if (drupalSettings.bootstrap && drupalSettings.bootstrap.formHasError) {
         var $context = $(context);
         $context.find('.form-item.has-error:not(.form-type-password.has-feedback)').once('error', function () {
           var $formItem = $(this);
@@ -75,10 +76,10 @@ var Drupal = Drupal || {};
    * Bootstrap Popovers.
    */
   Drupal.behaviors.bootstrapPopovers = {
-    attach: function (context, settings) {
-      if (settings.bootstrap && settings.bootstrap.popoverEnabled) {
+    attach: function (context) {
+      if (drupalSettings.bootstrap && drupalSettings.bootstrap.popoverEnabled) {
         var $currentPopover = $();
-        if (settings.bootstrap.popoverOptions.triggerAutoclose) {
+        if (drupalSettings.bootstrap.popoverOptions.triggerAutoclose) {
           $(document).on('click', function (e) {
             if ($currentPopover.length && !$(e.target).is('[data-toggle=popover]') && $(e.target).parents('.popover.in').length === 0) {
               $currentPopover.popover('hide');
@@ -89,7 +90,7 @@ var Drupal = Drupal || {};
         var elements = $(context).find('[data-toggle=popover]').toArray();
         for (var i = 0; i < elements.length; i++) {
           var $element = $(elements[i]);
-          var options = $.extend({}, settings.bootstrap.popoverOptions, $element.data());
+          var options = $.extend({}, drupalSettings.bootstrap.popoverOptions, $element.data());
           if (!options.content) {
             options.content = function () {
               var target = $(this).data('target');
@@ -99,7 +100,7 @@ var Drupal = Drupal || {};
           $element.popover(options).on('click', function (e) {
             e.preventDefault();
           });
-          if (settings.bootstrap.popoverOptions.triggerAutoclose) {
+          if (drupalSettings.bootstrap.popoverOptions.triggerAutoclose) {
             $element.on('show.bs.popover', function () {
               if ($currentPopover.length) {
                 $currentPopover.popover('hide');
@@ -116,12 +117,12 @@ var Drupal = Drupal || {};
    * Bootstrap Tooltips.
    */
   Drupal.behaviors.bootstrapTooltips = {
-    attach: function (context, settings) {
-      if (settings.bootstrap && settings.bootstrap.tooltipEnabled) {
+    attach: function (context) {
+      if (drupalSettings.bootstrap && drupalSettings.bootstrap.tooltipEnabled) {
         var elements = $(context).find('[data-toggle="tooltip"]').toArray();
         for (var i = 0; i < elements.length; i++) {
           var $element = $(elements[i]);
-          var options = $.extend({}, settings.bootstrap.tooltipOptions, $element.data());
+          var options = $.extend({}, drupalSettings.bootstrap.tooltipOptions, $element.data());
           $element.tooltip(options);
         }
       }
@@ -133,7 +134,7 @@ var Drupal = Drupal || {};
    */
   var $scrollableElement = $();
   Drupal.behaviors.bootstrapAnchors = {
-    attach: function(context, settings) {
+    attach: function (context) {
       var i, elements = ['html', 'body'];
       if (!$scrollableElement.length) {
         for (i = 0; i < elements.length; i++) {
@@ -152,7 +153,7 @@ var Drupal = Drupal || {};
           }
         }
       }
-      if (!settings.bootstrap || !settings.bootstrap.anchorsFix) {
+      if (!drupalSettings.bootstrap || !drupalSettings.bootstrap.anchorsFix) {
         return;
       }
       var anchors = $(context).find('a').toArray();
@@ -204,7 +205,7 @@ var Drupal = Drupal || {};
             $fakeAnchor.remove();
             $target.attr(attr, element.hash.replace('#', ''));
           };
-          if (Drupal.settings.bootstrap.anchorsSmoothScrolling) {
+          if (drupalSettings.bootstrap.anchorsSmoothScrolling) {
             $scrollableElement.animate({ scrollTop: offset, avoidTransforms: true }, 400, complete);
           }
           else {
@@ -227,4 +228,4 @@ var Drupal = Drupal || {};
     return '<div class="tabledrag-changed-warning alert alert-warning messages warning">' + Drupal.theme('tableDragChangedMarker') + ' ' + Drupal.t('Changes made in this table will not be saved until the form is submitted.') + '</div>';
   };
 
-})(jQuery, Drupal);
+})(jQuery, Drupal, drupalSettings);

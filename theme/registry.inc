@@ -101,6 +101,9 @@ function _bootstrap_theme(&$existing, $type, $theme, $path) {
  * Implements hook_theme_registry_alter().
  */
 function bootstrap_theme_registry_alter(&$registry) {
+  // @todo - D8 no longer includes this for themes.
+  // @see https://www.drupal.org/node/2390973
+
   // Retrieve the active theme names.
   $themes = _bootstrap_get_base_themes(NULL, TRUE);
 

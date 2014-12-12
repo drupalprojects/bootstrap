@@ -1,0 +1,20 @@
+name: Bootstrap
+description: 'Built to use Bootstrap, a sleek, intuitive, and powerful front-end framework for faster and easier web development.'
+type: theme
+package: Bootstrap
+core: 8.x
+version: VERSION
+regions:
+  navigation: 'Navigation'
+  header: 'Top Bar'
+  highlighted: 'Highlighted'
+  help: 'Help'
+  content: 'Content'
+  sidebar_first: 'Primary'
+  sidebar_second: 'Secondary'
+  footer: 'Footer'
+  page_top: 'Page top'
+  page_bottom: 'Page bottom'
+
+libraries:
+  - bootstrap/globalscripts
