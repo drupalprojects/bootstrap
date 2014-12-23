@@ -9,6 +9,9 @@
 use Drupal\Core\Template\Attribute;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Crypt;
+use Drupal\Component\Utility\Unicode;
+use Drupal\Core\Theme\ThemeManager;
+use Drupal\Core\Utility\ThemeRegistry;
 
 /**
  * Return information from the .info file of a theme (and possible base themes).
@@ -255,7 +258,7 @@ function _bootstrap_remove_class($class, &$element) {
 function _bootstrap_get_base_themes($theme_key = NULL, $include_theme_key = FALSE) {
   static $themes;
   if (!isset($theme_key)) {
-    $theme_key = $GLOBALS['theme_key'];
+    $theme_key = \Drupal::theme()->getActiveTheme()->getName();
   }
   if (!isset($themes[$theme_key])) {
     $themes[$theme_key] = array_unique(array_filter((array) bootstrap_get_theme_info($theme_key, 'base theme')));
@@ -549,7 +552,7 @@ function _bootstrap_icon($name, $default = NULL) {
       );
     }
 
-    $output = drupal_render($icon);
+    $output = \Drupal\Core\Render\RendererInterface::render($icon);
   }
   return empty($output) && isset($default) ? $default : $output;
 }
@@ -736,7 +739,7 @@ function _bootstrap_colorize_text($string, $default = '') {
           break;
 
         case 'contains':
-          if (strpos(drupal_strtolower($string), drupal_strtolower($value)) !== FALSE) {
+          if (strpos(Unicode::strtolower($string), Unicode::strtolower($value)) !== FALSE) {
             return $class;
           }
           break;
@@ -814,7 +817,7 @@ function _bootstrap_iconize_text($string, $default = '') {
           break;
 
         case 'contains':
-          if (strpos(drupal_strtolower($string), drupal_strtolower($value)) !== FALSE) {
+          if (strpos(Unicode::strtolower($string), Unicode::strtolower($value)) !== FALSE) {
             return _bootstrap_icon($icon, $default);
           }
           break;

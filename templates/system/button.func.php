@@ -4,6 +4,8 @@
  * button.func.php
  */
 
+use Drupal\Core\Template\Attribute;
+
 /**
  * Overrides theme_button().
  */
@@ -12,7 +14,7 @@ function bootstrap_button($variables) {
 
   // Allow button text to be appear hidden.
   // @see https://www.drupal.org/node/2327437
-  $text = !empty($element['#hide_text']) ? '<span class="element-invisible">' . $element['#value'] . '</span>' : $element['#value'];
+  $text = !empty($element['#hide_text']) ? '<span class="visually-hidden">' . $element['#value'] . '</span>' : $element['#value'];
 
   // Add icons before or after the value.
   // @see https://www.drupal.org/node/2219965
@@ -26,5 +28,5 @@ function bootstrap_button($variables) {
   }
 
   // This line break adds inherent margin between multiple buttons.
-  return '<button' . drupal_attributes($element['#attributes']) . '>' . $text . "</button>\n";
+  return '<button' . new Attribute($element['#attributes']) . '>' . $text . "</button>\n";
 }

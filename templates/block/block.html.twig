@@ -1,4 +1,4 @@
-<?php
+{#
 /**
  * @file
  * Default theme implementation to display a block.
@@ -44,15 +44,16 @@
  *
  * @ingroup themeable
  */
-?>
-<section id="<?php print $block_html_id; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
+#}
+<section{{ attributes }}>
+  {{ title_prefix }}
+  {% if label %}
+    <h2{{ title_attributes }}>{{ label }}</h2>
+  {% endif %}
+  {{ title_suffix }}
 
-  <?php print render($title_prefix); ?>
-  <?php if ($title): ?>
-    <h2<?php print $title_attributes; ?>><?php print $title; ?></h2>
-  <?php endif;?>
-  <?php print render($title_suffix); ?>
-
-  <?php print $content ?>
-
+  {% block content %}
+    {{ content }}
+  {% endblock %}
 </section>
+

@@ -4,14 +4,14 @@
  * region.vars.php
  */
 
+use Drupal\Core\Template\Attribute;
+
 /**
  * Implements hook_preprocess_region().
  */
 function bootstrap_preprocess_region(&$variables) {
-  global $theme;
-
+  $theme = \Drupal::theme()->getActiveTheme()->getName();
   $region = $variables['region'];
-  $classes = &$variables['classes_array'];
 
   // Content region.
   if ($region === 'content') {
@@ -21,10 +21,10 @@ function bootstrap_preprocess_region(&$variables) {
   // Help region.
   elseif ($region === 'help' && !empty($variables['content'])) {
     $variables['content'] = _bootstrap_icon('question-sign') . $variables['content'];
-    $classes[] = 'alert';
-    $classes[] = 'alert-info';
-    $classes[] = 'messages';
-    $classes[] = 'info';
+    $variables['attributes']['class'][] = 'alert';
+    $variables['attributes']['class'][] = 'alert-info';
+    $variables['attributes']['class'][] = 'messages';
+    $variables['attributes']['class'][] = 'info';
   }
 
   // Support for "well" classes in regions.
@@ -35,6 +35,6 @@ function bootstrap_preprocess_region(&$variables) {
     }
   }
   if (!empty($wells[$region])) {
-    $classes[] = $wells[$region];
+    $variables['attributes']['class'][] = $wells[$region];
   }
 }

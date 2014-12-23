@@ -191,7 +191,7 @@ var Drupal = Drupal || {};
             event.preventDefault();
           }
           var $fakeAnchor = $('<div/>')
-            .addClass('element-invisible')
+            .addClass('visually-hidden')
             .attr(attr, $target.attr(attr))
             .css({
               position: 'absolute',

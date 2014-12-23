@@ -4,6 +4,8 @@
  * page.vars.php
  */
 
+use Drupal\Core\Template\Attribute;
+
 /**
  * Implements hook_preprocess_page().
  *
@@ -11,17 +13,20 @@
  */
 function bootstrap_preprocess_page(&$variables) {
   // Add information about the number of sidebars.
+  $variables['content_column_attributes'] = new Attribute();
+  $variables['content_column_attributes']['class'] = array();
   if (!empty($variables['page']['sidebar_first']) && !empty($variables['page']['sidebar_second'])) {
-    $variables['content_column_class'] = ' class="col-sm-6"';
+    $variables['content_column_attributes']['class'][] = 'col-sm-6';
   }
   elseif (!empty($variables['page']['sidebar_first']) || !empty($variables['page']['sidebar_second'])) {
-    $variables['content_column_class'] = ' class="col-sm-9"';
+    $variables['content_column_attributes']['class'][] = 'col-sm-9';
   }
   else {
-    $variables['content_column_class'] = ' class="col-sm-12"';
+    $variables['content_column_attributes']['class'][] = 'col-sm-12';
   }
 
   // Primary nav.
+  // @todo cleanup.
   $variables['primary_nav'] = FALSE;
   if ($variables['main_menu']) {
     // Build links.
@@ -39,27 +44,18 @@ function bootstrap_preprocess_page(&$variables) {
     $variables['secondary_nav']['#theme_wrappers'] = array('menu_tree__secondary');
   }
 
-  $variables['navbar_classes_array'] = array('navbar');
-
+  $variables['navbar_attributes'] = new Attribute();
+  $variables['navbar_attributes']['class'] = array('navbar');
   if (theme_get_setting('bootstrap_navbar_position') !== '') {
-    $variables['navbar_classes_array'][] = 'navbar-' . theme_get_setting('bootstrap_navbar_position');
+    $variables['navbar_attributes']['class'][] = 'navbar-' . theme_get_setting('bootstrap_navbar_position');
   }
   else {
-    $variables['navbar_classes_array'][] = 'container';
+    $variables['navbar_attributes']['class'][] = 'container';
   }
   if (theme_get_setting('bootstrap_navbar_inverse')) {
-    $variables['navbar_classes_array'][] = 'navbar-inverse';
+    $variables['navbar_attributes']['class'][] = 'navbar-inverse';
   }
   else {
-    $variables['navbar_classes_array'][] = 'navbar-default';
+    $variables['navbar_attributes']['class'][] = 'navbar-default';
   }
-}
-
-/**
- * Implements hook_process_page().
- *
- * @see page.tpl.php
- */
-function bootstrap_process_page(&$variables) {
-  $variables['navbar_classes'] = implode(' ', $variables['navbar_classes_array']);
 }

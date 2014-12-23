@@ -9,30 +9,40 @@
  */
 function bootstrap_preprocess_bootstrap_panel(&$variables) {
   $element = &$variables['element'];
+
   $attributes = !empty($element['#attributes']) ? $element['#attributes'] : array();
-  $attributes['class'][] = 'panel';
-  $attributes['class'][] = 'panel-default';
+  $variables['attributes']['class'][] = 'panel';
+  $variables['attributes']['class'][] = 'panel-default';
+
   // states.js requires form-wrapper on fieldset to work properly.
-  $attributes['class'][] = 'form-wrapper';
+  $variables['attributes']['class'][] = 'form-wrapper';
+
   $variables['collapsible'] = FALSE;
+
   if (isset($element['#collapsible'])) {
     $variables['collapsible'] = $element['#collapsible'];
+    $variables['attributes']['class'][] = 'collapsible';
   }
+
   $variables['collapsed'] = FALSE;
   if (isset($element['#collapsed'])) {
     $variables['collapsed'] = $element['#collapsed'];
+    $variables['attributes']['class'][] = 'collapsed';
   }
+
   // Force grouped fieldsets to not be collapsible (for vertical tabs).
   if (!empty($element['#group'])) {
     $variables['collapsible'] = FALSE;
     $variables['collapsed'] = FALSE;
   }
+
   if (!isset($element['#id']) && $variables['collapsible']) {
-    $element['#id'] = drupal_html_id('bootstrap-panel');
+    $element['#id'] = \Drupal\Component\Utility\Html::getUniqueId('bootstrap-panel');
   }
+
   $variables['target'] = NULL;
   if (isset($element['#id'])) {
-    $attributes['id'] = $element['#id'];
+    $variables['attributes']['id'] = $element['#id'];
     $variables['target'] = '#' . $element['#id'] . ' > .collapse';
   }
   $variables['content'] = $element['#children'];
@@ -50,12 +60,4 @@ function bootstrap_preprocess_bootstrap_panel(&$variables) {
   foreach ($keys as $key) {
     $variables[$key] = !empty($element["#$key"]) ? $element["#$key"] : FALSE;
   }
-  $variables['attributes'] = $attributes;
-}
-
-/**
- * Implements hook_process_bootstrap_panel().
- */
-function bootstrap_process_bootstrap_panel(&$variables) {
-  $variables['attributes'] = drupal_attributes($variables['attributes']);
 }

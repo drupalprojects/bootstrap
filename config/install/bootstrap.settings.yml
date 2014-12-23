@@ -95,3 +95,6 @@ bootstrap_bootswatch: ''
 # --------------
 bootstrap_toggle_name: 1
 bootstrap_toggle_search: 1
+
+bootstrap_css_excludes:
+  - vertical-tabs.css

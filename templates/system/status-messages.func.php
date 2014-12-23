@@ -36,7 +36,7 @@ function bootstrap_status_messages($variables) {
     $output .= "  <a class=\"close\" data-dismiss=\"alert\" href=\"#\">&times;</a>\n";
 
     if (!empty($status_heading[$type])) {
-      $output .= '<h4 class="element-invisible">' . $status_heading[$type] . "</h4>\n";
+      $output .= '<h4 class="visually-hidden">' . $status_heading[$type] . "</h4>\n";
     }
 
     if (count($messages) > 1) {
