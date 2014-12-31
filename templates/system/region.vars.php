@@ -10,8 +10,11 @@ use Drupal\Core\Template\Attribute;
  * Implements hook_preprocess_region().
  */
 function bootstrap_preprocess_region(&$variables) {
+  $region = $variables['elements']['#region'];
+  $variables['region'] = $region;
+  $variables['content'] = $variables['elements']['#children'];
+
   $theme = \Drupal::theme()->getActiveTheme()->getName();
-  $region = $variables['region'];
 
   // Content region.
   if ($region === 'content') {

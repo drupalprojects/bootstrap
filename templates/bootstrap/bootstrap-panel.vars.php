@@ -4,21 +4,34 @@
  * bootstrap-panel.vars.php
  */
 
+use Drupal\Core\Render\Element;
+use Drupal\Core\Template\Attribute;
+use Drupal\Component\Utility\Xss;
+
 /**
  * Implements hook_preprocess_bootstrap_panel().
  */
 function bootstrap_preprocess_bootstrap_panel(&$variables) {
-  $element = &$variables['element'];
+  $element = $variables['element'];
+  Element::setAttributes($element, array('id'));
+  Element\RenderElement::setAttributes($element);
+  $variables['attributes'] = $element['#attributes'];
+  $variables['prefix'] = isset($element['#field_prefix']) ? $element['#field_prefix'] : NULL;
+  $variables['suffix'] = isset($element['#field_suffix']) ? $element['#field_suffix'] : NULL;
+  $variables['title_display'] = isset($element['#title_display']) ? $element['#title_display'] : NULL;
+  $variables['children'] = $element['#children'];
+  $variables['required'] = !empty($element['#required']) ? $element['#required'] : NULL;
 
-  $attributes = !empty($element['#attributes']) ? $element['#attributes'] : array();
+  $variables['legend']['title'] = !empty($element['#title']) ? Xss::filterAdmin($element['#title']) : '';
+  $variables['legend']['attributes'] = new Attribute();
+  $variables['legend_span']['attributes'] = new Attribute();
+
   $variables['attributes']['class'][] = 'panel';
   $variables['attributes']['class'][] = 'panel-default';
-
   // states.js requires form-wrapper on fieldset to work properly.
   $variables['attributes']['class'][] = 'form-wrapper';
 
   $variables['collapsible'] = FALSE;
-
   if (isset($element['#collapsible'])) {
     $variables['collapsible'] = $element['#collapsible'];
     $variables['attributes']['class'][] = 'collapsible';
@@ -45,9 +58,16 @@ function bootstrap_preprocess_bootstrap_panel(&$variables) {
     $variables['attributes']['id'] = $element['#id'];
     $variables['target'] = '#' . $element['#id'] . ' > .collapse';
   }
-  $variables['content'] = $element['#children'];
-  if (isset($element['#value'])) {
-    $variables['content'] .= $element['#value'];
+
+
+  if (!empty($element['#description'])) {
+    $description_id = $element['#attributes']['id'] . '--description';
+    $description_attributes['id'] = $description_id;
+    $variables['description']['attributes'] = new Attribute($description_attributes);
+    $variables['description']['content'] = $element['#description'];
+
+    // Add the description's id to the fieldset aria attributes.
+    $variables['attributes']['aria-describedby'] = $description_id;
   }
 
   // Iterate over optional variables.
@@ -56,6 +76,7 @@ function bootstrap_preprocess_bootstrap_panel(&$variables) {
     'prefix',
     'suffix',
     'title',
+    'value',
   );
   foreach ($keys as $key) {
     $variables[$key] = !empty($element["#$key"]) ? $element["#$key"] : FALSE;

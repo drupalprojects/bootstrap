@@ -27,6 +27,12 @@
       <div class="help-block">{{ description }}</div>
     {% endif %}
     {{ content }}
+    {% if children %}
+      {{ children }}
+    {% endif %}
+    {% if value %}
+      {{ value }}
+    {% endif %}
   </div>
   {% if collapsible %}
     </div>

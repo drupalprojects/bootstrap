@@ -9,6 +9,7 @@
  */
 function bootstrap_preprocess_input(&$variables) {
   $element = $variables['element'];
+  $variables['children'] = $element['#children'];
 
   // @todo Not converting to buttons. Should we? Also should we remove button and button--primary classes?
   _bootstrap_colorize_button($element);
