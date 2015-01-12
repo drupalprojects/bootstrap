@@ -12,6 +12,7 @@ use Drupal\Core\Template\Attribute;
 function bootstrap_preprocess_form_element(&$variables) {
   $element = &$variables['element'];
   $type = $element['#type'];
+  $title_display = $element['#title_display'];
 
   // This function is invoked as theme wrapper, but the rendered form element
   // may not necessarily have been processed by
@@ -100,7 +101,7 @@ function bootstrap_preprocess_form_element(&$variables) {
     }
   }
 
-  if ($is_checkbox || $is_radio) {
+  if (($is_checkbox || $is_radio) && $title_display != 'none' && $title_display != 'invisible') {
     $description = array(
       '#markup' => $element['#description'],
     );
