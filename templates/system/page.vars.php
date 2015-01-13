@@ -5,6 +5,7 @@
  */
 
 use Drupal\Core\Template\Attribute;
+use Drupal\Core\Menu\MenuTreeParameters;
 
 /**
  * Implements hook_preprocess_page().
@@ -25,25 +26,6 @@ function bootstrap_preprocess_page(&$variables) {
     $variables['content_column_attributes']['class'][] = 'col-sm-12';
   }
 
-  // Primary nav.
-  // @todo cleanup.
-  $variables['primary_nav'] = FALSE;
-  if ($variables['main_menu']) {
-    // Build links.
-    $variables['primary_nav'] = menu_tree(variable_get('menu_main_links_source', 'main-menu'));
-    // Provide default theme wrapper function.
-    $variables['primary_nav']['#theme_wrappers'] = array('menu_tree__primary');
-  }
-
-  // Secondary nav.
-  $variables['secondary_nav'] = FALSE;
-  if ($variables['secondary_menu']) {
-    // Build links.
-    $variables['secondary_nav'] = menu_tree(variable_get('menu_secondary_links_source', 'user-menu'));
-    // Provide default theme wrapper function.
-    $variables['secondary_nav']['#theme_wrappers'] = array('menu_tree__secondary');
-  }
-
   $variables['navbar_attributes'] = new Attribute();
   $variables['navbar_attributes']['class'] = array('navbar');
   if (theme_get_setting('bootstrap_navbar_position') !== '') {
@@ -58,4 +40,21 @@ function bootstrap_preprocess_page(&$variables) {
   else {
     $variables['navbar_attributes']['class'][] = 'navbar-default';
   }
+
+  // Primary nav.
+  $menu_tree = \Drupal::menuTree();
+  // Render the top-level administration menu links.
+  $parameters = new MenuTreeParameters();
+  $tree = $menu_tree->load('main', $parameters);
+  $variables['primary_nav'] = $menu_tree->build($tree);
+  $variables['primary_nav']['#attributes']['class'][] = 'navbar-nav';
+
+  // Primary nav.
+  $menu_tree = \Drupal::menuTree();
+  // Render the top-level administration menu links.
+  $parameters = new MenuTreeParameters();
+  $tree = $menu_tree->load('account', $parameters);
+  $variables['secondary_nav'] = $menu_tree->build($tree);
+  $variables['secondary_nav']['#attributes']['class'][] = 'navbar-nav';
+  $variables['secondary_nav']['#attributes']['class'][] = 'secondary';
 }

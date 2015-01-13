@@ -661,6 +661,10 @@ th.checkbox, td.checkbox, th.radio, td.radio {
   display: table-cell
 }
 
+td .checkbox.form-no-label input {
+  margin-left: 0;
+}
+
 .views-display-settings .label {
   font-size: 100%;
   color: #666

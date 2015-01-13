@@ -98,3 +98,4 @@ bootstrap_toggle_search: 1
 
 bootstrap_css_excludes:
   - vertical-tabs.css
+  - system.theme.css

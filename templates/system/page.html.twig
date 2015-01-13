@@ -83,15 +83,13 @@
       </button>
     </div>
 
-    {% if page.primary_menu or page.secondary_menu or page.navigation %}
+
       <div class="navbar-collapse collapse">
         <nav role="navigation">
-          {{ page.primary_menu }}
-          {{ page.secondary_menu }}
-          {{ page.navigation }}
+          {{ primary_nav }}
+          {{ secondary_nav }}
         </nav>
       </div>
-    {% endif %}
   </div>
 </header>
 

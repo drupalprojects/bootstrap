@@ -155,6 +155,10 @@ function bootstrap_theme_suggestions_alter(array &$suggestions, array $variables
   if ($hook == 'details') {
     $suggestions[] = 'bootstrap_panel';
   }
+
+  if ($variables['elements']['#region'] == 'navigation') {
+    $suggestions[] = 'region__no_wrapper';
+  }
 }
 
 /**
@@ -258,4 +262,3 @@ function bootstrap_js_callback_filter_xss_alter(array &$allowed_tags = array()) 
  * Include #process callbacks for elements.
  */
 bootstrap_include('bootstrap', 'theme/process.inc');
-
