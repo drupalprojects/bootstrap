@@ -244,6 +244,10 @@ function _bootstrap_process_theme_registry(&$registry, $themes) {
         // Correct the type that is implementing this override.
         $registry[$hook]['type'] = $GLOBALS['theme_path'] === $registry[$hook]['theme path'] ? 'theme' : 'base_theme';
 
+        // Sort the phase functions.
+        // @see https://www.drupal.org/node/2098551
+        _bootstrap_registry_sort_phase_functions($registry[$hook][$phase_key], $hook, $phase, $themes);
+
         // Setup a default "context" variable. This allows #context to be passed
         // to every template and theme function.
         // @see https://drupal.org/node/2035055
@@ -262,6 +266,51 @@ function _bootstrap_process_theme_registry(&$registry, $themes) {
         }
       }
     }
+  }
+}
+
+/**
+ * Ensures the phase functions are invoked in the correct order.
+ *
+ * @param array $functions
+ *   The phase functions to iterate over.
+ * @param string $hook
+ *   The current hook being processed.
+ * @param string $phase
+ *   The current phase being processed.
+ * @param array $themes
+ *   An indexed array of current themes.
+ *
+ * @see https://www.drupal.org/node/2098551
+ */
+function _bootstrap_registry_sort_phase_functions(&$functions, $hook, $phase, $themes) {
+  // Immediately return if there is nothing to sort.
+  if (count($functions) < 2) {
+    return;
+  }
+
+  // Create an associative array of theme functions to ensure sort order.
+  $theme_functions = array_fill_keys($themes, array());
+
+  // Iterate over all the themes.
+  foreach ($themes as $theme) {
+    // Only add the function to the array of theme functions if it currently
+    // exists in the $functions array.
+    $function = $theme . '_' . $phase . '_' . $hook;
+    $key = array_search($function, $functions);
+    if ($key !== FALSE) {
+      // Save the theme function to be added later, but sorted.
+      $theme_functions[$theme][] = $function;
+
+      // Remove it from the current $functions array.
+      unset($functions[$key]);
+    }
+  }
+
+  // Iterate over all the captured theme functions and place them back into
+  // the phase functions array.
+  foreach ($theme_functions as $array) {
+    $functions = array_merge($functions, $array);
   }
 }
 
