@@ -169,7 +169,7 @@ function bootstrap_form_alter(&$form, FormStateInterface $form_state, $form_id =
     switch ($form_id) {
       case 'system_theme_settings':
         // Include the settings form here.
-        bootstrap_include('bootstrap', 'theme/settings.inc');
+        bootstrap_include('bootstrap', 'includes/settings.inc');
         _bootstrap_settings_form($form, $form_state);
         break;
 
@@ -261,4 +261,4 @@ function bootstrap_js_callback_filter_xss_alter(array &$allowed_tags = array()) 
 /**
  * Include #process callbacks for elements.
  */
-bootstrap_include('bootstrap', 'theme/process.inc');
+bootstrap_include('bootstrap', 'includes/process.inc');
