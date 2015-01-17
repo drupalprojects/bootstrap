@@ -4,6 +4,8 @@
  * breadcrumb.vars.php
  */
 
+use Drupal\Core\Template\Attribute;
+
 /**
  * Implements hook_preprocess_breadcrumb().
  */
@@ -17,14 +19,14 @@ function bootstrap_preprocess_breadcrumb(&$variables) {
   }
 
   if (theme_get_setting('bootstrap_breadcrumb_title') && !empty($breadcrumb)) {
-    $item = menu_get_item();
+    $request = \Drupal::request();
+    $route_match = \Drupal::routeMatch();
+    $page_title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
 
-    $page_title = !empty($item['tab_parent']) ? check_plain($item['title']) : drupal_get_title();
     if (!empty($page_title)) {
       $breadcrumb[] = array(
-        // If we are on a non-default tab, use the tab's title.
-        'data' => $page_title,
-        'class' => array('active'),
+        'text' => $page_title,
+        'attributes' => new Attribute(array('class' => array('active'))),
       );
     }
   }
