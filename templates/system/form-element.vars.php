@@ -73,7 +73,7 @@ function bootstrap_preprocess_form_element(&$variables) {
 
   $variables['children'] = $element['#children'];
 
-  if (!empty($element['#autocomplete_path']) && drupal_valid_path($element['#autocomplete_path'])) {
+  if (!empty($element['#autocomplete_path'])  && Drupal::PathValidator($element['#autocomplete_route_name'])) {
     $variables['attributes']['class'][] = 'form-autocomplete';
   }
 

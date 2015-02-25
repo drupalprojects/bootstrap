@@ -4,6 +4,8 @@
  * input.vars.php
  */
 
+use Drupal\Core\Template\Attribute;
+
 /**
  * Preprocess input.
  */
@@ -19,6 +21,45 @@ function bootstrap_preprocess_input(&$variables) {
 
   if (_bootstrap_is_button($element)) {
     $variables['attributes']['class'][] = 'btn';
+  }
+
+  // Autocomplete fields.
+  if (!empty($element['#autocomplete_route_name']) && Drupal::PathValidator($element['#autocomplete_route_name'])) {
+    $variables['autocomplete'] = TRUE;
+
+    // Attributes for hidden input field.
+    $attributes = new Attribute();
+    $attributes['type'] = 'hidden';
+    $attributes['id'] = $element['#attributes']['id'] . '-autocomplete';
+    $attributes['value'] = Drupal::Url($element['#autocomplete_route_name'], $element['#autocomplete_route_parameters']);
+    $attributes['disabled'] = 'disabled';
+    $attributes['class'] = 'autocomplete';
+
+    // Uses icon for autocomplete "throbber".
+    $icon = _bootstrap_icon('refresh');
+
+    // Fallback to using core's throbber.
+    if (empty($icon)) {
+      $icon = array(
+        '#type' => 'container',
+        '#attributes' => array(
+          'class' => array(
+            'ajax-progress',
+            'ajax-progress-throbber',
+            'invisible',
+          ),
+        ),
+        'throbber' => array(
+          '#type' => 'html_tag',
+          '#tag' => 'div',
+          '#attributes' => array(
+            'class' => array('throbber'),
+          ),
+        ),
+      );
+    }
+    $variables['autocomplete_icon'] = $icon;
+    $variables['autocomplete_attributes'] = $attributes;
   }
 
   // Setup a default "icon" variable. This allows #icon to be passed

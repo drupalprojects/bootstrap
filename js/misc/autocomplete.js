@@ -1,155 +1,246 @@
 (function ($) {
 
-/**
- * Attaches the autocomplete behavior to all required fields.
- */
-Drupal.behaviors.autocomplete = {
-  attach: function (context) {
-    var $context = $(context);
-    var acdb = [];
-    $context.find('input.autocomplete').once('autocomplete', function () {
-      var uri = this.value;
-      if (!acdb[uri]) {
-        acdb[uri] = new Drupal.ACDB(uri);
+  "use strict";
+
+  var autocomplete;
+
+  /**
+   * Helper splitting terms from the autocomplete value.
+   *
+   * @param {String} value
+   *
+   * @return {Array}
+   */
+  function autocompleteSplitValues(value) {
+    // We will match the value against comma-separated terms.
+    var result = [];
+    var quote = false;
+    var current = '';
+    var valueLength = value.length;
+    var i, character;
+
+    for (i = 0; i < valueLength; i++) {
+      character = value.charAt(i);
+      if (character === '"') {
+        current += character;
+        quote = !quote;
       }
-      var $input = $context.find('#' + this.id.substr(0, this.id.length - 13))
-        .attr('autocomplete', 'OFF')
-        .attr('aria-autocomplete', 'list');
-      $context.find($input[0].form).submit(Drupal.autocompleteSubmit);
-      $input.parents('.form-item')
-        .attr('role', 'application')
-        .append($('<span class="visually-hidden" aria-live="assertive"></span>')
-          .attr('id', $input.attr('id') + '-autocomplete-aria-live')
-      );
-      new Drupal.jsAC($input, acdb[uri], $context);
-    });
+      else if (character === ',' && !quote) {
+        result.push(current.trim());
+        current = '';
+      }
+      else {
+        current += character;
+      }
+    }
+    if (value.length > 0) {
+      result.push($.trim(current));
+    }
+
+    return result;
   }
-};
 
-/**
- * Prevents the form from submitting if the suggestions popup is open
- * and closes the suggestions popup when doing so.
- */
-Drupal.autocompleteSubmit = function () {
-  return $('.form-autocomplete > .dropdown').each(function () {
-    this.owner.hidePopup();
-  }).length == 0;
-};
-
-/**
- * Highlights a suggestion.
- */
-Drupal.jsAC.prototype.highlight = function (node) {
-  if (this.selected) {
-    $(this.selected).removeClass('active');
+  /**
+   * Returns the last value of an multi-value textfield.
+   *
+   * @param {String} terms
+   *
+   * @return {String}
+   */
+  function extractLastTerm(terms) {
+    return autocomplete.splitValues(terms).pop();
   }
-  $(node).addClass('active');
-  this.selected = node;
-  $(this.ariaLive).html($(this.selected).html());
-};
 
-/**
- * Unhighlights a suggestion.
- */
-Drupal.jsAC.prototype.unhighlight = function (node) {
-  $(node).removeClass('active');
-  this.selected = false;
-  $(this.ariaLive).empty();
-};
-
-/**
- * Positions the suggestions popup and starts a search.
- */
-Drupal.jsAC.prototype.populatePopup = function () {
-  var $input = $(this.input);
-  // Show popup.
-  if (this.popup) {
-    $(this.popup).remove();
+  /**
+   * The search handler is called before a search is performed.
+   *
+   * @param {Object} event
+   *
+   * @return {Boolean}
+   */
+  function searchHandler(event) {
+    // Only search when the term is two characters or larger.
+    $(event.target).next().find('.icon').addClass('glyphicon-spin');
+    $(event.target).next().find('.ajax-progress-throbber').removeClass('invisible');
+    var term = autocomplete.extractLastTerm(event.target.value);
+    return term.length >= autocomplete.minLength;
   }
-  this.selected = false;
-  this.popup = $('<div class="dropdown"></div>')[0];
-  this.popup.owner = this;
-  $input.parent().after(this.popup);
 
-  // Do search.
-  this.db.owner = this;
-  this.db.search(this.input.value);
-};
+  /**
+   * The response handler is called after a search is performed.
+   * Adds Bootstrap glyphicon-spin class.
+   *
+   * @param {Object} event
+   */
+  function responseHandler(event) {
+    // Only search when the term is two characters or larger.
+    $(event.target).next().find('.icon').removeClass('glyphicon-spin');
+    $(event.target).next().find('.ajax-progress-throbber').addClass('invisible');
+  }
 
-/**
- * Fills the suggestion popup with any matches received.
- */
-Drupal.jsAC.prototype.found = function (matches) {
-  // If no value in the textfield, do not show the popup.
-  if (!this.input.value.length) {
+  /**
+   * The open handler is called after a search is performed.
+   * Adds appropriate Bootstrap classes and wraps the menu in div with dropdown class.
+   *
+   * @param {Object} event*
+   */
+  function openHandler(event) {
+    var $element = $(this);
+    $element.data("ui-autocomplete").menu.element.addClass("dropdown-menu");
+    if (!$element.data("ui-autocomplete").menu.element.parent().hasClass('.dropdown')) {
+      $element.data("ui-autocomplete").menu.element.wrap('<div class="dropdown" />');
+    }
+  }
+
+  /**
+   * jQuery UI autocomplete source callback.
+   *
+   * @param {Object} request
+   * @param {Function} response
+   */
+  function sourceData(request, response) {
+    var elementId = this.element.attr('id');
+
+    if (!(elementId in autocomplete.cache)) {
+      autocomplete.cache[elementId] = {};
+    }
+
+    /**
+     * Filter through the suggestions removing all terms already tagged and
+     * display the available terms to the user.
+     *
+     * @param {Object} suggestions
+     */
+    function showSuggestions(suggestions) {
+      var tagged = autocomplete.splitValues(request.term);
+      for (var i = 0, il = tagged.length; i < il; i++) {
+        var index = suggestions.indexOf(tagged[i]);
+        if (index >= 0) {
+          suggestions.splice(index, 1);
+        }
+      }
+      response(suggestions);
+    }
+
+    /**
+     * Transforms the data object into an array and update autocomplete results.
+     *
+     * @param {Object} data
+     */
+    function sourceCallbackHandler(data) {
+      autocomplete.cache[elementId][term] = data;
+
+      // Send the new string array of terms to the jQuery UI list.
+      showSuggestions(data);
+    }
+
+    // Get the desired term and construct the autocomplete URL for it.
+    var term = autocomplete.extractLastTerm(request.term);
+
+    // Check if the term is already cached.
+    if (autocomplete.cache[elementId].hasOwnProperty(term)) {
+      showSuggestions(autocomplete.cache[elementId][term]);
+    }
+    else {
+      var options = $.extend({success: sourceCallbackHandler, data: {q: term}}, autocomplete.ajax);
+      $.ajax(this.element.attr('data-autocomplete-path'), options);
+    }
+  }
+
+  /**
+   * Handles an autocompletefocus event.
+   *
+   * @return {Boolean}
+   */
+  function focusHandler(event, ui) {
     return false;
   }
 
-  // Prepare matches.
-  var ul = $('<ul class="dropdown-menu"></ul>');
-  var ac = this;
-  ul.css({
-    display: 'block',
-    right: 0
-  });
-  for (var key in matches) {
-    $('<li></li>')
-      .html($('<a href="#"></a>').html(matches[key]).click(function (e) { e.preventDefault(); }))
-      .mousedown(function () { ac.select(this); })
-      .mouseover(function () { ac.highlight(this); })
-      .mouseout(function () { ac.unhighlight(this); })
-      .data('autocompleteValue', key)
+  /**
+   * Handles an autocompleteselect event.
+   *
+   * @param {Object} event
+   * @param {Object} ui
+   *
+   * @return {Boolean}
+   */
+  function selectHandler(event, ui) {
+    var terms = autocomplete.splitValues(event.target.value);
+    // Remove the current input.
+    terms.pop();
+    // Add the selected item.
+    if (ui.item.value.search(",") > 0) {
+      terms.push('"' + ui.item.value + '"');
+    }
+    else {
+      terms.push(ui.item.value);
+    }
+    event.target.value = terms.join(', ');
+    // Return false to tell jQuery UI that we've filled in the value already.
+    return false;
+  }
+
+  /**
+   * Override jQuery UI _renderItem function to output HTML by default.
+   *
+   * @param {Object} ul
+   * @param {Object} item
+   *
+   * @return {Object}
+   */
+  function renderItem(ul, item) {
+    return $("<li>")
+      .append($("<a>").html(item.label))
       .appendTo(ul);
   }
 
-  // Show popup with matches, if any.
-  if (this.popup) {
-    if (ul.children().length) {
-      $(this.popup).empty().append(ul).show();
-      $(this.ariaLive).html(Drupal.t('Autocomplete popup'));
+  /**
+   * Attaches the autocomplete behavior to all required fields.
+   */
+  Drupal.behaviors.autocomplete = {
+    attach: function (context) {
+      // Act on textfields with the "form-autocomplete" class.
+      var $autocomplete = $(context).find('input.form-autocomplete').once('autocomplete');
+      if ($autocomplete.length) {
+        // Use jQuery UI Autocomplete on the textfield.
+        $autocomplete.autocomplete(autocomplete.options)
+          .data("ui-autocomplete")
+          ._renderItem = autocomplete.options.renderItem;
+      }
+    },
+    detach: function (context, settings, trigger) {
+      if (trigger === 'unload') {
+        $(context).find('input.form-autocomplete')
+          .removeOnce('autocomplete')
+          .autocomplete('destroy');
+      }
     }
-    else {
-      $(this.popup).css({ visibility: 'hidden' });
-      this.hidePopup();
+  };
+
+  /**
+   * Autocomplete object implementation.
+   */
+  autocomplete = {
+    cache: {},
+    // Exposes methods to allow overriding by contrib.
+    minLength: 1,
+    splitValues: autocompleteSplitValues,
+    extractLastTerm: extractLastTerm,
+    // jQuery UI autocomplete options.
+    options: {
+      source: sourceData,
+      focus: focusHandler,
+      search: searchHandler,
+      select: selectHandler,
+      renderItem: renderItem,
+      response: responseHandler,
+      open: openHandler
+    },
+    ajax: {
+      dataType: 'json'
     }
-  }
-};
+  };
 
-Drupal.jsAC.prototype.setStatus = function (status) {
-  var $throbber = $(this.input).parent().find('.glyphicon-refresh, .autocomplete-throbber').first();
-  var throbbingClass = $throbber.is('.autocomplete-throbber') ? 'throbbing' : 'glyphicon-spin';
-  switch (status) {
-    case 'begin':
-      $throbber.addClass(throbbingClass);
-      $(this.ariaLive).html(Drupal.t('Searching for matches...'));
-      break;
-    case 'cancel':
-    case 'error':
-    case 'found':
-      $throbber.removeClass(throbbingClass);
-      break;
-  }
-};
-
-// Save the previous autocomplete prototype.
-var oldPrototype = Drupal.jsAC.prototype;
-
-/**
- * Override the autocomplete constructor.
- */
-Drupal.jsAC = function ($input, db, $context) {
-  var ac = this;
-  this.$context = $context;
-  this.input = $input[0];
-  this.ariaLive = $context.find('#' + this.input.id + '-autocomplete-aria-live');
-  this.db = db;
-  $input
-    .keydown(function (event) { return ac.onkeydown(this, event); })
-    .keyup(function (event) { ac.onkeyup(this, event); })
-    .blur(function () { ac.hidePopup(); ac.db.cancel(); });
-};
-
-// Restore the previous prototype.
-Drupal.jsAC.prototype = oldPrototype;
+  Drupal.autocomplete = autocomplete;
 
 })(jQuery);
