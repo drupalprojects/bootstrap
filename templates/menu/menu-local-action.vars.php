@@ -46,10 +46,6 @@ function bootstrap_preprocess_menu_local_action(&$variables) {
     }
     // Force HTML so we can render any icon that may have been added.
     $options['html'] = !empty($options['html']) || !empty($icon) ? TRUE : FALSE;
-
-    // Some browsers require ending </span> rather than self-closing tag.
-    $icon = substr($icon, 0, -2) . '></span>';
-
     $variables['link'] = array(
       '#type' => 'link',
       '#title' => $icon . $link['title'],
@@ -59,10 +55,8 @@ function bootstrap_preprocess_menu_local_action(&$variables) {
   }
   else {
     $variables['link'] = array(
-      '#type' => 'link',
-      '#title' => $link['title'],
-      '#options' => $options,
-      '#url' => $link['url'],
+      '#type' => 'markup',
+      '#value' => $icon . $link['title'],
     );
   }
 }
