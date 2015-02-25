@@ -40,23 +40,23 @@ function _bootstrap_prerender_input($variables) {
   // Only add the "form-control" class for specific element input types.
   $types = array(
     // Core.
+    'color',
+    'date',
+    'email',
+    'entity_autocomplete',
+    'machine_name',
+    'number',
     'password',
     'password_confirm',
+    'range',
+    'search',
     'select',
-    'textarea',
+    'tel',
     'textfield',
-    // HTML5.
-    'email',
+    'url',
     // Webform module.
     'webform_email',
     'webform_number',
-    // Elements module.
-    'emailfield',
-    'numberfield',
-    'rangefield',
-    'searchfield',
-    'telfield',
-    'urlfield',
   );
 
   if (!empty($type) && (in_array($type, $types) || ($type === 'file' && empty($element['#managed_file'])))) {
