@@ -471,16 +471,6 @@ ul li.collapsed, ul li.expanded, ul li.leaf {
   background-color: #fff
 }
 
-.js input.form-autocomplete.ui-autocomplete-loading {
-  background-image: none;
-}
-
-.ui-autocomplete .ui-state-focus {
-  background: #eee;
-  border: none;
-  margin: 0;
-}
-
 .ajax-progress .glyphicon {
   font-size: 90%;
   margin: 0 -.25em 0 .5em
