@@ -20,21 +20,18 @@
     {% endif %}
   {% endif %}
   {% if collapsible %}
-    <div class="panel-collapse collapse fade{{ collapsed ? in : '' }}">
-  {% endif %}
-  <div class="panel-body">
-    {% if description %}
-      <div class="help-block">{{ description }}</div>
+  <div class="panel-collapse collapse fade{{ collapsed ? in : '' }}">
     {% endif %}
-    {{ content }}
-    {% if children %}
-      {{ children }}
-    {% endif %}
-    {% if value %}
-      {{ value }}
-    {% endif %}
-  </div>
-  {% if collapsible %}
+    <div class="panel-body">
+      {% if description %}
+        <div class="help-block">{{ description }}</div>
+      {% endif %}
+      {{ content }}
+      {% if children %}
+        {{ children }}
+      {% endif %}
     </div>
+    {% if collapsible %}
+  </div>
   {% endif %}
 </fieldset>
