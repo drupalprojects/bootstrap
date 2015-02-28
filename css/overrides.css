@@ -816,3 +816,17 @@ details {
   margin: 0 2px;
   border: 1px solid #C0C0C0;
 }
+
+.dropbutton-wrapper {
+  display: inline-block;
+}
+
+.dropbutton-widget {
+  padding-right: 20px;
+}
+
+.btn-group > .btn.dropdown-toggle {
+  position: absolute;
+  right: 0;
+  top: 0;
+}

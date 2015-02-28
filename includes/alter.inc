@@ -72,6 +72,9 @@ function bootstrap_js_alter(&$js) {
   // Replacement files must begin with '_', like '_node.js'.
   $files = _bootstrap_file_scan_directory($theme_path . '/js', '/\.js$/');
   foreach ($files as $file) {
+    if ($file->name == 'bootstrap' || $file->name == 'bootstrap.admin') {
+      continue;
+    }
     $path = str_replace($theme_path . '/js/', '', $file->uri);
     // Detect if this is a replacement file.
     $replace = FALSE;
@@ -89,15 +92,28 @@ function bootstrap_js_alter(&$js) {
       }
     }
     // Path should always exist to either add or replace JavaScript file.
-    if (!empty($path)) {
+    if (!empty($path) && array_key_exists($path, $js)) {
+      $bootstrap_js_defaults = array(
+        'type' => 'file',
+        'group' => JS_DEFAULT,
+        'every_page' => FALSE,
+        'weight' => 0,
+        'scope' => 'footer',
+        'cache' => TRUE,
+        'preprocess' => TRUE,
+        'attributes' => array(),
+        'version' => NULL,
+        'data' => $file->uri,
+        'browsers' => array(),
+      );
       // Replace file.
       if ($replace) {
-        $js[$file->uri] = drupal_js_defaults($file->uri);
+        $js[$file->uri] = $bootstrap_js_defaults;
         unset($js['core/' . $path]);
       }
       // Add file.
       else {
-        $js[$file->uri] = drupal_js_defaults($file->uri);
+        $js[$file->uri] = $bootstrap_js_defaults;
       }
     }
   }
@@ -162,9 +178,20 @@ function bootstrap_theme_suggestions_alter(array &$suggestions, array $variables
 }
 
 /**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function bootstrap_theme_suggestions_input_alter(array &$suggestions, array $variables) {
+  if (!empty($variables['element']['#is_button'])) {
+    $suggestions[] = 'input__button';
+  }
+}
+
+/**
  * Implements hook_form_alter().
  */
 function bootstrap_form_alter(&$form, FormStateInterface $form_state, $form_id = NULL) {
+  $config = \Drupal::config('bootstrap.settings');
+
   if ($form_id) {
     switch ($form_id) {
       case 'system_theme_settings':
@@ -213,6 +240,19 @@ function bootstrap_form_alter(&$form, FormStateInterface $form_state, $form_id =
       case 'path_admin_filter_form':
         $form['basic']['filter']['#input_group_button'] = TRUE;
         break;
+    }
+  }
+
+  // Convert delete links in forms to Bootstrap buttons with delete links.
+  // @TODO revisit to see if there's a better place to handle this.
+  if (!empty($form['actions']['delete']['#type']) && $form['actions']['delete']['#type'] === 'link') {
+    $form['actions']['delete']['#attributes']['class'][] = 'btn';
+    if ($config->get('bootstrap_button_colorize')) {
+      $form['actions']['delete']['#attributes']['class'][] = 'btn-danger';
+    }
+    if ($config->get('bootstrap_button_iconize')) {
+      $form['actions']['delete']['#options']['html'] = 'true';
+      $form['actions']['delete']['#title'] = _bootstrap_icon('trash') . ' Delete';
     }
   }
 }

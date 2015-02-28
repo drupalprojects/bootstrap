@@ -4,22 +4,18 @@
  * input.vars.php
  */
 
+use Drupal\Core\Template\Attribute;
+
 /**
  * Preprocess input.
  */
 function bootstrap_preprocess_input(&$variables) {
-  $element = $variables['element'];
-  $variables['children'] = $element['#children'];
+  $config = \Drupal::config('bootstrap.settings');
+  $element = &$variables['element'];
+  $attributes = new Attribute($variables['attributes']);
 
-  // @todo Not converting to buttons. Should we? Also should we remove button and button--primary classes?
-  _bootstrap_colorize_button($element);
-  //_bootstrap_iconize_button($element);
-
-  $variables['attributes'] = $element['#attributes'];
-
-  if (_bootstrap_is_button($element)) {
-    $variables['attributes']['class'][] = 'btn';
-  }
+  // Set the element's attributes.
+  \Drupal\Core\Render\Element::setAttributes($element, array('id', 'name', 'value', 'type'));
 
   // Setup a default "icon" variable. This allows #icon to be passed
   // to every template and theme function.
@@ -30,10 +26,32 @@ function bootstrap_preprocess_input(&$variables) {
   if (!isset($element['#icon_position'])) {
     $variables['element']['#icon_position'] = 'before';
   }
-  $variables = _bootstrap_prerender_input($variables);
+
+  // Handle button inputs.
+  if (_bootstrap_is_button($element)) {
+    $variables['attributes']['class'][] = 'btn';
+    _bootstrap_colorize_button($variables);
+    _bootstrap_iconize_button($element);
+
+    // Add button size, if necessary.
+    if ($size = $config->get('bootstrap_button_size')) {
+      $variables['attributes']['class'][] = $size;
+    }
+
+    // Add in the button type class.
+    $variables['attributes']['class'][] = 'form-' . $element['#type'];
+    $variables['label'] = $element['#value'];
+  }
+
+  _bootstrap_prerender_input($variables);
+
+  // Additional Twig variables.
+  $variables['icon'] = $element['#icon'];
+  $variables['attributes']['title'] = $variables['attributes']['value'];
+  $variables['element'] = $element;
 }
 
-function _bootstrap_prerender_input($variables) {
+function _bootstrap_prerender_input(&$variables) {
   $element = $variables['element'];
   $type = $element['#type'];
 
@@ -73,5 +91,4 @@ function _bootstrap_prerender_input($variables) {
       $variables['attributes']['data-toggle'] = 'tooltip';
     }
   }
-  return $variables;
 }

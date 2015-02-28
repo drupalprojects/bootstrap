@@ -635,31 +635,29 @@ function _bootstrap_is_button($element) {
 /**
  * Helper function for adding colors to button elements.
  *
- * @param array $element
- *   The form element, passed by reference.
+ * @param array $variables
+ *   The form variables of the element, passed by reference.
  */
-function _bootstrap_colorize_button(&$element) {
-  if (_bootstrap_is_button($element)) {
-    // Do not add the class if one is already present in the array.
-    $button_classes = array(
-      'btn-default',
-      'btn-primary',
-      'btn-success',
-      'btn-info',
-      'btn-warning',
-      'btn-danger',
-      'btn-link',
-    );
-    $class_intersection = array_intersect($button_classes, $element['#attributes']['class']);
-    if (empty($class_intersection)) {
-      // Get the matched class.
-      $class = theme_get_setting('bootstrap_button_colorize') ? _bootstrap_colorize_text($element['#value']) : FALSE;
-      // If no particular class matched, use the default style.
-      if (!$class) {
-        $class = 'default';
-      }
-      $element['#attributes']['class'][] = 'btn-' . $class;
+function _bootstrap_colorize_button(&$variables) {
+  // Do not add the class if one is already present in the array.
+  $button_classes = array(
+    'btn-default',
+    'btn-primary',
+    'btn-success',
+    'btn-info',
+    'btn-warning',
+    'btn-danger',
+    'btn-link',
+  );
+  $class_intersection = array_intersect($button_classes, $variables['attributes']['class']);
+  if (empty($class_intersection)) {
+    // Get the matched class.
+    $class = theme_get_setting('bootstrap_button_colorize') ? _bootstrap_colorize_text($variables['element']['#value']) : FALSE;
+    // If no particular class matched, use the default style.
+    if (!$class) {
+      $class = 'default';
     }
+    $variables['attributes']['class'][] = 'btn-' . $class;
   }
 }
 
@@ -758,7 +756,8 @@ function _bootstrap_colorize_text($string, $default = '') {
  *   The form element, passed by reference.
  */
 function _bootstrap_iconize_button(&$element) {
-  if (theme_get_setting('bootstrap_button_iconize') && _bootstrap_is_button($element) && ($icon = _bootstrap_iconize_text($element['#value']))) {
+  $config = \Drupal::config('bootstrap.settings');
+  if ($config->get('bootstrap_button_iconize') && _bootstrap_is_button($element) && ($icon = _bootstrap_iconize_text($element['#value']))) {
     $element['#icon'] = $icon;
   }
 }
