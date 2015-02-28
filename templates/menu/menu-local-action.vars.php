@@ -1,27 +1,33 @@
 <?php
 /**
  * @file
- * menu-local-action.func.php
+ * menu-local-action.vars.php
  */
 
 /**
  * Overrides theme_menu_local_action().
+ *
+ * Prepares variables for single local action link templates.
+ *
+ * Default template: menu-local-action.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: A render element containing:
+ *     - #link: A menu link array with 'title', 'url', and (optionally)
+ *       'localized_options' keys.
  */
-function bootstrap_menu_local_action($variables) {
+function bootstrap_preprocess_menu_local_action(&$variables) {
   $link = $variables['element']['#link'];
-
-  $options = isset($link['localized_options']) ? $link['localized_options'] : array();
-
-  // If the title is not HTML, sanitize it.
-  if (empty($options['html'])) {
-    $link['title'] = check_plain($link['title']);
-  }
+  $link += array(
+    'localized_options' => array(),
+  );
+  $link['localized_options']['set_active_class'] = TRUE;
 
   $icon = _bootstrap_iconize_text($link['title']);
+  $options = isset($link['localized_options']) ? $link['localized_options'] : array();
 
-  // Format the action link.
-  $output = '';
-  if (isset($link['href'])) {
+  if (isset($link['url'])) {
     // Turn link into a mini-button and colorize based on title.
     if ($class = _bootstrap_colorize_text($link['title'])) {
       if (!isset($options['attributes']['class'])) {
@@ -40,11 +46,17 @@ function bootstrap_menu_local_action($variables) {
     }
     // Force HTML so we can render any icon that may have been added.
     $options['html'] = !empty($options['html']) || !empty($icon) ? TRUE : FALSE;
-    $output .= l($icon . $link['title'], $link['href'], $options);
+    $variables['link'] = array(
+      '#type' => 'link',
+      '#title' => $icon . $link['title'],
+      '#options' => $options,
+      '#url' => $link['url'],
+    );
   }
   else {
-    $output .= $icon . $link['title'];
+    $variables['link'] = array(
+      '#type' => 'markup',
+      '#value' => $icon . $link['title'],
+    );
   }
-
-  return $output;
 }
