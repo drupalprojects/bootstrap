@@ -31,6 +31,10 @@ function bootstrap_preprocess_bootstrap_panel(&$variables) {
   // states.js requires form-wrapper on fieldset to work properly.
   $variables['attributes']['class'][] = 'form-wrapper';
 
+  if (in_array('container-inline', $variables['attributes']['class'])) {
+    $variables['attributes']['class'][] = 'form-inline';
+  }
+
   $variables['collapsible'] = FALSE;
   if (isset($element['#collapsible'])) {
     $variables['collapsible'] = $element['#collapsible'];
