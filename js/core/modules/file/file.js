@@ -3,17 +3,17 @@
   /**
    * Attach behaviors to the file upload and remove buttons.
    */
-  Drupal.behaviors.fileButtons = {
-    attach: function (context) {
-      $(':input.form-submit', context).bind('mousedown', Drupal.file.disableFields);
-      $('div.form-managed-file :input.form-submit', context).bind('mousedown', Drupal.file.progressBar);
-    },
-    detach: function (context) {
-      $(':input.form-submit', context).unbind('mousedown', Drupal.file.disableFields);
-      $('div.form-managed-file :input.form-submit', context).unbind('mousedown', Drupal.file.progressBar);
-    }
-  };
   if (Drupal.file) {
+    Drupal.behaviors.fileButtons = {
+      attach: function (context) {
+        $(':input.form-submit', context).bind('mousedown', Drupal.file.disableFields);
+        $('div.form-managed-file :input.form-submit', context).bind('mousedown', Drupal.file.progressBar);
+      },
+      detach: function (context) {
+        $(':input.form-submit', context).unbind('mousedown', Drupal.file.disableFields);
+        $('div.form-managed-file :input.form-submit', context).unbind('mousedown', Drupal.file.progressBar);
+      }
+    };
     /**
      * Prevent file uploads when using buttons not intended to upload.
      */
