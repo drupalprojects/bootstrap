@@ -4,6 +4,8 @@
  * breadcrumb.vars.php
  */
 
+use Drupal\Core\Template\Attribute;
+
 /**
  * Implements hook_preprocess_breadcrumb().
  */
@@ -14,5 +16,18 @@ function bootstrap_preprocess_breadcrumb(&$variables) {
   $show_breadcrumb_home = theme_get_setting('bootstrap_breadcrumb_home');
   if (!$show_breadcrumb_home) {
     array_shift($breadcrumb);
+  }
+
+  if (theme_get_setting('bootstrap_breadcrumb_title') && !empty($breadcrumb)) {
+    $request = \Drupal::request();
+    $route_match = \Drupal::routeMatch();
+    $page_title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
+
+    if (!empty($page_title)) {
+      $breadcrumb[] = array(
+        'text' => $page_title,
+        'attributes' => new Attribute(array('class' => array('active'))),
+      );
+    }
   }
 }

@@ -552,7 +552,7 @@ function _bootstrap_icon($name, $default = NULL) {
       );
     }
 
-    $output = \Drupal\Core\Render\RendererInterface::render($icon);
+    $output = \Drupal::service('renderer')->render($icon);
   }
   return empty($output) && isset($default) ? $default : $output;
 }
