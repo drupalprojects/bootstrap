@@ -365,8 +365,17 @@ table.sticky-header {
 }
 
 a.tabledrag-handle .handle {
+  background: none;
   height: auto;
-  width: auto
+  padding: 0 12px;
+}
+
+a.tabledrag-handle:hover .handle {
+  background: none;
+}
+
+td.field-multiple-drag {
+  white-space: nowrap;
 }
 
 .error {
