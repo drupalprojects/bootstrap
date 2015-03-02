@@ -43,6 +43,15 @@ function bootstrap_preprocess_input(&$variables) {
     $variables['label'] = $element['#value'];
   }
 
+  // Search fields.
+  if ($element['#type'] == 'search') {
+    $attributes = new Attribute($variables['attributes']);
+    $attributes['placeholder'] = t('Search');
+    $attributes['data-original-title'] = t('Enter the terms you wish to search for.');
+    $variables['attributes'] = $attributes;
+  }
+}
+
   _bootstrap_prerender_input($variables);
 
   // Additional Twig variables.

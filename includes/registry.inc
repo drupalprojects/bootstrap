@@ -90,12 +90,6 @@ function _bootstrap_theme(&$existing, $type, $theme, $path) {
   $hooks['bootstrap_panel'] = array(
     'render element' => 'element',
   );
-
-  // Bootstrap search form wrapper.
-  // @todo Remove this as it's not really needed and should use suggestions.
-  $hooks['bootstrap_search_form_wrapper'] = array(
-    'render element' => 'element',
-  );
   return $hooks;
 }
 
