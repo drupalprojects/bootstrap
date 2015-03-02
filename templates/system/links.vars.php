@@ -4,6 +4,8 @@
  * links.vars.php
  */
 
+use Drupal\Core\Template\Attribute;
+
 /**
  * Implements hook_preprocess_links().
  */
