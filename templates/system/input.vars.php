@@ -50,8 +50,7 @@ function bootstrap_preprocess_input(&$variables) {
     $attributes['data-original-title'] = t('Enter the terms you wish to search for.');
     $variables['attributes'] = $attributes;
   }
-}
-
+  
   _bootstrap_prerender_input($variables);
 
   // Additional Twig variables.
