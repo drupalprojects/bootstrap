@@ -187,6 +187,13 @@ function bootstrap_theme_suggestions_input_alter(array &$suggestions, array $var
 }
 
 /**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function bootstrap_theme_suggestions_fieldset_alter(array &$suggestions, array $variables) {
+  $suggestions[] = 'bootstrap_panel';
+}
+
+/**
  * Implements hook_form_alter().
  */
 function bootstrap_form_alter(&$form, FormStateInterface $form_state, $form_id = NULL) {
