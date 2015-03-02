@@ -50,8 +50,47 @@ function bootstrap_preprocess_input(&$variables) {
     $attributes['data-original-title'] = t('Enter the terms you wish to search for.');
     $variables['attributes'] = $attributes;
   }
-  
+
   _bootstrap_prerender_input($variables);
+
+  // Autocomplete fields.
+  if (!empty($element['#autocomplete_route_name']) && Drupal::PathValidator($element['#autocomplete_route_name'])) {
+    $variables['autocomplete'] = TRUE;
+
+    // Attributes for hidden input field.
+    $autocomplete_attributes = new Attribute();
+    $autocomplete_attributes['type'] = 'hidden';
+    $autocomplete_attributes['id'] = $element['#attributes']['id'] . '-autocomplete';
+    $autocomplete_attributes['value'] = Drupal::Url($element['#autocomplete_route_name'], $element['#autocomplete_route_parameters']);
+    $autocomplete_attributes['disabled'] = 'disabled';
+    $autocomplete_attributes['class'] = 'autocomplete';
+
+    // Uses icon for autocomplete "throbber".
+    $icon = _bootstrap_icon('refresh');
+
+    // Fallback to using core's throbber.
+    if (empty($icon)) {
+      $icon = array(
+        '#type' => 'container',
+        '#attributes' => array(
+          'class' => array(
+            'ajax-progress',
+            'ajax-progress-throbber',
+            'invisible',
+          ),
+        ),
+        'throbber' => array(
+          '#type' => 'html_tag',
+          '#tag' => 'div',
+          '#attributes' => array(
+            'class' => array('throbber'),
+          ),
+        ),
+      );
+    }
+    $variables['autocomplete_icon'] = $icon;
+    $variables['autocomplete_attributes'] = $autocomplete_attributes;
+  }
 
   // Additional Twig variables.
   $variables['icon'] = $element['#icon'];
