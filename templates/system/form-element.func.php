@@ -55,15 +55,15 @@ function bootstrap_form_element(&$variables) {
 
   // See http://getbootstrap.com/css/#forms-controls.
   if (isset($element['#type'])) {
-    if ($element['#type'] == "radio") {
+    if ($element['#type'] === 'radio') {
       $wrapper_attributes['class'][] = 'radio';
       $is_radio = TRUE;
     }
-    elseif ($element['#type'] == "checkbox") {
+    elseif ($element['#type'] === 'checkbox') {
       $wrapper_attributes['class'][] = 'checkbox';
       $is_checkbox = TRUE;
     }
-    else {
+    elseif ($element['#type'] !== 'hidden') {
       $wrapper_attributes['class'][] = 'form-group';
     }
   }
