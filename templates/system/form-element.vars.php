@@ -88,15 +88,15 @@ function bootstrap_preprocess_form_element(&$variables) {
   $is_radio = FALSE;
 
   if (isset($type)) {
-    if ($type == "radio") {
+    if ($type === 'radio') {
       $variables['attributes']['class'][] = 'radio';
       $is_radio = TRUE;
     }
-    elseif ($type == "checkbox") {
+    elseif ($type === 'checkbox') {
       $variables['attributes']['class'][] = 'checkbox';
       $is_checkbox = TRUE;
     }
-    else {
+    elseif ($type !== 'hidden') {
       $variables['attributes']['class'][] = 'form-group';
     }
   }
