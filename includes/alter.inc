@@ -10,6 +10,16 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Template\Attribute;
 
 /**
+ * Include #pre_render callbacks for elements.
+ */
+bootstrap_include('bootstrap', 'includes/pre-render.inc');
+
+/**
+ * Include #process callbacks for elements.
+ */
+bootstrap_include('bootstrap', 'includes/process.inc');
+
+/**
  * Implements hook_css_alter().
  */
 function bootstrap_css_alter(&$css) {
@@ -54,6 +64,81 @@ function bootstrap_css_alter(&$css) {
   if (!empty($excludes)) {
     $css = array_diff_key($css, array_combine($excludes, $excludes));
   }
+}
+
+/**
+ * Implements hook_element_info_alter().
+ *
+ * @todo This currently does not work due to the following issue.
+ * @see https://www.drupal.org/node/2024217#comment-9696043
+ */
+function bootstrap_element_info_alter(&$info) {
+  $theme_key = \Drupal::theme()->getActiveTheme()->getName();
+
+  $cid = "theme_registry:bootstrap:element_info";
+  $element_info = array();
+  if (($cache = \Drupal::cache()->get($cid)) && !empty($cache->data)) {
+    $element_info = $cache->data;
+  }
+
+  if (!isset($element_info[$theme_key])) {
+    $themes = _bootstrap_get_base_themes($theme_key, TRUE);
+    foreach ($themes as $theme) {
+      foreach ($info as $type => &$element) {
+        // Ensure elements that have a base type with the #input set match.
+        if (isset($element['#base_type']) && isset($info[$element['#base_type']]['#input'])) {
+          $element['#input'] = $info[$element['#base_type']]['#input'];
+        }
+
+        // Setup a default "icon" variable. This allows #icon to be passed
+        // to every template and theme function.
+        // @see https://drupal.org/node/2219965
+        if (!isset($element['#icon'])) {
+          $element['#icon'] = NULL;
+        }
+        if (!isset($element['#icon_position'])) {
+          $element['#icon_position'] = 'before';
+        }
+
+        $properties = array(
+          '#process' => array(
+            'form_process',
+            'form_process_' . $type,
+          ),
+          '#pre_render' => array(
+            'pre_render',
+            'pre_render_' . $type,
+          ),
+        );
+        foreach ($properties as $property => $callbacks) {
+          foreach ($callbacks as $callback) {
+            $function = $theme . '_' . $callback;
+            if (function_exists($function)) {
+              // Replace direct core function correlation.
+              if (!empty($element[$property]) && ($key = array_search($callback, $element[$property])) !== FALSE) {
+                $element[$property][$key] = $function;
+              }
+              // Check for a "form_" prefix instead (for #pre_render).
+              else if (!empty($element[$property]) && ($key = array_search('form_' . $callback, $element[$property])) !== FALSE) {
+                $element[$property][$key] = $function;
+              }
+              // Otherwise, append the function.
+              else {
+                $element[$property][] = $function;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Cache the element information.
+    $element_info[$theme_key] = $info;
+    \Drupal::cache()->set($cid, $element_info);
+  }
+
+  // Set the element info to the cached processed data.
+  $info = $element_info[$theme_key];
 }
 
 /**
@@ -298,8 +383,3 @@ function bootstrap_menu_local_tasks_alter(&$data, &$router_item, $root_path) {
 function bootstrap_js_callback_filter_xss_alter(array &$allowed_tags = array()) {
   $allowed_tags[] = 'button';
 }
-
-/**
- * Include #process callbacks for elements.
- */
-bootstrap_include('bootstrap', 'includes/process.inc');

@@ -59,5 +59,129 @@ function hook_bootstrap_iconize_text_alter(&$texts) {
 }
 
 /**
+ * This hook allows sub-themes to process all form elements.
+ *
+ * For this hook to be recognized, it must reside directly inside the
+ * template.php file or via a file that is directly included into template.php.
+ *
+ * Any time a hook is added or removed, the Drupal cache must be completely
+ * cleared and rebuilt for the changes to take effect.
+ *
+ * Implementations of this hook should check to see if the element has a
+ * property named #bootstrap_ignore_process and check if it is set to TRUE.
+ * If it is, the hook should immediately return with the unaltered element.
+ *
+ * @param array $element
+ *   The element array, this is NOT passed by reference and must return the
+ *   altered element instead.
+ * @param array $form_state
+ *   The form state array, passed by reference.
+ * @param array $form
+ *   The complete form array, passed by reference.
+ *
+ * @return array
+ *   The altered element array.
+ *
+ * @see bootstrap_element_info_alter()
+ * @see form_builder()
+ * @see drupal_process_form()
+ */
+function hook_form_process($element, &$form_state, &$form) {
+  return $element;
+}
+
+/**
+ * This hook allows sub-themes to process a specific form element type.
+ *
+ * For this hook to be recognized, it must reside directly inside the
+ * template.php file or via a file that is directly included into template.php.
+ *
+ * Any time a hook is added or removed, the Drupal cache must be completely
+ * cleared and rebuilt for the changes to take effect.
+ *
+ * If there is a matching "form_process_HOOK" function already defined
+ * (provided by core), it will be replaced. The theme replacing it will be
+ * responsible for fully processing the element as it was prior.
+ *
+ * Implementations of this hook should check to see if the element has a
+ * property named #bootstrap_ignore_process and check if it is set to TRUE.
+ * If it is, the hook should immediately return with the unaltered element.
+ *
+ * @param array $element
+ *   The element array, this is NOT passed by reference and must return the
+ *   altered element instead.
+ * @param array $form_state
+ *   The form state array, passed by reference.
+ * @param array $form
+ *   The complete form array, passed by reference.
+ *
+ * @return array
+ *   The altered element array.
+ *
+ * @see bootstrap_element_info_alter()
+ * @see form_builder()
+ * @see drupal_process_form()
+ */
+function hook_form_process_HOOK($element, &$form_state, &$form) {
+  return $element;
+}
+
+/**
+ * This hook allows sub-themes to alter all elements before it's rendered.
+ *
+ * For this hook to be recognized, it must reside directly inside the
+ * template.php file or via a file that is directly included into template.php.
+ *
+ * Any time a hook is added or removed, the Drupal cache must be completely
+ * cleared and rebuilt for the changes to take effect.
+ *
+ * Implementations of this hook should check to see if the element has a
+ * property named #bootstrap_ignore_pre_render and check if it is set to TRUE.
+ * If it is, the hook should immediately return with the unaltered element.
+ *
+ * @param array $element
+ *   The element array, this is NOT passed by reference and must return the
+ *   altered element instead.
+ *
+ * @return array
+ *   The altered element array.
+ *
+ * @see bootstrap_element_info_alter()
+ */
+function hook_pre_render($element) {
+  return $element;
+}
+
+/**
+ * This hook allows sub-themes to alter a specific element before it's rendered.
+ *
+ * For this hook to be recognized, it must reside directly inside the
+ * template.php file or via a file that is directly included into template.php.
+ *
+ * Any time a hook is added or removed, the Drupal cache must be completely
+ * cleared and rebuilt for the changes to take effect.
+ *
+ * If there is a matching "form_pre_render_HOOK" function already defined
+ * (provided by core), it will be replaced. The theme replacing it will be
+ * responsible for fully processing the element as it was prior.
+ *
+ * Implementations of this hook should check to see if the element has a
+ * property named #bootstrap_ignore_pre_render and check if it is set to TRUE.
+ * If it is, the hook should immediately return with the unaltered element.
+ *
+ * @param array $element
+ *   The element array, this is NOT passed by reference and must return the
+ *   altered element instead.
+ *
+ * @return array
+ *   The altered element array.
+ *
+ * @see bootstrap_element_info_alter()
+ */
+function hook_pre_render_HOOK($element, &$form_state, &$form) {
+  return $element;
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

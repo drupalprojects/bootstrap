@@ -48,6 +48,16 @@ function bootstrap_theme(&$existing, $type, $theme, $path) {
 }
 
 /**
+ * Clear any previously set element_info() static cache.
+ *
+ * If element_info() was invoked before the theme was fully initialized, this
+ * can cause the theme's alter hook to not be invoked.
+ *
+ * @see https://www.drupal.org/node/2351731
+ */
+drupal_static_reset('element_info');
+
+/**
  * Declare various hook_*_alter() hooks.
  *
  * hook_*_alter() implementations must live (via include) inside this file so

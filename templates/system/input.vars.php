@@ -98,6 +98,7 @@ function bootstrap_preprocess_input(&$variables) {
   $variables['element'] = $element;
 }
 
+// @todo Remove once hook_element_info_alter() works again.
 function _bootstrap_prerender_input(&$variables) {
   $element = $variables['element'];
   $type = $element['#type'];
