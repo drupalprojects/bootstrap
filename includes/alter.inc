@@ -54,52 +54,81 @@ function bootstrap_css_alter(&$css) {
 /**
  * Implements hook_element_info_alter().
  */
-function bootstrap_element_info_alter(&$elements) {
-  foreach ($elements as &$element) {
-    // Determine if the element has a base type.
-    $base_type = isset($element['#base_type']) && isset($elements[$element['#base_type']]) ? $elements[$element['#base_type']] : FALSE;
+function bootstrap_element_info_alter(&$info) {
+  global $theme_key;
+  $element_info = array();
 
-    // Setup a default "icon" variable. This allows #icon to be passed
-    // to every template and theme function.
-    // @see https://drupal.org/node/2219965
-    if (!isset($element['#icon'])) {
-      $element['#icon'] = NULL;
-    }
-    if (!isset($element['#icon_position'])) {
-      $element['#icon_position'] = 'before';
-    }
-
-    // Pre-render input elements.
-    if (!empty($element['#input']) || ($base_type && !empty($base_type['#input']))) {
-      $element['#pre_render'][] = '_bootstrap_pre_render_input';
-    }
-
-    // Process all form elements.
-    $element['#process'][] = '_bootstrap_process_element';
-
-    // Process fieldset elements.
-    if (!empty($element['#type']) && $element['#type'] === 'fieldset') {
-      $element['#theme_wrappers'] = array('bootstrap_panel');
-    }
-    if (!empty($element['#theme']) && $element['#theme'] === 'fieldset') {
-      $element['#theme'] = 'bootstrap_panel';
-    }
-
-    // Replace #process function.
-    if (!empty($element['#process']) && ($key = array_search('form_process_fieldset', $element['#process'])) !== FALSE) {
-      $element['#process'][$key] = '_bootstrap_process_fieldset';
-    }
-
-    // Replace #pre_render function.
-    if (!empty($element['#pre_render']) && ($key = array_search('form_pre_render_fieldset', $element['#pre_render'])) !== FALSE) {
-      $element['#pre_render'][$key] = '_bootstrap_pre_render_fieldset';
-    }
-
-    // Replace #theme_wrappers function.
-    if (!empty($element['#theme_wrappers']) && ($key = array_search('fieldset', $element['#theme_wrappers'])) !== FALSE) {
-      $element['#theme_wrappers'][$key] = 'bootstrap_panel';
-    }
+  $cid = "theme_registry:bootstrap:element_info";
+  if (($cache = cache_get($cid)) && !empty($cache->data)) {
+    $element_info = $cache->data;
   }
+
+  if (!isset($element_info[$theme_key])) {
+    $themes = _bootstrap_get_base_themes($theme_key, TRUE);
+    foreach ($themes as $theme) {
+      foreach ($info as $type => &$element) {
+        // Ensure elements that have a base type with the #input set match.
+        if (isset($element['#base_type']) && isset($info[$element['#base_type']]['#input'])) {
+          $element['#input'] = $info[$element['#base_type']]['#input'];
+        }
+
+        // Replace fieldset theme implementations with bootstrap_panel.
+        if (!empty($element['#theme']) && $element['#theme'] === 'fieldset') {
+          $element['#theme'] = 'bootstrap_panel';
+        }
+        if (!empty($element['#theme_wrappers']) && ($key = array_search('fieldset', $element['#theme_wrappers'])) !== FALSE) {
+          $element['#theme_wrappers'][$key] = 'bootstrap_panel';
+        }
+
+        // Setup a default "icon" variable. This allows #icon to be passed
+        // to every template and theme function.
+        // @see https://drupal.org/node/2219965
+        if (!isset($element['#icon'])) {
+          $element['#icon'] = NULL;
+        }
+        if (!isset($element['#icon_position'])) {
+          $element['#icon_position'] = 'before';
+        }
+
+        $properties = array(
+          '#process' => array(
+            'form_process',
+            'form_process_' . $type,
+          ),
+          '#pre_render' => array(
+            'pre_render',
+            'pre_render_' . $type,
+          ),
+        );
+        foreach ($properties as $property => $callbacks) {
+          foreach ($callbacks as $callback) {
+            $function = $theme . '_' . $callback;
+            if (function_exists($function)) {
+              // Replace direct core function correlation.
+              if (!empty($element[$property]) && ($key = array_search($callback, $element[$property])) !== FALSE) {
+                $element[$property][$key] = $function;
+              }
+              // Check for a "form_" prefix instead (for #pre_render).
+              else if (!empty($element[$property]) && ($key = array_search('form_' . $callback, $element[$property])) !== FALSE) {
+                $element[$property][$key] = $function;
+              }
+              // Otherwise, append the function.
+              else {
+                $element[$property][] = $function;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Cache the element information.
+    $element_info[$theme_key] = $info;
+    cache_set($cid, $element_info);
+  }
+
+  // Set the element info to the cached processed data.
+  $info = $element_info[$theme_key];
 }
 
 /**

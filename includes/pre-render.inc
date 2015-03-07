@@ -7,9 +7,13 @@
  */
 
 /**
- * Pre-render input elements.
+ * Implements hook_pre_render().
  */
-function _bootstrap_pre_render_input($element) {
+function bootstrap_pre_render($element) {
+  if (!empty($element['#bootstrap_ignore_pre_render'])) {
+    return $element;
+  }
+
   // Only add the "form-control" class for specific element input types.
   $types = array(
     // Core.
@@ -18,18 +22,26 @@ function _bootstrap_pre_render_input($element) {
     'select',
     'textarea',
     'textfield',
-    // HTML5.
+
+    // Elements module (HTML5).
+    'date',
+    'datefield',
     'email',
+    'emailfield',
+    'number',
+    'numberfield',
+    'range',
+    'rangefield',
+    'search',
+    'searchfield',
+    'tel',
+    'telfield',
+    'url',
+    'urlfield',
+
     // Webform module.
     'webform_email',
     'webform_number',
-    // Elements module.
-    'emailfield',
-    'numberfield',
-    'rangefield',
-    'searchfield',
-    'telfield',
-    'urlfield',
   );
 
   if (!empty($element['#type']) && (in_array($element['#type'], $types) || ($element['#type'] === 'file' && empty($element['#managed_file'])))) {
@@ -45,15 +57,16 @@ function _bootstrap_pre_render_input($element) {
       $element['#attributes']['data-toggle'] = 'tooltip';
     }
   }
+
   return $element;
 }
 
 /**
- * Pre-render fieldset element.
+ * Implements hook_pre_render_HOOK().
  */
-function _bootstrap_pre_render_fieldset($element) {
+function bootstrap_pre_render_fieldset($element) {
   // Fieldsets may be rendered outside of a Form API context.
-  if (!isset($element['#parents']) || !isset($element['#groups'])) {
+  if (!empty($element['#bootstrap_ignore_pre_render']) || !isset($element['#parents']) || !isset($element['#groups'])) {
     return $element;
   }
   // Inject group member elements belonging to this group.
@@ -100,4 +113,30 @@ function _bootstrap_pre_render_fieldset($element) {
   }
 
   return $element;
+}
+
+/**
+ * Pre-render input elements.
+ *
+ * @deprecated Use proper hooks instead. Will be removed in 7.x-3.2.
+ *
+ * @see hook_pre_render()
+ *
+ * @todo Remove in 7.x-3.2.
+ */
+function _bootstrap_pre_render_input($element) {
+  return bootstrap_pre_render($element);
+}
+
+/**
+ * Pre-render fieldset element.
+ *
+ * @deprecated Use proper hooks instead. Will be removed in 7.x-3.2.
+ *
+ * @see hook_pre_render_HOOK()
+ *
+ * @todo Remove in 7.x-3.2.
+ */
+function _bootstrap_pre_render_fieldset($element) {
+  return bootstrap_pre_render_fieldset($element);
 }
