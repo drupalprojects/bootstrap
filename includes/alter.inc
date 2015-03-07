@@ -7,6 +7,16 @@
  */
 
 /**
+ * Include #pre_render callbacks for elements.
+ */
+bootstrap_include('bootstrap', 'includes/pre-render.inc');
+
+/**
+ * Include #process callbacks for elements.
+ */
+bootstrap_include('bootstrap', 'includes/process.inc');
+
+/**
  * Implements hook_css_alter().
  */
 function bootstrap_css_alter(&$css) {
@@ -56,9 +66,9 @@ function bootstrap_css_alter(&$css) {
  */
 function bootstrap_element_info_alter(&$info) {
   global $theme_key;
-  $element_info = array();
 
   $cid = "theme_registry:bootstrap:element_info";
+  $element_info = array();
   if (($cache = cache_get($cid)) && !empty($cache->data)) {
     $element_info = $cache->data;
   }
@@ -331,13 +341,3 @@ function bootstrap_menu_local_tasks_alter(&$data, &$router_item, $root_path) {
 function bootstrap_js_callback_filter_xss_alter(array &$allowed_tags = array()) {
   $allowed_tags[] = 'button';
 }
-
-/**
- * Include #pre_render callbacks for elements.
- */
-bootstrap_include('bootstrap', 'includes/pre-render.inc');
-
-/**
- * Include #process callbacks for elements.
- */
-bootstrap_include('bootstrap', 'includes/process.inc');
