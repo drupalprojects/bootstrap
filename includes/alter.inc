@@ -68,37 +68,36 @@ function bootstrap_element_info_alter(&$info) {
   global $theme_key;
 
   $cid = "theme_registry:bootstrap:element_info";
-  $element_info = array();
+  $cached = array();
   if (($cache = cache_get($cid)) && !empty($cache->data)) {
-    $element_info = $cache->data;
+    $cached = $cache->data;
   }
 
-  if (!isset($element_info[$theme_key])) {
-    $themes = _bootstrap_get_base_themes($theme_key, TRUE);
-    foreach ($themes as $theme) {
-      foreach ($info as $type => &$element) {
+  $themes = _bootstrap_get_base_themes($theme_key, TRUE);
+  foreach ($themes as $theme) {
+    if (!isset($cached[$theme])) {
+      $cached[$theme] = array();
+      foreach (array_keys($info) as $type) {
+        $element = array();
+
         // Ensure elements that have a base type with the #input set match.
-        if (isset($element['#base_type']) && isset($info[$element['#base_type']]['#input'])) {
-          $element['#input'] = $info[$element['#base_type']]['#input'];
+        if (isset($info[$type]['#base_type']) && isset($info[$type][$info[$type]['#base_type']]['#input'])) {
+          $element['#input'] = $info[$info[$type]['#base_type']]['#input'];
         }
 
         // Replace fieldset theme implementations with bootstrap_panel.
-        if (!empty($element['#theme']) && $element['#theme'] === 'fieldset') {
-          $element['#theme'] = 'bootstrap_panel';
+        if (!empty($info[$type]['#theme']) && $info[$type]['#theme'] === 'fieldset') {
+          $element['#bootstrap_replace']['#theme'] = 'bootstrap_panel';
         }
-        if (!empty($element['#theme_wrappers']) && ($key = array_search('fieldset', $element['#theme_wrappers'])) !== FALSE) {
-          $element['#theme_wrappers'][$key] = 'bootstrap_panel';
+        if (!empty($info[$type]['#theme_wrappers']) && array_search('fieldset', $info[$type]['#theme_wrappers']) !== FALSE) {
+          $element['#bootstrap_replace']['#theme_wrappers']['fieldset'] = 'bootstrap_panel';
         }
 
         // Setup a default "icon" variable. This allows #icon to be passed
         // to every template and theme function.
         // @see https://drupal.org/node/2219965
-        if (!isset($element['#icon'])) {
-          $element['#icon'] = NULL;
-        }
-        if (!isset($element['#icon_position'])) {
-          $element['#icon_position'] = 'before';
-        }
+        $element['#icon'] = NULL;
+        $element['#icon_position'] = 'before';
 
         $properties = array(
           '#process' => array(
@@ -115,12 +114,12 @@ function bootstrap_element_info_alter(&$info) {
             $function = $theme . '_' . $callback;
             if (function_exists($function)) {
               // Replace direct core function correlation.
-              if (!empty($element[$property]) && ($key = array_search($callback, $element[$property])) !== FALSE) {
-                $element[$property][$key] = $function;
+              if (!empty($info[$type][$property]) && array_search($callback, $info[$type][$property]) !== FALSE) {
+                $element['#bootstrap_replace'][$property][$callback] = $function;
               }
               // Check for a "form_" prefix instead (for #pre_render).
-              else if (!empty($element[$property]) && ($key = array_search('form_' . $callback, $element[$property])) !== FALSE) {
-                $element[$property][$key] = $function;
+              else if (!empty($info[$type][$property]) && array_search('form_' . $callback, $info[$type][$property]) !== FALSE) {
+                $element['#bootstrap_replace'][$property]['form_' . $callback] = $function;
               }
               // Otherwise, append the function.
               else {
@@ -129,16 +128,68 @@ function bootstrap_element_info_alter(&$info) {
             }
           }
         }
+        $cached[$theme][$type] = $element;
       }
+
+      // Cache the element information.
+      cache_set($cid, $cached);
     }
 
-    // Cache the element information.
-    $element_info[$theme_key] = $info;
-    cache_set($cid, $element_info);
+    // Merge in each theme's cached element info.
+    $info = _bootstrap_element_info_array_merge($info, $cached[$theme]);
+  }
+}
+
+/**
+ * Merges the cached element information into the runtime array.
+ *
+ * @param array $info
+ *   The element info array to merge data into.
+ * @param array $cached
+ *   The cached element info data array to merge from.
+ *
+ * @return array
+ *   The altered element info array.
+ */
+function _bootstrap_element_info_array_merge($info, $cached) {
+  foreach ($cached as $type => $element) {
+    $replacement_data = isset($element['#bootstrap_replace']) ? $element['#bootstrap_replace'] : array();
+    unset($element['#bootstrap_replace']);
+    foreach ($element as $property => $data) {
+      if (is_array($data)) {
+        if (!isset($info[$type][$property])) {
+          $info[$type][$property] = array();
+        }
+        // Append the values if not already in the array.
+        foreach ($data as $key => $value) {
+          if (!in_array($value, $info[$type][$property])) {
+            $info[$type][$property][] = $value;
+          }
+        }
+      }
+      // Create the property, if not already set.
+      else if (!isset($info[$type][$property])) {
+        $info[$type][$property] = $data;
+      }
+    }
+    // Replace data, if necessary.
+    foreach ($replacement_data as $property => $data) {
+      if (is_array($data)) {
+        foreach ($data as $needle => $replacement) {
+          if (!empty($info[$type][$property]) && ($key = array_search($needle, $info[$type][$property])) !== FALSE) {
+            $info[$type][$property][$key] = $replacement;
+          }
+        }
+      }
+      // Replace the property with the new data.
+      else {
+        $info[$type][$property] = $data;
+      }
+    }
   }
 
-  // Set the element info to the cached processed data.
-  $info = $element_info[$theme_key];
+  // Return the altered element info array.
+  return $info;
 }
 
 /**
