@@ -70,7 +70,7 @@ function bootstrap_css_alter(&$css) {
  * Implements hook_element_info_alter().
  *
  * @todo This currently does not work due to the following issue.
- * @see https://www.drupal.org/node/2024217#comment-9696043
+ * @see https://www.drupal.org/node/2390973
  */
 function bootstrap_element_info_alter(&$info) {
   $theme_key = \Drupal::theme()->getActiveTheme()->getName();

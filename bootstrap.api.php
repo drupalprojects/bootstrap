@@ -178,7 +178,7 @@ function hook_pre_render($element) {
  *
  * @see bootstrap_element_info_alter()
  */
-function hook_pre_render_HOOK($element, &$form_state, &$form) {
+function hook_pre_render_HOOK($element) {
   return $element;
 }
 
