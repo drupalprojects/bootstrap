@@ -19,6 +19,7 @@ function bootstrap_file_widget($variables) {
     }
   }
 
+  $element['upload_button']['#attributes']['class'][] = 'btn-primary';
   $element['upload_button']['#prefix'] = '<span class="input-group-btn">';
   $element['upload_button']['#suffix'] = '</span>';
 

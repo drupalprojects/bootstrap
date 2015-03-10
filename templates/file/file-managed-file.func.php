@@ -20,10 +20,12 @@ function bootstrap_file_managed_file($variables) {
   $attributes['class'][] = 'form-managed-file';
   $attributes['class'][] = 'input-group';
 
+  $element['upload_button']['#attributes']['class'][] = 'btn-primary';
   $element['upload_button']['#prefix'] = '<span class="input-group-btn">';
   $element['upload_button']['#suffix'] = '</span>';
   $element['remove_button']['#prefix'] = '<span class="input-group-btn">';
   $element['remove_button']['#suffix'] = '</span>';
+  $element['remove_button']['#attributes']['class'][] = 'btn-danger';
 
   if (!empty($element['filename'])) {
     $element['filename']['#prefix'] = '<div class="form-control">';

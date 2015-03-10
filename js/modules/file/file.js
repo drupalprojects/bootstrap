@@ -91,7 +91,7 @@
             '%filename': this.value.replace('C:\\fakepath\\', ''),
             '%extensions': extensionPattern.replace(/\|/g, ', ')
           });
-          $(this).closest('div.form-managed-file').prepend('<div class="alert alert-danger alert-dismissible messages error file-upload-js-error" aria-live="polite" role="alert">\
+          $(this).closest('div.form-managed-file').parents('.form-item').first().prepend('<div class="alert alert-danger alert-dismissible messages error file-upload-js-error" aria-live="polite" role="alert">\
             <button type="button" class="close" data-dismiss="alert">\
               <span aria-hidden="true">&times;</span>\
               <span class="sr-only">Close</span>\
