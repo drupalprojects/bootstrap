@@ -25,7 +25,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
   $regions = system_region_list($theme);
 
   // Display a warning if jquery_update isn't enabled.
-  if ((!module_exists('jquery_update') || !version_compare(variable_get('jquery_update_jquery_version', '1.10'), '1.7', '>=')) && !theme_get_setting('bootstrap_toggle_jquery_error')) {
+  if ((!module_exists('jquery_update') || !version_compare(variable_get('jquery_update_jquery_version', '1.10'), '1.7', '>=')) && !theme_get_setting('bootstrap_toggle_jquery_error', $theme)) {
     drupal_set_message(t('jQuery Update is not enabled, Bootstrap requires a minimum jQuery version of 1.7 or higher.<br/>Please enable <a href="https://drupal.org/project/jquery_update">jQuery Update module</a> 7.x-2.3 or higher, you must manually set this in the configuration after it is installed.'), 'error', FALSE);
   }
 
@@ -71,7 +71,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
   $form['general']['container']['bootstrap_fluid_container'] = array(
     '#type' => 'checkbox',
     '#title' => t('Fluid container'),
-    '#default_value' => theme_get_setting('bootstrap_fluid_container'),
+    '#default_value' => theme_get_setting('bootstrap_fluid_container', $theme),
     '#description' => t('Use <code>.container-fluid</code> class. See <a href="http://getbootstrap.com/css/#grid-example-fluid">Fluid container</a>'),
   );
 
@@ -85,7 +85,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
   $form['general']['buttons']['bootstrap_button_size'] = array(
     '#type' => 'select',
     '#title' => t('Default button size'),
-    '#default_value' => theme_get_setting('bootstrap_button_size'),
+    '#default_value' => theme_get_setting('bootstrap_button_size', $theme),
     '#empty_option' => t('Normal'),
     '#options' => array(
       'btn-xs' => t('Extra Small'),
@@ -96,7 +96,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
   $form['general']['buttons']['bootstrap_button_colorize'] = array(
     '#type' => 'checkbox',
     '#title' => t('Colorize Buttons'),
-    '#default_value' => theme_get_setting('bootstrap_button_colorize'),
+    '#default_value' => theme_get_setting('bootstrap_button_colorize', $theme),
     '#description' => t('Adds classes to buttons based on their text value. See: <a href="!bootstrap_url" target="_blank">Buttons</a> and <a href="!api_url" target="_blank">hook_bootstrap_colorize_text_alter()</a>', array(
       '!bootstrap_url' => 'http://getbootstrap.com/css/#buttons',
       '!api_url' => 'http://drupalcode.org/project/bootstrap.git/blob/refs/heads/7.x-3.x:/bootstrap.api.php#l13',
@@ -105,7 +105,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
   $form['general']['buttons']['bootstrap_button_iconize'] = array(
     '#type' => 'checkbox',
     '#title' => t('Iconize Buttons'),
-    '#default_value' => theme_get_setting('bootstrap_button_iconize'),
+    '#default_value' => theme_get_setting('bootstrap_button_iconize', $theme),
     '#description' => t('Adds icons to buttons based on the text value. See: <a href="!api_url" target="_blank">hook_bootstrap_iconize_text_alter()</a>', array(
       '!api_url' => 'http://drupalcode.org/project/bootstrap.git/blob/refs/heads/7.x-3.x:/bootstrap.api.php#l37',
     )),
@@ -121,7 +121,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
   $form['general']['forms']['bootstrap_forms_required_has_error'] = array(
     '#type' => 'checkbox',
     '#title' => t('Make required elements display as an error'),
-    '#default_value' => theme_get_setting('bootstrap_forms_required_has_error'),
+    '#default_value' => theme_get_setting('bootstrap_forms_required_has_error', $theme),
     '#description' => t('If an element in a form is required, enabling this will always display the element with a <code>.has-error</code> class. This turns the element red and helps in usability for determining which form elements are required to submit the form.  This feature compliments the "JavaScript > Forms > Automatically remove error classes when values have been entered" feature.'),
   );
 
@@ -138,7 +138,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#description' => t('Add classes to an <code>&lt;img&gt;</code> element to easily style images in any project. Note: Internet Explorer 8 lacks support for rounded corners. See: <a href="!bootstrap_url" target="_blank">Image Shapes</a>', array(
       '!bootstrap_url' => 'http://getbootstrap.com/css/#images-shapes',
     )),
-    '#default_value' => theme_get_setting('bootstrap_image_shape'),
+    '#default_value' => theme_get_setting('bootstrap_image_shape', $theme),
     '#empty_option' => t('None'),
     '#options' => array(
       'img-rounded' => t('Rounded'),
@@ -149,7 +149,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
   $form['general']['images']['bootstrap_image_responsive'] = array(
     '#type' => 'checkbox',
     '#title' => t('Responsive Images'),
-    '#default_value' => theme_get_setting('bootstrap_image_responsive'),
+    '#default_value' => theme_get_setting('bootstrap_image_responsive', $theme),
     '#description' => t('Images in Bootstrap 3 can be made responsive-friendly via the addition of the <code>.img-responsive</code> class. This applies <code>max-width: 100%;</code> and <code>height: auto;</code> to the image so that it scales nicely to the parent element.'),
   );
 
@@ -163,31 +163,31 @@ function _bootstrap_settings_form(&$form, $form_state) {
   $form['general']['tables']['bootstrap_table_bordered'] = array(
     '#type' => 'checkbox',
     '#title' => t('Bordered table'),
-    '#default_value' => theme_get_setting('bootstrap_table_bordered'),
+    '#default_value' => theme_get_setting('bootstrap_table_bordered', $theme),
     '#description' => t('Add borders on all sides of the table and cells.'),
   );
   $form['general']['tables']['bootstrap_table_condensed'] = array(
     '#type' => 'checkbox',
     '#title' => t('Condensed table'),
-    '#default_value' => theme_get_setting('bootstrap_table_condensed'),
+    '#default_value' => theme_get_setting('bootstrap_table_condensed', $theme),
     '#description' => t('Make tables more compact by cutting cell padding in half.'),
   );
   $form['general']['tables']['bootstrap_table_hover'] = array(
     '#type' => 'checkbox',
     '#title' => t('Hover rows'),
-    '#default_value' => theme_get_setting('bootstrap_table_hover'),
+    '#default_value' => theme_get_setting('bootstrap_table_hover', $theme),
     '#description' => t('Enable a hover state on table rows.'),
   );
   $form['general']['tables']['bootstrap_table_striped'] = array(
     '#type' => 'checkbox',
     '#title' => t('Striped rows'),
-    '#default_value' => theme_get_setting('bootstrap_table_striped'),
+    '#default_value' => theme_get_setting('bootstrap_table_striped', $theme),
     '#description' => t('Add zebra-striping to any table row within the <code>&lt;tbody&gt;</code>. <strong>Note:</strong> Striped tables are styled via the <code>:nth-child</code> CSS selector, which is not available in Internet Explorer 8.'),
   );
   $form['general']['tables']['bootstrap_table_responsive'] = array(
     '#type' => 'checkbox',
     '#title' => t('Responsive tables'),
-    '#default_value' => theme_get_setting('bootstrap_table_responsive'),
+    '#default_value' => theme_get_setting('bootstrap_table_responsive', $theme),
     '#description' => t('Makes tables responsive by wrapping them in <code>.table-responsive</code> to make them scroll horizontally up to small devices (under 768px). When viewing on anything larger than 768px wide, you will not see any difference in these tables.'),
   );
 
@@ -208,7 +208,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
   $form['components']['breadcrumbs']['bootstrap_breadcrumb'] = array(
     '#type' => 'select',
     '#title' => t('Breadcrumb visibility'),
-    '#default_value' => theme_get_setting('bootstrap_breadcrumb'),
+    '#default_value' => theme_get_setting('bootstrap_breadcrumb', $theme),
     '#options' => array(
       0 => t('Hidden'),
       1 => t('Visible'),
@@ -218,7 +218,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
   $form['components']['breadcrumbs']['bootstrap_breadcrumb_home'] = array(
     '#type' => 'checkbox',
     '#title' => t('Show "Home" breadcrumb link'),
-    '#default_value' => theme_get_setting('bootstrap_breadcrumb_home'),
+    '#default_value' => theme_get_setting('bootstrap_breadcrumb_home', $theme),
     '#description' => t('If your site has a module dedicated to handling breadcrumbs already, ensure this setting is enabled.'),
     '#states' => array(
       'invisible' => array(
@@ -229,7 +229,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
   $form['components']['breadcrumbs']['bootstrap_breadcrumb_title'] = array(
     '#type' => 'checkbox',
     '#title' => t('Show current page title at end'),
-    '#default_value' => theme_get_setting('bootstrap_breadcrumb_title'),
+    '#default_value' => theme_get_setting('bootstrap_breadcrumb_title', $theme),
     '#description' => t('If your site has a module dedicated to handling breadcrumbs already, ensure this setting is disabled.'),
     '#states' => array(
       'invisible' => array(
@@ -249,7 +249,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#type' => 'select',
     '#title' => t('Navbar Position'),
     '#description' => t('Select your Navbar position.'),
-    '#default_value' => theme_get_setting('bootstrap_navbar_position'),
+    '#default_value' => theme_get_setting('bootstrap_navbar_position', $theme),
     '#options' => array(
       'static-top' => t('Static Top'),
       'fixed-top' => t('Fixed Top'),
@@ -261,7 +261,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#type' => 'checkbox',
     '#title' => t('Inverse navbar style'),
     '#description' => t('Select if you want the inverse navbar style.'),
-    '#default_value' => theme_get_setting('bootstrap_navbar_inverse'),
+    '#default_value' => theme_get_setting('bootstrap_navbar_inverse', $theme),
   );
 
   // Region wells.
@@ -288,7 +288,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
         'class' => array('input-sm'),
       ),
       '#options' => $wells,
-      '#default_value' => theme_get_setting('bootstrap_region_well-' . $name),
+      '#default_value' => theme_get_setting('bootstrap_region_well-' . $name, $theme),
     );
   }
 
@@ -309,13 +309,13 @@ function _bootstrap_settings_form(&$form, $form_state) {
   $form['javascript']['anchors']['bootstrap_anchors_fix'] = array(
     '#type' => 'checkbox',
     '#title' => t('Fix anchor positions'),
-    '#default_value' => theme_get_setting('bootstrap_anchors_fix'),
+    '#default_value' => theme_get_setting('bootstrap_anchors_fix', $theme),
     '#description' => t('Ensures anchors are correctly positioned only when there is margin or padding detected on the BODY element. This is useful when fixed navbar or administration menus are used.'),
   );
   $form['javascript']['anchors']['bootstrap_anchors_smooth_scrolling'] = array(
     '#type' => 'checkbox',
     '#title' => t('Enable smooth scrolling'),
-    '#default_value' => theme_get_setting('bootstrap_anchors_smooth_scrolling'),
+    '#default_value' => theme_get_setting('bootstrap_anchors_smooth_scrolling', $theme),
     '#description' => t('Animates page by scrolling to an anchor link target smoothly when clicked.'),
     '#states' => array(
       'invisible' => array(
@@ -334,14 +334,14 @@ function _bootstrap_settings_form(&$form, $form_state) {
   $form['javascript']['forms']['bootstrap_forms_has_error_value_toggle'] = array(
     '#type' => 'checkbox',
     '#title' => t('Automatically remove error classes when values have been entered'),
-    '#default_value' => theme_get_setting('bootstrap_forms_has_error_value_toggle'),
+    '#default_value' => theme_get_setting('bootstrap_forms_has_error_value_toggle', $theme),
     '#description' => t('If an element has a <code>.has-error</code> class attached to it, enabling this will automatically remove that class when a value is entered. This feature compliments the "General > Forms > Make required elements display as an error" feature.'),
   );
   $form['javascript']['forms']['bootstrap_tooltip_descriptions'] = array(
     '#type' => 'checkbox',
     '#title' => t('Use Tooltips for simple form descriptions'),
     '#description' => t('Form items that contain simple descriptions (no HTML, no title attribute and are less than the specified length below) will be converted into tooltips. This helps reduce the sometimes unnecessary noise of form item descriptions. Descriptions that contain longer text or HTML as actionable descriptions (user needs to click) will not be converted. This ensures it is always visible so its usability remains intact.'),
-    '#default_value' => theme_get_setting('bootstrap_tooltip_descriptions'),
+    '#default_value' => theme_get_setting('bootstrap_tooltip_descriptions', $theme),
     '#states' => array(
       'visible' => array(
         ':input[name="bootstrap_tooltip_enabled"]' => array('checked' => TRUE),
@@ -364,7 +364,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
       '!code' => '<code>data-toggle="popover"</code>',
       '!warning' => '<strong class="error text-error">WARNING: This feature can sometimes impact performance. Disable if pages appear to "hang" after initial load.</strong>',
     )),
-    '#default_value' => theme_get_setting('bootstrap_popover_enabled'),
+    '#default_value' => theme_get_setting('bootstrap_popover_enabled', $theme),
   );
   $form['javascript']['popovers']['options'] = array(
     '#type' => 'fieldset',
@@ -385,19 +385,19 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#type' => 'checkbox',
     '#title' => t('animate'),
     '#description' => t('Apply a CSS fade transition to the popover.'),
-    '#default_value' => theme_get_setting('bootstrap_popover_animation'),
+    '#default_value' => theme_get_setting('bootstrap_popover_animation', $theme),
   );
   $form['javascript']['popovers']['options']['bootstrap_popover_html'] = array(
     '#type' => 'checkbox',
     '#title' => t('HTML'),
     '#description' => t("Insert HTML into the popover. If false, jQuery's text method will be used to insert content into the DOM. Use text if you're worried about XSS attacks."),
-    '#default_value' => theme_get_setting('bootstrap_popover_html'),
+    '#default_value' => theme_get_setting('bootstrap_popover_html', $theme),
   );
   $form['javascript']['popovers']['options']['bootstrap_popover_placement'] = array(
     '#type' => 'select',
     '#title' => t('placement'),
     '#description' => t('Where to position the popover. When "auto" is specified, it will dynamically reorient the popover. For example, if placement is "auto left", the popover will display to the left when possible, otherwise it will display right.'),
-    '#default_value' => theme_get_setting('bootstrap_popover_placement'),
+    '#default_value' => theme_get_setting('bootstrap_popover_placement', $theme),
     '#options' => drupal_map_assoc(array(
       'top',
       'bottom',
@@ -417,13 +417,13 @@ function _bootstrap_settings_form(&$form, $form_state) {
       '!this' => l(t('this'), 'https://github.com/twbs/bootstrap/issues/4215'),
       '!example' => l(t('an informative example'), 'http://jsfiddle.net/fScua/'),
     )),
-    '#default_value' => theme_get_setting('bootstrap_popover_selector'),
+    '#default_value' => theme_get_setting('bootstrap_popover_selector', $theme),
   );
   $form['javascript']['popovers']['options']['bootstrap_popover_trigger'] = array(
     '#type' => 'checkboxes',
     '#title' => t('trigger'),
     '#description' => t('How a popover is triggered.'),
-    '#default_value' => theme_get_setting('bootstrap_popover_trigger'),
+    '#default_value' => theme_get_setting('bootstrap_popover_trigger', $theme),
     '#options' => drupal_map_assoc(array(
       'click',
       'hover',
@@ -435,31 +435,31 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#type' => 'checkbox',
     '#title' => t('Auto-close on document click'),
     '#description' => t('Will automatically close the current popover if a click occurs anywhere else other than the popover element.'),
-    '#default_value' => theme_get_setting('bootstrap_popover_trigger_autoclose'),
+    '#default_value' => theme_get_setting('bootstrap_popover_trigger_autoclose', $theme),
   );
   $form['javascript']['popovers']['options']['bootstrap_popover_title'] = array(
     '#type' => 'textfield',
     '#title' => t('title'),
     '#description' => t("Default title value if \"title\" attribute isn't present."),
-    '#default_value' => theme_get_setting('bootstrap_popover_title'),
+    '#default_value' => theme_get_setting('bootstrap_popover_title', $theme),
   );
   $form['javascript']['popovers']['options']['bootstrap_popover_content'] = array(
     '#type' => 'textfield',
     '#title' => t('content'),
     '#description' => t('Default content value if "data-content" or "data-target" attributes are not present.'),
-    '#default_value' => theme_get_setting('bootstrap_popover_content'),
+    '#default_value' => theme_get_setting('bootstrap_popover_content', $theme),
   );
   $form['javascript']['popovers']['options']['bootstrap_popover_delay'] = array(
     '#type' => 'textfield',
     '#title' => t('delay'),
     '#description' => t('The amount of time to delay showing and hiding the popover (in milliseconds). Does not apply to manual trigger type.'),
-    '#default_value' => theme_get_setting('bootstrap_popover_delay'),
+    '#default_value' => theme_get_setting('bootstrap_popover_delay', $theme),
   );
   $form['javascript']['popovers']['options']['bootstrap_popover_container'] = array(
     '#type' => 'textfield',
     '#title' => t('container'),
     '#description' => t('Appends the popover to a specific element. Example: "body". This option is particularly useful in that it allows you to position the popover in the flow of the document near the triggering element - which will prevent the popover from floating away from the triggering element during a window resize.'),
-    '#default_value' => theme_get_setting('bootstrap_popover_container'),
+    '#default_value' => theme_get_setting('bootstrap_popover_container', $theme),
   );
 
   // Tooltips.
@@ -479,13 +479,13 @@ function _bootstrap_settings_form(&$form, $form_state) {
       '!code' => '<code>data-toggle="tooltip"</code>',
       '!warning' => '<strong class="error text-error">WARNING: This feature can sometimes impact performance. Disable if pages appear to "hang" after initial load.</strong>',
     )),
-    '#default_value' => theme_get_setting('bootstrap_tooltip_enabled'),
+    '#default_value' => theme_get_setting('bootstrap_tooltip_enabled', $theme),
   );
   $form['javascript']['tooltips']['bootstrap_tooltip_descriptions_length'] = array(
     '#type' => 'textfield',
     '#title' => t('Simple form description length'),
     '#description' => t('The character length limit used to determine when a description makes a sense to be used as a tooltip.'),
-    '#default_value' => theme_get_setting('bootstrap_tooltip_descriptions_length'),
+    '#default_value' => theme_get_setting('bootstrap_tooltip_descriptions_length', $theme),
     '#states' => array(
       'visible' => array(
         ':input[name="bootstrap_tooltip_enabled"]' => array('checked' => TRUE),
@@ -512,19 +512,19 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#type' => 'checkbox',
     '#title' => t('animate'),
     '#description' => t('Apply a CSS fade transition to the tooltip.'),
-    '#default_value' => theme_get_setting('bootstrap_tooltip_animation'),
+    '#default_value' => theme_get_setting('bootstrap_tooltip_animation', $theme),
   );
   $form['javascript']['tooltips']['options']['bootstrap_tooltip_html'] = array(
     '#type' => 'checkbox',
     '#title' => t('HTML'),
     '#description' => t("Insert HTML into the tooltip. If false, jQuery's text method will be used to insert content into the DOM. Use text if you're worried about XSS attacks."),
-    '#default_value' => theme_get_setting('bootstrap_tooltip_html'),
+    '#default_value' => theme_get_setting('bootstrap_tooltip_html', $theme),
   );
   $form['javascript']['tooltips']['options']['bootstrap_tooltip_placement'] = array(
     '#type' => 'select',
     '#title' => t('placement'),
     '#description' => t('Where to position the tooltip. When "auto" is specified, it will dynamically reorient the tooltip. For example, if placement is "auto left", the tooltip will display to the left when possible, otherwise it will display right.'),
-    '#default_value' => theme_get_setting('bootstrap_tooltip_placement'),
+    '#default_value' => theme_get_setting('bootstrap_tooltip_placement', $theme),
     '#options' => drupal_map_assoc(array(
       'top',
       'bottom',
@@ -541,13 +541,13 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#type' => 'textfield',
     '#title' => t('selector'),
     '#description' => t('If a selector is provided, tooltip objects will be delegated to the specified targets.'),
-    '#default_value' => theme_get_setting('bootstrap_tooltip_selector'),
+    '#default_value' => theme_get_setting('bootstrap_tooltip_selector', $theme),
   );
   $form['javascript']['tooltips']['options']['bootstrap_tooltip_trigger'] = array(
     '#type' => 'checkboxes',
     '#title' => t('trigger'),
     '#description' => t('How a tooltip is triggered.'),
-    '#default_value' => theme_get_setting('bootstrap_tooltip_trigger'),
+    '#default_value' => theme_get_setting('bootstrap_tooltip_trigger', $theme),
     '#options' => drupal_map_assoc(array(
       'click',
       'hover',
@@ -559,13 +559,13 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#type' => 'textfield',
     '#title' => t('delay'),
     '#description' => t('The amount of time to delay showing and hiding the tooltip (in milliseconds). Does not apply to manual trigger type.'),
-    '#default_value' => theme_get_setting('bootstrap_tooltip_delay'),
+    '#default_value' => theme_get_setting('bootstrap_tooltip_delay', $theme),
   );
   $form['javascript']['tooltips']['options']['bootstrap_tooltip_container'] = array(
     '#type' => 'textfield',
     '#title' => t('container'),
     '#description' => t('Appends the tooltip to a specific element. Example: "body"'),
-    '#default_value' => theme_get_setting('bootstrap_tooltip_container'),
+    '#default_value' => theme_get_setting('bootstrap_tooltip_container', $theme),
   );
 
   // Advanced settings.
@@ -600,7 +600,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
       '3.0.1',
       '3.0.0',
     )),
-    '#default_value' => theme_get_setting('bootstrap_cdn'),
+    '#default_value' => theme_get_setting('bootstrap_cdn', $theme),
     '#empty_option' => t('Disabled'),
     '#empty_value' => NULL,
   );
@@ -623,7 +623,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
         'external' => TRUE,
       )),
     )),
-    '#default_value' => theme_get_setting('bootstrap_bootswatch'),
+    '#default_value' => theme_get_setting('bootstrap_bootswatch', $theme),
     '#options' => $bootswatch_themes,
     '#empty_option' => t('Disabled'),
     '#empty_value' => NULL,
@@ -642,7 +642,7 @@ function _bootstrap_settings_form(&$form, $form_state) {
   $form['advanced']['bootstrap_toggle_jquery_error'] = array(
     '#type' => 'checkbox',
     '#title' => t('Suppress jQuery version error message'),
-    '#default_value' => theme_get_setting('bootstrap_toggle_jquery_error'),
+    '#default_value' => theme_get_setting('bootstrap_toggle_jquery_error', $theme),
     '#description' => t('Enable this if the version of jQuery has been upgraded to 1.7+ using a method other than the !jquery_update module.', array(
       '!jquery_update' => l(t('jQuery Update'), 'https://drupal.org/project/jquery_update'),
     )),
