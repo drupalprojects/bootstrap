@@ -74,7 +74,7 @@
  */
 ?>
 <header id="navbar" role="banner" class="<?php print $navbar_classes; ?>">
-  <div class="container">
+  <div class="<?php print $container_class; ?>">
     <div class="navbar-header">
       <?php if ($logo): ?>
         <a class="logo navbar-btn pull-left" href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>">
@@ -113,7 +113,7 @@
   </div>
 </header>
 
-<div class="main-container container">
+<div class="main-container <?php print $container_class; ?>">
 
   <header role="banner" id="page-header">
     <?php if (!empty($site_slogan)): ?>
@@ -165,7 +165,7 @@
 </div>
 
 <?php if (!empty($page['footer'])): ?>
-  <footer class="footer container">
+  <footer class="footer <?php print $container_class; ?>">
     <?php print render($page['footer']); ?>
   </footer>
 <?php endif; ?>

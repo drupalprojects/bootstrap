@@ -30,6 +30,10 @@ regions[page_bottom]    = 'Page bottom'
 ;; Theme Settings
 ;;;;;;;;;;;;;;;;;;;;;
 
+; Container
+; --------------
+settings[bootstrap_fluid_container] = 0
+
 ; Buttons
 ; --------------
 settings[bootstrap_button_size] = ''

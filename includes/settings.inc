@@ -61,6 +61,20 @@ function _bootstrap_settings_form(&$form, $form_state) {
     '#group' => 'bootstrap',
   );
 
+  //Container
+  $form['general']['container'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Container'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  $form['general']['container']['bootstrap_fluid_container'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Fluid container'),
+    '#default_value' => theme_get_setting('bootstrap_fluid_container'),
+    '#description' => t('Use <code>.container-fluid</code> class. See <a href="http://getbootstrap.com/css/#grid-example-fluid">Fluid container</a>'),
+  );
+
   // Buttons.
   $form['general']['buttons'] = array(
     '#type' => 'fieldset',
