@@ -198,6 +198,29 @@ function _bootstrap_element_info_array_merge($info, $cached) {
 function bootstrap_form_alter(array &$form, array &$form_state = array(), $form_id = NULL) {
   if ($form_id) {
     switch ($form_id) {
+      case 'system_theme_settings':
+        // Create vertical tabs for global settings (provided by core or other
+        // contrib modules).
+        if (!isset($form['global'])) {
+          $form['global'] = array(
+            '#type' => 'vertical_tabs',
+            '#weight' => -9,
+          );
+          if (!empty($form_state['build_info']['args'][0])) {
+            $form['global']['#prefix'] = '<h2><small>' . t('Override Global Settings') . '</small></h2>';
+          }
+        }
+
+        // Iterate over all child elements and check to see if they should be
+        // moved in the global vertical tabs.
+        $global_children = element_children($form);
+        foreach ($global_children as $child) {
+          if (isset($form[$child]['#type']) && $form[$child]['#type'] === 'fieldset' && !isset($form[$child]['#group'])) {
+            $form[$child]['#group'] = 'global';
+          }
+        }
+        break;
+
       case 'search_form':
         // Add a clearfix class so the results don't overflow onto the form.
         $form['#attributes']['class'][] = 'clearfix';
