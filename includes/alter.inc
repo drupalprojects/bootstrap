@@ -345,12 +345,6 @@ function bootstrap_form_alter(&$form, FormStateInterface $form_state, $form_id =
 
   if ($form_id) {
     switch ($form_id) {
-      case 'system_theme_settings':
-        // Include the settings form here.
-        bootstrap_include('bootstrap', 'includes/settings.inc');
-        _bootstrap_settings_form($form, $form_state);
-        break;
-
       case 'search_form':
         // Add a clearfix class so the results don't overflow onto the form.
         $form['#attributes']['class'][] = 'clearfix';
