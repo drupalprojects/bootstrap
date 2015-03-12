@@ -1,3 +1,7 @@
+# Container
+# --------------
+bootstrap_fluid_container: 0
+
 # Buttons
 # --------------
 bootstrap_button_size: ''

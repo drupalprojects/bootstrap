@@ -62,7 +62,7 @@
  */
 #}
 <header{{ navbar_attributes }} id="navbar" role="banner">
-  <div class="container">
+  <div class="{{ container_class }}">
     <div class="navbar-header">
       {% if logo %}
         <a class="logo navbar-btn pull-left" href="{{ front_page }}" title="<?php print t('Home'); ?>">
@@ -93,7 +93,7 @@
   </div>
 </header>
 
-<div class="main-container container">
+<div class="main-container {{ container_class }}">
 
   <header role="banner" id="page-header">
     {% if site_slogan %}
@@ -144,7 +144,7 @@
 </div>
 
 {% if page.footer %}
-  <footer class="footer container" role="contentinfo">
+  <footer class="footer {{ container_class }}" role="contentinfo">
     {{ page.footer }}
   </footer>
 {% endif %}
