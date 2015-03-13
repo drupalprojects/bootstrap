@@ -4,6 +4,8 @@
  * menu-local-action.vars.php
  */
 
+use Drupal\Component\Utility\String;
+
 /**
  * Overrides theme_menu_local_action().
  *
@@ -44,11 +46,10 @@ function bootstrap_preprocess_menu_local_action(&$variables) {
         $options['attributes']['class'] = implode(' ', $options['attributes']['class']);
       }
     }
-    // Force HTML so we can render any icon that may have been added.
-    $options['html'] = !empty($options['html']) || !empty($icon) ? TRUE : FALSE;
+
     $variables['link'] = array(
       '#type' => 'link',
-      '#title' => $icon . $link['title'],
+      '#title' => String::format($icon . '@text', array('@text' => $link['title'])),
       '#options' => $options,
       '#url' => $link['url'],
     );
