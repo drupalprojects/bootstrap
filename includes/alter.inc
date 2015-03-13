@@ -354,7 +354,7 @@ function bootstrap_form_alter(&$form, FormStateInterface $form_state, $form_id =
             '#type' => 'vertical_tabs',
             '#weight' => -9,
           );
-          if (!empty($form_state['build_info']['args'][0])) {
+          if (!empty($form_state->getBuildInfo()['args'])) {
             $form['global']['#prefix'] = '<h2><small>' . t('Override Global Settings') . '</small></h2>';
           }
         }
@@ -363,7 +363,7 @@ function bootstrap_form_alter(&$form, FormStateInterface $form_state, $form_id =
         // moved in the global vertical tabs.
         $global_children = Element::children($form);
         foreach ($global_children as $child) {
-          if (isset($form[$child]['#type']) && $form[$child]['#type'] === 'fieldset' && !isset($form[$child]['#group'])) {
+          if (isset($form[$child]['#type']) && $form[$child]['#type'] === 'details' && !isset($form[$child]['#group'])) {
             $form[$child]['#group'] = 'global';
           }
         }
