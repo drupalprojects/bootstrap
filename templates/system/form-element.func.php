@@ -29,7 +29,7 @@ function bootstrap_form_element(&$variables) {
   }
 
   // Check for errors and set correct error class.
-  if ((isset($element['#parents']) && form_get_error($element)) || (!empty($element['#required']) && theme_get_setting('bootstrap_forms_required_has_error'))) {
+  if ((isset($element['#parents']) && form_get_error($element)) || (!empty($element['#required']) && bootstrap_setting('forms_required_has_error'))) {
     $wrapper_attributes['class'][] = 'has-error';
   }
 

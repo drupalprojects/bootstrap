@@ -14,7 +14,7 @@ function bootstrap_filter_tips_more_info() {
     'target' => '_blank',
     'title' => t('Opens in new window'),
   );
-  if (theme_get_setting('bootstrap_tooltip_enabled')) {
+  if (bootstrap_setting('tooltip_enabled')) {
     $attributes['data-toggle'] = 'tooltip';
   }
   return l(_bootstrap_icon('question-sign') . t('More information about text formats'), 'filter/tips', array(

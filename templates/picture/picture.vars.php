@@ -9,7 +9,7 @@
  */
 function bootstrap_preprocess_picture(&$variables) {
   // Add responsiveness, if necessary.
-  if ($shape = theme_get_setting('bootstrap_image_responsive')) {
+  if ($shape = bootstrap_setting('image_responsive')) {
     $variables['attributes']['class'][] = 'img-responsive';
   }
 }

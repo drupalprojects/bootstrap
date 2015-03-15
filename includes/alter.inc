@@ -21,29 +21,27 @@ bootstrap_include('bootstrap', 'includes/process.inc');
  */
 function bootstrap_css_alter(&$css) {
   $theme_path = drupal_get_path('theme', 'bootstrap');
+
   // Exclude specified CSS files from theme.
   $excludes = bootstrap_get_theme_info(NULL, 'exclude][css');
-  // Add Bootstrap CDN file and overrides.
-  $bootstrap_cdn = theme_get_setting('bootstrap_cdn');
-  if ($bootstrap_cdn) {
-    // Add CDN.
-    if (theme_get_setting('bootstrap_bootswatch')) {
-      $cdn = '//netdna.bootstrapcdn.com/bootswatch/' . $bootstrap_cdn  . '/' . theme_get_setting('bootstrap_bootswatch') . '/bootstrap.min.css';
+
+  // Add CDN assets, if any.
+  if ($cdn_assets = bootstrap_get_cdn_assets('css')) {
+    $cdn_weight = -2.99;
+    foreach ($cdn_assets as $cdn_asset) {
+      $cdn_weight += .01;
+      $css[$cdn_asset] = array(
+        'data' => $cdn_asset,
+        'type' => 'external',
+        'every_page' => TRUE,
+        'media' => 'all',
+        'preprocess' => FALSE,
+        'group' => CSS_THEME,
+        'browsers' => array('IE' => TRUE, '!IE' => TRUE),
+        'weight' => $cdn_weight,
+      );
     }
-    else {
-      $cdn = '//netdna.bootstrapcdn.com/bootstrap/' . $bootstrap_cdn  . '/css/bootstrap.min.css';
-    }
-    $css[$cdn] = array(
-      'data' => $cdn,
-      'type' => 'external',
-      'every_page' => TRUE,
-      'media' => 'all',
-      'preprocess' => FALSE,
-      'group' => CSS_THEME,
-      'browsers' => array('IE' => TRUE, '!IE' => TRUE),
-      'weight' => -2,
-    );
-    // Add overrides.
+    // Add the overrides file.
     $override = $theme_path . '/css/overrides.css';
     $css[$override] = array(
       'data' => $override,
@@ -331,42 +329,44 @@ function bootstrap_js_alter(&$js) {
 
   // Add Bootstrap settings.
   $js['settings']['data'][]['bootstrap'] = array(
-    'anchorsFix' => theme_get_setting('bootstrap_anchors_fix'),
-    'anchorsSmoothScrolling' => theme_get_setting('bootstrap_anchors_smooth_scrolling'),
-    'formHasError' => (int) theme_get_setting('bootstrap_forms_has_error_value_toggle'),
-    'popoverEnabled' => theme_get_setting('bootstrap_popover_enabled'),
+    'anchorsFix' => bootstrap_setting('anchors_fix'),
+    'anchorsSmoothScrolling' => bootstrap_setting('anchors_smooth_scrolling'),
+    'formHasError' => (int) bootstrap_setting('forms_has_error_value_toggle'),
+    'popoverEnabled' => bootstrap_setting('popover_enabled'),
     'popoverOptions' => array(
-      'animation' => (int) theme_get_setting('bootstrap_popover_animation'),
-      'html' => (int) theme_get_setting('bootstrap_popover_html'),
-      'placement' => theme_get_setting('bootstrap_popover_placement'),
-      'selector' => theme_get_setting('bootstrap_popover_selector'),
-      'trigger' => implode(' ', array_filter(array_values((array) theme_get_setting('bootstrap_popover_trigger')))),
-      'triggerAutoclose' => (int) theme_get_setting('bootstrap_popover_trigger_autoclose'),
-      'title' => theme_get_setting('bootstrap_popover_title'),
-      'content' => theme_get_setting('bootstrap_popover_content'),
-      'delay' => (int) theme_get_setting('bootstrap_popover_delay'),
-      'container' => theme_get_setting('bootstrap_popover_container'),
+      'animation' => (int) bootstrap_setting('popover_animation'),
+      'html' => (int) bootstrap_setting('popover_html'),
+      'placement' => bootstrap_setting('popover_placement'),
+      'selector' => bootstrap_setting('popover_selector'),
+      'trigger' => implode(' ', array_filter(array_values((array) bootstrap_setting('popover_trigger')))),
+      'triggerAutoclose' => (int) bootstrap_setting('popover_trigger_autoclose'),
+      'title' => bootstrap_setting('popover_title'),
+      'content' => bootstrap_setting('popover_content'),
+      'delay' => (int) bootstrap_setting('popover_delay'),
+      'container' => bootstrap_setting('popover_container'),
     ),
-    'tooltipEnabled' => theme_get_setting('bootstrap_tooltip_enabled'),
+    'tooltipEnabled' => bootstrap_setting('tooltip_enabled'),
     'tooltipOptions' => array(
-      'animation' => (int) theme_get_setting('bootstrap_tooltip_animation'),
-      'html' => (int) theme_get_setting('bootstrap_tooltip_html'),
-      'placement' => theme_get_setting('bootstrap_tooltip_placement'),
-      'selector' => theme_get_setting('bootstrap_tooltip_selector'),
-      'trigger' => implode(' ', array_filter(array_values((array) theme_get_setting('bootstrap_tooltip_trigger')))),
-      'delay' => (int) theme_get_setting('bootstrap_tooltip_delay'),
-      'container' => theme_get_setting('bootstrap_tooltip_container'),
+      'animation' => (int) bootstrap_setting('tooltip_animation'),
+      'html' => (int) bootstrap_setting('tooltip_html'),
+      'placement' => bootstrap_setting('tooltip_placement'),
+      'selector' => bootstrap_setting('tooltip_selector'),
+      'trigger' => implode(' ', array_filter(array_values((array) bootstrap_setting('tooltip_trigger')))),
+      'delay' => (int) bootstrap_setting('tooltip_delay'),
+      'container' => bootstrap_setting('tooltip_container'),
     ),
   );
 
-  // Add CDN.
-  if (theme_get_setting('bootstrap_cdn')) {
-    $cdn = '//netdna.bootstrapcdn.com/bootstrap/' . theme_get_setting('bootstrap_cdn')  . '/js/bootstrap.min.js';
-    $js[$cdn] = drupal_js_defaults();
-    $js[$cdn]['data'] = $cdn;
-    $js[$cdn]['type'] = 'external';
-    $js[$cdn]['every_page'] = TRUE;
-    $js[$cdn]['weight'] = -100;
+  // Add CDN assets, if any.
+  if ($cdn_assets = bootstrap_get_cdn_assets('js')) {
+    $cdn_weight = -99.99;
+    foreach ($cdn_assets as $cdn_asset) {
+      $cdn_weight += .01;
+      $js[$cdn_asset] = drupal_js_defaults($cdn_asset);
+      $js[$cdn_asset]['type'] = 'external';
+      $js[$cdn_asset]['every_page'] = TRUE;
+      $js[$cdn_asset]['weight'] = $cdn_weight;
+    }
   }
 }
 
@@ -374,7 +374,7 @@ function bootstrap_js_alter(&$js) {
  * Implements hook_icon_bundle_list_alter().
  */
 function bootstrap_icon_bundle_list_alter(&$build, $bundle) {
-  if (theme_get_setting('bootstrap_tooltip_enabled')) {
+  if (bootstrap_setting('tooltip_enabled')) {
     foreach ($build as &$icon) {
       $icon['#attributes']['data-toggle'] = 'tooltip';
       $icon['#attributes']['data-placement'] = 'bottom';

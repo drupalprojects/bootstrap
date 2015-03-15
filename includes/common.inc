@@ -6,6 +6,75 @@
  * Contains common functionality for the entire base theme.
  */
 
+define('BOOTSTRAP_VERSION_MAJOR', 3);
+define('BOOTSTRAP_VERSION_MINOR', 3);
+define('BOOTSTRAP_VERSION_PATCH', 2);
+define('BOOTSTRAP_VERSION', BOOTSTRAP_VERSION_MAJOR . '.' . BOOTSTRAP_VERSION_MINOR . '.' . BOOTSTRAP_VERSION_PATCH);
+
+/**
+ * Retrieves CDN assets for the active provider, if any.
+ *
+ * @param string|array $type
+ *   The type of asset to retrieve: "css" or "js", defaults to an array
+ *   array containing both if not set.
+ * @param string $provider
+ *   The name of a specific CDN provider to use, defaults to the active provider
+ *   set in the theme settings.
+ * @param string $theme
+ *   The name of a specific theme the settings should be retrieved from,
+ *   defaults to the active theme.
+ *
+ * @return array
+ *   If $type is a string or an array with only one (1) item in it, the assets
+ *   are returned as an indexed array of files. Otherwise, an associative array
+ *   is returned keyed by the type.
+ */
+function bootstrap_get_cdn_assets($type = NULL, $provider = NULL, $theme = NULL) {
+  $assets = array();
+  $types = array();
+
+  // If no type is set, return all CSS and JS.
+  if (!isset($type)) {
+    $types = array('css', 'js');
+  }
+  elseif (isset($type)) {
+    if (!is_array($type)) {
+      $type = array($type);
+    }
+    $types = $type;
+  }
+
+  // Retrieve the active CDN provider data.
+  bootstrap_include('bootstrap', 'includes/cdn.inc');
+  if (!isset($provider)) {
+    $provider = bootstrap_setting('cdn_provider');
+    if (!isset($provider)) {
+      $provider = '';
+    }
+  }
+
+  $data = bootstrap_cdn_provider($provider);
+
+  // Alter the assets based on provider.
+  $function = 'bootstrap_bootstrap_cdn_provider_' . $provider . '_assets_alter';
+  if (function_exists($function)) {
+    $function($data, $theme);
+  }
+  // @todo Use drupal_alter() once CDN is in bootstrap_core companion module.
+  // drupal_alter('bootstrap_cdn_provider_' . $provider . '_assets', $data, $theme);
+
+  // Iterate over each type.
+  foreach ($types as $type) {
+    if (variable_get("preprocess_$type", FALSE) && !empty($data['min'][$type])) {
+      $assets[$type] = $data['min'][$type];
+    }
+    elseif (!empty($data[$type])) {
+      $assets[$type] = $data[$type];
+    }
+  }
+  return count($types) > 1 ? $assets : $assets[$type];
+}
+
 /**
  * Return information from the .info file of a theme (and possible base themes).
  *
@@ -100,6 +169,42 @@ function bootstrap_include($theme, $path) {
   }
   if ($themes[$theme] && ($file = DRUPAL_ROOT . '/' . $themes[$theme] . '/' . $path) && file_exists($file)) {
     include_once $file;
+  }
+}
+
+/**
+ * Retrieves a setting for the current theme or for a given theme.
+ *
+ * This is a wrapper for theme_get_setting(), ensuring to use deprecated
+ * setting values instead.
+ *
+ * @param string $name
+ *   The name of the setting to be retrieved.
+ * @param string $theme
+ *   The name of a given theme; defaults to the currently active theme.
+ * @param string $prefix
+ *   The prefix used on the $name of the setting, this will be appended with
+ *   "_" automatically if set.
+ *
+ * @return
+ *   The value of the requested setting, NULL if the setting does not exist.
+ *
+ * @see theme_get_setting()
+ *
+ * @todo Refactor in 7.x-4.x and get rid of the deprecated settings.
+ */
+function bootstrap_setting($name, $theme = NULL, $prefix = 'bootstrap') {
+  $prefix = !empty($prefix) ? $prefix . '_' : '';
+  $deprecated = array(
+    // New setting name               => old setting name.
+    'bootstrap_cdn_jsdelivr_version'  => 'bootstrap_cdn',
+    'bootstrap_cdn_jsdelivr_theme'    => 'bootstrap_bootswatch',
+  );
+  if (isset($deprecated[$prefix . $name]) && ($setting = theme_get_setting($deprecated[$prefix . $name], $theme))) {
+    return $setting;
+  }
+  else {
+    return theme_get_setting($prefix . $name, $theme);
   }
 }
 
@@ -573,7 +678,7 @@ function _bootstrap_glyphicons_supported() {
       // that is the case here so no file discovery is necessary. If the active
       // theme does not have this setting, it falls back to the base theme that
       // does.
-      $supported[$theme] = (bool) theme_get_setting('bootstrap_cdn', $theme);
+      $supported[$theme] = !!bootstrap_get_cdn_assets('css', NULL, $theme);
 
       // CDN not used, iterate over all of the active (base) themes to determine
       // if they contain glyphicon font files.
@@ -637,7 +742,7 @@ function _bootstrap_colorize_button(&$element) {
     $class_intersection = array_intersect($button_classes, $element['#attributes']['class']);
     if (empty($class_intersection)) {
       // Get the matched class.
-      $class = theme_get_setting('bootstrap_button_colorize') ? _bootstrap_colorize_text($element['#value']) : FALSE;
+      $class = bootstrap_setting('button_colorize') ? _bootstrap_colorize_text($element['#value']) : FALSE;
       // If no particular class matched, use the default style.
       if (!$class) {
         $class = 'default';
@@ -742,7 +847,7 @@ function _bootstrap_colorize_text($string, $default = '') {
  *   The form element, passed by reference.
  */
 function _bootstrap_iconize_button(&$element) {
-  if (theme_get_setting('bootstrap_button_iconize') && _bootstrap_is_button($element) && ($icon = _bootstrap_iconize_text($element['#value']))) {
+  if (bootstrap_setting('button_iconize') && _bootstrap_is_button($element) && ($icon = _bootstrap_iconize_text($element['#value']))) {
     $element['#icon'] = $icon;
   }
 }
@@ -890,7 +995,7 @@ function _bootstrap_tooltip_description($description) {
 
   // Determine if tooltips are enabled.
   if (!isset($tooltip_descriptions)) {
-    $tooltip_descriptions = theme_get_setting('bootstrap_tooltip_enabled') && theme_get_setting('bootstrap_tooltip_descriptions');
+    $tooltip_descriptions = bootstrap_setting('tooltip_enabled') && bootstrap_setting('tooltip_descriptions');
   }
 
   // Go ahead and return FALSE if not enabled.
@@ -900,7 +1005,7 @@ function _bootstrap_tooltip_description($description) {
 
   $id = drupal_hash_base64($description);
   if (!isset($descriptions[$id])) {
-    $descriptions[$id] = ($description === strip_tags($description) && strlen($description) <= theme_get_setting('bootstrap_tooltip_descriptions_length'));
+    $descriptions[$id] = ($description === strip_tags($description) && strlen($description) <= bootstrap_setting('tooltip_descriptions_length'));
   }
   return $descriptions[$id];
 }

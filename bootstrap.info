@@ -118,8 +118,13 @@ settings[bootstrap_tooltip_container] = 'body'
 
 ; Advanced
 ; --------------
-settings[bootstrap_cdn] = 3.2.0
-settings[bootstrap_bootswatch] = ''
+settings[bootstrap_cdn_provider] = 'jsdelivr'
+settings[bootstrap_cdn_custom_css] = '//cdn.jsdelivr.net/bootstrap/3.3.2/css/bootstrap.css'
+settings[bootstrap_cdn_custom_css_min] = '//cdn.jsdelivr.net/bootstrap/3.3.2/css/bootstrap.min.css'
+settings[bootstrap_cdn_custom_js] = '//cdn.jsdelivr.net/bootstrap/3.3.2/js/bootstrap.js'
+settings[bootstrap_cdn_custom_js_min] = '//cdn.jsdelivr.net/bootstrap/3.3.2/js/bootstrap.min.js'
+settings[bootstrap_cdn_jsdelivr_version] = '3.3.2'
+settings[bootstrap_cdn_jsdelivr_theme] = 'bootstrap'
 
 ; Global
 ; --------------

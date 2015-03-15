@@ -18,7 +18,7 @@
  */
 function bootstrap_file_upload_help($variables) {
   // If popover's are disabled, just theme this normally.
-  if (!theme_get_setting('bootstrap_popover_enabled')) {
+  if (!bootstrap_setting('popover_enabled')) {
     return theme_file_upload_help($variables);
   }
 

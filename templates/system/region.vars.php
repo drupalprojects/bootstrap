@@ -31,7 +31,7 @@ function bootstrap_preprocess_region(&$variables) {
   static $wells;
   if (!isset($wells)) {
     foreach (system_region_list($theme) as $name => $title) {
-      $wells[$name] = theme_get_setting('bootstrap_region_well-' . $name);
+      $wells[$name] = bootstrap_setting('region_well-' . $name);
     }
   }
   if (!empty($wells[$region])) {
