@@ -4,14 +4,14 @@
     var self = this;
     var $element = $(element);
     this.settings = Drupal.settings.password;
-    this.$wrapper = $element.parent().parent().addClass('row');
-    this.$helpBlock = $('<div class="help-block"></div>').appendTo(this.$wrapper);
+    this.$wrapper = $element.parent().parent();
+    this.$row = $('<div class="row">').prependTo(this.$wrapper);
 
     // The password object.
     this.password = {
       $input: $element,
       $label: $element.parent().find('label'),
-      $wrapper: $element.parent().addClass('col-sm-4 has-feedback')
+      $wrapper: $element.parent().addClass('col-sm-6 col-md-4 has-feedback').appendTo(self.$row)
     };
     this.password.$icon = $('<span class="glyphicon form-control-feedback"></span>').appendTo(this.password.$wrapper);
 
@@ -26,8 +26,8 @@
     this.confirm = {
       $input: this.$wrapper.find('input.password-confirm')
     };
-    this.confirm.$wrapper = this.confirm.$input.parent().addClass('col-sm-4 has-feedback');
-    this.confirm.$icon = $('<span class="glyphicon form-control-feedback"></span>').appendTo(this.confirm.$wrapper);
+    this.confirm.$wrapper = this.confirm.$input.parent().addClass('col-sm-6 col-md-4 has-feedback').appendTo(self.$row);
+    this.confirm.$icon = $('<span class="glyphicon form-control-feedback"></span>');
 
     // Bind events.
     this.password.$input.on('keyup focus blur', function () {
@@ -36,6 +36,9 @@
     this.confirm.$input.on('keyup blur', function () {
       self.validateMatch();
     });
+
+    // Add password help at the of row.
+    this.$helpBlock = $('<div class="help-block password-help"></div>').appendTo(this.$row);
 
     return this;
   };
