@@ -395,20 +395,23 @@ ul li.leaf {
 // Password strength/match.
 .form-type-password-confirm {
   position: relative;
-  .form-type-password {
-    clear: left;
-  }
   label {
     display: block;
     .label {
       float: right;
     }
   }
-  .help-block {
-    border-left: 1px solid @table-border-color;
-    display: inline-block;
-    margin-left: 2em;
+  .password-help {
     padding-left: 2em;
+    @media (min-width: @screen-sm-min) {
+      border-left: 1px solid @table-border-color;
+      left: percentage(6/12);
+      margin-left: (@grid-gutter-width / 2);
+      position: absolute;
+    }
+    @media (min-width: @screen-md-min) {
+      left: percentage(4/12);
+    }
   }
   .progress {
     background: transparent;
@@ -419,8 +422,14 @@ ul li.leaf {
     height: 4px;
     margin: -5px 0px 0;
   }
+  .form-type-password {
+    clear: left;
+  }
   .form-control-feedback {
     right: 15px;
+  }
+  .help-block {
+    clear: both;
   }
 }
 
