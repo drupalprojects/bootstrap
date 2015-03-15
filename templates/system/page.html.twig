@@ -74,22 +74,24 @@
         <a class="name navbar-brand" href="{{ font_page }}" title="{{ 'Home'|t }}">{{ site_name }}</a>
       {% endif %}
 
-      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
+      {% if page.primary_menu is not empty or page.secondary_menu is not empty or page.navigation is not empty %}
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      {% endif %}
     </div>
 
-
+    {% if page.primary_menu is not empty or page.secondary_menu is not empty or page.navigation is not empty %}
       <div class="navbar-collapse collapse">
         <nav role="navigation">
           {{ primary_nav }}
           {{ secondary_nav }}
         </nav>
       </div>
+    {% endif %}
   </div>
 </header>
 
