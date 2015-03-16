@@ -191,7 +191,7 @@ function bootstrap_include($theme, $path) {
  *   The prefix used on the $name of the setting, this will be appended with
  *   "_" automatically if set.
  *
- * @return
+ * @return mixed
  *   The value of the requested setting, NULL if the setting does not exist.
  *
  * @see theme_get_setting()
@@ -200,17 +200,30 @@ function bootstrap_include($theme, $path) {
  */
 function bootstrap_setting($name, $theme = NULL, $prefix = 'bootstrap') {
   $prefix = !empty($prefix) ? $prefix . '_' : '';
-  $deprecated = array(
-    // New setting name               => old setting name.
-    'bootstrap_cdn_jsdelivr_version'  => 'bootstrap_cdn',
-    'bootstrap_cdn_jsdelivr_theme'    => 'bootstrap_bootswatch',
-  );
-  if (isset($deprecated[$prefix . $name]) && ($setting = theme_get_setting($deprecated[$prefix . $name], $theme))) {
-    return $setting;
+  $setting = theme_get_setting($prefix . $name, $theme);
+  switch ($prefix . $name) {
+    case 'bootstrap_cdn_provider':
+      $deprecated = theme_get_setting('bootstrap_cdn', $theme);
+      if (isset($deprecated)) {
+        $setting = empty($deprecated) ? '' : 'jsdelivr';
+      }
+      break;
+
+    case 'bootstrap_cdn_jsdelivr_version':
+      $deprecated = theme_get_setting('bootstrap_cdn', $theme);
+      if (isset($deprecated)) {
+        $setting = empty($deprecated) ? BOOTSTRAP_VERSION : $deprecated;
+      }
+      break;
+
+    case 'bootstrap_cdn_jsdelivr_theme':
+      $deprecated = theme_get_setting('bootstrap_bootswatch', $theme);
+      if (isset($deprecated)) {
+        $setting = empty($deprecated) ? 'bootstrap' : $deprecated;
+      }
+      break;
   }
-  else {
-    return theme_get_setting($prefix . $name, $theme);
-  }
+  return $setting;
 }
 
 /**
