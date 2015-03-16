@@ -19,6 +19,7 @@ function bootstrap_pre_render($element) {
     // Core.
     'password',
     'password_confirm',
+    'machine_name',
     'select',
     'textarea',
     'textfield',
