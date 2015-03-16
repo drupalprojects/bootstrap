@@ -10,7 +10,7 @@
 function bootstrap_menu_local_task($variables) {
   $link = $variables['element']['#link'];
   $link_text = $link['title'];
-  $classes = array();
+  $attributes = array();
 
   if (!empty($variables['element']['#active'])) {
     // Add text to indicate active tab for non-visual users.
@@ -24,8 +24,8 @@ function bootstrap_menu_local_task($variables) {
     $link['localized_options']['html'] = TRUE;
     $link_text = t('!local-task-title!active', array('!local-task-title' => $link['title'], '!active' => $active));
 
-    $classes[] = 'active';
+    $attributes['class'][] = 'active';
   }
 
-  return '<li class="' . implode(' ', $classes) . '">' . l($link_text, $link['href'], $link['localized_options']) . "</li>\n";
+  return '<li' . drupal_attributes($attributes) . '>' . l($link_text, $link['href'], $link['localized_options']) . "</li>\n";
 }
