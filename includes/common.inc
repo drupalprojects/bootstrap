@@ -30,6 +30,7 @@ define('BOOTSTRAP_VERSION', BOOTSTRAP_VERSION_MAJOR . '.' . BOOTSTRAP_VERSION_MI
  *   is returned keyed by the type.
  */
 function bootstrap_get_cdn_assets($type = NULL, $provider = NULL, $theme = NULL) {
+  $original_type = $type;
   $assets = array();
   $types = array();
 
@@ -44,35 +45,39 @@ function bootstrap_get_cdn_assets($type = NULL, $provider = NULL, $theme = NULL)
     $types = $type;
   }
 
-  // Retrieve the active CDN provider data.
-  bootstrap_include('bootstrap', 'includes/cdn.inc');
-  if (!isset($provider)) {
-    $provider = bootstrap_setting('cdn_provider');
-    if (!isset($provider)) {
-      $provider = '';
-    }
-  }
-
-  $data = bootstrap_cdn_provider($provider);
-
-  // Alter the assets based on provider.
-  $function = 'bootstrap_bootstrap_cdn_provider_' . $provider . '_assets_alter';
-  if (function_exists($function)) {
-    $function($data, $theme);
-  }
-  // @todo Use drupal_alter() once CDN is in bootstrap_core companion module.
-  // drupal_alter('bootstrap_cdn_provider_' . $provider . '_assets', $data, $theme);
-
-  // Iterate over each type.
+  // Ensure default arrays exist for the requested types.
   foreach ($types as $type) {
-    if (variable_get("preprocess_$type", FALSE) && !empty($data['min'][$type])) {
-      $assets[$type] = $data['min'][$type];
+    $assets[$type] = array();
+  }
+
+  // Retrieve the CDN provider from the theme.
+  if (!isset($provider)) {
+    $provider = bootstrap_setting('cdn_provider', $theme);
+  }
+
+  // Load the CDN provider data.
+  bootstrap_include('bootstrap', 'includes/cdn.inc');
+  if (!empty($provider) && ($data = bootstrap_cdn_provider($provider))) {
+    // Alter the assets based on provider.
+    $function = 'bootstrap_bootstrap_cdn_provider_' . $provider . '_assets_alter';
+    if (function_exists($function)) {
+      $function($data, $theme);
     }
-    elseif (!empty($data[$type])) {
-      $assets[$type] = $data[$type];
+    // @todo Use drupal_alter() once CDN is in bootstrap_core companion module.
+    // drupal_alter('bootstrap_cdn_provider_' . $provider . '_assets', $data, $theme);
+
+    // Iterate over each type.
+    foreach ($types as $type) {
+      if (variable_get("preprocess_$type", FALSE) && !empty($data['min'][$type])) {
+        $assets[$type] = $data['min'][$type];
+      }
+      elseif (!empty($data[$type])) {
+        $assets[$type] = $data[$type];
+      }
     }
   }
-  return count($types) > 1 ? $assets : $assets[$type];
+
+  return is_string($original_type) ? $assets[$original_type] : $assets;
 }
 
 /**
