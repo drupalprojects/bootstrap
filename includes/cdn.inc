@@ -340,8 +340,8 @@ function bootstrap_cdn_provider_settings_form(&$form, &$form_state, $theme) {
 
   $providers = bootstrap_cdn_provider();
   $options = array();
-  foreach ($providers as $key => $provider) {
-    $options[$key] = $provider['title'];
+  foreach ($providers as $key => $data) {
+    $options[$key] = $data['title'];
   }
   $form['advanced']['cdn']['bootstrap_cdn_provider'] = array(
     '#type' => 'select',
