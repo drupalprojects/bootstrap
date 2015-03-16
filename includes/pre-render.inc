@@ -45,17 +45,22 @@ function bootstrap_pre_render($element) {
     'webform_number',
   );
 
-  if (!empty($element['#type']) && (in_array($element['#type'], $types) || ($element['#type'] === 'file' && empty($element['#managed_file'])))) {
-    $element['#attributes']['class'][] = 'form-control';
-  }
-
-  if (!empty($element['#type']) && ($element['#type'] !== 'checkbox' || $element['#type'] !== 'radio' || $element['#type'] !== 'checkboxes' || $element['#type'] !== 'radios')) {
-    if (!empty($element['#description']) && empty($element['#attributes']['title']) && _bootstrap_tooltip_description($element['#description'])) {
-      $element['#attributes']['title'] = $element['#description'];
+  // Add necessary classes for specific types.
+  if (!empty($element['#type'])) {
+    if (in_array($element['#type'], $types) || ($element['#type'] === 'file' && empty($element['#managed_file']))) {
+      $element['#attributes']['class'][] = 'form-control';
     }
+    if ($element['#type'] === 'machine_name') {
+      $element['#wrapper_attributes']['class'][] = 'form-inline';
+    }
+    if ($element['#type'] !== 'checkbox' || $element['#type'] !== 'radio' || $element['#type'] !== 'checkboxes' || $element['#type'] !== 'radios') {
+      if (!empty($element['#description']) && empty($element['#attributes']['title']) && _bootstrap_tooltip_description($element['#description'])) {
+        $element['#attributes']['title'] = $element['#description'];
+      }
 
-    if (!empty($element['#attributes']['title'])) {
-      $element['#attributes']['data-toggle'] = 'tooltip';
+      if (!empty($element['#attributes']['title'])) {
+        $element['#attributes']['data-toggle'] = 'tooltip';
+      }
     }
   }
 
