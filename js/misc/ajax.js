@@ -46,11 +46,11 @@ Drupal.ajax.prototype.beforeSend = function (xmlhttprequest, options) {
       progressBar.setProgress(-1, this.progress.message);
     }
     if (this.progress.url) {
-      progressBar.startMonitoring(this.progress.url, this.progress.interval || 1500);
+      progressBar.startMonitoring(this.progress.url, this.progress.interval || 500);
     }
     this.progress.element = $(progressBar.element).addClass('ajax-progress ajax-progress-bar');
     this.progress.object = progressBar;
-    $(this.element).after(this.progress.element);
+    $(this.element).closest('.file-widget,.form-item').after(this.progress.element);
   }
   else if (this.progress.type == 'throbber') {
     this.progress.element = $('<div class="ajax-progress ajax-progress-throbber"><i class="glyphicon glyphicon-refresh glyphicon-spin"></i></div>');
