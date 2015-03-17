@@ -316,10 +316,6 @@ function bootstrap_theme_suggestions_alter(array &$suggestions, array $variables
   if ($hook == 'details') {
     $suggestions[] = 'bootstrap_panel';
   }
-
-  if ($variables['elements']['#region'] == 'navigation') {
-    $suggestions[] = 'region__no_wrapper';
-  }
 }
 
 /**

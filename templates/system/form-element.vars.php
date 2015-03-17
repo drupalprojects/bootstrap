@@ -119,6 +119,11 @@ function bootstrap_preprocess_form_element(&$variables) {
   }
 
   // Input Groups.
-  $variables['input_group'] = $element['#input_group'];
-  $variables['input_group_button'] = $element['#input_group_button'];
+  if (isset($element['#input_group'])) {
+    $variables['input_group'] = $element['#input_group'];
+  }
+
+  if (isset($element['#input_group_button'])) {
+    $variables['input_group_button'] = $element['#input_group_button'];
+  }
 }

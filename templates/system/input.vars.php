@@ -94,7 +94,9 @@ function bootstrap_preprocess_input(&$variables) {
 
   // Additional Twig variables.
   $variables['icon'] = $element['#icon'];
-  $variables['attributes']['title'] = $variables['attributes']['value'];
+  if (isset($variables['attributes']['value'])) {
+    $variables['attributes']['title'] = $variables['attributes']['value'];
+  }
   $variables['element'] = $element;
 }
 
