@@ -462,6 +462,27 @@ ul li.leaf {
   }
 }
 
+// AJAX "Progress bar".
+.ajax-progress-bar {
+  border-radius: 0 0 @border-radius-base @border-radius-base;
+  border: 1px solid @input-group-addon-border-color;
+  margin: -1px 0 0;
+  padding: @padding-base-vertical @padding-base-horizontal;
+  width: 100%;
+  .progress {
+    height: 8px;
+    margin: 0;
+  }
+  .percentage,
+  .message {
+    color: @text-muted;
+    font-size: @font-size-small;
+    line-height: 1em;
+    margin: 5px 0 0;
+    padding: 0;
+  }
+}
+
 .glyphicon-spin {
   display: inline-block;
   -moz-animation: spin 1s infinite linear;
