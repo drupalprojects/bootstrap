@@ -12,6 +12,74 @@ define('BOOTSTRAP_VERSION_PATCH', 2);
 define('BOOTSTRAP_VERSION', BOOTSTRAP_VERSION_MAJOR . '.' . BOOTSTRAP_VERSION_MINOR . '.' . BOOTSTRAP_VERSION_PATCH);
 
 /**
+ * Helper function for smartly converting an element description into a tooltip.
+ *
+ * @param array $element
+ *   An element render array, passed by reference.
+ * @param array $target
+ *   The target element render array the tooltip is to be attached to, passed
+ *   by reference. If not set, it will default to the $element passed.
+ * @param bool $input_only
+ *   Toggle determining whether or not to only convert input elements.
+ * @param int $length
+ *   The length of characters to determine if description is "simple".
+ */
+function bootstrap_element_smart_description(&$element, &$target = NULL, $input_only = TRUE, $length = NULL) {
+  // Determine if tooltips are enabled.
+  static $enabled;
+  if (!isset($enabled)) {
+    $enabled = bootstrap_setting('tooltip_enabled') && bootstrap_setting('forms_smart_descriptions');
+  }
+
+  // Immediately return if "simple" tooltip descriptions are not enabled.
+  if (!$enabled) {
+    return FALSE;
+  }
+
+  // Allow a different element to attach the tooltip.
+  if (!isset($target)) {
+    $target = &$element;
+  }
+
+  // Retrieve the length limit for smart descriptions.
+  if (!isset($length)) {
+    $length = (int) bootstrap_setting('forms_smart_descriptions_limit');
+    // Disable length checking by setting it to FALSE if empty.
+    if (empty($length)) {
+      $length = FALSE;
+    }
+  }
+
+  // Retrieve the allowed tags for smart descriptions. This is primarily used
+  // for display purposes only (i.e. non-UI/UX related elements that wouldn't
+  // require a user to "click", like a link).
+  $allowed_tags = array_filter(array_unique(array_map('trim', explode(',', bootstrap_setting('forms_smart_descriptions_allowed_tags') . ''))));
+
+  // Disable length checking by setting it to FALSE if empty.
+  if (empty($allowed_tags)) {
+    $allowed_tags = FALSE;
+  }
+
+  $html = FALSE;
+  $type = !empty($element['#type']) ? $element['#type'] : FALSE;
+  if (!$input_only || !empty($target['#input']) || !empty($element['#smart_description']) || !empty($target['#smart_description'])) {
+    if (!empty($element['#description']) && empty($target['#attributes']['title']) && empty($target['#attributes']['data-toggle'])) {
+      if (_bootstrap_is_simple_string($element['#description'], $length, $allowed_tags, $html)) {
+        // Checkboxes and radios must add the tooltip to the wrapper container.
+        $wrapper = $type === 'checkbox' || $type === 'radio' || $type === 'checkboxes' || $type === 'radios';
+        $attributes = &_bootstrap_get_attributes($target, $wrapper);
+        $attributes['title'] = $allowed_tags !== FALSE ? filter_xss($element['#description'], $allowed_tags) : $element['#description'];
+        $attributes['data-toggle'] = 'tooltip';
+        if ($html || $allowed_tags === FALSE) {
+          $attributes['data-html'] = 'true';
+        }
+        unset($element['#description']);
+      }
+    }
+  }
+}
+
+/**
  * Retrieves CDN assets for the active provider, if any.
  *
  * @param string|array $type
@@ -222,6 +290,21 @@ function bootstrap_setting($name, $theme = NULL, $prefix = 'bootstrap') {
         $setting = empty($deprecated) ? 'bootstrap' : $deprecated;
       }
       break;
+
+    case 'bootstrap_forms_smart_descriptions':
+      $deprecated = theme_get_setting('bootstrap_tooltip_descriptions', $theme);
+      if (isset($deprecated)) {
+        $setting = (int) !empty($deprecated);
+      }
+      break;
+
+    case 'bootstrap_forms_smart_descriptions_limit':
+      $deprecated = theme_get_setting('bootstrap_tooltip_descriptions_length', $theme);
+      if (isset($deprecated)) {
+        $setting = (int) !empty($deprecated);
+      }
+      break;
+
   }
   return $setting;
 }
@@ -234,11 +317,17 @@ function bootstrap_setting($name, $theme = NULL, $prefix = 'bootstrap') {
  *   $variables parameter in [pre]process functions and it will logically
  *   determine the correct path to that particular theme hook's attribute array.
  *   Passed by reference.
+ * @param bool $wrapper
+ *   Toggle determining whether or not the wrapper container attributes should
+ *   be returned instead.
  *
  * @return array
  *   The attributes array. Passed by reference.
  */
-function &_bootstrap_get_attributes(&$element) {
+function &_bootstrap_get_attributes(&$element, $wrapper = FALSE) {
+  // Determine which property to retrieve.
+  $property = $wrapper ? 'wrapper_attributes' : 'attributes';
+
   // Attempt to retrieve a renderable element attributes first.
   if (
     isset($element['#type']) ||
@@ -246,29 +335,29 @@ function &_bootstrap_get_attributes(&$element) {
     isset($element['#pre_render']) ||
     isset($element['#markup']) ||
     isset($element['#theme_wrappers']) ||
-    isset($element['#attributes'])
+    isset($element["#$property"])
   ) {
-    if (!isset($element['#attributes'])) {
-      $element['#attributes'] = array();
+    if (!isset($element["#$property"])) {
+      $element["#$property"] = array();
     }
-    return $element['#attributes'];
+    return $element["#$property"];
   }
   // Treat $element as if it were a [pre]process function $variables parameter
   // and look for a renderable "element".
   elseif (isset($element['element'])) {
-    if (!isset($element['element']['#attributes'])) {
-      $element['element']['#attributes'] = array();
+    if (!isset($element['element']["#$property"])) {
+      $element['element']["#$property"] = array();
     }
-    return $element['element']['#attributes'];
+    return $element['element']["#$property"];
   }
 
   // If all else fails, create (if needed) a default "attributes" array. This
   // will, at the very least, either work or cause an error that can be tracked.
-  if (!isset($element['attributes'])) {
-    $element['attributes'] = array();
+  if (!isset($element[$property])) {
+    $element[$property] = array();
   }
 
-  return $element['attributes'];
+  return $element[$property];
 }
 
 /**
@@ -279,12 +368,15 @@ function &_bootstrap_get_attributes(&$element) {
  *   $variables parameter in [pre]process functions and it will logically
  *   determine the correct path to that particular theme hook's classes array.
  *   Passed by reference.
+ * @param bool $wrapper
+ *   Toggle determining whether or not the wrapper container attributes should
+ *   be returned instead.
  *
  * @return array
  *   The classes array. Passed by reference.
  */
-function &_bootstrap_get_classes(&$element) {
-  $attributes = &_bootstrap_get_attributes($element);
+function &_bootstrap_get_classes(&$element, $wrapper = FALSE) {
+  $attributes = &_bootstrap_get_attributes($element, $wrapper);
 
   if (!isset($attributes['class'])) {
     $attributes['class'] = array();
@@ -311,10 +403,13 @@ function &_bootstrap_get_classes(&$element) {
  *   $variables parameter in [pre]process functions and it will logically
  *   determine the correct path to that particular theme hook's classes array.
  *   Passed by reference.
+ * @param bool $wrapper
+ *   Toggle determining whether or not the wrapper container attributes should
+ *   be returned instead.
  */
-function _bootstrap_add_class($class, &$element) {
+function _bootstrap_add_class($class, &$element, $wrapper = FALSE) {
   // Retrieve the element's classes.
-  $classes = &_bootstrap_get_classes($element);
+  $classes = &_bootstrap_get_classes($element, $wrapper);
 
   // Convert the class to an array.
   if (!is_array($class)) {
@@ -340,10 +435,13 @@ function _bootstrap_add_class($class, &$element) {
  *   $variables parameter in [pre]process functions and it will logically
  *   determine the correct path to that particular theme hook's classes array.
  *   Passed by reference.
+ * @param bool $wrapper
+ *   Toggle determining whether or not the wrapper container attributes should
+ *   be returned instead.
  */
-function _bootstrap_remove_class($class, &$element) {
+function _bootstrap_remove_class($class, &$element, $wrapper = FALSE) {
   // Retrieve the element's classes.
-  $classes = &_bootstrap_get_classes($element);
+  $classes = &_bootstrap_get_classes($element, $wrapper);
 
   // Convert the class to an array.
   if (!is_array($class)) {
@@ -1083,37 +1181,42 @@ function _bootstrap_process_theme_suggestion(&$variables) {
 }
 
 /**
- * Helper function for determining if a tooltip can be used for a description.
+ * Helper function to determine if a string of text is considered "simple".
  *
- * @param string $description
- *   The string of text to process.
+ * @param string $string
+ *   The string of text to check "simple" criteria on.
+ * @param int|FALSE $length
+ *   The length of characters used to determine whether or not $string is
+ *   considered "simple". Set explicitly to FALSE to disable this criteria.
+ * @param array|FALSE $allowed_tags
+ *   An array of allowed tag elements. Set explicitly to FALSE to disable this
+ *   criteria.
+ * @param bool $html
+ *   A variable, passed by reference, that indicates whether or not the
+ *   string contains HTML.
  *
  * @return bool
- *   Returns TRUE if the $description can be used as a tooltip, FALSE otherwise.
+ *   Returns TRUE if the $string is considered "simple", FALSE otherwise.
  */
-function _bootstrap_tooltip_description($description) {
+function _bootstrap_is_simple_string($string, $length = 250, $allowed_tags = NULL, &$html = FALSE) {
   // Use the advanced drupal_static() pattern, since this is called very often.
   static $drupal_static_fast;
   if (!isset($drupal_static_fast)) {
-    $drupal_static_fast['descriptions'] = &drupal_static(__FUNCTION__);
+    $drupal_static_fast['strings'] = &drupal_static(__FUNCTION__);
   }
-  // Get static data.
-  $descriptions = &$drupal_static_fast['descriptions'];
-  $tooltip_descriptions = &$drupal_static_fast['tooltip_descriptions'];
-
-  // Determine if tooltips are enabled.
-  if (!isset($tooltip_descriptions)) {
-    $tooltip_descriptions = bootstrap_setting('tooltip_enabled') && bootstrap_setting('tooltip_descriptions');
+  $strings = &$drupal_static_fast['strings'];
+  if (!isset($strings[$string])) {
+    $plain_string = strip_tags($string);
+    $simple = TRUE;
+    if ($allowed_tags !== FALSE) {
+      $filtered_string = filter_xss($string, $allowed_tags);
+      $html = $filtered_string !== $plain_string;
+      $simple = $simple && $string === $filtered_string;
+    }
+    if ($length !== FALSE) {
+      $simple = $simple && strlen($plain_string) <= intval($length);
+    }
+    $strings[$string] = $simple;
   }
-
-  // Go ahead and return FALSE if not enabled.
-  if (!$tooltip_descriptions) {
-    return FALSE;
-  }
-
-  $id = drupal_hash_base64($description);
-  if (!isset($descriptions[$id])) {
-    $descriptions[$id] = ($description === strip_tags($description) && strlen($description) <= bootstrap_setting('tooltip_descriptions_length'));
-  }
-  return $descriptions[$id];
+  return $strings[$string];
 }

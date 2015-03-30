@@ -46,24 +46,19 @@ function bootstrap_pre_render($element) {
   );
 
   // Add necessary classes for specific types.
-  if (!empty($element['#type'])) {
-    if (in_array($element['#type'], $types) || ($element['#type'] === 'file' && empty($element['#managed_file']))) {
+  if ($type = !empty($element['#type']) ? $element['#type'] : FALSE) {
+    if (in_array($type, $types) || ($type === 'file' && empty($element['#managed_file']))) {
       $element['#attributes']['class'][] = 'form-control';
     }
-    if ($element['#type'] === 'machine_name') {
+    if ($type === 'machine_name') {
       $element['#wrapper_attributes']['class'][] = 'form-inline';
-    }
-    if ($element['#type'] !== 'checkbox' || $element['#type'] !== 'radio' || $element['#type'] !== 'checkboxes' || $element['#type'] !== 'radios') {
-      if (!empty($element['#description']) && empty($element['#attributes']['title']) && _bootstrap_tooltip_description($element['#description'])) {
-        $element['#attributes']['title'] = $element['#description'];
-      }
-
-      if (!empty($element['#attributes']['title'])) {
-        $element['#attributes']['data-toggle'] = 'tooltip';
-      }
     }
   }
 
+  // Add smart descriptions to the element, if necessary.
+  bootstrap_element_smart_description($element);
+
+  // Return the modified element.
   return $element;
 }
 
@@ -119,30 +114,4 @@ function bootstrap_pre_render_fieldset($element) {
   }
 
   return $element;
-}
-
-/**
- * Pre-render input elements.
- *
- * @deprecated Use proper hooks instead. Will be removed in 7.x-3.2.
- *
- * @see hook_pre_render()
- *
- * @todo Remove in 7.x-3.2.
- */
-function _bootstrap_pre_render_input($element) {
-  return bootstrap_pre_render($element);
-}
-
-/**
- * Pre-render fieldset element.
- *
- * @deprecated Use proper hooks instead. Will be removed in 7.x-3.2.
- *
- * @see hook_pre_render_HOOK()
- *
- * @todo Remove in 7.x-3.2.
- */
-function _bootstrap_pre_render_fieldset($element) {
-  return bootstrap_pre_render_fieldset($element);
 }

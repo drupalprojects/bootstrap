@@ -84,6 +84,9 @@ settings[bootstrap_anchors_smooth_scrolling] = 1
 ; --------------
 settings[bootstrap_forms_required_has_error] = 0
 settings[bootstrap_forms_has_error_value_toggle] = 1
+settings[bootstrap_forms_smart_descriptions] = 1
+settings[bootstrap_forms_smart_descriptions_limit] = 250
+settings[bootstrap_forms_smart_descriptions_allowed_tags] = 'b, code, em, i, kbd, span, strong'
 
 ; Popovers
 ; --------------
@@ -104,8 +107,6 @@ settings[bootstrap_popover_container] = 'body'
 ; Tooltips
 ; --------------
 settings[bootstrap_tooltip_enabled] = 1
-settings[bootstrap_tooltip_descriptions] = 1
-settings[bootstrap_tooltip_descriptions_length] = 200
 settings[bootstrap_tooltip_animation] = 1
 settings[bootstrap_tooltip_html] = 0
 settings[bootstrap_tooltip_placement] = 'auto left'

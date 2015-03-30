@@ -118,6 +118,34 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
     '#default_value' => bootstrap_setting('forms_required_has_error', $theme),
     '#description' => t('If an element in a form is required, enabling this will always display the element with a <code>.has-error</code> class. This turns the element red and helps in usability for determining which form elements are required to submit the form.  This feature compliments the "JavaScript > Forms > Automatically remove error classes when values have been entered" feature.'),
   );
+  $form['general']['forms']['bootstrap_forms_smart_descriptions'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Smart form descriptions (via Tooltips)'),
+    '#description' => t('Convert descriptions into tooltips (must be enabled) automatically based on certain criteria. This helps reduce the, sometimes unnecessary, amount of noise on a page full of form elements.'),
+    '#default_value' => bootstrap_setting('forms_smart_descriptions', $theme),
+  );
+  $form['general']['forms']['bootstrap_forms_smart_descriptions_limit'] = array(
+    '#type' => 'textfield',
+    '#title' => t('"Smart form descriptions" maximum character limit'),
+    '#description' => t('Prevents descriptions from becoming tooltips by checking the character length of the description (HTML is not counted towards this limit). To disable this filtering criteria, leave an empty value.'),
+    '#default_value' => bootstrap_setting('forms_smart_descriptions_limit', $theme),
+    '#states' => array(
+      'visible' => array(
+        ':input[name="bootstrap_forms_smart_descriptions"]' => array('checked' => TRUE),
+      ),
+    ),
+  );
+  $form['general']['forms']['bootstrap_forms_smart_descriptions_allowed_tags'] = array(
+    '#type' => 'textfield',
+    '#title' => t('"Smart form descriptions" allowed (HTML) tags'),
+    '#description' => t('Prevents descriptions from becoming tooltips by checking for HTML not in the list above (i.e. links). Separate by commas. To disable this filtering criteria, leave an empty value.'),
+    '#default_value' => bootstrap_setting('forms_smart_descriptions_allowed_tags', $theme),
+    '#states' => array(
+      'visible' => array(
+        ':input[name="bootstrap_forms_smart_descriptions"]' => array('checked' => TRUE),
+      ),
+    ),
+  );
 
   // Images.
   $form['general']['images'] = array(
@@ -333,17 +361,6 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
     '#default_value' => bootstrap_setting('forms_has_error_value_toggle', $theme),
     '#description' => t('If an element has a <code>.has-error</code> class attached to it, enabling this will automatically remove that class when a value is entered. This feature compliments the "General > Forms > Make required elements display as an error" feature.'),
   );
-  $form['javascript']['forms']['bootstrap_tooltip_descriptions'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Use Tooltips for simple form descriptions'),
-    '#description' => t('Form items that contain simple descriptions (no HTML, no title attribute and are less than the specified length below) will be converted into tooltips. This helps reduce the sometimes unnecessary noise of form item descriptions. Descriptions that contain longer text or HTML as actionable descriptions (user needs to click) will not be converted. This ensures it is always visible so its usability remains intact.'),
-    '#default_value' => bootstrap_setting('tooltip_descriptions', $theme),
-    '#states' => array(
-      'visible' => array(
-        ':input[name="bootstrap_tooltip_enabled"]' => array('checked' => TRUE),
-      ),
-    ),
-  );
 
   // Popovers.
   $form['javascript']['popovers'] = array(
@@ -476,18 +493,6 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
       '!warning' => '<strong class="error text-error">WARNING: This feature can sometimes impact performance. Disable if pages appear to "hang" after initial load.</strong>',
     )),
     '#default_value' => bootstrap_setting('tooltip_enabled', $theme),
-  );
-  $form['javascript']['tooltips']['bootstrap_tooltip_descriptions_length'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Simple form description length'),
-    '#description' => t('The character length limit used to determine when a description makes a sense to be used as a tooltip.'),
-    '#default_value' => bootstrap_setting('tooltip_descriptions_length', $theme),
-    '#states' => array(
-      'visible' => array(
-        ':input[name="bootstrap_tooltip_enabled"]' => array('checked' => TRUE),
-        ':input[name="bootstrap_tooltip_descriptions"]' => array('checked' => TRUE),
-      ),
-    ),
   );
   $form['javascript']['tooltips']['options'] = array(
     '#type' => 'fieldset',

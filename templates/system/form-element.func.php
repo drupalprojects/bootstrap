@@ -60,13 +60,6 @@ function bootstrap_form_element(&$variables) {
     $wrapper_attributes['class'][] = 'form-group';
   }
 
-  // Add dynamic tooltips for elements that meet the criteria.
-  $tooltip_description = !empty($element['#description']) && _bootstrap_tooltip_description($element['#description']);
-  if ($tooltip_description && ($element['#type'] === 'checkbox' || $element['#type'] === 'radio' || $element['#type'] === 'checkboxes' || $element['#type'] === 'radios')) {
-    $wrapper_attributes['title'] = $element['#description'];
-    $wrapper_attributes['data-toggle'] = 'tooltip';
-  }
-
   // Create a render array for the form element.
   $build = array(
     '#theme_wrappers' => array('container__form_element'),
@@ -109,15 +102,15 @@ function bootstrap_form_element(&$variables) {
     );
   }
 
-  // Add the element's description markup (for non-tooltip based descriptions).
-  if (!empty($element['#description']) && !$tooltip_description && empty($element['#attributes']['title'])) {
+  // Construct the element's description markup.
+  if (!empty($element['#description'])) {
     $build['description'] = array(
       '#type' => 'container',
       '#attributes' => array(
         'class' => array('help-block'),
       ),
       '#weight' => 20,
-      0 => array('#markup' => $element['#description']),
+      0 => array('#markup' => filter_xss_admin($element['#description'])),
     );
   }
 

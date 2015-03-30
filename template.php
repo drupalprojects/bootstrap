@@ -30,6 +30,11 @@
 include_once dirname(__FILE__) . '/includes/common.inc';
 
 /**
+ * Include any deprecated functions.
+ */
+bootstrap_include('bootstrap', 'includes/deprecated.inc');
+
+/**
  * Implements hook_theme().
  *
  * Register theme hook implementations.
