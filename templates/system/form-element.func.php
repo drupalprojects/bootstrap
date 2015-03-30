@@ -9,8 +9,16 @@
  */
 function bootstrap_form_element(&$variables) {
   $element = &$variables['element'];
-  $is_checkbox = FALSE;
-  $is_radio = FALSE;
+  $name = !empty($element['#name']) ? $element['#name'] : FALSE;
+  $type = !empty($element['#type']) ? $element['#type'] : FALSE;
+  $checkbox = $type && $type === 'checkbox';
+  $radio = $type && $type === 'radio';
+
+  // Create an attributes array for the wrapping container.
+  if (empty($element['#wrapper_attributes'])) {
+    $element['#wrapper_attributes'] = array();
+  }
+  $wrapper_attributes = &$element['#wrapper_attributes'];
 
   // This function is invoked as theme wrapper, but the rendered form element
   // may not necessarily have been processed by form_builder().
@@ -18,13 +26,8 @@ function bootstrap_form_element(&$variables) {
     '#title_display' => 'before',
   );
 
-  if (empty($element['#wrapper_attributes'])) {
-    $element['#wrapper_attributes'] = array();
-  }
-  $wrapper_attributes = &$element['#wrapper_attributes'];
-
-  // Add element #id for #type 'item'.
-  if (isset($element['#markup']) && !empty($element['#id'])) {
+  // Add wrapper ID for 'item' type.
+  if ($type && $type === 'item' && !empty($element['#markup']) && !empty($element['#id'])) {
     $wrapper_attributes['id'] = $element['#id'];
   }
 
@@ -33,106 +36,90 @@ function bootstrap_form_element(&$variables) {
     $wrapper_attributes['class'][] = 'has-error';
   }
 
-  if (!empty($element['#type'])) {
-    $wrapper_attributes['class'][] = 'form-type-' . strtr($element['#type'], '_', '-');
+  // Add necessary classes to wrapper container.
+  $wrapper_attributes['class'][] = 'form-item';
+  if ($name) {
+    $wrapper_attributes['class'][] = 'form-item-' . drupal_html_class($name);
   }
-  if (!empty($element['#name'])) {
-    $wrapper_attributes['class'][] = 'form-item-' . strtr($element['#name'], array(
-        ' ' => '-',
-        '_' => '-',
-        '[' => '-',
-        ']' => '',
-      ));
+  if ($type) {
+    $wrapper_attributes['class'][] = 'form-type-' . drupal_html_class($type);
   }
-  // Add a class for disabled elements to facilitate cross-browser styling.
   if (!empty($element['#attributes']['disabled'])) {
     $wrapper_attributes['class'][] = 'form-disabled';
   }
   if (!empty($element['#autocomplete_path']) && drupal_valid_path($element['#autocomplete_path'])) {
     $wrapper_attributes['class'][] = 'form-autocomplete';
   }
-  $wrapper_attributes['class'][] = 'form-item';
 
-  // See http://getbootstrap.com/css/#forms-controls.
-  if (isset($element['#type'])) {
-    if ($element['#type'] === 'radio') {
-      $wrapper_attributes['class'][] = 'radio';
-      $is_radio = TRUE;
-    }
-    elseif ($element['#type'] === 'checkbox') {
-      $wrapper_attributes['class'][] = 'checkbox';
-      $is_checkbox = TRUE;
-    }
-    elseif ($element['#type'] !== 'hidden') {
-      $wrapper_attributes['class'][] = 'form-group';
-    }
+  // Checkboxes and radios do no receive the 'form-group' class, instead they
+  // simply have their own classes.
+  if ($checkbox || $radio) {
+    $wrapper_attributes['class'][] = drupal_html_class($type);
+  }
+  elseif ($type && $type !== 'hidden') {
+    $wrapper_attributes['class'][] = 'form-group';
   }
 
+  // Add dynamic tooltips for elements that meet the criteria.
   $tooltip_description = !empty($element['#description']) && _bootstrap_tooltip_description($element['#description']);
   if ($tooltip_description && ($element['#type'] === 'checkbox' || $element['#type'] === 'radio' || $element['#type'] === 'checkboxes' || $element['#type'] === 'radios')) {
     $wrapper_attributes['title'] = $element['#description'];
     $wrapper_attributes['data-toggle'] = 'tooltip';
   }
 
-  $output = '<div' . drupal_attributes($wrapper_attributes) . '>' . "\n";
+  // Create a render array for the form element.
+  $build = array(
+    '#theme_wrappers' => array('container__form_element'),
+    '#attributes' => $wrapper_attributes,
+  );
 
-  // If #title is not set, we don't display any label or required marker.
-  if (!isset($element['#title'])) {
-    $element['#title_display'] = 'none';
+  // Render the label for the form element.
+  $build['label'] = array(
+    '#markup' => theme('form_element_label', $variables),
+  );
+
+  // Increase the label weight if it should be displayed after the element.
+  if (isset($element['#title_display']) && $element['#title_display'] === 'after') {
+    $build['label']['#weight'] = 10;
   }
 
-  $prefix = '';
-  $suffix = '';
-  if (isset($element['#field_prefix']) || isset($element['#field_suffix'])) {
-    // Determine if "#input_group" was specified.
-    if (!empty($element['#input_group'])) {
-      $prefix .= '<div class="input-group">';
-      $prefix .= isset($element['#field_prefix']) ? '<span class="input-group-addon">' . $element['#field_prefix'] . '</span>' : '';
-      $suffix .= isset($element['#field_suffix']) ? '<span class="input-group-addon">' . $element['#field_suffix'] . '</span>' : '';
+  // Checkboxes and radios render the input element inside the label. If the
+  // element is neither of those, then the input element must be rendered here.
+  if (!$checkbox && !$radio) {
+    $prefix = isset($element['#field_prefix']) ? $element['#field_prefix'] : '';
+    $suffix = isset($element['#field_suffix']) ? $element['#field_suffix'] : '';
+    if ((!empty($prefix) || !empty($suffix)) && (isset($element['#input_group']) || isset($element['#input_group_button']))) {
+      if (!empty($element['#field_prefix'])) {
+        $prefix = '<span class="input-group-' . (!empty($element['#input_group_button']) ? 'btn' : 'addon') . '">' . $prefix . '</span>';
+      }
+      if (!empty($element['#field_suffix'])) {
+        $suffix = '<span class="input-group-' . (!empty($element['#input_group_button']) ? 'btn' : 'addon') . '">' . $suffix . '</span>';
+      }
+
+      // Add a wrapping container around the elements.
+      $prefix = '<div class="input-group">' . $prefix;
       $suffix .= '</div>';
     }
-    // Determine if "#input_group_button" was specified.
-    elseif (!empty($element['#input_group_button'])) {
-      $prefix .= '<div class="input-group">';
-      $prefix .= isset($element['#field_prefix']) ? '<span class="input-group-btn">' . $element['#field_prefix'] . '</span>' : '';
-      $suffix .= isset($element['#field_suffix']) ? '<span class="input-group-btn">' . $element['#field_suffix'] . '</span>' : '';
-      $suffix .= '</div>';
-    }
-    else {
-      $prefix .= isset($element['#field_prefix']) ? $element['#field_prefix'] : '';
-      $suffix .= isset($element['#field_suffix']) ? $element['#field_suffix'] : '';
-    }
+
+    // Build the form element.
+    $build['element'] = array(
+      '#markup' => $element['#children'],
+      '#prefix' => !empty($prefix) ? $prefix : NULL,
+      '#suffix' => !empty($suffix) ? $suffix : NULL,
+    );
   }
 
-  switch ($element['#title_display']) {
-    case 'before':
-    case 'invisible':
-      $output .= ' ' . theme('form_element_label', $variables);
-      $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
-      break;
-
-    case 'after':
-      if ($is_radio || $is_checkbox) {
-        $variables['#children'] = $prefix . $element['#children'] . ' ' . $suffix;
-      }
-      else {
-        $output .= ' ' . $prefix . $element['#children'] . $suffix;
-      }
-      $output .= ' ' . theme('form_element_label', $variables) . "\n";
-      break;
-
-    case 'none':
-    case 'attribute':
-      // Output no label and no required marker, only the children.
-      $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
-      break;
-  }
-
+  // Add the element's description markup (for non-tooltip based descriptions).
   if (!empty($element['#description']) && !$tooltip_description && empty($element['#attributes']['title'])) {
-    $output .= '<p class="help-block">' . $element['#description'] . "</p>\n";
+    $build['description'] = array(
+      '#type' => 'container',
+      '#attributes' => array(
+        'class' => array('help-block'),
+      ),
+      0 => array('#markup' => $element['#description']),
+    );
   }
 
-  $output .= "</div>\n";
-
-  return $output;
+  // Render the form element build array.
+  return drupal_render($build);
 }
