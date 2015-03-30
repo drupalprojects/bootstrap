@@ -12,19 +12,19 @@ function bootstrap_form_element_label(&$variables) {
 
   // Extract variables.
   $output = '';
-  $title = isset($element['#title']) ? filter_xss_admin($element['#title']) : '';
+  $title = isset($element['#title']) ? filter_xss_admin($element['#title']) . ' ' : '';
   $required = !empty($element['#required']) ? theme('form_required_marker', array('element' => $element)) : '';
   if ($required) {
-    $title = empty($title) ? $required : "$title $required";
+    $title .= $required;
   }
-  $display = isset($element['#title_display']) ? $element['#title_display'] : 'none';
+  $display = isset($element['#title_display']) ? $element['#title_display'] : 'before';
   $type = !empty($element['#type']) ? $element['#type'] : FALSE;
   $checkbox = $type && $type === 'checkbox';
   $radio = $type && $type === 'radio';
 
-  // Immediately return if there is no title, required marker and element is
-  // not a checkbox or radio (which requires the label to be rendered).
-  if (!$title && !$required && !$checkbox && !$radio) {
+  // Immediately return if the element is not a checkbox or radio and there is
+  // no label to be rendered.
+  if (!$checkbox && !$radio && ($display === 'none' || (!$title && !$required))) {
     return '';
   }
 
@@ -44,7 +44,7 @@ function bootstrap_form_element_label(&$variables) {
     if ($display === 'before') {
       $output .= $title;
     }
-    elseif ($display === 'invisible') {
+    elseif ($display === 'none' || $display === 'invisible') {
       $output .= '<span class="element-invisible">' . $title . '</span>';
     }
     // Inject the rendered checkbox or radio element inside the label.

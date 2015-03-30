@@ -79,7 +79,7 @@ function bootstrap_form_element(&$variables) {
   );
 
   // Increase the label weight if it should be displayed after the element.
-  if (isset($element['#title_display']) && $element['#title_display'] === 'after') {
+  if ($element['#title_display'] === 'after') {
     $build['label']['#weight'] = 10;
   }
 
