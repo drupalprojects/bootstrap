@@ -116,6 +116,7 @@ function bootstrap_form_element(&$variables) {
       '#attributes' => array(
         'class' => array('help-block'),
       ),
+      '#weight' => 20,
       0 => array('#markup' => $element['#description']),
     );
   }
