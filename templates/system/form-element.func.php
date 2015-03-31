@@ -81,7 +81,7 @@ function bootstrap_form_element(&$variables) {
   if (!$checkbox && !$radio) {
     $prefix = isset($element['#field_prefix']) ? $element['#field_prefix'] : '';
     $suffix = isset($element['#field_suffix']) ? $element['#field_suffix'] : '';
-    if ((!empty($prefix) || !empty($suffix)) && (isset($element['#input_group']) || isset($element['#input_group_button']))) {
+    if ((!empty($prefix) || !empty($suffix)) && (!empty($element['#input_group']) || !empty($element['#input_group_button']))) {
       if (!empty($element['#field_prefix'])) {
         $prefix = '<span class="input-group-' . (!empty($element['#input_group_button']) ? 'btn' : 'addon') . '">' . $prefix . '</span>';
       }
@@ -90,7 +90,9 @@ function bootstrap_form_element(&$variables) {
       }
 
       // Add a wrapping container around the elements.
-      $prefix = '<div class="input-group">' . $prefix;
+      $input_group_attributes = &_bootstrap_get_attributes($element, 'input_group_attributes');
+      $input_group_attributes['class'][] = 'input-group';
+      $prefix = '<div' . drupal_attributes($input_group_attributes) . '>' . $prefix;
       $suffix .= '</div>';
     }
 

@@ -65,14 +65,36 @@ function bootstrap_element_smart_description(&$element, &$target = NULL, $input_
   if (!$input_only || !empty($target['#input']) || !empty($element['#smart_description']) || !empty($target['#smart_description'])) {
     if (!empty($element['#description']) && empty($target['#attributes']['title']) && empty($target['#attributes']['data-toggle'])) {
       if (_bootstrap_is_simple_string($element['#description'], $length, $allowed_tags, $html)) {
-        // Checkboxes and radios must add the tooltip to the wrapper container.
-        $wrapper = $type === 'checkbox' || $type === 'radio' || $type === 'checkboxes' || $type === 'radios';
-        $attributes = &_bootstrap_get_attributes($target, $wrapper);
+        // Default property (on the element itself).
+        $property = 'attributes';
+
+        // Add the tooltip to the #label_attributes property for 'checkbox'
+        // and 'radio' elements.
+        if ($type === 'checkbox' || $type === 'radio') {
+          $property = 'label_attributes';
+        }
+        // Add the tooltip to the #wrapper_attributes property for 'checkboxes'
+        // and 'radios' elements.
+        elseif ($type === 'checkboxes' || $type === 'radios') {
+          $property = 'wrapper_attributes';
+        }
+        // Add the tooltip to the #input_group_attributes property for elements
+        // that have valid input groups set.
+        elseif ((!empty($element['#field_prefix']) || !empty($element['#field_suffix'])) && (!empty($element['#input_group']) || !empty($element['#input_group_button']))) {
+          $property = 'input_group_attributes';
+        }
+
+        // Retrieve the proper attributes array.
+        $attributes = &_bootstrap_get_attributes($target, $property);
+
+        // Set the tooltip attributes.
         $attributes['title'] = $allowed_tags !== FALSE ? filter_xss($element['#description'], $allowed_tags) : $element['#description'];
         $attributes['data-toggle'] = 'tooltip';
         if ($html || $allowed_tags === FALSE) {
           $attributes['data-html'] = 'true';
         }
+
+        // Remove the element description so it isn't (re-)rendered later.
         unset($element['#description']);
       }
     }
@@ -317,17 +339,15 @@ function bootstrap_setting($name, $theme = NULL, $prefix = 'bootstrap') {
  *   $variables parameter in [pre]process functions and it will logically
  *   determine the correct path to that particular theme hook's attribute array.
  *   Passed by reference.
- * @param bool $wrapper
- *   Toggle determining whether or not the wrapper container attributes should
- *   be returned instead.
+ * @param string $property
+ *   Determines which attributes array to retrieve. By default, this is the
+ *   normal attributes, but can be "wrapper_attributes" or
+ *   "input_group_attributes".
  *
  * @return array
  *   The attributes array. Passed by reference.
  */
-function &_bootstrap_get_attributes(&$element, $wrapper = FALSE) {
-  // Determine which property to retrieve.
-  $property = $wrapper ? 'wrapper_attributes' : 'attributes';
-
+function &_bootstrap_get_attributes(&$element, $property = 'attributes') {
   // Attempt to retrieve a renderable element attributes first.
   if (
     isset($element['#type']) ||
@@ -368,15 +388,16 @@ function &_bootstrap_get_attributes(&$element, $wrapper = FALSE) {
  *   $variables parameter in [pre]process functions and it will logically
  *   determine the correct path to that particular theme hook's classes array.
  *   Passed by reference.
- * @param bool $wrapper
- *   Toggle determining whether or not the wrapper container attributes should
- *   be returned instead.
+ * @param string $property
+ *   Determines which attributes array to retrieve. By default, this is the
+ *   normal attributes, but can be "wrapper_attributes" or
+ *   "input_group_attributes".
  *
  * @return array
  *   The classes array. Passed by reference.
  */
-function &_bootstrap_get_classes(&$element, $wrapper = FALSE) {
-  $attributes = &_bootstrap_get_attributes($element, $wrapper);
+function &_bootstrap_get_classes(&$element, $property = 'attributes') {
+  $attributes = &_bootstrap_get_attributes($element, $property);
 
   if (!isset($attributes['class'])) {
     $attributes['class'] = array();
@@ -403,13 +424,14 @@ function &_bootstrap_get_classes(&$element, $wrapper = FALSE) {
  *   $variables parameter in [pre]process functions and it will logically
  *   determine the correct path to that particular theme hook's classes array.
  *   Passed by reference.
- * @param bool $wrapper
- *   Toggle determining whether or not the wrapper container attributes should
- *   be returned instead.
+ * @param string $property
+ *   Determines which attributes array to retrieve. By default, this is the
+ *   normal attributes, but can be "wrapper_attributes" or
+ *   "input_group_attributes".
  */
-function _bootstrap_add_class($class, &$element, $wrapper = FALSE) {
+function _bootstrap_add_class($class, &$element, $property = 'attributes') {
   // Retrieve the element's classes.
-  $classes = &_bootstrap_get_classes($element, $wrapper);
+  $classes = &_bootstrap_get_classes($element, $property);
 
   // Convert the class to an array.
   if (!is_array($class)) {
@@ -435,13 +457,14 @@ function _bootstrap_add_class($class, &$element, $wrapper = FALSE) {
  *   $variables parameter in [pre]process functions and it will logically
  *   determine the correct path to that particular theme hook's classes array.
  *   Passed by reference.
- * @param bool $wrapper
- *   Toggle determining whether or not the wrapper container attributes should
- *   be returned instead.
+ * @param string $property
+ *   Determines which attributes array to retrieve. By default, this is the
+ *   normal attributes, but can be "wrapper_attributes" or
+ *   "input_group_attributes".
  */
-function _bootstrap_remove_class($class, &$element, $wrapper = FALSE) {
+function _bootstrap_remove_class($class, &$element, $property = 'attributes') {
   // Retrieve the element's classes.
-  $classes = &_bootstrap_get_classes($element, $wrapper);
+  $classes = &_bootstrap_get_classes($element, $property);
 
   // Convert the class to an array.
   if (!is_array($class)) {

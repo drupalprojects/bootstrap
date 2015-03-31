@@ -28,11 +28,11 @@ function bootstrap_form_element_label(&$variables) {
     return '';
   }
 
-  // Create the attributes array for the label.
-  $attributes = array(
-    // Add Bootstrap label class.
-    'class' => array('control-label')
-  );
+  // Retrieve the label attributes array.
+  $attributes = &_bootstrap_get_attributes($element, 'label_attributes');
+
+  // Add Bootstrap label class.
+  $attributes['class'][] = 'control-label';
 
   // Add the necessary 'for' attribute if the element ID exists.
   if (!empty($element['#id'])) {
