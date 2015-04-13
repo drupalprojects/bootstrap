@@ -94,7 +94,7 @@ var Drupal = Drupal || {};
           if (!options.content) {
             options.content = function () {
               var target = $(this).data('target');
-              return target && $(target) && $(target).length && $(target).clone().removeClass('element-invisible').wrap('<div/>').parent()[$(this).data('bs.popover').options.html ? 'html' : 'text']() || '';
+              return target && $(target) && $(target).length && $(target).clone().removeClass('visually-hidden').wrap('<div/>').parent()[$(this).data('bs.popover').options.html ? 'html' : 'text']() || '';
             }
           }
           $element.popover(options).on('click', function (e) {
