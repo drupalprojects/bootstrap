@@ -12,76 +12,6 @@ use Drupal\Component\Utility\Crypt;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Theme\ThemeManager;
 use Drupal\Core\Utility\ThemeRegistry;
-use Drupal\Core\Url;
-
-define('BOOTSTRAP_VERSION_MAJOR', 3);
-define('BOOTSTRAP_VERSION_MINOR', 3);
-define('BOOTSTRAP_VERSION_PATCH', 2);
-define('BOOTSTRAP_VERSION', BOOTSTRAP_VERSION_MAJOR . '.' . BOOTSTRAP_VERSION_MINOR . '.' . BOOTSTRAP_VERSION_PATCH);
-
-/**
- * Retrieves CDN assets for the active provider, if any.
- *
- * @param string|array $type
- *   The type of asset to retrieve: "css" or "js", defaults to an array
- *   array containing both if not set.
- * @param string $provider
- *   The name of a specific CDN provider to use, defaults to the active provider
- *   set in the theme settings.
- * @param string $theme
- *   The name of a specific theme the settings should be retrieved from,
- *   defaults to the active theme.
- *
- * @return array
- *   If $type is a string or an array with only one (1) item in it, the assets
- *   are returned as an indexed array of files. Otherwise, an associative array
- *   is returned keyed by the type.
- */
-function bootstrap_get_cdn_assets($type = NULL, $provider = NULL, $theme = NULL) {
-  $assets = array();
-  $types = array();
-
-  // If no type is set, return all CSS and JS.
-  if (!isset($type)) {
-    $types = array('css', 'js');
-  }
-  elseif (isset($type)) {
-    if (!is_array($type)) {
-      $type = array($type);
-    }
-    $types = $type;
-  }
-
-  // Retrieve the active CDN provider data.
-  bootstrap_include('bootstrap', 'includes/cdn.inc');
-  if (!isset($provider)) {
-    $provider = bootstrap_setting('cdn_provider');
-    if (!isset($provider)) {
-      $provider = '';
-    }
-  }
-
-  $data = bootstrap_cdn_provider($provider);
-
-  // Alter the assets based on provider.
-  $function = 'bootstrap_bootstrap_cdn_provider_' . $provider . '_assets_alter';
-  if (function_exists($function)) {
-    $function($data, $theme);
-  }
-  // @todo Use drupal_alter() once CDN is in bootstrap_core companion module.
-  // drupal_alter('bootstrap_cdn_provider_' . $provider . '_assets', $data, $theme);
-
-  // Iterate over each type.
-  foreach ($types as $type) {
-    if (\Drupal::config("preprocess_$type", FALSE) && !empty($data['min'][$type])) {
-      $assets[$type] = $data['min'][$type];
-    }
-    elseif (!empty($data[$type])) {
-      $assets[$type] = $data[$type];
-    }
-  }
-  return count($types) > 1 ? $assets : $assets[$type];
-}
 
 /**
  * Return information from the .info file of a theme (and possible base themes).
@@ -160,42 +90,6 @@ function bootstrap_get_theme_info($theme_key = NULL, $key = NULL, $base_themes =
     }
   }
   return FALSE;
-}
-
-/**
- * Retrieves a setting for the current theme or for a given theme.
- *
- * This is a wrapper for theme_get_setting(), ensuring to use deprecated
- * setting values instead.
- *
- * @param string $name
- *   The name of the setting to be retrieved.
- * @param string $theme
- *   The name of a given theme; defaults to the currently active theme.
- * @param string $prefix
- *   The prefix used on the $name of the setting, this will be appended with
- *   "_" automatically if set.
- *
- * @return
- *   The value of the requested setting, NULL if the setting does not exist.
- *
- * @see theme_get_setting()
- *
- * @todo Refactor in 7.x-4.x and get rid of the deprecated settings.
- */
-function bootstrap_setting($name, $theme = NULL, $prefix = 'bootstrap') {
-  $prefix = !empty($prefix) ? $prefix . '_' : '';
-  $deprecated = array(
-    // New setting name               => old setting name.
-    'bootstrap_cdn_jsdelivr_version'  => 'bootstrap_cdn',
-    'bootstrap_cdn_jsdelivr_theme'    => 'bootstrap_bootswatch',
-  );
-  if (isset($deprecated[$prefix . $name]) && ($setting = theme_get_setting($deprecated[$prefix . $name], $theme))) {
-    return $setting;
-  }
-  else {
-    return theme_get_setting($prefix . $name, $theme);
-  }
 }
 
 /**
@@ -415,212 +309,300 @@ function _bootstrap_file_scan_directory($dir, $mask, array $options = array()) {
 
 /**
  * Helper function for returning an array of Bootstrap Glyphicons.
+ *
+ * @param string $version
+ *   The specific version of glyphicons to return. If not set, the latest
+ *   BOOTSTRAP_VERSION will be used.
+ *
+ * @return array
+ *   An associative array of icons keyed by their classes.
  */
-function _bootstrap_glyphicons() {
-  static $icons = array(
-    // Class => Name.
-    'glyphicon-adjust' => 'adjust',
-    'glyphicon-align-center' => 'align-center',
-    'glyphicon-align-justify' => 'align-justify',
-    'glyphicon-align-left' => 'align-left',
-    'glyphicon-align-right' => 'align-right',
-    'glyphicon-arrow-down' => 'arrow-down',
-    'glyphicon-arrow-left' => 'arrow-left',
-    'glyphicon-arrow-right' => 'arrow-right',
-    'glyphicon-arrow-up' => 'arrow-up',
-    'glyphicon-asterisk' => 'asterisk',
-    'glyphicon-backward' => 'backward',
-    'glyphicon-ban-circle' => 'ban-circle',
-    'glyphicon-barcode' => 'barcode',
-    'glyphicon-bell' => 'bell',
-    'glyphicon-bold' => 'bold',
-    'glyphicon-book' => 'book',
-    'glyphicon-bookmark' => 'bookmark',
-    'glyphicon-briefcase' => 'briefcase',
-    'glyphicon-bullhorn' => 'bullhorn',
-    'glyphicon-calendar' => 'calendar',
-    'glyphicon-camera' => 'camera',
-    'glyphicon-certificate' => 'certificate',
-    'glyphicon-check' => 'check',
-    'glyphicon-chevron-down' => 'chevron-down',
-    'glyphicon-chevron-left' => 'chevron-left',
-    'glyphicon-chevron-right' => 'chevron-right',
-    'glyphicon-chevron-up' => 'chevron-up',
-    'glyphicon-circle-arrow-down' => 'circle-arrow-down',
-    'glyphicon-circle-arrow-left' => 'circle-arrow-left',
-    'glyphicon-circle-arrow-right' => 'circle-arrow-right',
-    'glyphicon-circle-arrow-up' => 'circle-arrow-up',
-    'glyphicon-cloud' => 'cloud',
-    'glyphicon-cloud-download' => 'cloud-download',
-    'glyphicon-cloud-upload' => 'cloud-upload',
-    'glyphicon-cog' => 'cog',
-    'glyphicon-collapse-down' => 'collapse-down',
-    'glyphicon-collapse-up' => 'collapse-up',
-    'glyphicon-comment' => 'comment',
-    'glyphicon-compressed' => 'compressed',
-    'glyphicon-copyright-mark' => 'copyright-mark',
-    'glyphicon-credit-card' => 'credit-card',
-    'glyphicon-cutlery' => 'cutlery',
-    'glyphicon-dashboard' => 'dashboard',
-    'glyphicon-download' => 'download',
-    'glyphicon-download-alt' => 'download-alt',
-    'glyphicon-earphone' => 'earphone',
-    'glyphicon-edit' => 'edit',
-    'glyphicon-eject' => 'eject',
-    'glyphicon-envelope' => 'envelope',
-    'glyphicon-euro' => 'euro',
-    'glyphicon-exclamation-sign' => 'exclamation-sign',
-    'glyphicon-expand' => 'expand',
-    'glyphicon-export' => 'export',
-    'glyphicon-eye-close' => 'eye-close',
-    'glyphicon-eye-open' => 'eye-open',
-    'glyphicon-facetime-video' => 'facetime-video',
-    'glyphicon-fast-backward' => 'fast-backward',
-    'glyphicon-fast-forward' => 'fast-forward',
-    'glyphicon-file' => 'file',
-    'glyphicon-film' => 'film',
-    'glyphicon-filter' => 'filter',
-    'glyphicon-fire' => 'fire',
-    'glyphicon-flag' => 'flag',
-    'glyphicon-flash' => 'flash',
-    'glyphicon-floppy-disk' => 'floppy-disk',
-    'glyphicon-floppy-open' => 'floppy-open',
-    'glyphicon-floppy-remove' => 'floppy-remove',
-    'glyphicon-floppy-save' => 'floppy-save',
-    'glyphicon-floppy-saved' => 'floppy-saved',
-    'glyphicon-folder-close' => 'folder-close',
-    'glyphicon-folder-open' => 'folder-open',
-    'glyphicon-font' => 'font',
-    'glyphicon-forward' => 'forward',
-    'glyphicon-fullscreen' => 'fullscreen',
-    'glyphicon-gbp' => 'gbp',
-    'glyphicon-gift' => 'gift',
-    'glyphicon-glass' => 'glass',
-    'glyphicon-globe' => 'globe',
-    'glyphicon-hand-down' => 'hand-down',
-    'glyphicon-hand-left' => 'hand-left',
-    'glyphicon-hand-right' => 'hand-right',
-    'glyphicon-hand-up' => 'hand-up',
-    'glyphicon-hd-video' => 'hd-video',
-    'glyphicon-hdd' => 'hdd',
-    'glyphicon-header' => 'header',
-    'glyphicon-headphones' => 'headphones',
-    'glyphicon-heart' => 'heart',
-    'glyphicon-heart-empty' => 'heart-empty',
-    'glyphicon-home' => 'home',
-    'glyphicon-import' => 'import',
-    'glyphicon-inbox' => 'inbox',
-    'glyphicon-indent-left' => 'indent-left',
-    'glyphicon-indent-right' => 'indent-right',
-    'glyphicon-info-sign' => 'info-sign',
-    'glyphicon-italic' => 'italic',
-    'glyphicon-leaf' => 'leaf',
-    'glyphicon-link' => 'link',
-    'glyphicon-list' => 'list',
-    'glyphicon-list-alt' => 'list-alt',
-    'glyphicon-lock' => 'lock',
-    'glyphicon-log-in' => 'log-in',
-    'glyphicon-log-out' => 'log-out',
-    'glyphicon-magnet' => 'magnet',
-    'glyphicon-map-marker' => 'map-marker',
-    'glyphicon-minus' => 'minus',
-    'glyphicon-minus-sign' => 'minus-sign',
-    'glyphicon-move' => 'move',
-    'glyphicon-music' => 'music',
-    'glyphicon-new-window' => 'new-window',
-    'glyphicon-off' => 'off',
-    'glyphicon-ok' => 'ok',
-    'glyphicon-ok-circle' => 'ok-circle',
-    'glyphicon-ok-sign' => 'ok-sign',
-    'glyphicon-open' => 'open',
-    'glyphicon-paperclip' => 'paperclip',
-    'glyphicon-pause' => 'pause',
-    'glyphicon-pencil' => 'pencil',
-    'glyphicon-phone' => 'phone',
-    'glyphicon-phone-alt' => 'phone-alt',
-    'glyphicon-picture' => 'picture',
-    'glyphicon-plane' => 'plane',
-    'glyphicon-play' => 'play',
-    'glyphicon-play-circle' => 'play-circle',
-    'glyphicon-plus' => 'plus',
-    'glyphicon-plus-sign' => 'plus-sign',
-    'glyphicon-print' => 'print',
-    'glyphicon-pushpin' => 'pushpin',
-    'glyphicon-qrcode' => 'qrcode',
-    'glyphicon-question-sign' => 'question-sign',
-    'glyphicon-random' => 'random',
-    'glyphicon-record' => 'record',
-    'glyphicon-refresh' => 'refresh',
-    'glyphicon-registration-mark' => 'registration-mark',
-    'glyphicon-remove' => 'remove',
-    'glyphicon-remove-circle' => 'remove-circle',
-    'glyphicon-remove-sign' => 'remove-sign',
-    'glyphicon-repeat' => 'repeat',
-    'glyphicon-resize-full' => 'resize-full',
-    'glyphicon-resize-horizontal' => 'resize-horizontal',
-    'glyphicon-resize-small' => 'resize-small',
-    'glyphicon-resize-vertical' => 'resize-vertical',
-    'glyphicon-retweet' => 'retweet',
-    'glyphicon-road' => 'road',
-    'glyphicon-save' => 'save',
-    'glyphicon-saved' => 'saved',
-    'glyphicon-screenshot' => 'screenshot',
-    'glyphicon-sd-video' => 'sd-video',
-    'glyphicon-search' => 'search',
-    'glyphicon-send' => 'send',
-    'glyphicon-share' => 'share',
-    'glyphicon-share-alt' => 'share-alt',
-    'glyphicon-shopping-cart' => 'shopping-cart',
-    'glyphicon-signal' => 'signal',
-    'glyphicon-sort' => 'sort',
-    'glyphicon-sort-by-alphabet' => 'sort-by-alphabet',
-    'glyphicon-sort-by-alphabet-alt' => 'sort-by-alphabet-alt',
-    'glyphicon-sort-by-attributes' => 'sort-by-attributes',
-    'glyphicon-sort-by-attributes-alt' => 'sort-by-attributes-alt',
-    'glyphicon-sort-by-order' => 'sort-by-order',
-    'glyphicon-sort-by-order-alt' => 'sort-by-order-alt',
-    'glyphicon-sound-5-1' => 'sound-5-1',
-    'glyphicon-sound-6-1' => 'sound-6-1',
-    'glyphicon-sound-7-1' => 'sound-7-1',
-    'glyphicon-sound-dolby' => 'sound-dolby',
-    'glyphicon-sound-stereo' => 'sound-stereo',
-    'glyphicon-star' => 'star',
-    'glyphicon-star-empty' => 'star-empty',
-    'glyphicon-stats' => 'stats',
-    'glyphicon-step-backward' => 'step-backward',
-    'glyphicon-step-forward' => 'step-forward',
-    'glyphicon-stop' => 'stop',
-    'glyphicon-subtitles' => 'subtitles',
-    'glyphicon-tag' => 'tag',
-    'glyphicon-tags' => 'tags',
-    'glyphicon-tasks' => 'tasks',
-    'glyphicon-text-height' => 'text-height',
-    'glyphicon-text-width' => 'text-width',
-    'glyphicon-th' => 'th',
-    'glyphicon-th-large' => 'th-large',
-    'glyphicon-th-list' => 'th-list',
-    'glyphicon-thumbs-down' => 'thumbs-down',
-    'glyphicon-thumbs-up' => 'thumbs-up',
-    'glyphicon-time' => 'time',
-    'glyphicon-tint' => 'tint',
-    'glyphicon-tower' => 'tower',
-    'glyphicon-transfer' => 'transfer',
-    'glyphicon-trash' => 'trash',
-    'glyphicon-tree-conifer' => 'tree-conifer',
-    'glyphicon-tree-deciduous' => 'tree-deciduous',
-    'glyphicon-unchecked' => 'unchecked',
-    'glyphicon-upload' => 'upload',
-    'glyphicon-usd' => 'usd',
-    'glyphicon-user' => 'user',
-    'glyphicon-volume-down' => 'volume-down',
-    'glyphicon-volume-off' => 'volume-off',
-    'glyphicon-volume-up' => 'volume-up',
-    'glyphicon-warning-sign' => 'warning-sign',
-    'glyphicon-wrench' => 'wrench',
-    'glyphicon-zoom-in' => 'zoom-in',
-    'glyphicon-zoom-out' => 'zoom-out',
-  );
-  return $icons;
+function _bootstrap_glyphicons($version = NULL) {
+  static $versions;
+  if (!isset($versions)) {
+    $versions = array();
+    $versions['3.0.0'] = array(
+      // Class => Name.
+      'glyphicon-adjust' => 'adjust',
+      'glyphicon-align-center' => 'align-center',
+      'glyphicon-align-justify' => 'align-justify',
+      'glyphicon-align-left' => 'align-left',
+      'glyphicon-align-right' => 'align-right',
+      'glyphicon-arrow-down' => 'arrow-down',
+      'glyphicon-arrow-left' => 'arrow-left',
+      'glyphicon-arrow-right' => 'arrow-right',
+      'glyphicon-arrow-up' => 'arrow-up',
+      'glyphicon-asterisk' => 'asterisk',
+      'glyphicon-backward' => 'backward',
+      'glyphicon-ban-circle' => 'ban-circle',
+      'glyphicon-barcode' => 'barcode',
+      'glyphicon-bell' => 'bell',
+      'glyphicon-bold' => 'bold',
+      'glyphicon-book' => 'book',
+      'glyphicon-bookmark' => 'bookmark',
+      'glyphicon-briefcase' => 'briefcase',
+      'glyphicon-bullhorn' => 'bullhorn',
+      'glyphicon-calendar' => 'calendar',
+      'glyphicon-camera' => 'camera',
+      'glyphicon-certificate' => 'certificate',
+      'glyphicon-check' => 'check',
+      'glyphicon-chevron-down' => 'chevron-down',
+      'glyphicon-chevron-left' => 'chevron-left',
+      'glyphicon-chevron-right' => 'chevron-right',
+      'glyphicon-chevron-up' => 'chevron-up',
+      'glyphicon-circle-arrow-down' => 'circle-arrow-down',
+      'glyphicon-circle-arrow-left' => 'circle-arrow-left',
+      'glyphicon-circle-arrow-right' => 'circle-arrow-right',
+      'glyphicon-circle-arrow-up' => 'circle-arrow-up',
+      'glyphicon-cloud' => 'cloud',
+      'glyphicon-cloud-download' => 'cloud-download',
+      'glyphicon-cloud-upload' => 'cloud-upload',
+      'glyphicon-cog' => 'cog',
+      'glyphicon-collapse-down' => 'collapse-down',
+      'glyphicon-collapse-up' => 'collapse-up',
+      'glyphicon-comment' => 'comment',
+      'glyphicon-compressed' => 'compressed',
+      'glyphicon-copyright-mark' => 'copyright-mark',
+      'glyphicon-credit-card' => 'credit-card',
+      'glyphicon-cutlery' => 'cutlery',
+      'glyphicon-dashboard' => 'dashboard',
+      'glyphicon-download' => 'download',
+      'glyphicon-download-alt' => 'download-alt',
+      'glyphicon-earphone' => 'earphone',
+      'glyphicon-edit' => 'edit',
+      'glyphicon-eject' => 'eject',
+      'glyphicon-envelope' => 'envelope',
+      'glyphicon-euro' => 'euro',
+      'glyphicon-exclamation-sign' => 'exclamation-sign',
+      'glyphicon-expand' => 'expand',
+      'glyphicon-export' => 'export',
+      'glyphicon-eye-close' => 'eye-close',
+      'glyphicon-eye-open' => 'eye-open',
+      'glyphicon-facetime-video' => 'facetime-video',
+      'glyphicon-fast-backward' => 'fast-backward',
+      'glyphicon-fast-forward' => 'fast-forward',
+      'glyphicon-file' => 'file',
+      'glyphicon-film' => 'film',
+      'glyphicon-filter' => 'filter',
+      'glyphicon-fire' => 'fire',
+      'glyphicon-flag' => 'flag',
+      'glyphicon-flash' => 'flash',
+      'glyphicon-floppy-disk' => 'floppy-disk',
+      'glyphicon-floppy-open' => 'floppy-open',
+      'glyphicon-floppy-remove' => 'floppy-remove',
+      'glyphicon-floppy-save' => 'floppy-save',
+      'glyphicon-floppy-saved' => 'floppy-saved',
+      'glyphicon-folder-close' => 'folder-close',
+      'glyphicon-folder-open' => 'folder-open',
+      'glyphicon-font' => 'font',
+      'glyphicon-forward' => 'forward',
+      'glyphicon-fullscreen' => 'fullscreen',
+      'glyphicon-gbp' => 'gbp',
+      'glyphicon-gift' => 'gift',
+      'glyphicon-glass' => 'glass',
+      'glyphicon-globe' => 'globe',
+      'glyphicon-hand-down' => 'hand-down',
+      'glyphicon-hand-left' => 'hand-left',
+      'glyphicon-hand-right' => 'hand-right',
+      'glyphicon-hand-up' => 'hand-up',
+      'glyphicon-hd-video' => 'hd-video',
+      'glyphicon-hdd' => 'hdd',
+      'glyphicon-header' => 'header',
+      'glyphicon-headphones' => 'headphones',
+      'glyphicon-heart' => 'heart',
+      'glyphicon-heart-empty' => 'heart-empty',
+      'glyphicon-home' => 'home',
+      'glyphicon-import' => 'import',
+      'glyphicon-inbox' => 'inbox',
+      'glyphicon-indent-left' => 'indent-left',
+      'glyphicon-indent-right' => 'indent-right',
+      'glyphicon-info-sign' => 'info-sign',
+      'glyphicon-italic' => 'italic',
+      'glyphicon-leaf' => 'leaf',
+      'glyphicon-link' => 'link',
+      'glyphicon-list' => 'list',
+      'glyphicon-list-alt' => 'list-alt',
+      'glyphicon-lock' => 'lock',
+      'glyphicon-log-in' => 'log-in',
+      'glyphicon-log-out' => 'log-out',
+      'glyphicon-magnet' => 'magnet',
+      'glyphicon-map-marker' => 'map-marker',
+      'glyphicon-minus' => 'minus',
+      'glyphicon-minus-sign' => 'minus-sign',
+      'glyphicon-move' => 'move',
+      'glyphicon-music' => 'music',
+      'glyphicon-new-window' => 'new-window',
+      'glyphicon-off' => 'off',
+      'glyphicon-ok' => 'ok',
+      'glyphicon-ok-circle' => 'ok-circle',
+      'glyphicon-ok-sign' => 'ok-sign',
+      'glyphicon-open' => 'open',
+      'glyphicon-paperclip' => 'paperclip',
+      'glyphicon-pause' => 'pause',
+      'glyphicon-pencil' => 'pencil',
+      'glyphicon-phone' => 'phone',
+      'glyphicon-phone-alt' => 'phone-alt',
+      'glyphicon-picture' => 'picture',
+      'glyphicon-plane' => 'plane',
+      'glyphicon-play' => 'play',
+      'glyphicon-play-circle' => 'play-circle',
+      'glyphicon-plus' => 'plus',
+      'glyphicon-plus-sign' => 'plus-sign',
+      'glyphicon-print' => 'print',
+      'glyphicon-pushpin' => 'pushpin',
+      'glyphicon-qrcode' => 'qrcode',
+      'glyphicon-question-sign' => 'question-sign',
+      'glyphicon-random' => 'random',
+      'glyphicon-record' => 'record',
+      'glyphicon-refresh' => 'refresh',
+      'glyphicon-registration-mark' => 'registration-mark',
+      'glyphicon-remove' => 'remove',
+      'glyphicon-remove-circle' => 'remove-circle',
+      'glyphicon-remove-sign' => 'remove-sign',
+      'glyphicon-repeat' => 'repeat',
+      'glyphicon-resize-full' => 'resize-full',
+      'glyphicon-resize-horizontal' => 'resize-horizontal',
+      'glyphicon-resize-small' => 'resize-small',
+      'glyphicon-resize-vertical' => 'resize-vertical',
+      'glyphicon-retweet' => 'retweet',
+      'glyphicon-road' => 'road',
+      'glyphicon-save' => 'save',
+      'glyphicon-saved' => 'saved',
+      'glyphicon-screenshot' => 'screenshot',
+      'glyphicon-sd-video' => 'sd-video',
+      'glyphicon-search' => 'search',
+      'glyphicon-send' => 'send',
+      'glyphicon-share' => 'share',
+      'glyphicon-share-alt' => 'share-alt',
+      'glyphicon-shopping-cart' => 'shopping-cart',
+      'glyphicon-signal' => 'signal',
+      'glyphicon-sort' => 'sort',
+      'glyphicon-sort-by-alphabet' => 'sort-by-alphabet',
+      'glyphicon-sort-by-alphabet-alt' => 'sort-by-alphabet-alt',
+      'glyphicon-sort-by-attributes' => 'sort-by-attributes',
+      'glyphicon-sort-by-attributes-alt' => 'sort-by-attributes-alt',
+      'glyphicon-sort-by-order' => 'sort-by-order',
+      'glyphicon-sort-by-order-alt' => 'sort-by-order-alt',
+      'glyphicon-sound-5-1' => 'sound-5-1',
+      'glyphicon-sound-6-1' => 'sound-6-1',
+      'glyphicon-sound-7-1' => 'sound-7-1',
+      'glyphicon-sound-dolby' => 'sound-dolby',
+      'glyphicon-sound-stereo' => 'sound-stereo',
+      'glyphicon-star' => 'star',
+      'glyphicon-star-empty' => 'star-empty',
+      'glyphicon-stats' => 'stats',
+      'glyphicon-step-backward' => 'step-backward',
+      'glyphicon-step-forward' => 'step-forward',
+      'glyphicon-stop' => 'stop',
+      'glyphicon-subtitles' => 'subtitles',
+      'glyphicon-tag' => 'tag',
+      'glyphicon-tags' => 'tags',
+      'glyphicon-tasks' => 'tasks',
+      'glyphicon-text-height' => 'text-height',
+      'glyphicon-text-width' => 'text-width',
+      'glyphicon-th' => 'th',
+      'glyphicon-th-large' => 'th-large',
+      'glyphicon-th-list' => 'th-list',
+      'glyphicon-thumbs-down' => 'thumbs-down',
+      'glyphicon-thumbs-up' => 'thumbs-up',
+      'glyphicon-time' => 'time',
+      'glyphicon-tint' => 'tint',
+      'glyphicon-tower' => 'tower',
+      'glyphicon-transfer' => 'transfer',
+      'glyphicon-trash' => 'trash',
+      'glyphicon-tree-conifer' => 'tree-conifer',
+      'glyphicon-tree-deciduous' => 'tree-deciduous',
+      'glyphicon-unchecked' => 'unchecked',
+      'glyphicon-upload' => 'upload',
+      'glyphicon-usd' => 'usd',
+      'glyphicon-user' => 'user',
+      'glyphicon-volume-down' => 'volume-down',
+      'glyphicon-volume-off' => 'volume-off',
+      'glyphicon-volume-up' => 'volume-up',
+      'glyphicon-warning-sign' => 'warning-sign',
+      'glyphicon-wrench' => 'wrench',
+      'glyphicon-zoom-in' => 'zoom-in',
+      'glyphicon-zoom-out' => 'zoom-out',
+    );
+    $versions['3.0.1'] = $versions['3.0.0'];
+    $versions['3.0.2'] = $versions['3.0.1'];
+    $versions['3.0.3'] = $versions['3.0.2'];
+    $versions['3.1.0'] = $versions['3.0.3'];
+    $versions['3.1.1'] = $versions['3.1.0'];
+    $versions['3.2.0'] = $versions['3.1.1'];
+    $versions['3.3.0'] = array_merge($versions['3.2.0'], array(
+      'glyphicon-eur' => 'eur',
+    ));
+    $versions['3.3.1'] = $versions['3.3.0'];
+    $versions['3.3.2'] = array_merge($versions['3.3.1'], array(
+      'glyphicon-alert' => 'alert',
+      'glyphicon-apple' => 'apple',
+      'glyphicon-baby-formula' => 'baby-formula',
+      'glyphicon-bed' => 'bed',
+      'glyphicon-bishop' => 'bishop',
+      'glyphicon-bitcoin' => 'bitcoin',
+      'glyphicon-blackboard' => 'blackboard',
+      'glyphicon-cd' => 'cd',
+      'glyphicon-console' => 'console',
+      'glyphicon-copy' => 'copy',
+      'glyphicon-duplicate' => 'duplicate',
+      'glyphicon-education' => 'education',
+      'glyphicon-equalizer' => 'equalizer',
+      'glyphicon-erase' => 'erase',
+      'glyphicon-grain' => 'grain',
+      'glyphicon-hourglass' => 'hourglass',
+      'glyphicon-ice-lolly' => 'ice-lolly',
+      'glyphicon-ice-lolly-tasted' => 'ice-lolly-tasted',
+      'glyphicon-king' => 'king',
+      'glyphicon-knight' => 'knight',
+      'glyphicon-lamp' => 'lamp',
+      'glyphicon-level-up' => 'level-up',
+      'glyphicon-menu-down' => 'menu-down',
+      'glyphicon-menu-hamburger' => 'menu-hamburger',
+      'glyphicon-menu-left' => 'menu-left',
+      'glyphicon-menu-right' => 'menu-right',
+      'glyphicon-menu-up' => 'menu-up',
+      'glyphicon-modal-window' => 'modal-window',
+      'glyphicon-object-align-bottom' => 'object-align-bottom',
+      'glyphicon-object-align-horizontal' => 'object-align-horizontal',
+      'glyphicon-object-align-left' => 'object-align-left',
+      'glyphicon-object-align-right' => 'object-align-right',
+      'glyphicon-object-align-top' => 'object-align-top',
+      'glyphicon-object-align-vertical' => 'object-align-vertical',
+      'glyphicon-oil' => 'oil',
+      'glyphicon-open-file' => 'open-file',
+      'glyphicon-option-horizontal' => 'option-horizontal',
+      'glyphicon-option-vertical' => 'option-vertical',
+      'glyphicon-paste' => 'paste',
+      'glyphicon-pawn' => 'pawn',
+      'glyphicon-piggy-bank' => 'piggy-bank',
+      'glyphicon-queen' => 'queen',
+      'glyphicon-ruble' => 'ruble',
+      'glyphicon-save-file' => 'save-file',
+      'glyphicon-scale' => 'scale',
+      'glyphicon-scissors' => 'scissors',
+      'glyphicon-subscript' => 'subscript',
+      'glyphicon-sunglasses' => 'sunglasses',
+      'glyphicon-superscript' => 'superscript',
+      'glyphicon-tent' => 'tent',
+      'glyphicon-text-background' => 'text-background',
+      'glyphicon-text-color' => 'text-color',
+      'glyphicon-text-size' => 'text-size',
+      'glyphicon-triangle-bottom' => 'triangle-bottom',
+      'glyphicon-triangle-left' => 'triangle-left',
+      'glyphicon-triangle-right' => 'triangle-right',
+      'glyphicon-triangle-top' => 'triangle-top',
+      'glyphicon-yen' => 'yen',
+    ));
+  }
+
+  // Return a specific versions icon set.
+  if (isset($version) && isset($versions[$version])) {
+    return $versions[$version];
+  }
+
+  // Return the latest version.
+  return $versions[BOOTSTRAP_VERSION];
 }
 
 /**
@@ -638,6 +620,8 @@ function _bootstrap_glyphicons() {
 function _bootstrap_icon($name, $default = NULL) {
   $output = NULL;
   // Ensure the icon specified is a valid Bootstrap Glyphicon.
+  // @todo Supply a specific version to _bootstrap_glyphicons() when Icon API
+  // supports versioning.
   if (_bootstrap_glyphicons_supported() && in_array($name, _bootstrap_glyphicons())) {
     // Attempt to use the Icon API module, if enabled and it generates output.
     if (\Drupal::moduleHandler()->moduleExists('icon')) {
@@ -651,7 +635,6 @@ function _bootstrap_icon($name, $default = NULL) {
       $icon = array(
         '#type' => 'html_tag',
         '#tag' => 'span',
-        '#value' => '',
         '#attributes' => array(
           'class' => array('icon', 'glyphicon', 'glyphicon-' . $name),
           'aria-hidden' => 'true',
@@ -759,7 +742,7 @@ function _bootstrap_colorize_button(&$variables) {
   $class_intersection = array_intersect($button_classes, $variables['attributes']['class']);
   if (empty($class_intersection)) {
     // Get the matched class.
-    $class = bootstrap_setting('button_colorize') ? _bootstrap_colorize_text($variables['element']['#value']) : FALSE;
+    $class = theme_get_setting('bootstrap_button_colorize') ? _bootstrap_colorize_text($variables['element']['#value']) : FALSE;
     // If no particular class matched, use the default style.
     if (!$class) {
       $class = 'default';
@@ -863,7 +846,8 @@ function _bootstrap_colorize_text($string, $default = '') {
  *   The form element, passed by reference.
  */
 function _bootstrap_iconize_button(&$element) {
-  if (bootstrap_setting('button_iconize') && _bootstrap_is_button($element) && ($icon = _bootstrap_iconize_text($element['#value']))) {
+  $config = \Drupal::config('bootstrap.settings');
+  if ($config->get('bootstrap_button_iconize') && _bootstrap_is_button($element) && ($icon = _bootstrap_iconize_text($element['#value']))) {
     $element['#icon'] = $icon;
   }
 }
@@ -1011,7 +995,7 @@ function _bootstrap_tooltip_description($description) {
 
   // Determine if tooltips are enabled.
   if (!isset($tooltip_descriptions)) {
-    $tooltip_descriptions = bootstrap_setting('tooltip_enabled') && bootstrap_setting('tooltip_descriptions');
+    $tooltip_descriptions = theme_get_setting('bootstrap_tooltip_enabled') && theme_get_setting('bootstrap_tooltip_descriptions');
   }
 
   // Go ahead and return FALSE if not enabled.
@@ -1021,66 +1005,7 @@ function _bootstrap_tooltip_description($description) {
 
   $id = Crypt::hashBase64($description);
   if (!isset($descriptions[$id])) {
-    $descriptions[$id] = ($description === strip_tags($description) && strlen($description) <= bootstrap_setting('tooltip_descriptions_length'));
+    $descriptions[$id] = ($description === strip_tags($description) && strlen($description) <= theme_get_setting('bootstrap_tooltip_descriptions_length'));
   }
   return $descriptions[$id];
-}
-
-/**
- * Helper function for generating link for a popover.
- *
- * @param string $link_title
- *   Link title.
- * @param string $id
- *   ID of the popover content to target.
- * @param string $popover_title
- *   Title of the popover content.
- * @param string $placement
- *   Position of the popover. Defaults to top.
- *
- * @return array
- *   A renderable array of the popover link.
- */
-function _bootstrap_popover_link($link_title, $id, $popover_title, $placement = 'top') {
-  $popover = array(
-    '#type' => 'link',
-    '#url' => Url::fromRoute('<current>'),
-    '#title' =>$link_title,
-    '#options' => array(
-      'attributes' => array(
-        'data-toggle' => 'popover',
-        'data-target' => '#' . $id,
-        'data-html' => 'true',
-        'data-placement' => $placement,
-        'data-title' => $popover_title,
-      ),
-    ),
-  );
-  return $popover;
-}
-
-/**
- * Helper function for generating content for a popover.
- *
- * @param string $id
- *   ID for the container.
- * @param $content
- *   Content for the popover content.
- * @return array
- *   Renderable array.
- */
-function _bootstrap_popover_content($id, $content) {
-  $popup_content = array(
-    '#type' => 'container',
-    '#attributes' => array(
-      'id' => $id,
-      'class' => array(
-        'visually-hidden',
-        'help-block',
-      ),
-    ),
-    'content' => $content,
-  );
-
-  return $popup_content;
 }

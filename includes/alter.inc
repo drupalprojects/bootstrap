@@ -10,7 +10,6 @@ use \Drupal\Core\Form\FormStateInterface;
 use \Drupal\Core\Template\Attribute;
 use \Drupal\Core\Render\Element;
 
-
 /**
  * Include #pre_render callbacks for elements.
  */
@@ -29,23 +28,27 @@ function bootstrap_css_alter(&$css) {
   $theme_path = drupal_get_path('theme', 'bootstrap');
   // Exclude specified CSS files from theme.
   $excludes = $config->get('bootstrap_css_excludes');
-  // Add CDN assets, if any.
-  if ($cdn_assets = bootstrap_get_cdn_assets('css')) {
-    $cdn_weight = -2.99;
-    foreach ($cdn_assets as $cdn_asset) {
-      $cdn_weight += .01;
-      $css[$cdn_asset] = array(
-        'data' => $cdn_asset,
-        'type' => 'external',
-        'every_page' => TRUE,
-        'media' => 'all',
-        'preprocess' => FALSE,
-        'group' => CSS_THEME,
-        'browsers' => array('IE' => TRUE, '!IE' => TRUE),
-        'weight' => $cdn_weight,
-      );
+  // Add Bootstrap CDN file and overrides.
+  $bootstrap_cdn = $config->get('bootstrap_cdn');
+  if ($bootstrap_cdn) {
+    // Add CDN.
+    if (theme_get_setting('bootstrap_bootswatch')) {
+      $cdn = '//netdna.bootstrapcdn.com/bootswatch/' . $bootstrap_cdn  . '/' . $config->get('bootstrap_bootswatch') . '/bootstrap.min.css';
     }
-    // Add the overrides file.
+    else {
+      $cdn = '//netdna.bootstrapcdn.com/bootstrap/' . $bootstrap_cdn  . '/css/bootstrap.min.css';
+    }
+    $css[$cdn] = array(
+      'data' => $cdn,
+      'type' => 'external',
+      'every_page' => TRUE,
+      'media' => 'all',
+      'preprocess' => FALSE,
+      'group' => CSS_AGGREGATE_THEME,
+      'browsers' => array('IE' => TRUE, '!IE' => TRUE),
+      'weight' => -2,
+    );
+    // Add overrides.
     $override = $theme_path . '/css/overrides.css';
     $css[$override] = array(
       'data' => $override,
@@ -53,7 +56,7 @@ function bootstrap_css_alter(&$css) {
       'every_page' => TRUE,
       'media' => 'all',
       'preprocess' => TRUE,
-      'group' => CSS_THEME,
+      'group' => CSS_AGGREGATE_THEME,
       'browsers' => array('IE' => TRUE, '!IE' => TRUE),
       'weight' => -1,
     );
@@ -66,6 +69,9 @@ function bootstrap_css_alter(&$css) {
 
 /**
  * Implements hook_element_info_alter().
+ *
+ * @todo This currently does not work due to the following issue.
+ * @see https://www.drupal.org/node/2390973
  */
 function bootstrap_element_info_alter(&$info) {
   $theme_key = \Drupal::theme()->getActiveTheme()->getName();
@@ -196,117 +202,6 @@ function _bootstrap_element_info_array_merge($info, $cached) {
 }
 
 /**
- * Implements hook_theme_suggestions_alter().
- */
-function bootstrap_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
-  switch ($hook) {
-    case 'details':
-      $suggestions[] = 'bootstrap_panel';
-      break;
-  }
-}
-
-/**
- * Implements hook_theme_suggestions_HOOK_alter().
- */
-function bootstrap_theme_suggestions_input_alter(array &$suggestions, array $variables) {
-  if (!empty($variables['element']['#is_button'])) {
-    $suggestions[] = 'input__button';
-  }
-}
-
-/**
- * Implements hook_theme_suggestions_HOOK_alter().
- */
-function bootstrap_theme_suggestions_fieldset_alter(array &$suggestions, array $variables) {
-  $suggestions[] = 'bootstrap_panel';
-}
-
-/**
- * Implements hook_form_alter().
- */
-function bootstrap_form_alter(&$form, FormStateInterface $form_state, $form_id = NULL) {
-  if ($form_id) {
-    switch ($form_id) {
-      case 'system_theme_settings':
-        // Create vertical tabs for global settings (provided by core or other
-        // contrib modules).
-        if (!isset($form['global'])) {
-          $form['global'] = array(
-            '#type' => 'vertical_tabs',
-            '#weight' => -9,
-          );
-          if (!empty($form_state->getBuildInfo()['args'])) {
-            $form['global']['#prefix'] = '<h2><small>' . t('Override Global Settings') . '</small></h2>';
-          }
-        }
-
-        // Iterate over all child elements and check to see if they should be
-        // moved in the global vertical tabs.
-        $global_children = Element::children($form);
-        foreach ($global_children as $child) {
-          if (isset($form[$child]['#type']) && $form[$child]['#type'] === 'details' && !isset($form[$child]['#group'])) {
-            $form[$child]['#group'] = 'global';
-          }
-        }
-        break;
-
-      case 'search_form':
-        // Add a clearfix class so the results don't overflow onto the form.
-        $form['#attributes']['class'][] = 'clearfix';
-
-        // Remove container-inline from the container classes.
-        $form['basic']['#attributes']['class'] = array();
-
-        // Hide the default button from display.
-        $form['basic']['submit']['#attributes']['class'][] = 'visually-hidden';
-        break;
-
-      case 'search_block_form':
-        $form['#attributes']['class'][] = 'form-search';
-
-        $form['search_block_form']['#title'] = '';
-        $form['search_block_form']['#attributes']['placeholder'] = t('Search');
-
-        // Hide the default button from display and implement a theme wrapper
-        // to add a submit button containing a search icon directly after the
-        // input element.
-        $form['actions']['submit']['#attributes']['class'][] = 'visually-hidden';
-        $form['search_block_form']['#theme_wrappers'] = array('bootstrap_search_form_wrapper');
-
-        // Apply a clearfix so the results don't overflow onto the form.
-        $form['#attributes']['class'][] = 'content-search';
-        break;
-
-      case 'image_style_edit_form':
-        $form['effects']['new']['effect']['data']['new']['#input_group_button'] = TRUE;
-        break;
-
-      case 'path_admin_filter_form':
-        $form['basic']['filter']['#input_group_button'] = TRUE;
-        break;
-    }
-  }
-
-  // Convert delete links in forms to Bootstrap buttons with delete links.
-  // @TODO revisit to see if there's a better place to handle this.
-  if (!empty($form['actions']['delete']['#type']) && $form['actions']['delete']['#type'] === 'link') {
-    $form['actions']['delete']['#attributes']['class'][] = 'btn';
-    if (theme_get_setting('bootstrap_button_colorize')) {
-      $form['actions']['delete']['#attributes']['class'][] = 'btn-danger';
-    }
-    if (theme_get_setting('bootstrap_button_iconize')) {
-      $form['actions']['delete']['#options']['html'] = 'true';
-      $trash_link = array(
-        '#type' => 'item',
-        '#markup' => '<span class="glyphicon glyphicon-trash"></span> ' . t('Delete'),
-      );
-      $form['actions']['delete']['#title'] = \Drupal::service('renderer')->render($trash_link);
-    }
-  }
-}
-
-/**
  * Implements hook_js_alter().
  */
 function bootstrap_js_alter(&$js) {
@@ -372,16 +267,151 @@ function bootstrap_js_alter(&$js) {
     $js = array_diff_key($js, array_combine($excludes, $excludes));
   }
 
-  // Add CDN assets, if any.
-  if ($cdn_assets = bootstrap_get_cdn_assets('js')) {
-    $cdn_weight = -99.99;
-    foreach ($cdn_assets as $cdn_asset) {
-      $cdn_weight += .01;
-      $js[$cdn_asset] = drupal_js_defaults($cdn_asset);
-      $js[$cdn_asset]['type'] = 'external';
-      $js[$cdn_asset]['every_page'] = TRUE;
-      $js[$cdn_asset]['scope'] = 'footer';
-      $js[$cdn_asset]['weight'] = $cdn_weight;
+  // Add Bootstrap settings.
+  $js['drupalSettings']['data']['bootstrap'] = array(
+    'anchorsFix' => $config->get('bootstrap_anchors_fix'),
+    'anchorsSmoothScrolling' => $config->get('bootstrap_anchors_smooth_scrolling'),
+    'formHasError' => (int) $config->get('bootstrap_forms_has_error_value_toggle'),
+    'popoverEnabled' => $config->get('bootstrap_popover_enabled'),
+    'popoverOptions' => array(
+      'animation' => (int) $config->get('bootstrap_popover_animation'),
+      'html' => (int) $config->get('bootstrap_popover_html'),
+      'placement' => $config->get('bootstrap_popover_placement'),
+      'selector' => $config->get('bootstrap_popover_selector'),
+      'trigger' => implode(' ', array_filter(array_values((array) $config->get('bootstrap_popover_trigger')))),
+      'triggerAutoclose' => (int) $config->get('bootstrap_popover_trigger_autoclose'),
+      'title' => $config->get('bootstrap_popover_title'),
+      'content' => $config->get('bootstrap_popover_content'),
+      'delay' => (int) $config->get('bootstrap_popover_delay'),
+      'container' => $config->get('bootstrap_popover_container'),
+    ),
+    'tooltipEnabled' => $config->get('bootstrap_tooltip_enabled'),
+    'tooltipOptions' => array(
+      'animation' => (int) $config->get('bootstrap_tooltip_animation'),
+      'html' => (int) $config->get('bootstrap_tooltip_html'),
+      'placement' => $config->get('bootstrap_tooltip_placement'),
+      'selector' => $config->get('bootstrap_tooltip_selector'),
+      'trigger' => implode(' ', array_filter(array_values((array) $config->get('bootstrap_tooltip_trigger')))),
+      'delay' => (int) $config->get('bootstrap_tooltip_delay'),
+      'container' => $config->get('bootstrap_tooltip_container'),
+    ),
+  );
+
+  // Add CDN.
+  if ($config->get('bootstrap_cdn')) {
+    $cdn = '//netdna.bootstrapcdn.com/bootstrap/' . $config->get('bootstrap_cdn')  . '/js/bootstrap.min.js';
+    $js[$cdn] = drupal_js_defaults();
+    $js[$cdn]['data'] = $cdn;
+    $js[$cdn]['type'] = 'external';
+    $js[$cdn]['every_page'] = TRUE;
+    $js[$cdn]['scope'] = 'footer';
+    $js[$cdn]['weight'] = -100;
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_alter().
+ */
+function bootstrap_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
+  if ($hook == 'details') {
+    $suggestions[] = 'bootstrap_panel';
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function bootstrap_theme_suggestions_input_alter(array &$suggestions, array $variables) {
+  if (!empty($variables['element']['#is_button'])) {
+    $suggestions[] = 'input__button';
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function bootstrap_theme_suggestions_fieldset_alter(array &$suggestions, array $variables) {
+  $suggestions[] = 'bootstrap_panel';
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function bootstrap_form_alter(&$form, FormStateInterface $form_state, $form_id = NULL) {
+  $config = \Drupal::config('bootstrap.settings');
+
+  if ($form_id) {
+    switch ($form_id) {
+      case 'system_theme_settings':
+        // Create vertical tabs for global settings (provided by core or other
+        // contrib modules).
+        if (!isset($form['global'])) {
+          $form['global'] = array(
+            '#type' => 'vertical_tabs',
+            '#weight' => -9,
+          );
+          if (!empty($form_state->getBuildInfo()['args'])) {
+            $form['global']['#prefix'] = '<h2><small>' . t('Override Global Settings') . '</small></h2>';
+          }
+        }
+
+        // Iterate over all child elements and check to see if they should be
+        // moved in the global vertical tabs.
+        $global_children = Element::children($form);
+        foreach ($global_children as $child) {
+          if (isset($form[$child]['#type']) && $form[$child]['#type'] === 'details' && !isset($form[$child]['#group'])) {
+            $form[$child]['#group'] = 'global';
+          }
+        }
+        break;
+
+      case 'search_form':
+        // Add a clearfix class so the results don't overflow onto the form.
+        $form['#attributes']['class'][] = 'clearfix';
+
+        // Remove container-inline from the container classes.
+        $form['basic']['#attributes']['class'] = array();
+
+        // Hide the default button from display.
+        $form['basic']['submit']['#attributes']['class'][] = 'visually-hidden';
+        break;
+
+      case 'search_block_form':
+        $form['#attributes']['class'][] = 'form-search';
+
+        $form['search_block_form']['#title'] = '';
+        $form['search_block_form']['#attributes']['placeholder'] = t('Search');
+
+        // Hide the default button from display and implement a theme wrapper
+        // to add a submit button containing a search icon directly after the
+        // input element.
+        $form['actions']['submit']['#attributes']['class'][] = 'visually-hidden';
+        $form['search_block_form']['#theme_wrappers'] = array('bootstrap_search_form_wrapper');
+
+        // Apply a clearfix so the results don't overflow onto the form.
+        $form['#attributes']['class'][] = 'content-search';
+        break;
+
+      case 'image_style_form':
+        $form['effects']['new']['new']['#input_group_button'] = TRUE;
+        break;
+
+      case 'path_admin_filter_form':
+        $form['basic']['filter']['#input_group_button'] = TRUE;
+        break;
+    }
+  }
+
+  // Convert delete links in forms to Bootstrap buttons with delete links.
+  // @TODO revisit to see if there's a better place to handle this.
+  if (!empty($form['actions']['delete']['#type']) && $form['actions']['delete']['#type'] === 'link') {
+    $form['actions']['delete']['#attributes']['class'][] = 'btn';
+    if ($config->get('bootstrap_button_colorize')) {
+      $form['actions']['delete']['#attributes']['class'][] = 'btn-danger';
+    }
+    if ($config->get('bootstrap_button_iconize')) {
+      $form['actions']['delete']['#options']['html'] = 'true';
+      $form['actions']['delete']['#title'] = _bootstrap_icon('trash') . ' Delete';
     }
   }
 }
@@ -425,41 +455,4 @@ function bootstrap_menu_local_tasks_alter(&$data, &$router_item, $root_path) {
  */
 function bootstrap_js_callback_filter_xss_alter(array &$allowed_tags = array()) {
   $allowed_tags[] = 'button';
-}
-
-/**
- * Implements hook_page_attachments_alter().
- */
-function bootstrap_page_attachments_alter(&$variables) {
-  $config = \Drupal::config('bootstrap.settings');
-  $variables['#attached']['drupalSettings'] = array(
-    'bootstrap' => array(
-      'anchorsFix' => $config->get('anchors_fix'),
-      'anchorsSmoothScrolling' => $config->get('anchors_smooth_scrolling'),
-      'formHasError' => (int) $config->get('forms_has_error_value_toggle'),
-      'popoverEnabled' => $config->get('popover_enabled'),
-      'popoverOptions' => array(
-        'animation' => (int) $config->get('popover_animation'),
-        'html' => (int) $config->get('popover_html'),
-        'placement' => $config->get('popover_placement'),
-        'selector' => $config->get('popover_selector'),
-        'trigger' => implode(' ', array_filter(array_values((array) $config->get('popover_trigger')))),
-        'triggerAutoclose' => (int) $config->get('popover_trigger_autoclose'),
-        'title' => $config->get('popover_title'),
-        'content' => $config->get('popover_content'),
-        'delay' => (int) $config->get('popover_delay'),
-        'container' => $config->get('popover_container'),
-      ),
-      'tooltipEnabled' => $config->get('tooltip_enabled'),
-      'tooltipOptions' => array(
-        'animation' => (int) $config->get('tooltip_animation'),
-        'html' => (int) $config->get('tooltip_html'),
-        'placement' => $config->get('tooltip_placement'),
-        'selector' => $config->get('tooltip_selector'),
-        'trigger' => implode(' ', array_filter(array_values((array) $config->get('tooltip_trigger')))),
-        'delay' => (int) $config->get('tooltip_delay'),
-        'container' => $config->get('tooltip_container'),
-      ),
-    ),
-  );
 }
