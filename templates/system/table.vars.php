@@ -36,24 +36,24 @@ function _bootstrap_table_add_classes(&$classes, &$variables) {
   $classes[] = 'table';
 
   // Bordered table.
-  if (!empty($context['bordered']) || theme_get_setting('bootstrap_table_bordered')) {
+  if (!empty($context['bordered']) || bootstrap_setting('table_bordered')) {
     $classes[] = 'table-bordered';
   }
 
   // Condensed table.
-  if (!empty($context['condensed']) || theme_get_setting('bootstrap_table_condensed')) {
+  if (!empty($context['condensed']) || bootstrap_setting('table_condensed')) {
     $classes[] = 'table-condensed';
   }
 
   // Hover rows.
-  if (!empty($context['hover']) || theme_get_setting('bootstrap_table_hover')) {
+  if (!empty($context['hover']) || bootstrap_setting('table_hover')) {
     $classes[] = 'table-hover';
   }
 
   // Striped rows.
-  if (!empty($context['striped']) || theme_get_setting('bootstrap_table_striped')) {
+  if (!empty($context['striped']) || bootstrap_setting('table_striped')) {
     $classes[] = 'table-striped';
   }
 
-  $variables['responsive'] = !empty($context['responsive']) ? $context['responsive'] : theme_get_setting('bootstrap_table_responsive');
+  $variables['responsive'] = !empty($context['responsive']) ? $context['responsive'] : bootstrap_setting('table_responsive');
 }

@@ -28,10 +28,10 @@ function bootstrap_css_alter(&$css) {
   $config = \Drupal::config('bootstrap.settings');
   $theme_path = drupal_get_path('theme', 'bootstrap');
   // Exclude specified CSS files from theme.
-  $excludes = $config->get('bootstrap_css_excludes');
+  $excludes = bootstrap_setting('css_excludes');
   // Add CDN assets, if any.
   if ($cdn_assets = bootstrap_get_cdn_assets('css')) {
-    $cdn_weight = -2.99;
+    $cdn_weight = 2.99;
     foreach ($cdn_assets as $cdn_asset) {
       $cdn_weight += .01;
       $css[$cdn_asset] = array(
@@ -40,7 +40,7 @@ function bootstrap_css_alter(&$css) {
         'every_page' => TRUE,
         'media' => 'all',
         'preprocess' => FALSE,
-        'group' => CSS_THEME,
+        'group' => CSS_AGGREGATE_DEFAULT,
         'browsers' => array('IE' => TRUE, '!IE' => TRUE),
         'weight' => $cdn_weight,
       );
@@ -53,7 +53,7 @@ function bootstrap_css_alter(&$css) {
       'every_page' => TRUE,
       'media' => 'all',
       'preprocess' => TRUE,
-      'group' => CSS_THEME,
+      'group' => CSS_AGGREGATE_DEFAULT,
       'browsers' => array('IE' => TRUE, '!IE' => TRUE),
       'weight' => -1,
     );
@@ -66,6 +66,9 @@ function bootstrap_css_alter(&$css) {
 
 /**
  * Implements hook_element_info_alter().
+ *
+ * @todo This currently does not work due to the following issue.
+ * @see https://www.drupal.org/node/2390973
  */
 function bootstrap_element_info_alter(&$info) {
   $theme_key = \Drupal::theme()->getActiveTheme()->getName();
@@ -196,6 +199,86 @@ function _bootstrap_element_info_array_merge($info, $cached) {
 }
 
 /**
+ * Implements hook_js_alter().
+ */
+function bootstrap_js_alter(&$js) {
+  $config = \Drupal::config('bootstrap.settings');
+
+  // Exclude specified JavaScript files from theme.
+  // @todo add excludes.
+  $excludes = $config->get('bootstrap_excludes_js');
+
+  $theme_path = drupal_get_path('theme', 'bootstrap');
+
+  // Add or replace JavaScript files when matching paths are detected.
+  // Replacement files must begin with '_', like '_node.js'.
+  $files = _bootstrap_file_scan_directory($theme_path . '/js', '/\.js$/');
+  foreach ($files as $file) {
+    if ($file->name == 'bootstrap' || $file->name == 'bootstrap.admin') {
+      continue;
+    }
+    $path = str_replace($theme_path . '/js/', '', $file->uri);
+    // Detect if this is a replacement file.
+    $replace = FALSE;
+    if (preg_match('/^[_]/', $file->filename)) {
+      $replace = TRUE;
+      $path = dirname($path) . '/' . preg_replace('/^[_]/', '', $file->filename);
+    }
+    $matches = array();
+    if (preg_match('/^modules\/([^\/]*)/', $path, $matches)) {
+      if (!\Drupal::moduleHandler()->moduleExists($matches[1])) {
+        continue;
+      }
+      else {
+        $path = str_replace('modules/' . $matches[1], drupal_get_path('module', $matches[1]), $path);
+      }
+    }
+    // Path should always exist to either add or replace JavaScript file.
+    if (!empty($path) && array_key_exists($path, $js)) {
+      $bootstrap_js_defaults = array(
+        'type' => 'file',
+        'group' => JS_DEFAULT,
+        'every_page' => FALSE,
+        'weight' => 0,
+        'scope' => 'footer',
+        'cache' => TRUE,
+        'preprocess' => TRUE,
+        'attributes' => array(),
+        'version' => NULL,
+        'data' => $file->uri,
+        'browsers' => array(),
+      );
+      // Replace file.
+      if ($replace) {
+        $js[$file->uri] = $bootstrap_js_defaults;
+        unset($js[$path]);
+      }
+      // Add file.
+      else {
+        $js[$file->uri] = $bootstrap_js_defaults;
+      }
+    }
+  }
+
+  if (!empty($excludes)) {
+    $js = array_diff_key($js, array_combine($excludes, $excludes));
+  }
+
+  // Add CDN assets, if any.
+  if ($cdn_assets = bootstrap_get_cdn_assets('js')) {
+    $cdn_weight = -99.99;
+    foreach ($cdn_assets as $cdn_asset) {
+      $cdn_weight += .01;
+      $js[$cdn_asset] = drupal_js_defaults($cdn_asset);
+      $js[$cdn_asset]['type'] = 'external';
+      $js[$cdn_asset]['every_page'] = TRUE;
+      $js[$cdn_asset]['scope'] = 'footer';
+      $js[$cdn_asset]['weight'] = $cdn_weight;
+    }
+  }
+}
+
+/**
  * Implements hook_theme_suggestions_alter().
  */
 function bootstrap_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
@@ -292,96 +375,16 @@ function bootstrap_form_alter(&$form, FormStateInterface $form_state, $form_id =
   // @TODO revisit to see if there's a better place to handle this.
   if (!empty($form['actions']['delete']['#type']) && $form['actions']['delete']['#type'] === 'link') {
     $form['actions']['delete']['#attributes']['class'][] = 'btn';
-    if (theme_get_setting('bootstrap_button_colorize')) {
+    if (bootstrap_setting('button_colorize')) {
       $form['actions']['delete']['#attributes']['class'][] = 'btn-danger';
     }
-    if (theme_get_setting('bootstrap_button_iconize')) {
+    if (bootstrap_setting('button_iconize')) {
       $form['actions']['delete']['#options']['html'] = 'true';
       $trash_link = array(
         '#type' => 'item',
         '#markup' => '<span class="glyphicon glyphicon-trash"></span> ' . t('Delete'),
       );
       $form['actions']['delete']['#title'] = \Drupal::service('renderer')->render($trash_link);
-    }
-  }
-}
-
-/**
- * Implements hook_js_alter().
- */
-function bootstrap_js_alter(&$js) {
-  $config = \Drupal::config('bootstrap.settings');
-
-  // Exclude specified JavaScript files from theme.
-  // @todo add excludes.
-  $excludes = $config->get('bootstrap_excludes_js');
-
-  $theme_path = drupal_get_path('theme', 'bootstrap');
-
-  // Add or replace JavaScript files when matching paths are detected.
-  // Replacement files must begin with '_', like '_node.js'.
-  $files = _bootstrap_file_scan_directory($theme_path . '/js', '/\.js$/');
-  foreach ($files as $file) {
-    if ($file->name == 'bootstrap' || $file->name == 'bootstrap.admin') {
-      continue;
-    }
-    $path = str_replace($theme_path . '/js/', '', $file->uri);
-    // Detect if this is a replacement file.
-    $replace = FALSE;
-    if (preg_match('/^[_]/', $file->filename)) {
-      $replace = TRUE;
-      $path = dirname($path) . '/' . preg_replace('/^[_]/', '', $file->filename);
-    }
-    $matches = array();
-    if (preg_match('/^modules\/([^\/]*)/', $path, $matches)) {
-      if (!\Drupal::moduleHandler()->moduleExists($matches[1])) {
-        continue;
-      }
-      else {
-        $path = str_replace('modules/' . $matches[1], drupal_get_path('module', $matches[1]), $path);
-      }
-    }
-    // Path should always exist to either add or replace JavaScript file.
-    if (!empty($path) && array_key_exists($path, $js)) {
-      $bootstrap_js_defaults = array(
-        'type' => 'file',
-        'group' => JS_DEFAULT,
-        'every_page' => FALSE,
-        'weight' => 0,
-        'scope' => 'footer',
-        'cache' => TRUE,
-        'preprocess' => TRUE,
-        'attributes' => array(),
-        'version' => NULL,
-        'data' => $file->uri,
-        'browsers' => array(),
-      );
-      // Replace file.
-      if ($replace) {
-        $js[$file->uri] = $bootstrap_js_defaults;
-        unset($js['core/' . $path]);
-      }
-      // Add file.
-      else {
-        $js[$file->uri] = $bootstrap_js_defaults;
-      }
-    }
-  }
-
-  if (!empty($excludes)) {
-    $js = array_diff_key($js, array_combine($excludes, $excludes));
-  }
-
-  // Add CDN assets, if any.
-  if ($cdn_assets = bootstrap_get_cdn_assets('js')) {
-    $cdn_weight = -99.99;
-    foreach ($cdn_assets as $cdn_asset) {
-      $cdn_weight += .01;
-      $js[$cdn_asset] = drupal_js_defaults($cdn_asset);
-      $js[$cdn_asset]['type'] = 'external';
-      $js[$cdn_asset]['every_page'] = TRUE;
-      $js[$cdn_asset]['scope'] = 'footer';
-      $js[$cdn_asset]['weight'] = $cdn_weight;
     }
   }
 }

@@ -55,7 +55,7 @@ function bootstrap_get_cdn_assets($type = NULL, $provider = NULL, $theme = NULL)
   // Retrieve the active CDN provider data.
   bootstrap_include('bootstrap', 'includes/cdn.inc');
   if (!isset($provider)) {
-    $provider = bootstrap_setting('cdn_provider');
+    $provider = bootstrap_setting('cdn_provider', $theme);
     if (!isset($provider)) {
       $provider = '';
     }
@@ -163,42 +163,6 @@ function bootstrap_get_theme_info($theme_key = NULL, $key = NULL, $base_themes =
 }
 
 /**
- * Retrieves a setting for the current theme or for a given theme.
- *
- * This is a wrapper for theme_get_setting(), ensuring to use deprecated
- * setting values instead.
- *
- * @param string $name
- *   The name of the setting to be retrieved.
- * @param string $theme
- *   The name of a given theme; defaults to the currently active theme.
- * @param string $prefix
- *   The prefix used on the $name of the setting, this will be appended with
- *   "_" automatically if set.
- *
- * @return
- *   The value of the requested setting, NULL if the setting does not exist.
- *
- * @see theme_get_setting()
- *
- * @todo Refactor in 7.x-4.x and get rid of the deprecated settings.
- */
-function bootstrap_setting($name, $theme = NULL, $prefix = 'bootstrap') {
-  $prefix = !empty($prefix) ? $prefix . '_' : '';
-  $deprecated = array(
-    // New setting name               => old setting name.
-    'bootstrap_cdn_jsdelivr_version'  => 'bootstrap_cdn',
-    'bootstrap_cdn_jsdelivr_theme'    => 'bootstrap_bootswatch',
-  );
-  if (isset($deprecated[$prefix . $name]) && ($setting = theme_get_setting($deprecated[$prefix . $name], $theme))) {
-    return $setting;
-  }
-  else {
-    return theme_get_setting($prefix . $name, $theme);
-  }
-}
-
-/**
  * Helper function for including theme files.
  *
  * @param string $theme
@@ -214,6 +178,33 @@ function bootstrap_include($theme, $path) {
   if ($themes[$theme] && ($file = DRUPAL_ROOT . '/' . $themes[$theme] . '/' . $path) && file_exists($file)) {
     include_once $file;
   }
+}
+
+/**
+ * Retrieves a setting for the current theme or for a given theme.
+ *
+ * This is a wrapper for theme_get_setting(), ensuring to use deprecated
+ * setting values instead.
+ *
+ * @param string $name
+ *   The name of the setting to be retrieved.
+ * @param string $theme
+ *   The name of a given theme; defaults to the currently active theme.
+ * @param string $prefix
+ *   The prefix used on the $name of the setting, this will be appended with
+ *   "_" automatically if set.
+ *
+ * @return mixed
+ *   The value of the requested setting, NULL if the setting does not exist.
+ *
+ * @see theme_get_setting()
+ *
+ * @todo Refactor in 7.x-4.x and get rid of the deprecated settings.
+ */
+function bootstrap_setting($name, $theme = NULL, $prefix = 'bootstrap') {
+  $prefix = !empty($prefix) ? $prefix . '_' : '';
+  $setting = theme_get_setting($prefix . $name, $theme);
+  return $setting;
 }
 
 /**
@@ -696,7 +687,7 @@ function _bootstrap_glyphicons_supported() {
       // that is the case here so no file discovery is necessary. If the active
       // theme does not have this setting, it falls back to the base theme that
       // does.
-      $supported[$theme] = (bool) theme_get_setting('bootstrap_cdn', $theme);
+      $supported[$theme] = (bool) bootstrap_setting('cdn', $theme);
 
       // CDN not used, iterate over all of the active (base) themes to determine
       // if they contain glyphicon font files.

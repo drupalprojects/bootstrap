@@ -9,7 +9,7 @@
  */
 function bootstrap_preprocess_image_srcset(&$variables) {
   // Add image shape, if necessary.
-  if ($shape = theme_get_setting('bootstrap_image_shape')) {
+  if ($shape = bootstrap_setting('image_shape')) {
     $variables['attributes']['class'][] = $shape;
   }
 }

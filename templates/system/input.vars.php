@@ -10,7 +10,6 @@ use Drupal\Core\Template\Attribute;
  * Preprocess input.
  */
 function bootstrap_preprocess_input(&$variables) {
-  $config = \Drupal::config('bootstrap.settings');
   $element = &$variables['element'];
   $attributes = new Attribute($variables['attributes']);
 
@@ -34,7 +33,7 @@ function bootstrap_preprocess_input(&$variables) {
     _bootstrap_iconize_button($element);
 
     // Add button size, if necessary.
-    if ($size = $config->get('bootstrap_button_size')) {
+    if ($size = bootstrap_setting('button_size')) {
       $variables['attributes']['class'][] = $size;
     }
 

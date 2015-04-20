@@ -7,11 +7,25 @@
  */
 
 #}
-<fieldset{{ attributes }}>
+
+{%
+set classes = [
+  'panel',
+  'panel-default',
+  'form-wrapper',
+  form_inline ? 'form-inline',
+  required ? 'form-required',
+  collapsible ? 'collapsible',
+  collapsed ? 'collapsed',
+]
+%}
+<fieldset{{ attributes.addClass(classes) }}>
   {% if title %}
     {% if collapsible %}
       <legend class="panel-heading">
-        <a href="#" class="panel-title fieldset-legend" data-toggle="collapse" data-target="{{ target }}">{{ title }}</a>
+        <a href="#" class="panel-title fieldset-legend" data-toggle="collapse" data-target="{{ target }}">
+          <span class="fieldset-legend-prefix visually-hidden">Show</span>{{ title }}
+        </a>
       </legend>
     {% else %}
       <legend class="panel-heading">
@@ -20,18 +34,17 @@
     {% endif %}
   {% endif %}
   {% if collapsible %}
-  <div class="panel-collapse collapse fade{{ collapsed ? in : '' }}">
+    <div class="panel-collapse collapse fade {{ collapsed == false ? 'in' : '' }}">
+  {% endif %}
+  <div class="panel-body">
+    {% if description.content %}
+      <div{{ description.attributes.addClass('description', 'help-block') }}>{{ description.content }}</div>
     {% endif %}
-    <div class="panel-body">
-      {% if description %}
-        <div class="help-block">{{ description }}</div>
-      {% endif %}
-      {{ content }}
-      {% if children %}
-        {{ children }}
-      {% endif %}
-    </div>
-    {% if collapsible %}
+    {% if children %}
+      {{ children }}
+    {% endif %}
   </div>
+  {% if collapsible %}
+    </div>
   {% endif %}
 </fieldset>

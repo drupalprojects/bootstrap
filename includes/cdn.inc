@@ -102,7 +102,13 @@ function bootstrap_cdn_provider($provider = NULL, $reset = FALSE) {
         elseif (!empty($data['api'])) {
           $client = Drupal::httpClient();
           $request = $client->createRequest('GET', $data['api']);
-          $response = $client->send($request);
+          try {
+            $response = $client->send($request);
+          }
+          catch (RequestException $e) {
+            $response = new stdClass();
+            $response->code = '400';
+          }
         }
 
         // Alter the specific provider.
@@ -113,7 +119,7 @@ function bootstrap_cdn_provider($provider = NULL, $reset = FALSE) {
         // @todo Use drupal_alter() once CDN is in bootstrap_core companion module.
         // drupal_alter('bootstrap_cdn_provider_' . $name, $data, $request);
       }
-      \Drupal::cache()->get($cid, $providers);
+      \Drupal::cache()->set($cid, $providers);
     }
   }
   if (isset($original_provider)) {
@@ -143,11 +149,11 @@ function bootstrap_bootstrap_cdn_provider_jsdelivr_alter(&$provider, $response =
   $provider['versions'] = array();
   $provider['themes'] = array();
 
-  try {
+  if (!$response->code == 400) {
     $data = $response->getBody(TRUE);
     $json = Json::decode($data);
   }
-  catch (GuzzleHttp\Exception\RequestException $e) {
+  else {
     // The request or parsing of the JSON data failed, provide defaults.
     $provider['error'] = TRUE;
     $provider['versions'][BOOTSTRAP_VERSION] = BOOTSTRAP_VERSION;
@@ -320,7 +326,7 @@ function bootstrap_bootstrap_cdn_provider_jsdelivr_assets_alter(&$provider, $the
  */
 function bootstrap_cdn_provider_settings_form(&$form, FormStateInterface &$form_state, $theme) {
   // Retrieve the provider from form values or the setting.
-  $form_values = $form_state->getValues('bootstrap_cdn_provider');
+  $form_values = $form_state->getValues('cdn_provider');
   $provider = isset($form_values) ? $form_values : bootstrap_setting('cdn_provider', $theme);
 
   // Intercept possible manual import of API data via AJAX callback.

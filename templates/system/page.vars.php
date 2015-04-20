@@ -26,7 +26,7 @@ function bootstrap_preprocess_page(&$variables) {
     $variables['content_column_attributes']['class'][] = 'col-sm-12';
   }
 
-  if (theme_get_setting('bootstrap_fluid_container') === 1) {
+  if (bootstrap_setting('fluid_container') === 1) {
     $variables['container_class'] = 'container-fluid';
   }
   else {
@@ -35,17 +35,16 @@ function bootstrap_preprocess_page(&$variables) {
 
   $variables['navbar_attributes'] = new Attribute();
   $variables['navbar_attributes']['class'] = array('navbar');
-  if (theme_get_setting('bootstrap_navbar_position') !== '') {
-    $variables['navbar_attributes']['class'][] = 'navbar-' . theme_get_setting('bootstrap_navbar_position');
+  if (bootstrap_setting('navbar_position') !== '') {
+    $variables['navbar_attributes']['class'][] = 'navbar-' . bootstrap_setting('navbar_position');
   }
-  elseif (theme_get_setting('bootstrap_fluid_container') === 1) {
+  elseif (bootstrap_setting('fluid_container') === 1) {
     $variables['navbar_classes_array'][] = 'container-fluid';
   }
   else {
     $variables['navbar_attributes']['class'][] = 'container';
   }
-
-  if (theme_get_setting('bootstrap_navbar_inverse')) {
+  if (bootstrap_setting('navbar_inverse')) {
     $variables['navbar_attributes']['class'][] = 'navbar-inverse';
   }
   else {
