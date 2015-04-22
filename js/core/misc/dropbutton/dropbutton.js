@@ -35,6 +35,7 @@
     // Merge defaults with settings.
     var options = $.extend({'title': Drupal.t('List additional actions')}, settings);
     var $dropbutton = $(dropbutton);
+    $dropbutton.addClass('form-group');
     this.$dropbutton = $dropbutton;
     this.$list = $dropbutton.find('.dropbutton');
     this.$dropbutton_widget = this.$dropbutton.find('.dropbutton-widget');

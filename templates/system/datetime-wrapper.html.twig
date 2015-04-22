@@ -16,10 +16,10 @@
  */
 #}
 {%
-set title_classes = [
-'control-label',
-required ? 'form-required',
-]
+  set title_classes = [
+    'control-label',
+    required ? 'form-required',
+  ]
 %}
 {% if title %}
   <label{{ title_attributes.addClass(title_classes) }}>{{ title }}</label>

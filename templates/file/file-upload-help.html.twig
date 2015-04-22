@@ -1,0 +1,27 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display help text for file fields.
+ *
+ * Available variables:
+ * - descriptions: Lines of help text for uploading a file.
+ * - description: The help text (description) for the file field.
+ * - popover: True if popovers enabled.
+ *
+ * @see template_preprocess_file_upload_help()
+ *
+ * @ingroup themeable
+ */
+#}
+{% if popover_link %}
+  <div class="help-block">
+    {{ description }}<br />
+    {{ popover_link }}
+  </div>
+  {{ popover_content }}
+{% else %}
+  <div class="help-block">
+    {{ description }}<br />
+    {{ descriptions|safe_join('<br />') }}
+  </div>
+{% endif %}

@@ -1,23 +1,13 @@
 <?php
 /**
  * @file
- * menu-local-action.vars.php
+ * menu-local-action.func.php
  */
 
 use Drupal\Component\Utility\String;
 
 /**
  * Overrides theme_menu_local_action().
- *
- * Prepares variables for single local action link templates.
- *
- * Default template: menu-local-action.html.twig.
- *
- * @param array $variables
- *   An associative array containing:
- *   - element: A render element containing:
- *     - #link: A menu link array with 'title', 'url', and (optionally)
- *       'localized_options' keys.
  */
 function bootstrap_preprocess_menu_local_action(&$variables) {
   $link = $variables['element']['#link'];
@@ -56,8 +46,10 @@ function bootstrap_preprocess_menu_local_action(&$variables) {
   }
   else {
     $variables['link'] = array(
-      '#type' => 'markup',
-      '#value' => $icon . $link['title'],
+      '#type' => 'link',
+      '#title' => $link['title'],
+      '#options' => $options,
+      '#url' => $link['url'],
     );
   }
 }

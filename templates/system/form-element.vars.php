@@ -5,125 +5,102 @@
  */
 
 use Drupal\Core\Template\Attribute;
+use Drupal\Core\Form\FormState;
 
 /**
  * Preprocess form_element.
  */
 function bootstrap_preprocess_form_element(&$variables) {
   $element = &$variables['element'];
-  $type = $element['#type'];
   $title_display = $element['#title_display'];
+  $name = !empty($element['#name']) ? $element['#name'] : FALSE;
+  $type = !empty($element['#type']) ? $element['#type'] : FALSE;
+  $checkbox = $type && $type === 'checkbox';
+  $radio = $type && $type === 'radio';
+  $has_tooltip = FALSE;
 
   // This function is invoked as theme wrapper, but the rendered form element
-  // may not necessarily have been processed by
-  // \Drupal::formBuilder()->doBuildForm().
+  // may not necessarily have been processed by Drupal::formBuilder()->doBuildForm().
   $element += array(
     '#title_display' => 'before',
   );
 
-  // Take over any #wrapper_attributes defined by the element.
-  // @todo Temporary hack for #type 'item'.
-  // @see http://drupal.org/node/1829202
-  $variables['attributes'] = array();
-  if (isset($element['#wrapper_attributes'])) {
-    $variables['attributes'] = $element['#wrapper_attributes'];
+  // Check for errors and set correct error class.
+  $formState = new FormState();
+  if ((isset($element['#parents']) && $formState->getError($element)) || (!empty($element['#required']) && bootstrap_setting('forms_required_has_error'))) {
+    $variables['has_error'] = TRUE;
   }
 
-  // Add element #id for #type 'item'.
-  if (isset($element['#markup']) && !empty($element['#id'])) {
-    $variables['attributes']['id'] = $element['#id'];
-  }
-
-  // Pass elements #type and #name to template.
-  if (!empty($element['#type'])) {
-    $variables['type'] = $type;
-  }
-  if (!empty($element['#name'])) {
-    $variables['name'] = $element['#name'];
-  }
-
-  // Pass elements disabled status to template.
-  $variables['disabled'] = !empty($element['#attributes']['disabled']) ? $element['#attributes']['disabled'] : NULL;
-
-  // If #title is not set, we don't display any label.
-  if (!isset($element['#title'])) {
-    $element['#title_display'] = 'none';
-  }
-
-  $variables['title_display'] = $element['#title_display'];
-
-  $variables['prefix'] = isset($element['#field_prefix']) ? $element['#field_prefix'] : NULL;
-  $variables['suffix'] = isset($element['#field_suffix']) ? $element['#field_suffix'] : NULL;
-
-  $variables['description'] = NULL;
-  if (!empty($element['#description'])) {
-    $variables['description_display'] = $element['#description_display'];
-    $description_attributes = [];
-    if (!empty($element['#id'])) {
-      $description_attributes['id'] = $element['#id'] . '--description';
-    }
-    $variables['description']['attributes'] = new Attribute($description_attributes);
-    $variables['description']['content'] = $element['#description'];
-  }
-
-  // Add label_display and label variables to template.
-  $variables['label_display'] = $element['#title_display'];
-  $variables['label'] = array('#theme' => 'form_element_label');
-  $variables['label'] += array_intersect_key($element, array_flip(array('#id', '#required', '#title', '#title_display')));
-
-  $variables['children'] = $element['#children'];
-
-  if (!empty($element['#autocomplete_path']) && drupal_valid_path($element['#autocomplete_path'])) {
-    $variables['attributes']['class'][] = 'form-autocomplete';
-  }
-
-  // Add a class for disabled elements to facilitate cross-browser styling.
-  if (!empty($element['#attributes']['disabled'])) {
-    $variables['attributes']['class'][] = 'form-disabled';
+  if (!empty($element['#autocomplete_route_name']) && Drupal::PathValidator($element['#autocomplete_route_name'])) {
+    $variables['is_autocomplete'] = TRUE;
   }
 
   // See http://getbootstrap.com/css/#forms-controls.
-
-  $is_checkbox = FALSE;
-  $is_radio = FALSE;
-
-  if (isset($type)) {
-    if ($type === 'radio') {
-      $variables['attributes']['class'][] = 'radio';
-      $is_radio = TRUE;
+  if (isset($element['#type'])) {
+    if ($radio) {
+       $variables['is_radio'] =  TRUE;
     }
-    elseif ($type === 'checkbox') {
-      $variables['attributes']['class'][] = 'checkbox';
-      $is_checkbox = TRUE;
+    elseif ($checkbox) {
+      $variables['is_checkbox'] = TRUE;
     }
-    elseif ($type !== 'hidden') {
-      $variables['attributes']['class'][] = 'form-group';
+    elseif ($type != 'hidden') {
+      $variables['is_form_group'] = TRUE;
     }
   }
 
-  if (($is_checkbox || $is_radio) && $title_display != 'none' && $title_display != 'invisible') {
-    $description = array(
-      '#markup' => $element['#description'],
-    );
-    // Place the description in the label.
-    $variables['label']['#description'] = \Drupal::service('renderer')->render($description);
+  // If #title is not set, we don't display any label or required marker.
+  if (!isset($element['#title'])) {
+    $element['#title_display'] = 'none';
+  }
+  $variables['title_display'] = $element['#title_display'];
+  // Add label_display and label variables to template.
+  $variables['label_display'] = $element['#title_display'];
+
+  // Place single checkboxes and radios in the label field.
+  if (($checkbox || $radio) && $title_display != 'none' && $title_display != 'invisible') {
     $variables['label']['#children'] = $variables['children'];
     unset($variables['children']);
     unset($variables['description']);
+
+    // Pass the label attributes to the Label.
+    $variables['label']['#label_attributes'] = $variables['element']['#label_attributes'];
   }
 
-  $tooltip_description = !empty($element['#description']) && _bootstrap_tooltip_description($element['#description']);
-  if ($tooltip_description && ($type === 'checkbox' || $type === 'radio' || $type === 'checkboxes' || $type === 'radios')) {
-    $wrapper_attributes['title'] = $element['#description'];
-    $wrapper_attributes['data-toggle'] = 'tooltip';
-  }
-
-  // Input Groups.
+  // Create variables for #input_group and #input_group_button flags.
   if (isset($element['#input_group'])) {
     $variables['input_group'] = $element['#input_group'];
   }
-
   if (isset($element['#input_group_button'])) {
     $variables['input_group_button'] = $element['#input_group_button'];
+  }
+
+  $prefix = '';
+  $suffix = '';
+  if (isset($element['#field_prefix']) || isset($element['#field_suffix'])) {
+    // Determine if "#input_group" was specified.
+    if (!empty($element['#input_group'])) {
+      $prefix = array(
+        '#markup' => '<div class="input-group">' . (isset($element['#field_prefix']) ? '<span class="input-group-addon">' . $element['#field_prefix'] . '</span>' : ''),
+      );
+      $suffix = array(
+        '#markup' => (isset($element['#field_suffix']) ? '<span class="input-group-addon">' . $element['#field_suffix'] . '</span>' : '') . '</div>',
+      );
+    }
+    // Determine if "#input_group_button" was specified.
+    elseif (!empty($element['#input_group_button'])) {
+      $prefix = array(
+        '#markup' => '<div class="input-group">' . (isset($element['#field_prefix']) ? '<span class="input-group-btn">' . $element['#field_prefix'] . '</span>' : ''),
+      );
+      $suffix = array(
+        '#markup' => (isset($element['#field_suffix']) ? '<span class="input-group-btn">' . $element['#field_suffix'] . '</span>' : '') . '</div>',
+      );
+    }
+    $render = \Drupal::service('renderer');
+    $variables['prefix'] = $render->render($prefix);
+    $variables['suffix'] = $render->render($suffix);
+  }
+  else {
+    $variables['prefix'] = '';
+    $variables['suffix'] = '';
   }
 }

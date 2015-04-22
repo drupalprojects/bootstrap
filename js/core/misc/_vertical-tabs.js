@@ -19,7 +19,7 @@
         return;
       }
 
-      $(context).find('[data-vertical-tabs-panes]').once('vertical-tabs', function () {
+      $(context).find('[data-vertical-tabs-panes]').once('vertical-tabs').each(function () {
         var $this = $(this).addClass('tab-content vertical-tabs-panes');
 
         var focusID = $(':hidden.vertical-tabs-active-tab', this).val();
@@ -40,13 +40,13 @@
 
         // Transform each details into a tab.
         $details.each(function () {
-          var $this = $(this);
+          var $that = $(this);
           var vertical_tab = new Drupal.verticalTab({
-            title: $this.find('> legend').text(),
-            details: $this
+            title: $that.find('> legend').text(),
+            details: $that
           });
           tab_list.append(vertical_tab.item);
-          $this
+          $that
             .removeClass('collapsed')
             // prop() can't be used on browsers not supporting details element,
             // the style won't apply to them if prop() is used.
@@ -56,7 +56,7 @@
             .data('verticalTab', vertical_tab)
             .find('> legend').remove();
           if (this.id === focusID) {
-            tab_focus = $this;
+            tab_focus = $that;
           }
         });
 

@@ -52,6 +52,10 @@ bootstrap_anchors_smooth_scrolling: 1
 # --------------
 bootstrap_forms_required_has_error: 0
 bootstrap_forms_has_error_value_toggle: 1
+bootstrap_forms_smart_descriptions: 1
+bootstrap_forms_smart_descriptions_limit: 250
+bootstrap_forms_smart_descriptions_allowed_tags: 'b, code, em, i, kbd, span, strong'
+
 
 # Popovers
 # --------------

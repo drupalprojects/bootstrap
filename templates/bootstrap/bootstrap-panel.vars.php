@@ -26,13 +26,14 @@ function bootstrap_preprocess_bootstrap_panel(&$variables) {
   $variables['legend']['attributes'] = new Attribute();
   $variables['legend_span']['attributes'] = new Attribute();
 
-  $variables['attributes']['class'][] = 'panel';
-  $variables['attributes']['class'][] = 'panel-default';
-  // states.js requires form-wrapper on fieldset to work properly.
-  $variables['attributes']['class'][] = 'form-wrapper';
+  if (!empty($element['#description'])) {
+    $description_id = $element['#attributes']['id'] . '--description';
+    $description_attributes['id'] = $description_id;
+    $variables['description']['attributes'] = new Attribute($description_attributes);
+    $variables['description']['content'] = $element['#description'];
 
-  if (in_array('container-inline', $variables['attributes']['class'])) {
-    $variables['attributes']['class'][] = 'form-inline';
+    // Add the description's id to the fieldset aria attributes.
+    $variables['attributes']['aria-describedby'] = $description_id;
   }
 
   $variables['collapsible'] = FALSE;
@@ -44,7 +45,6 @@ function bootstrap_preprocess_bootstrap_panel(&$variables) {
   $variables['collapsed'] = FALSE;
   if (isset($element['#collapsed'])) {
     $variables['collapsed'] = $element['#collapsed'];
-    $variables['attributes']['class'][] = 'collapsed';
   }
 
   // Force grouped fieldsets to not be collapsible (for vertical tabs).
@@ -59,19 +59,10 @@ function bootstrap_preprocess_bootstrap_panel(&$variables) {
 
   $variables['target'] = NULL;
   if (isset($element['#id'])) {
-    $variables['attributes']['id'] = $element['#id'];
+    if (!isset($variables['attributes']['id'])) {
+      $variables['attributes']['id'] = $element['#id'];
+    }
     $variables['target'] = '#' . $element['#id'] . ' > .collapse';
-  }
-
-
-  if (!empty($element['#description'])) {
-    $description_id = $element['#attributes']['id'] . '--description';
-    $description_attributes['id'] = $description_id;
-    $variables['description']['attributes'] = new Attribute($description_attributes);
-    $variables['description']['content'] = $element['#description'];
-
-    // Add the description's id to the fieldset aria attributes.
-    $variables['attributes']['aria-describedby'] = $description_id;
   }
 
   // Iterate over optional variables.

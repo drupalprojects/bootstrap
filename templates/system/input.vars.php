@@ -16,16 +16,6 @@ function bootstrap_preprocess_input(&$variables) {
   // Set the element's attributes.
   \Drupal\Core\Render\Element::setAttributes($element, array('id', 'name', 'value', 'type'));
 
-  // Setup a default "icon" variable. This allows #icon to be passed
-  // to every template and theme function.
-  // @see https://drupal.org/node/2219965
-  if (!isset($element['#icon'])) {
-    $variables['element']['#icon'] = NULL;
-  }
-  if (!isset($element['#icon_position'])) {
-    $variables['element']['#icon_position'] = 'before';
-  }
-
   // Handle button inputs.
   if (_bootstrap_is_button($element)) {
     $variables['attributes']['class'][] = 'btn';
@@ -40,14 +30,6 @@ function bootstrap_preprocess_input(&$variables) {
     // Add in the button type class.
     $variables['attributes']['class'][] = 'form-' . $element['#type'];
     $variables['label'] = $element['#value'];
-  }
-
-  // Search fields.
-  if ($element['#type'] == 'search') {
-    $attributes = new Attribute($variables['attributes']);
-    $attributes['placeholder'] = t('Search');
-    $attributes['data-original-title'] = t('Enter the terms you wish to search for.');
-    $variables['attributes'] = $attributes;
   }
 
   _bootstrap_prerender_input($variables);
@@ -91,15 +73,17 @@ function bootstrap_preprocess_input(&$variables) {
     $variables['autocomplete_attributes'] = $autocomplete_attributes;
   }
 
+  // Search fields.
+  if ($element['#type'] == 'search') {
+    $attributes['placeholder'] = t('Search');
+    $attributes['data-original-title'] = t('Enter the terms you wish to search for.');
+  }
+
   // Additional Twig variables.
   $variables['icon'] = $element['#icon'];
-  if (isset($variables['attributes']['value'])) {
-    $variables['attributes']['title'] = $variables['attributes']['value'];
-  }
   $variables['element'] = $element;
 }
 
-// @todo Remove once hook_element_info_alter() works again.
 function _bootstrap_prerender_input(&$variables) {
   $element = $variables['element'];
   $type = $element['#type'];
@@ -107,37 +91,30 @@ function _bootstrap_prerender_input(&$variables) {
   // Only add the "form-control" class for specific element input types.
   $types = array(
     // Core.
-    'color',
-    'date',
-    'email',
-    'entity_autocomplete',
-    'machine_name',
-    'number',
     'password',
     'password_confirm',
-    'range',
-    'search',
     'select',
-    'tel',
     'textfield',
-    'url',
+    'machine_name',
+    'entity_autocomplete',
+    // HTML5.
+    'email',
     // Webform module.
     'webform_email',
     'webform_number',
+    // Elements module.
+    'date',
+    'color',
+    'email',
+    'number',
+    'range',
+    'search',
+    'tel',
+    'url',
   );
 
   if (!empty($type) && (in_array($type, $types) || ($type === 'file' && empty($element['#managed_file'])))) {
     $variables['attributes']['class'][] = 'form-control';
   }
-
-  // Tooltips for non- radios and checkboxes.
-  if (!empty($type) && ($type !== 'checkbox' || $type !== 'radio' || $type !== 'checkboxes' || $type !== 'radios')) {
-    if (!empty($element['#description']) && empty($element['#attributes']['title']) && _bootstrap_tooltip_description($element['#description'])) {
-      $variables['attributes']['title'] = $element['#description'];
-    }
-
-    if (!empty($variables['attributes']['title'])) {
-      $variables['attributes']['data-toggle'] = 'tooltip';
-    }
-  }
+  return $variables;
 }

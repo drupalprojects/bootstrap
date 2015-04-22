@@ -395,23 +395,20 @@ ul li.leaf {
 // Password strength/match.
 .form-type-password-confirm {
   position: relative;
+  .form-type-password {
+    clear: left;
+  }
   label {
     display: block;
     .label {
       float: right;
     }
   }
-  .password-help {
+  .help-block {
+    border-left: 1px solid @table-border-color;
+    display: inline-block;
+    margin-left: 2em;
     padding-left: 2em;
-    @media (min-width: @screen-sm-min) {
-      border-left: 1px solid @table-border-color;
-      left: percentage(6/12);
-      margin-left: (@grid-gutter-width / 2);
-      position: absolute;
-    }
-    @media (min-width: @screen-md-min) {
-      left: percentage(4/12);
-    }
   }
   .progress {
     background: transparent;
@@ -422,14 +419,8 @@ ul li.leaf {
     height: 4px;
     margin: -5px 0px 0;
   }
-  .form-type-password {
-    clear: left;
-  }
   .form-control-feedback {
     right: 15px;
-  }
-  .help-block {
-    clear: both;
   }
 }
 
@@ -454,24 +445,11 @@ ul li.leaf {
   }
 }
 
-// AJAX "Progress bar".
-.ajax-progress-bar {
-  border-radius: 0 0 @border-radius-base @border-radius-base;
-  border: 1px solid @input-group-addon-border-color;
-  margin: -1px 0 0;
-  padding: @padding-base-vertical @padding-base-horizontal;
-  width: 100%;
-  .progress {
-    height: 8px;
-    margin: 0;
-  }
-  .percentage,
-  .message {
-    color: @text-muted;
-    font-size: @font-size-small;
-    line-height: 1em;
-    margin: 5px 0 0;
-    padding: 0;
+// AJAX "Throbber".
+.ajax-progress {
+  .glyphicon {
+    font-size: 90%;
+    margin: 0 -.25em 0 0.5em;
   }
 }
 
@@ -525,6 +503,14 @@ a .glyphicon-spin {
   100% {
     transform: rotate(359deg);
   }
+}
+
+.glyphicon-refresh {
+  -webkit-transform-origin: 50% 45%;
+  -moz-transform-origin: 50% 45%;
+  -ms-transform-origin: 50% 45%;
+  -o-transform-origin: 50% 45%;
+  transform-origin: 50% 45%;
 }
 
 /**

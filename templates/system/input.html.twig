@@ -15,13 +15,14 @@
  * @ingroup themeable
  */
 #}
-
-{% if autocomplete %}
-<div class="input-group">
-  {% endif %}
-  <input{{ attributes }} />{{ children }}
-  {% if autocomplete %}
-  <span class="input-group-addon">{{ autocomplete_icon }}</span>
-</div>
-<input{{ autocomplete_attributes }}>
+{% if autocomplete or input_group %}
+  <div class="input-group">
+{% endif %}
+<input{{ attributes }} />{{ children }}
+{% if input_group %}
+  </div>
+{% elseif autocomplete %}
+    <span class="input-group-addon">{{ autocomplete_icon }}</span>
+  </div>
+  <input{{ autocomplete_attributes }}>
 {% endif %}

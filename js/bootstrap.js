@@ -14,7 +14,7 @@ var Drupal = Drupal || {};
     attach: function (context) {
       // Provide some Bootstrap tab/Drupal integration.
 
-      $(context).find('.tabbable').once('bootstrap-tabs', function () {
+      $(context).find('.tabbable').once('bootstrap-tabs').each(function () {
         var $wrapper = $(this);
         var $tabs = $wrapper.find('.nav-tabs');
         var $content = $wrapper.find('.tab-content');
@@ -59,7 +59,7 @@ var Drupal = Drupal || {};
     attach: function (context) {
       if (drupalSettings.bootstrap && drupalSettings.bootstrap.formHasError) {
         var $context = $(context);
-        $context.find('.form-item.has-error:not(.form-type-password.has-feedback)').once('error', function () {
+        $context.find('.form-item.has-error:not(.form-type-password.has-feedback)').once('error').each(function () {
           var $formItem = $(this);
           var $input = $formItem.find(':input');
           $input.on('keyup focus blur', function () {
@@ -162,7 +162,7 @@ var Drupal = Drupal || {};
           this.bootstrapAnchor(anchors[i]);
         }
       }
-      $scrollableElement.once('bootstrap-anchors', function () {
+      $scrollableElement.once('bootstrap-anchors').each( function () {
         $scrollableElement.on('click.bootstrap-anchors', 'a[href*="#"]:not([data-toggle],[data-target],[data-slide])', function(e) {
           if (this.scrollTo) {
             this.scrollTo(e);

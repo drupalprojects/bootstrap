@@ -12,12 +12,105 @@ use Drupal\Component\Utility\Crypt;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Theme\ThemeManager;
 use Drupal\Core\Utility\ThemeRegistry;
+use Drupal\Component\Utility\Xss;
 use Drupal\Core\Url;
+
 
 define('BOOTSTRAP_VERSION_MAJOR', 3);
 define('BOOTSTRAP_VERSION_MINOR', 3);
 define('BOOTSTRAP_VERSION_PATCH', 2);
 define('BOOTSTRAP_VERSION', BOOTSTRAP_VERSION_MAJOR . '.' . BOOTSTRAP_VERSION_MINOR . '.' . BOOTSTRAP_VERSION_PATCH);
+
+/**
+ * Helper function for smartly converting an element description into a tooltip.
+ *
+ * @param array $element
+ *   An element render array, passed by reference.
+ * @param array $target
+ *   The target element render array the tooltip is to be attached to, passed
+ *   by reference. If not set, it will default to the $element passed.
+ * @param bool $input_only
+ *   Toggle determining whether or not to only convert input elements.
+ * @param int $length
+ *   The length of characters to determine if description is "simple".
+ */
+function bootstrap_element_smart_description(&$element, &$target = NULL, $input_only = TRUE, $length = NULL) {
+  // Determine if tooltips are enabled.
+  static $enabled;
+  if (!isset($enabled)) {
+    $enabled = bootstrap_setting('tooltip_enabled') && bootstrap_setting('forms_smart_descriptions');
+  }
+
+  // Immediately return if "simple" tooltip descriptions are not enabled.
+  if (!$enabled) {
+    return FALSE;
+  }
+
+  // Allow a different element to attach the tooltip.
+  if (!isset($target)) {
+    $target = &$element;
+  }
+
+  // Retrieve the length limit for smart descriptions.
+  if (!isset($length)) {
+    $length = (int) bootstrap_setting('forms_smart_descriptions_limit');
+    // Disable length checking by setting it to FALSE if empty.
+    if (empty($length)) {
+      $length = FALSE;
+    }
+  }
+
+  // Retrieve the allowed tags for smart descriptions. This is primarily used
+  // for display purposes only (i.e. non-UI/UX related elements that wouldn't
+  // require a user to "click", like a link).
+  $allowed_tags = array_filter(array_unique(array_map('trim', explode(',', bootstrap_setting('forms_smart_descriptions_allowed_tags') . ''))));
+
+  // Disable length checking by setting it to FALSE if empty.
+  if (empty($allowed_tags)) {
+    $allowed_tags = FALSE;
+  }
+
+  $html = FALSE;
+  $type = !empty($element['#type']) ? $element['#type'] : FALSE;
+  if (!$input_only || !empty($target['#input']) || !empty($element['#smart_description']) || !empty($target['#smart_description'])) {
+    if (!empty($element['#description']) && empty($target['#attributes']['title']) && empty($target['#attributes']['data-toggle'])) {
+      if (_bootstrap_is_simple_string($element['#description'], $length, $allowed_tags, $html)) {
+
+        // Default property (on the element itself).
+        $property = 'attributes';
+
+        // Add the tooltip to the #label_attributes property for 'checkbox'
+        // and 'radio' elements.
+        if ($type === 'checkbox' || $type === 'radio') {
+          $property = 'label_attributes';
+        }
+        // Add the tooltip to the #wrapper_attributes property for 'checkboxes'
+        // and 'radios' elements.
+        elseif ($type === 'checkboxes' || $type === 'radios') {
+          $property = 'attributes';
+        }
+        // Add the tooltip to the #input_group_attributes property for elements
+        // that have valid input groups set.
+        elseif ((!empty($element['#field_prefix']) || !empty($element['#field_suffix'])) && (!empty($element['#input_group']) || !empty($element['#input_group_button']))) {
+          $property = 'attributes';
+        }
+
+        // Retrieve the proper attributes array.
+        $attributes = &_bootstrap_get_attributes($target, $property);
+
+        // Set the tooltip attributes.
+        $attributes['title'] = $allowed_tags !== FALSE ? Xss::filter($element['#description'], $allowed_tags) : $element['#description'];
+        $attributes['data-toggle'] = 'tooltip';
+        if ($html || $allowed_tags === FALSE) {
+          $attributes['data-html'] = 'true';
+        }
+
+        // Remove the element description so it isn't (re-)rendered later.
+        unset($element['#description']);
+      }
+    }
+  }
+}
 
 /**
  * Retrieves CDN assets for the active provider, if any.
@@ -38,6 +131,7 @@ define('BOOTSTRAP_VERSION', BOOTSTRAP_VERSION_MAJOR . '.' . BOOTSTRAP_VERSION_MI
  *   is returned keyed by the type.
  */
 function bootstrap_get_cdn_assets($type = NULL, $provider = NULL, $theme = NULL) {
+  $original_type = $type;
   $assets = array();
   $types = array();
 
@@ -52,35 +146,39 @@ function bootstrap_get_cdn_assets($type = NULL, $provider = NULL, $theme = NULL)
     $types = $type;
   }
 
-  // Retrieve the active CDN provider data.
-  bootstrap_include('bootstrap', 'includes/cdn.inc');
+  // Ensure default arrays exist for the requested types.
+  foreach ($types as $type) {
+    $assets[$type] = array();
+  }
+
+  // Retrieve the active CDN provider from the theme.
   if (!isset($provider)) {
     $provider = bootstrap_setting('cdn_provider', $theme);
-    if (!isset($provider)) {
-      $provider = '';
+  }
+
+  // Load the CDN provider data.
+  bootstrap_include('bootstrap', 'includes/cdn.inc');
+  if (!empty($provider) && ($data = bootstrap_cdn_provider($provider))) {
+    // Alter the assets based on provider.
+    $function = 'bootstrap_bootstrap_cdn_provider_' . $provider . '_assets_alter';
+    if (function_exists($function)) {
+      $function($data, $theme);
+    }
+    // @todo Use drupal_alter() once CDN is in bootstrap_core companion module.
+    // drupal_alter('bootstrap_cdn_provider_' . $provider . '_assets', $data, $theme);
+
+    // Iterate over each type.
+    foreach ($types as $type) {
+      if (\Drupal::config("preprocess_$type", FALSE) && !empty($data['min'][$type])) {
+        $assets[$type] = $data['min'][$type];
+      }
+      elseif (!empty($data[$type])) {
+        $assets[$type] = $data[$type];
+      }
     }
   }
 
-  $data = bootstrap_cdn_provider($provider);
-
-  // Alter the assets based on provider.
-  $function = 'bootstrap_bootstrap_cdn_provider_' . $provider . '_assets_alter';
-  if (function_exists($function)) {
-    $function($data, $theme);
-  }
-  // @todo Use drupal_alter() once CDN is in bootstrap_core companion module.
-  // drupal_alter('bootstrap_cdn_provider_' . $provider . '_assets', $data, $theme);
-
-  // Iterate over each type.
-  foreach ($types as $type) {
-    if (\Drupal::config("preprocess_$type", FALSE) && !empty($data['min'][$type])) {
-      $assets[$type] = $data['min'][$type];
-    }
-    elseif (!empty($data[$type])) {
-      $assets[$type] = $data[$type];
-    }
-  }
-  return count($types) > 1 ? $assets : $assets[$type];
+  return is_string($original_type) ? $assets[$original_type] : $assets;
 }
 
 /**
@@ -215,11 +313,15 @@ function bootstrap_setting($name, $theme = NULL, $prefix = 'bootstrap') {
  *   $variables parameter in [pre]process functions and it will logically
  *   determine the correct path to that particular theme hook's attribute array.
  *   Passed by reference.
+ * @param string $property
+ *   Determines which attributes array to retrieve. By default, this is the
+ *   normal attributes, but can be "wrapper_attributes" or
+ *   "input_group_attributes".
  *
  * @return array
  *   The attributes array. Passed by reference.
  */
-function &_bootstrap_get_attributes(&$element) {
+function &_bootstrap_get_attributes(&$element, $property = 'attributes') {
   // Attempt to retrieve a renderable element attributes first.
   if (
     isset($element['#type']) ||
@@ -227,29 +329,29 @@ function &_bootstrap_get_attributes(&$element) {
     isset($element['#pre_render']) ||
     isset($element['#markup']) ||
     isset($element['#theme_wrappers']) ||
-    isset($element['#attributes'])
+    isset($element["#$property"])
   ) {
-    if (!isset($element['#attributes'])) {
-      $element['#attributes'] = array();
+    if (!isset($element["#$property"])) {
+      $element["#$property"] = array();
     }
-    return $element['#attributes'];
+    return $element["#$property"];
   }
   // Treat $element as if it were a [pre]process function $variables parameter
   // and look for a renderable "element".
   elseif (isset($element['element'])) {
-    if (!isset($element['element']['#attributes'])) {
-      $element['element']['#attributes'] = array();
+    if (!isset($element['element']["#$property"])) {
+      $element['element']["#$property"] = array();
     }
-    return $element['element']['#attributes'];
+    return $element['element']["#$property"];
   }
 
   // If all else fails, create (if needed) a default "attributes" array. This
   // will, at the very least, either work or cause an error that can be tracked.
-  if (!isset($element['attributes'])) {
-    $element['attributes'] = array();
+  if (!isset($element[$property])) {
+    $element[$property] = array();
   }
 
-  return $element['attributes'];
+  return $element[$property];
 }
 
 /**
@@ -260,12 +362,16 @@ function &_bootstrap_get_attributes(&$element) {
  *   $variables parameter in [pre]process functions and it will logically
  *   determine the correct path to that particular theme hook's classes array.
  *   Passed by reference.
+ * @param string $property
+ *   Determines which attributes array to retrieve. By default, this is the
+ *   normal attributes, but can be "wrapper_attributes" or
+ *   "input_group_attributes".
  *
  * @return array
  *   The classes array. Passed by reference.
  */
-function &_bootstrap_get_classes(&$element) {
-  $attributes = &_bootstrap_get_attributes($element);
+function &_bootstrap_get_classes(&$element, $property = 'attributes') {
+  $attributes = &_bootstrap_get_attributes($element, $property);
 
   if (!isset($attributes['class'])) {
     $attributes['class'] = array();
@@ -292,10 +398,14 @@ function &_bootstrap_get_classes(&$element) {
  *   $variables parameter in [pre]process functions and it will logically
  *   determine the correct path to that particular theme hook's classes array.
  *   Passed by reference.
+ * @param string $property
+ *   Determines which attributes array to retrieve. By default, this is the
+ *   normal attributes, but can be "wrapper_attributes" or
+ *   "input_group_attributes".
  */
-function _bootstrap_add_class($class, &$element) {
+function _bootstrap_add_class($class, &$element, $property = 'attributes') {
   // Retrieve the element's classes.
-  $classes = &_bootstrap_get_classes($element);
+  $classes = &_bootstrap_get_classes($element, $property);
 
   // Convert the class to an array.
   if (!is_array($class)) {
@@ -321,10 +431,14 @@ function _bootstrap_add_class($class, &$element) {
  *   $variables parameter in [pre]process functions and it will logically
  *   determine the correct path to that particular theme hook's classes array.
  *   Passed by reference.
+ * @param string $property
+ *   Determines which attributes array to retrieve. By default, this is the
+ *   normal attributes, but can be "wrapper_attributes" or
+ *   "input_group_attributes".
  */
-function _bootstrap_remove_class($class, &$element) {
+function _bootstrap_remove_class($class, &$element, $property = 'attributes') {
   // Retrieve the element's classes.
-  $classes = &_bootstrap_get_classes($element);
+  $classes = &_bootstrap_get_classes($element, $property);
 
   // Convert the class to an array.
   if (!is_array($class)) {
@@ -406,212 +520,300 @@ function _bootstrap_file_scan_directory($dir, $mask, array $options = array()) {
 
 /**
  * Helper function for returning an array of Bootstrap Glyphicons.
+ *
+ * @param string $version
+ *   The specific version of glyphicons to return. If not set, the latest
+ *   BOOTSTRAP_VERSION will be used.
+ *
+ * @return array
+ *   An associative array of icons keyed by their classes.
  */
-function _bootstrap_glyphicons() {
-  static $icons = array(
-    // Class => Name.
-    'glyphicon-adjust' => 'adjust',
-    'glyphicon-align-center' => 'align-center',
-    'glyphicon-align-justify' => 'align-justify',
-    'glyphicon-align-left' => 'align-left',
-    'glyphicon-align-right' => 'align-right',
-    'glyphicon-arrow-down' => 'arrow-down',
-    'glyphicon-arrow-left' => 'arrow-left',
-    'glyphicon-arrow-right' => 'arrow-right',
-    'glyphicon-arrow-up' => 'arrow-up',
-    'glyphicon-asterisk' => 'asterisk',
-    'glyphicon-backward' => 'backward',
-    'glyphicon-ban-circle' => 'ban-circle',
-    'glyphicon-barcode' => 'barcode',
-    'glyphicon-bell' => 'bell',
-    'glyphicon-bold' => 'bold',
-    'glyphicon-book' => 'book',
-    'glyphicon-bookmark' => 'bookmark',
-    'glyphicon-briefcase' => 'briefcase',
-    'glyphicon-bullhorn' => 'bullhorn',
-    'glyphicon-calendar' => 'calendar',
-    'glyphicon-camera' => 'camera',
-    'glyphicon-certificate' => 'certificate',
-    'glyphicon-check' => 'check',
-    'glyphicon-chevron-down' => 'chevron-down',
-    'glyphicon-chevron-left' => 'chevron-left',
-    'glyphicon-chevron-right' => 'chevron-right',
-    'glyphicon-chevron-up' => 'chevron-up',
-    'glyphicon-circle-arrow-down' => 'circle-arrow-down',
-    'glyphicon-circle-arrow-left' => 'circle-arrow-left',
-    'glyphicon-circle-arrow-right' => 'circle-arrow-right',
-    'glyphicon-circle-arrow-up' => 'circle-arrow-up',
-    'glyphicon-cloud' => 'cloud',
-    'glyphicon-cloud-download' => 'cloud-download',
-    'glyphicon-cloud-upload' => 'cloud-upload',
-    'glyphicon-cog' => 'cog',
-    'glyphicon-collapse-down' => 'collapse-down',
-    'glyphicon-collapse-up' => 'collapse-up',
-    'glyphicon-comment' => 'comment',
-    'glyphicon-compressed' => 'compressed',
-    'glyphicon-copyright-mark' => 'copyright-mark',
-    'glyphicon-credit-card' => 'credit-card',
-    'glyphicon-cutlery' => 'cutlery',
-    'glyphicon-dashboard' => 'dashboard',
-    'glyphicon-download' => 'download',
-    'glyphicon-download-alt' => 'download-alt',
-    'glyphicon-earphone' => 'earphone',
-    'glyphicon-edit' => 'edit',
-    'glyphicon-eject' => 'eject',
-    'glyphicon-envelope' => 'envelope',
-    'glyphicon-euro' => 'euro',
-    'glyphicon-exclamation-sign' => 'exclamation-sign',
-    'glyphicon-expand' => 'expand',
-    'glyphicon-export' => 'export',
-    'glyphicon-eye-close' => 'eye-close',
-    'glyphicon-eye-open' => 'eye-open',
-    'glyphicon-facetime-video' => 'facetime-video',
-    'glyphicon-fast-backward' => 'fast-backward',
-    'glyphicon-fast-forward' => 'fast-forward',
-    'glyphicon-file' => 'file',
-    'glyphicon-film' => 'film',
-    'glyphicon-filter' => 'filter',
-    'glyphicon-fire' => 'fire',
-    'glyphicon-flag' => 'flag',
-    'glyphicon-flash' => 'flash',
-    'glyphicon-floppy-disk' => 'floppy-disk',
-    'glyphicon-floppy-open' => 'floppy-open',
-    'glyphicon-floppy-remove' => 'floppy-remove',
-    'glyphicon-floppy-save' => 'floppy-save',
-    'glyphicon-floppy-saved' => 'floppy-saved',
-    'glyphicon-folder-close' => 'folder-close',
-    'glyphicon-folder-open' => 'folder-open',
-    'glyphicon-font' => 'font',
-    'glyphicon-forward' => 'forward',
-    'glyphicon-fullscreen' => 'fullscreen',
-    'glyphicon-gbp' => 'gbp',
-    'glyphicon-gift' => 'gift',
-    'glyphicon-glass' => 'glass',
-    'glyphicon-globe' => 'globe',
-    'glyphicon-hand-down' => 'hand-down',
-    'glyphicon-hand-left' => 'hand-left',
-    'glyphicon-hand-right' => 'hand-right',
-    'glyphicon-hand-up' => 'hand-up',
-    'glyphicon-hd-video' => 'hd-video',
-    'glyphicon-hdd' => 'hdd',
-    'glyphicon-header' => 'header',
-    'glyphicon-headphones' => 'headphones',
-    'glyphicon-heart' => 'heart',
-    'glyphicon-heart-empty' => 'heart-empty',
-    'glyphicon-home' => 'home',
-    'glyphicon-import' => 'import',
-    'glyphicon-inbox' => 'inbox',
-    'glyphicon-indent-left' => 'indent-left',
-    'glyphicon-indent-right' => 'indent-right',
-    'glyphicon-info-sign' => 'info-sign',
-    'glyphicon-italic' => 'italic',
-    'glyphicon-leaf' => 'leaf',
-    'glyphicon-link' => 'link',
-    'glyphicon-list' => 'list',
-    'glyphicon-list-alt' => 'list-alt',
-    'glyphicon-lock' => 'lock',
-    'glyphicon-log-in' => 'log-in',
-    'glyphicon-log-out' => 'log-out',
-    'glyphicon-magnet' => 'magnet',
-    'glyphicon-map-marker' => 'map-marker',
-    'glyphicon-minus' => 'minus',
-    'glyphicon-minus-sign' => 'minus-sign',
-    'glyphicon-move' => 'move',
-    'glyphicon-music' => 'music',
-    'glyphicon-new-window' => 'new-window',
-    'glyphicon-off' => 'off',
-    'glyphicon-ok' => 'ok',
-    'glyphicon-ok-circle' => 'ok-circle',
-    'glyphicon-ok-sign' => 'ok-sign',
-    'glyphicon-open' => 'open',
-    'glyphicon-paperclip' => 'paperclip',
-    'glyphicon-pause' => 'pause',
-    'glyphicon-pencil' => 'pencil',
-    'glyphicon-phone' => 'phone',
-    'glyphicon-phone-alt' => 'phone-alt',
-    'glyphicon-picture' => 'picture',
-    'glyphicon-plane' => 'plane',
-    'glyphicon-play' => 'play',
-    'glyphicon-play-circle' => 'play-circle',
-    'glyphicon-plus' => 'plus',
-    'glyphicon-plus-sign' => 'plus-sign',
-    'glyphicon-print' => 'print',
-    'glyphicon-pushpin' => 'pushpin',
-    'glyphicon-qrcode' => 'qrcode',
-    'glyphicon-question-sign' => 'question-sign',
-    'glyphicon-random' => 'random',
-    'glyphicon-record' => 'record',
-    'glyphicon-refresh' => 'refresh',
-    'glyphicon-registration-mark' => 'registration-mark',
-    'glyphicon-remove' => 'remove',
-    'glyphicon-remove-circle' => 'remove-circle',
-    'glyphicon-remove-sign' => 'remove-sign',
-    'glyphicon-repeat' => 'repeat',
-    'glyphicon-resize-full' => 'resize-full',
-    'glyphicon-resize-horizontal' => 'resize-horizontal',
-    'glyphicon-resize-small' => 'resize-small',
-    'glyphicon-resize-vertical' => 'resize-vertical',
-    'glyphicon-retweet' => 'retweet',
-    'glyphicon-road' => 'road',
-    'glyphicon-save' => 'save',
-    'glyphicon-saved' => 'saved',
-    'glyphicon-screenshot' => 'screenshot',
-    'glyphicon-sd-video' => 'sd-video',
-    'glyphicon-search' => 'search',
-    'glyphicon-send' => 'send',
-    'glyphicon-share' => 'share',
-    'glyphicon-share-alt' => 'share-alt',
-    'glyphicon-shopping-cart' => 'shopping-cart',
-    'glyphicon-signal' => 'signal',
-    'glyphicon-sort' => 'sort',
-    'glyphicon-sort-by-alphabet' => 'sort-by-alphabet',
-    'glyphicon-sort-by-alphabet-alt' => 'sort-by-alphabet-alt',
-    'glyphicon-sort-by-attributes' => 'sort-by-attributes',
-    'glyphicon-sort-by-attributes-alt' => 'sort-by-attributes-alt',
-    'glyphicon-sort-by-order' => 'sort-by-order',
-    'glyphicon-sort-by-order-alt' => 'sort-by-order-alt',
-    'glyphicon-sound-5-1' => 'sound-5-1',
-    'glyphicon-sound-6-1' => 'sound-6-1',
-    'glyphicon-sound-7-1' => 'sound-7-1',
-    'glyphicon-sound-dolby' => 'sound-dolby',
-    'glyphicon-sound-stereo' => 'sound-stereo',
-    'glyphicon-star' => 'star',
-    'glyphicon-star-empty' => 'star-empty',
-    'glyphicon-stats' => 'stats',
-    'glyphicon-step-backward' => 'step-backward',
-    'glyphicon-step-forward' => 'step-forward',
-    'glyphicon-stop' => 'stop',
-    'glyphicon-subtitles' => 'subtitles',
-    'glyphicon-tag' => 'tag',
-    'glyphicon-tags' => 'tags',
-    'glyphicon-tasks' => 'tasks',
-    'glyphicon-text-height' => 'text-height',
-    'glyphicon-text-width' => 'text-width',
-    'glyphicon-th' => 'th',
-    'glyphicon-th-large' => 'th-large',
-    'glyphicon-th-list' => 'th-list',
-    'glyphicon-thumbs-down' => 'thumbs-down',
-    'glyphicon-thumbs-up' => 'thumbs-up',
-    'glyphicon-time' => 'time',
-    'glyphicon-tint' => 'tint',
-    'glyphicon-tower' => 'tower',
-    'glyphicon-transfer' => 'transfer',
-    'glyphicon-trash' => 'trash',
-    'glyphicon-tree-conifer' => 'tree-conifer',
-    'glyphicon-tree-deciduous' => 'tree-deciduous',
-    'glyphicon-unchecked' => 'unchecked',
-    'glyphicon-upload' => 'upload',
-    'glyphicon-usd' => 'usd',
-    'glyphicon-user' => 'user',
-    'glyphicon-volume-down' => 'volume-down',
-    'glyphicon-volume-off' => 'volume-off',
-    'glyphicon-volume-up' => 'volume-up',
-    'glyphicon-warning-sign' => 'warning-sign',
-    'glyphicon-wrench' => 'wrench',
-    'glyphicon-zoom-in' => 'zoom-in',
-    'glyphicon-zoom-out' => 'zoom-out',
-  );
-  return $icons;
+function _bootstrap_glyphicons($version = NULL) {
+  static $versions;
+  if (!isset($versions)) {
+    $versions = array();
+    $versions['3.0.0'] = array(
+      // Class => Name.
+      'glyphicon-adjust' => 'adjust',
+      'glyphicon-align-center' => 'align-center',
+      'glyphicon-align-justify' => 'align-justify',
+      'glyphicon-align-left' => 'align-left',
+      'glyphicon-align-right' => 'align-right',
+      'glyphicon-arrow-down' => 'arrow-down',
+      'glyphicon-arrow-left' => 'arrow-left',
+      'glyphicon-arrow-right' => 'arrow-right',
+      'glyphicon-arrow-up' => 'arrow-up',
+      'glyphicon-asterisk' => 'asterisk',
+      'glyphicon-backward' => 'backward',
+      'glyphicon-ban-circle' => 'ban-circle',
+      'glyphicon-barcode' => 'barcode',
+      'glyphicon-bell' => 'bell',
+      'glyphicon-bold' => 'bold',
+      'glyphicon-book' => 'book',
+      'glyphicon-bookmark' => 'bookmark',
+      'glyphicon-briefcase' => 'briefcase',
+      'glyphicon-bullhorn' => 'bullhorn',
+      'glyphicon-calendar' => 'calendar',
+      'glyphicon-camera' => 'camera',
+      'glyphicon-certificate' => 'certificate',
+      'glyphicon-check' => 'check',
+      'glyphicon-chevron-down' => 'chevron-down',
+      'glyphicon-chevron-left' => 'chevron-left',
+      'glyphicon-chevron-right' => 'chevron-right',
+      'glyphicon-chevron-up' => 'chevron-up',
+      'glyphicon-circle-arrow-down' => 'circle-arrow-down',
+      'glyphicon-circle-arrow-left' => 'circle-arrow-left',
+      'glyphicon-circle-arrow-right' => 'circle-arrow-right',
+      'glyphicon-circle-arrow-up' => 'circle-arrow-up',
+      'glyphicon-cloud' => 'cloud',
+      'glyphicon-cloud-download' => 'cloud-download',
+      'glyphicon-cloud-upload' => 'cloud-upload',
+      'glyphicon-cog' => 'cog',
+      'glyphicon-collapse-down' => 'collapse-down',
+      'glyphicon-collapse-up' => 'collapse-up',
+      'glyphicon-comment' => 'comment',
+      'glyphicon-compressed' => 'compressed',
+      'glyphicon-copyright-mark' => 'copyright-mark',
+      'glyphicon-credit-card' => 'credit-card',
+      'glyphicon-cutlery' => 'cutlery',
+      'glyphicon-dashboard' => 'dashboard',
+      'glyphicon-download' => 'download',
+      'glyphicon-download-alt' => 'download-alt',
+      'glyphicon-earphone' => 'earphone',
+      'glyphicon-edit' => 'edit',
+      'glyphicon-eject' => 'eject',
+      'glyphicon-envelope' => 'envelope',
+      'glyphicon-euro' => 'euro',
+      'glyphicon-exclamation-sign' => 'exclamation-sign',
+      'glyphicon-expand' => 'expand',
+      'glyphicon-export' => 'export',
+      'glyphicon-eye-close' => 'eye-close',
+      'glyphicon-eye-open' => 'eye-open',
+      'glyphicon-facetime-video' => 'facetime-video',
+      'glyphicon-fast-backward' => 'fast-backward',
+      'glyphicon-fast-forward' => 'fast-forward',
+      'glyphicon-file' => 'file',
+      'glyphicon-film' => 'film',
+      'glyphicon-filter' => 'filter',
+      'glyphicon-fire' => 'fire',
+      'glyphicon-flag' => 'flag',
+      'glyphicon-flash' => 'flash',
+      'glyphicon-floppy-disk' => 'floppy-disk',
+      'glyphicon-floppy-open' => 'floppy-open',
+      'glyphicon-floppy-remove' => 'floppy-remove',
+      'glyphicon-floppy-save' => 'floppy-save',
+      'glyphicon-floppy-saved' => 'floppy-saved',
+      'glyphicon-folder-close' => 'folder-close',
+      'glyphicon-folder-open' => 'folder-open',
+      'glyphicon-font' => 'font',
+      'glyphicon-forward' => 'forward',
+      'glyphicon-fullscreen' => 'fullscreen',
+      'glyphicon-gbp' => 'gbp',
+      'glyphicon-gift' => 'gift',
+      'glyphicon-glass' => 'glass',
+      'glyphicon-globe' => 'globe',
+      'glyphicon-hand-down' => 'hand-down',
+      'glyphicon-hand-left' => 'hand-left',
+      'glyphicon-hand-right' => 'hand-right',
+      'glyphicon-hand-up' => 'hand-up',
+      'glyphicon-hd-video' => 'hd-video',
+      'glyphicon-hdd' => 'hdd',
+      'glyphicon-header' => 'header',
+      'glyphicon-headphones' => 'headphones',
+      'glyphicon-heart' => 'heart',
+      'glyphicon-heart-empty' => 'heart-empty',
+      'glyphicon-home' => 'home',
+      'glyphicon-import' => 'import',
+      'glyphicon-inbox' => 'inbox',
+      'glyphicon-indent-left' => 'indent-left',
+      'glyphicon-indent-right' => 'indent-right',
+      'glyphicon-info-sign' => 'info-sign',
+      'glyphicon-italic' => 'italic',
+      'glyphicon-leaf' => 'leaf',
+      'glyphicon-link' => 'link',
+      'glyphicon-list' => 'list',
+      'glyphicon-list-alt' => 'list-alt',
+      'glyphicon-lock' => 'lock',
+      'glyphicon-log-in' => 'log-in',
+      'glyphicon-log-out' => 'log-out',
+      'glyphicon-magnet' => 'magnet',
+      'glyphicon-map-marker' => 'map-marker',
+      'glyphicon-minus' => 'minus',
+      'glyphicon-minus-sign' => 'minus-sign',
+      'glyphicon-move' => 'move',
+      'glyphicon-music' => 'music',
+      'glyphicon-new-window' => 'new-window',
+      'glyphicon-off' => 'off',
+      'glyphicon-ok' => 'ok',
+      'glyphicon-ok-circle' => 'ok-circle',
+      'glyphicon-ok-sign' => 'ok-sign',
+      'glyphicon-open' => 'open',
+      'glyphicon-paperclip' => 'paperclip',
+      'glyphicon-pause' => 'pause',
+      'glyphicon-pencil' => 'pencil',
+      'glyphicon-phone' => 'phone',
+      'glyphicon-phone-alt' => 'phone-alt',
+      'glyphicon-picture' => 'picture',
+      'glyphicon-plane' => 'plane',
+      'glyphicon-play' => 'play',
+      'glyphicon-play-circle' => 'play-circle',
+      'glyphicon-plus' => 'plus',
+      'glyphicon-plus-sign' => 'plus-sign',
+      'glyphicon-print' => 'print',
+      'glyphicon-pushpin' => 'pushpin',
+      'glyphicon-qrcode' => 'qrcode',
+      'glyphicon-question-sign' => 'question-sign',
+      'glyphicon-random' => 'random',
+      'glyphicon-record' => 'record',
+      'glyphicon-refresh' => 'refresh',
+      'glyphicon-registration-mark' => 'registration-mark',
+      'glyphicon-remove' => 'remove',
+      'glyphicon-remove-circle' => 'remove-circle',
+      'glyphicon-remove-sign' => 'remove-sign',
+      'glyphicon-repeat' => 'repeat',
+      'glyphicon-resize-full' => 'resize-full',
+      'glyphicon-resize-horizontal' => 'resize-horizontal',
+      'glyphicon-resize-small' => 'resize-small',
+      'glyphicon-resize-vertical' => 'resize-vertical',
+      'glyphicon-retweet' => 'retweet',
+      'glyphicon-road' => 'road',
+      'glyphicon-save' => 'save',
+      'glyphicon-saved' => 'saved',
+      'glyphicon-screenshot' => 'screenshot',
+      'glyphicon-sd-video' => 'sd-video',
+      'glyphicon-search' => 'search',
+      'glyphicon-send' => 'send',
+      'glyphicon-share' => 'share',
+      'glyphicon-share-alt' => 'share-alt',
+      'glyphicon-shopping-cart' => 'shopping-cart',
+      'glyphicon-signal' => 'signal',
+      'glyphicon-sort' => 'sort',
+      'glyphicon-sort-by-alphabet' => 'sort-by-alphabet',
+      'glyphicon-sort-by-alphabet-alt' => 'sort-by-alphabet-alt',
+      'glyphicon-sort-by-attributes' => 'sort-by-attributes',
+      'glyphicon-sort-by-attributes-alt' => 'sort-by-attributes-alt',
+      'glyphicon-sort-by-order' => 'sort-by-order',
+      'glyphicon-sort-by-order-alt' => 'sort-by-order-alt',
+      'glyphicon-sound-5-1' => 'sound-5-1',
+      'glyphicon-sound-6-1' => 'sound-6-1',
+      'glyphicon-sound-7-1' => 'sound-7-1',
+      'glyphicon-sound-dolby' => 'sound-dolby',
+      'glyphicon-sound-stereo' => 'sound-stereo',
+      'glyphicon-star' => 'star',
+      'glyphicon-star-empty' => 'star-empty',
+      'glyphicon-stats' => 'stats',
+      'glyphicon-step-backward' => 'step-backward',
+      'glyphicon-step-forward' => 'step-forward',
+      'glyphicon-stop' => 'stop',
+      'glyphicon-subtitles' => 'subtitles',
+      'glyphicon-tag' => 'tag',
+      'glyphicon-tags' => 'tags',
+      'glyphicon-tasks' => 'tasks',
+      'glyphicon-text-height' => 'text-height',
+      'glyphicon-text-width' => 'text-width',
+      'glyphicon-th' => 'th',
+      'glyphicon-th-large' => 'th-large',
+      'glyphicon-th-list' => 'th-list',
+      'glyphicon-thumbs-down' => 'thumbs-down',
+      'glyphicon-thumbs-up' => 'thumbs-up',
+      'glyphicon-time' => 'time',
+      'glyphicon-tint' => 'tint',
+      'glyphicon-tower' => 'tower',
+      'glyphicon-transfer' => 'transfer',
+      'glyphicon-trash' => 'trash',
+      'glyphicon-tree-conifer' => 'tree-conifer',
+      'glyphicon-tree-deciduous' => 'tree-deciduous',
+      'glyphicon-unchecked' => 'unchecked',
+      'glyphicon-upload' => 'upload',
+      'glyphicon-usd' => 'usd',
+      'glyphicon-user' => 'user',
+      'glyphicon-volume-down' => 'volume-down',
+      'glyphicon-volume-off' => 'volume-off',
+      'glyphicon-volume-up' => 'volume-up',
+      'glyphicon-warning-sign' => 'warning-sign',
+      'glyphicon-wrench' => 'wrench',
+      'glyphicon-zoom-in' => 'zoom-in',
+      'glyphicon-zoom-out' => 'zoom-out',
+    );
+    $versions['3.0.1'] = $versions['3.0.0'];
+    $versions['3.0.2'] = $versions['3.0.1'];
+    $versions['3.0.3'] = $versions['3.0.2'];
+    $versions['3.1.0'] = $versions['3.0.3'];
+    $versions['3.1.1'] = $versions['3.1.0'];
+    $versions['3.2.0'] = $versions['3.1.1'];
+    $versions['3.3.0'] = array_merge($versions['3.2.0'], array(
+      'glyphicon-eur' => 'eur',
+    ));
+    $versions['3.3.1'] = $versions['3.3.0'];
+    $versions['3.3.2'] = array_merge($versions['3.3.1'], array(
+      'glyphicon-alert' => 'alert',
+      'glyphicon-apple' => 'apple',
+      'glyphicon-baby-formula' => 'baby-formula',
+      'glyphicon-bed' => 'bed',
+      'glyphicon-bishop' => 'bishop',
+      'glyphicon-bitcoin' => 'bitcoin',
+      'glyphicon-blackboard' => 'blackboard',
+      'glyphicon-cd' => 'cd',
+      'glyphicon-console' => 'console',
+      'glyphicon-copy' => 'copy',
+      'glyphicon-duplicate' => 'duplicate',
+      'glyphicon-education' => 'education',
+      'glyphicon-equalizer' => 'equalizer',
+      'glyphicon-erase' => 'erase',
+      'glyphicon-grain' => 'grain',
+      'glyphicon-hourglass' => 'hourglass',
+      'glyphicon-ice-lolly' => 'ice-lolly',
+      'glyphicon-ice-lolly-tasted' => 'ice-lolly-tasted',
+      'glyphicon-king' => 'king',
+      'glyphicon-knight' => 'knight',
+      'glyphicon-lamp' => 'lamp',
+      'glyphicon-level-up' => 'level-up',
+      'glyphicon-menu-down' => 'menu-down',
+      'glyphicon-menu-hamburger' => 'menu-hamburger',
+      'glyphicon-menu-left' => 'menu-left',
+      'glyphicon-menu-right' => 'menu-right',
+      'glyphicon-menu-up' => 'menu-up',
+      'glyphicon-modal-window' => 'modal-window',
+      'glyphicon-object-align-bottom' => 'object-align-bottom',
+      'glyphicon-object-align-horizontal' => 'object-align-horizontal',
+      'glyphicon-object-align-left' => 'object-align-left',
+      'glyphicon-object-align-right' => 'object-align-right',
+      'glyphicon-object-align-top' => 'object-align-top',
+      'glyphicon-object-align-vertical' => 'object-align-vertical',
+      'glyphicon-oil' => 'oil',
+      'glyphicon-open-file' => 'open-file',
+      'glyphicon-option-horizontal' => 'option-horizontal',
+      'glyphicon-option-vertical' => 'option-vertical',
+      'glyphicon-paste' => 'paste',
+      'glyphicon-pawn' => 'pawn',
+      'glyphicon-piggy-bank' => 'piggy-bank',
+      'glyphicon-queen' => 'queen',
+      'glyphicon-ruble' => 'ruble',
+      'glyphicon-save-file' => 'save-file',
+      'glyphicon-scale' => 'scale',
+      'glyphicon-scissors' => 'scissors',
+      'glyphicon-subscript' => 'subscript',
+      'glyphicon-sunglasses' => 'sunglasses',
+      'glyphicon-superscript' => 'superscript',
+      'glyphicon-tent' => 'tent',
+      'glyphicon-text-background' => 'text-background',
+      'glyphicon-text-color' => 'text-color',
+      'glyphicon-text-size' => 'text-size',
+      'glyphicon-triangle-bottom' => 'triangle-bottom',
+      'glyphicon-triangle-left' => 'triangle-left',
+      'glyphicon-triangle-right' => 'triangle-right',
+      'glyphicon-triangle-top' => 'triangle-top',
+      'glyphicon-yen' => 'yen',
+    ));
+  }
+
+  // Return a specific versions icon set.
+  if (isset($version) && isset($versions[$version])) {
+    return $versions[$version];
+  }
+
+  // Return the latest version.
+  return $versions[BOOTSTRAP_VERSION];
 }
 
 /**
@@ -629,6 +831,8 @@ function _bootstrap_glyphicons() {
 function _bootstrap_icon($name, $default = NULL) {
   $output = NULL;
   // Ensure the icon specified is a valid Bootstrap Glyphicon.
+  // @todo Supply a specific version to _bootstrap_glyphicons() when Icon API
+  // supports versioning.
   if (_bootstrap_glyphicons_supported() && in_array($name, _bootstrap_glyphicons())) {
     // Attempt to use the Icon API module, if enabled and it generates output.
     if (\Drupal::moduleHandler()->moduleExists('icon')) {
@@ -687,7 +891,7 @@ function _bootstrap_glyphicons_supported() {
       // that is the case here so no file discovery is necessary. If the active
       // theme does not have this setting, it falls back to the base theme that
       // does.
-      $supported[$theme] = (bool) bootstrap_setting('cdn', $theme);
+      $supported[$theme] = !!bootstrap_get_cdn_assets('css', NULL, $theme);
 
       // CDN not used, iterate over all of the active (base) themes to determine
       // if they contain glyphicon font files.
@@ -982,39 +1186,44 @@ function _bootstrap_process_theme_suggestion(&$variables) {
 }
 
 /**
- * Helper function for determining if a tooltip can be used for a description.
+ * Helper function to determine if a string of text is considered "simple".
  *
- * @param string $description
- *   The string of text to process.
+ * @param string $string
+ *   The string of text to check "simple" criteria on.
+ * @param int|FALSE $length
+ *   The length of characters used to determine whether or not $string is
+ *   considered "simple". Set explicitly to FALSE to disable this criteria.
+ * @param array|FALSE $allowed_tags
+ *   An array of allowed tag elements. Set explicitly to FALSE to disable this
+ *   criteria.
+ * @param bool $html
+ *   A variable, passed by reference, that indicates whether or not the
+ *   string contains HTML.
  *
  * @return bool
- *   Returns TRUE if the $description can be used as a tooltip, FALSE otherwise.
+ *   Returns TRUE if the $string is considered "simple", FALSE otherwise.
  */
-function _bootstrap_tooltip_description($description) {
+function _bootstrap_is_simple_string($string, $length = 250, $allowed_tags = NULL, &$html = FALSE) {
   // Use the advanced drupal_static() pattern, since this is called very often.
   static $drupal_static_fast;
   if (!isset($drupal_static_fast)) {
-    $drupal_static_fast['descriptions'] = &drupal_static(__FUNCTION__);
+    $drupal_static_fast['strings'] = &drupal_static(__FUNCTION__);
   }
-  // Get static data.
-  $descriptions = &$drupal_static_fast['descriptions'];
-  $tooltip_descriptions = &$drupal_static_fast['tooltip_descriptions'];
-
-  // Determine if tooltips are enabled.
-  if (!isset($tooltip_descriptions)) {
-    $tooltip_descriptions = bootstrap_setting('tooltip_enabled') && bootstrap_setting('tooltip_descriptions');
+  $strings = &$drupal_static_fast['strings'];
+  if (!isset($strings[$string])) {
+    $plain_string = strip_tags($string);
+    $simple = TRUE;
+    if ($allowed_tags !== FALSE) {
+      $filtered_string = Xss::filter($string, $allowed_tags);
+      $html = $filtered_string !== $plain_string;
+      $simple = $simple && $string === $filtered_string;
+    }
+    if ($length !== FALSE) {
+      $simple = $simple && strlen($plain_string) <= intval($length);
+    }
+    $strings[$string] = $simple;
   }
-
-  // Go ahead and return FALSE if not enabled.
-  if (!$tooltip_descriptions) {
-    return FALSE;
-  }
-
-  $id = Crypt::hashBase64($description);
-  if (!isset($descriptions[$id])) {
-    $descriptions[$id] = ($description === strip_tags($description) && strlen($description) <= bootstrap_setting('tooltip_descriptions_length'));
-  }
-  return $descriptions[$id];
+  return $strings[$string];
 }
 
 /**

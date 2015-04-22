@@ -4,10 +4,10 @@ globalscripts:
     js/bootstrap.js: {}
   dependencies:
     - core/jquery
+    - core/jquery.once
     - core/drupal.ajax
     - core/drupal
     - core/drupalSettings
-    - core/jquery.once
 
 adminscript:
   version: VERSION

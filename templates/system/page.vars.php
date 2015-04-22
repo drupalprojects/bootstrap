@@ -26,20 +26,10 @@ function bootstrap_preprocess_page(&$variables) {
     $variables['content_column_attributes']['class'][] = 'col-sm-12';
   }
 
-  if (bootstrap_setting('fluid_container') === 1) {
-    $variables['container_class'] = 'container-fluid';
-  }
-  else {
-    $variables['container_class'] = 'container';
-  }
-
   $variables['navbar_attributes'] = new Attribute();
   $variables['navbar_attributes']['class'] = array('navbar');
   if (bootstrap_setting('navbar_position') !== '') {
     $variables['navbar_attributes']['class'][] = 'navbar-' . bootstrap_setting('navbar_position');
-  }
-  elseif (bootstrap_setting('fluid_container') === 1) {
-    $variables['navbar_classes_array'][] = 'container-fluid';
   }
   else {
     $variables['navbar_attributes']['class'][] = 'container';

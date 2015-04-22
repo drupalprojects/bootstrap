@@ -16,13 +16,13 @@ function bootstrap_preprocess_webform_element(&$variables) {
 
   // See http://getbootstrap.com/css/#forms-controls.
   if (isset($element['#type'])) {
-    if ($element['#type'] === 'radio') {
+    if ($element['#type'] == "radio") {
       $wrapper_attributes['class'][] = 'radio';
     }
-    elseif ($element['#type'] === 'checkbox') {
+    elseif ($element['#type'] == "checkbox") {
       $wrapper_attributes['class'][] = 'checkbox';
     }
-    elseif ($element['#type'] !== 'hidden') {
+    else {
       $wrapper_attributes['class'][] = 'form-group';
     }
   }

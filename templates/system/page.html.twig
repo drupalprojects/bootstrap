@@ -62,10 +62,10 @@
  */
 #}
 <header{{ navbar_attributes }} id="navbar" role="banner">
-  <div class="{{ container_class }}">
+  <div class="container">
     <div class="navbar-header">
       {% if logo %}
-        <a class="logo navbar-btn pull-left" href="{{ front_page }}" title="<?php print t('Home'); ?>">
+        <a class="logo navbar-btn pull-left" href="{{ front_page }}" title="{{ 'Home'|t }}">
           <img src="{{ logo }}" alt="{{ 'Home'|t }}" />
         </a>
       {% endif %}
@@ -74,28 +74,26 @@
         <a class="name navbar-brand" href="{{ font_page }}" title="{{ 'Home'|t }}">{{ site_name }}</a>
       {% endif %}
 
-      {% if page.primary_menu is not empty or page.secondary_menu is not empty or page.navigation is not empty %}
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-      {% endif %}
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
     </div>
 
-    {% if page.primary_menu is not empty or page.secondary_menu is not empty or page.navigation is not empty %}
+
       <div class="navbar-collapse collapse">
         <nav role="navigation">
           {{ primary_nav }}
           {{ secondary_nav }}
         </nav>
       </div>
-    {% endif %}
   </div>
 </header>
 
-<div class="main-container {{ container_class }}">
+<div class="main-container container">
 
   <header role="banner" id="page-header">
     {% if site_slogan %}
@@ -146,7 +144,7 @@
 </div>
 
 {% if page.footer %}
-  <footer class="footer {{ container_class }}" role="contentinfo">
+  <footer class="footer container" role="contentinfo">
     {{ page.footer }}
   </footer>
 {% endif %}
