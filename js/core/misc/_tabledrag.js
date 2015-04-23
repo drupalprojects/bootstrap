@@ -95,7 +95,7 @@
       var indent = Drupal.theme('tableDragIndentation');
       var testRow = $('<tr/>').addClass('draggable').appendTo(table);
       var testCell = $('<td/>').appendTo(testRow).prepend(indent).prepend(indent);
-      var $indentation = testCell.find('.indentation');
+      var $indentation = testCell.find('.js-indentation');
       this.indentAmount = $indentation.get(1).offsetLeft - $indentation.get(0).offsetLeft;
       testRow.remove();
     }
@@ -105,7 +105,7 @@
     $table.find('> tr.draggable, > tbody > tr.draggable').each(function () { self.makeDraggable(this); });
 
     // Add a link before the table for users to show or hide weight columns.
-    $table.before($('<a href="#" class="tabledrag-toggle-weight">Show row weights</a>')
+    $table.before($('<button type="button" class="link tabledrag-toggle-weight btn btn-link"></button>')
         .attr('title', Drupal.t('Re-order rows by numerical weight instead of dragging.'))
         .on('click', $.proxy(function (e) {
           e.preventDefault();
@@ -158,7 +158,7 @@
       if (this.tableSettings.hasOwnProperty(group)) { // Find the first field in this group.
         for (var d in this.tableSettings[group]) {
           if (this.tableSettings[group].hasOwnProperty(d)) {
-            var field = $table.find('.' + this.tableSettings[group][d].target + ':first');
+            var field = $table.find('.' + this.tableSettings[group][d].target).eq(0);
             if (field.length && this.tableSettings[group][d].hidden) {
               hidden = this.tableSettings[group][d].hidden;
               cell = field.closest('td');
@@ -225,7 +225,7 @@
     }
     // Trigger an event to allow other scripts to react to this display change.
     // Force the extra parameter as a bool.
-    $('table.tabledrag-processed').trigger('columnschange', !!displayWeight);
+    $('table').findOnce('tabledrag').trigger('columnschange', !!displayWeight);
   };
 
   /**
@@ -250,7 +250,7 @@
    * Undo showColumns().
    */
   Drupal.tableDrag.prototype.hideColumns = function () {
-    var $tables = $('table.tabledrag-processed');
+    var $tables = $('table').findOnce('tabledrag');
     // Hide weight/parent cells and headers.
     $tables.find('.tabledrag-hide').css('display', 'none');
     // Show TableDrag handles.
@@ -268,7 +268,7 @@
    * Undo hideColumns().
    */
   Drupal.tableDrag.prototype.showColumns = function () {
-    var $tables = $('table.tabledrag-processed');
+    var $tables = $('table').findOnce('tabledrag');
     // Show weight/parent cells and headers.
     $tables.find('.tabledrag-hide').css('display', '');
     // Hide TableDrag handles.
@@ -311,18 +311,18 @@
     var self = this;
     var $item = $(item);
     // Add a class to the title link
-    $item.find('td:first a').addClass('menu-item__link');
+    $item.find('td').eq(0).find('a').addClass('menu-item__link');
     // Create the handle.
     var handle = $('<a href="#" class="tabledrag-handle"><div class="glyphicon glyphicon-move handle">&nbsp;</div></a>').attr('title', Drupal.t('Drag to re-order'));
     // Insert the handle after indentations (if any).
-    var $indentationLast = $item.find('td:first .indentation:last');
+    var $indentationLast = $item.find('td').eq(0).find('.js-indentation').eq(-1);
     if ($indentationLast.length) {
       $indentationLast.after(handle);
       // Update the total width of indentation in this entire table.
-      self.indentCount = Math.max($item.find('.indentation').length, self.indentCount);
+      self.indentCount = Math.max($item.find('.js-indentation').length, self.indentCount);
     }
     else {
-      $item.find('td:first').prepend(handle);
+      $item.find('td').eq(0).prepend(handle);
     }
 
     if (Modernizr.touch) {
@@ -388,7 +388,7 @@
             if ($(item).is('.tabledrag-root')) {
               // Swap with the previous top-level row.
               groupHeight = 0;
-              while (previousRow && $previousRow.find('.indentation').length) {
+              while (previousRow && $previousRow.find('.js-indentation').length) {
                 $previousRow = $(previousRow).prev('tr').eq(0);
                 previousRow = $previousRow.get(0);
                 groupHeight += $previousRow.is(':hidden') ? 0 : previousRow.offsetHeight;
@@ -417,7 +417,7 @@
           break;
         case 40: // Down arrow.
         case 63233: // Safari down arrow.
-          var $nextRow = $(self.rowObject.group).filter(':last').next('tr').eq(0);
+          var $nextRow = $(self.rowObject.group).eq(-1).next('tr').eq(0);
           var nextRow = $nextRow.get(0);
           while (nextRow && $nextRow.is(':hidden')) {
             $nextRow = $(nextRow).next('tr').eq(0);
@@ -436,7 +436,7 @@
                 $(nextGroup.group).each(function () {
                   groupHeight += $(this).is(':hidden') ? 0 : this.offsetHeight;
                 });
-                var nextGroupRow = $(nextGroup.group).filter(':last').get(0);
+                var nextGroupRow = $(nextGroup.group).eq(-1).get(0);
                 self.rowObject.swap('after', nextGroupRow);
                 // No need to check for indentation, 0 is the only valid one.
                 window.scrollBy(0, parseInt(groupHeight, 10));
@@ -770,7 +770,7 @@
       sourceRow = changedRow;
       if ($previousRow.is('.draggable') && $previousRow.find('.' + group).length) {
         if (this.indentEnabled) {
-          if ($previousRow.find('.indentations').length === $changedRow.find('.indentations').length) {
+          if ($previousRow.find('.js-indentations').length === $changedRow.find('.js-indentations').length) {
             sourceRow = previousRow;
           }
         }
@@ -780,7 +780,7 @@
       }
       else if ($nextRow.is('.draggable') && $nextRow.find('.' + group).length) {
         if (this.indentEnabled) {
-          if ($nextRow.find('.indentations').length === $changedRow.find('.indentations').length) {
+          if ($nextRow.find('.js-indentations').length === $changedRow.find('.js-indentations').length) {
             sourceRow = nextRow;
           }
         }
@@ -794,7 +794,7 @@
     else if (rowSettings.relationship === 'parent') {
       $previousRow = $changedRow.prev('tr');
       previousRow = $previousRow;
-      while ($previousRow.length && $previousRow.find('.indentation').length >= this.rowObject.indents) {
+      while ($previousRow.length && $previousRow.find('.js-indentation').length >= this.rowObject.indents) {
         $previousRow = $previousRow.prev('tr');
         previousRow = $previousRow;
       }
@@ -808,7 +808,7 @@
         // Use the first row in the table as source, because it's guaranteed to
         // be at the root level. Find the first item, then compare this row
         // against it as a sibling.
-        sourceRow = $(this.table).find('tr.draggable:first').get(0);
+        sourceRow = $(this.table).find('tr.draggable').eq(0).get(0);
         if (sourceRow === this.rowObject.element) {
           sourceRow = $(this.rowObject.group[this.rowObject.group.length - 1]).next('tr.draggable').get(0);
         }
@@ -838,7 +838,7 @@
       switch (rowSettings.action) {
         case 'depth':
           // Get the depth of the target row.
-          targetElement.value = $(sourceElement).closest('tr').find('.indentation').length;
+          targetElement.value = $(sourceElement).closest('tr').find('.js-indentation').length;
           break;
         case 'match':
           // Update the value.
@@ -976,7 +976,7 @@
     this.element = tableRow;
     this.method = method;
     this.group = [tableRow];
-    this.groupDepth = $tableRow.find('.indentation').length;
+    this.groupDepth = $tableRow.find('.js-indentation').length;
     this.changed = false;
     this.table = $tableRow.closest('table')[0];
     this.indentEnabled = indentEnabled;
@@ -984,12 +984,12 @@
     this.direction = ''; // Direction the row is being moved.
 
     if (this.indentEnabled) {
-      this.indents = $tableRow.find('.indentation').length;
+      this.indents = $tableRow.find('.js-indentation').length;
       this.children = this.findChildren(addClasses);
       this.group = $.merge(this.group, this.children);
       // Find the depth of this entire group.
       for (var n = 0; n < this.group.length; n++) {
-        this.groupDepth = Math.max($(this.group[n]).find('.indentation').length, this.groupDepth);
+        this.groupDepth = Math.max($(this.group[n]).find('.js-indentation').length, this.groupDepth);
       }
     }
   };
@@ -1021,11 +1021,11 @@
 
     while (currentRow.length) {
       // A greater indentation indicates this is a child.
-      if (currentRow.find('.indentation').length > parentIndentation) {
+      if (currentRow.find('.js-indentation').length > parentIndentation) {
         child++;
         rows.push(currentRow[0]);
         if (addClasses) {
-          currentRow.find('.indentation').each(rowIndentation);
+          currentRow.find('.js-indentation').each(rowIndentation);
         }
       }
       else {
@@ -1034,7 +1034,7 @@
       currentRow = currentRow.next('tr.draggable');
     }
     if (addClasses && rows.length) {
-      $(rows[rows.length - 1]).find('.indentation:nth-child(' + (parentIndentation + 1) + ')').addClass('tree-child-last');
+      $(rows[rows.length - 1]).find('.js-indentation:nth-child(' + (parentIndentation + 1) + ')').addClass('tree-child-last');
     }
     return rows;
   };
@@ -1112,7 +1112,7 @@
 
     // Minimum indentation:
     // Do not orphan the next row.
-    minIndent = nextRow ? $(nextRow).find('.indentation').length : 0;
+    minIndent = nextRow ? $(nextRow).find('.js-indentation').length : 0;
 
     // Maximum indentation:
     if (!prevRow || $prevRow.is(':not(.draggable)') || $(this.element).is('.tabledrag-root')) {
@@ -1124,7 +1124,7 @@
     }
     else {
       // Do not go deeper than as a child of the previous row.
-      maxIndent = $prevRow.find('.indentation').length + ($prevRow.is('.tabledrag-leaf') ? 0 : 1);
+      maxIndent = $prevRow.find('.js-indentation').length + ($prevRow.is('.tabledrag-leaf') ? 0 : 1);
       // Limit by the maximum allowed depth for the table.
       if (this.maxDepth) {
         maxIndent = Math.min(maxIndent, this.maxDepth - (this.groupDepth - this.indents));
@@ -1147,7 +1147,7 @@
     // Determine the valid indentations interval if not available yet.
     if (!this.interval) {
       var prevRow = $(this.element).prev('tr').get(0);
-      var nextRow = $group.filter(':last').next('tr').get(0);
+      var nextRow = $group.eq(-1).next('tr').get(0);
       this.interval = this.validIndentInterval(prevRow, nextRow);
     }
 
@@ -1160,11 +1160,11 @@
     for (var n = 1; n <= Math.abs(indentDiff); n++) {
       // Add or remove indentations.
       if (indentDiff < 0) {
-        $group.find('.indentation:first').remove();
+        $group.find('.js-indentation').eq(0).remove();
         this.indents--;
       }
       else {
-        $group.find('td:first').prepend(Drupal.theme('tableDragIndentation'));
+        $group.find('td').eq(0).prepend(Drupal.theme('tableDragIndentation'));
         this.indents++;
       }
     }
@@ -1198,7 +1198,7 @@
           // Either add immediately if this is a flat table, or check to ensure
           // that this row has the same level of indentation.
           if (this.indentEnabled) {
-            checkRowIndentation = checkRow.find('.indentation').length;
+            checkRowIndentation = checkRow.find('.js-indentation').length;
           }
 
           if (!(this.indentEnabled) || (checkRowIndentation === rowIndentation)) {
@@ -1230,7 +1230,7 @@
   Drupal.tableDrag.prototype.row.prototype.removeIndentClasses = function () {
     for (var n in this.children) {
       if (this.children.hasOwnProperty(n)) {
-        $(this.children[n]).find('.indentation')
+        $(this.children[n]).find('.js-indentation')
           .removeClass('tree-child')
           .removeClass('tree-child-first')
           .removeClass('tree-child-last')
@@ -1244,11 +1244,9 @@
    */
   Drupal.tableDrag.prototype.row.prototype.markChanged = function () {
     var marker = Drupal.theme('tableDragChangedMarker');
-    var $cell = $(this.element).find('td:first');
-    // Find the first appropriate place to insert the marker.
-    var $target = $($cell.find('.file-size').get(0) || $cell.find('.file').get(0) || $cell.find('.tabledrag-handle').get(0));
-    if (!$cell.find('.tabledrag-changed').length) {
-      $target.after(' ' + marker + ' ');
+    var cell = $(this.element).find('td').eq(0);
+    if (cell.find('.tabledrag-changed').length === 0) {
+      cell.append(marker);
     }
   };
 
@@ -1279,4 +1277,3 @@
   });
 
 })(jQuery, Drupal, drupalSettings);
-
