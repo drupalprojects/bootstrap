@@ -37,5 +37,4 @@ function bootstrap_preprocess_form_element_label(&$variables) {
 
   // Add generic Bootstrap identifier class.
   $variables['attributes']['class'][] = 'control-label';
-  $variables['attributes'] = array_merge($variables['attributes'], $variables['element']['#label_attributes']);
 }
