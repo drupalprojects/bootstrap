@@ -5,7 +5,7 @@
  */
 
 use \Drupal\Component\Utility\Html;
-use \Drupal\Component\Utility\String;
+use \Drupal\Component\Utility\SafeMarkup;
 use \Drupal\Core\Url;
 
 /**
@@ -63,7 +63,7 @@ function bootstrap_preprocess_file_upload_help(&$variables) {
     $id = html::getUniqueId('upload-instructions');
 
     $icon = _bootstrap_icon('question-sign');
-    $link_title = String::format($icon . ' ' . '@text', array('@text' => 'More information'));
+    $link_title = SafeMarkup::format($icon . ' ' . '@text', array('@text' => 'More information'));
     $variables['popover_link'] = _bootstrap_popover_link($link_title, $id, t('File requirements'), 'bottom');
 
     $description_content = array(

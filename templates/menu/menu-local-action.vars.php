@@ -4,7 +4,7 @@
  * menu-local-action.func.php
  */
 
-use Drupal\Component\Utility\String;
+use Drupal\Component\Utility\SafeMarkup;
 
 /**
  * Overrides theme_menu_local_action().
@@ -39,7 +39,7 @@ function bootstrap_preprocess_menu_local_action(&$variables) {
 
     $variables['link'] = array(
       '#type' => 'link',
-      '#title' => String::format($icon . '@text', array('@text' => $link['title'])),
+      '#title' => SafeMarkup::format($icon . '@text', array('@text' => $link['title'])),
       '#options' => $options,
       '#url' => $link['url'],
     );
