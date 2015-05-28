@@ -286,6 +286,21 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
     '#default_value' => bootstrap_setting('navbar_inverse', $theme),
   );
 
+  // Pager
+  $form['components']['pager'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Pager'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+  $form['components']['pager']['bootstrap_pager_first_and_last'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show "First" and "Last" links in the pager'),
+    '#description' => t('Allow user to choose whether to display "First" and "Last" links on pagers.'),
+    '#default_value' => bootstrap_setting('pager_first_and_last', $theme),
+  );
+
   // Region wells.
   $wells = array(
     '' => t('None'),
