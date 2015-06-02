@@ -64,6 +64,10 @@ settings[bootstrap_breadcrumb_title] = 1
 settings[bootstrap_navbar_position] = ''
 settings[bootstrap_navbar_inverse] = 0
 
+; Pager
+; --------------
+settings[bootstrap_pager_first_and_last] = 1
+
 ; Region Wells
 ; --------------
 settings[bootstrap_region_well-navigation] = ''
