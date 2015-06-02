@@ -289,7 +289,7 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
   // Pager
   $form['components']['pager'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Pager'),
+    '#title' => t('Pagination'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
