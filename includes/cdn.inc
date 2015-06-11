@@ -157,21 +157,27 @@ function bootstrap_bootstrap_cdn_provider_jsdelivr_alter(&$provider, $request = 
     return;
   }
 
+  // Expected library names from jsDelivr API v1. Must use "twitter-bootstrap"
+  // instead of "bootstrap" (which is just a folder alias).
+  // @see https://www.drupal.org/node/2504343
+  // @see https://github.com/jsdelivr/api/issues/94
+  $bootstrap = 'twitter-bootstrap';
+  $bootswatch = 'bootswatch';
+
   // Extract the raw asset files from the JSON data for each framework.
-  $bootstrap = array();
-  $bootswatch = array();
+  $libraries = array();
   foreach ($json as $data) {
-    if ($data['name'] === 'bootswatch' || $data['name'] === 'twitter-bootstrap') {
+    if ($data['name'] === $bootstrap || $data['name'] === $bootswatch) {
       foreach ($data['assets'] as $asset) {
         if (preg_match('/^' . BOOTSTRAP_VERSION_MAJOR . '\.\d\.\d$/', $asset['version'])) {
-          ${$data['name']}[$asset['version']] = $asset['files'];
+          $libraries[$data['name']][$asset['version']] = $asset['files'];
         }
       }
     }
   }
 
   // Populate the provider array with the versions and themes available.
-  foreach (array_keys($bootstrap) as $version) {
+  foreach (array_keys($libraries[$bootstrap]) as $version) {
     $provider['versions'][$version] = $version;
 
     if (!isset($provider['themes'][$version])) {
@@ -179,11 +185,11 @@ function bootstrap_bootstrap_cdn_provider_jsdelivr_alter(&$provider, $request = 
     }
 
     // Extract Bootstrap themes.
-    $provider['themes'][$version] = drupal_array_merge_deep($provider['themes'][$version], _bootstrap_cdn_provider_jsdelivr_extract_themes($bootstrap[$version], "//cdn.jsdelivr.net/bootstrap/$version"));
+    $provider['themes'][$version] = drupal_array_merge_deep($provider['themes'][$version], _bootstrap_cdn_provider_jsdelivr_extract_themes($libraries[$bootstrap][$version], "//cdn.jsdelivr.net/bootstrap/$version"));
 
     // Extract Bootswatch themes.
-    if (isset($bootswatch[$version])) {
-      $provider['themes'][$version] = drupal_array_merge_deep($provider['themes'][$version], _bootstrap_cdn_provider_jsdelivr_extract_themes($bootswatch[$version], "//cdn.jsdelivr.net/bootswatch/$version"));
+    if (isset($libraries[$bootswatch][$version])) {
+      $provider['themes'][$version] = drupal_array_merge_deep($provider['themes'][$version], _bootstrap_cdn_provider_jsdelivr_extract_themes($libraries[$bootswatch][$version], "//cdn.jsdelivr.net/bootswatch/$version"));
     }
   }
 
