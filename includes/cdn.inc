@@ -174,7 +174,7 @@ function bootstrap_bootstrap_cdn_provider_jsdelivr_alter(&$provider, $response =
   $bootstrap = array();
   $bootswatch = array();
   foreach ($json as $data) {
-    if ($data['name'] === 'bootswatch' || $data['name'] === 'bootstrap') {
+    if ($data['name'] === 'bootswatch' || $data['name'] === 'twitter-bootstrap') {
       foreach ($data['assets'] as $asset) {
         if (preg_match('/^' . BOOTSTRAP_VERSION_MAJOR . '\.\d\.\d$/', $asset['version'])) {
           ${$data['name']}[$asset['version']] = $asset['files'];
