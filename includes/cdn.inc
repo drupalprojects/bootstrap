@@ -7,6 +7,7 @@
  */
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Form\FormStateInterface;
 use GuzzleHttp\Exception\RequestException;
@@ -145,16 +146,36 @@ function bootstrap_cdn_provider($provider = NULL, $reset = FALSE) {
  */
 function bootstrap_bootstrap_cdn_provider_jsdelivr_alter(&$provider, $response = NULL) {
   $json = array();
-  $client = Drupal::httpClient();
   $provider['versions'] = array();
   $provider['themes'] = array();
 
-  if (!$response->code == 400) {
-    $data = $response->getBody(TRUE);
-    $json = Json::decode($data);
+  if ($response->code == 200) {
+    $json = Json::decode($response->getBody(TRUE));
   }
-  else {
-    // The request or parsing of the JSON data failed, provide defaults.
+
+  // Expected library names from jsDelivr API v1. Must use "twitter-bootstrap"
+  // instead of "bootstrap" (which is just a folder alias).
+  // @see https://www.drupal.org/node/2504343
+  // @see https://github.com/jsdelivr/api/issues/94
+  $bootstrap = 'twitter-bootstrap';
+  $bootswatch = 'bootswatch';
+
+  // Extract the raw asset files from the JSON data for each framework.
+  $libraries = array();
+  if ($json) {
+    foreach ($json as $data) {
+      if ($data['name'] === $bootstrap || $data['name'] === $bootswatch) {
+        foreach ($data['assets'] as $asset) {
+          if (preg_match('/^' . BOOTSTRAP_VERSION_MAJOR . '\.\d\.\d$/', $asset['version'])) {
+            $libraries[$data['name']][$asset['version']] = $asset['files'];
+          }
+        }
+      }
+    }
+  }
+
+  // If the main bootstrap library could not be found, then provide defaults.
+  if (!isset($libraries[$bootstrap])) {
     $provider['error'] = TRUE;
     $provider['versions'][BOOTSTRAP_VERSION] = BOOTSTRAP_VERSION;
     $provider['themes'][BOOTSTRAP_VERSION] = array(
@@ -170,21 +191,9 @@ function bootstrap_bootstrap_cdn_provider_jsdelivr_alter(&$provider, $response =
     );
     return;
   }
-  // Extract the raw asset files from the JSON data for each framework.
-  $bootstrap = array();
-  $bootswatch = array();
-  foreach ($json as $data) {
-    if ($data['name'] === 'bootswatch' || $data['name'] === 'bootstrap') {
-      foreach ($data['assets'] as $asset) {
-        if (preg_match('/^' . BOOTSTRAP_VERSION_MAJOR . '\.\d\.\d$/', $asset['version'])) {
-          ${$data['name']}[$asset['version']] = $asset['files'];
-        }
-      }
-    }
-  }
 
   // Populate the provider array with the versions and themes available.
-  foreach (array_keys($bootstrap) as $version) {
+  foreach (array_keys($libraries[$bootstrap]) as $version) {
     $provider['versions'][$version] = $version;
 
     if (!isset($provider['themes'][$version])) {
@@ -192,11 +201,11 @@ function bootstrap_bootstrap_cdn_provider_jsdelivr_alter(&$provider, $response =
     }
 
     // Extract Bootstrap themes.
-    $provider['themes'][$version] = \Drupal\Component\Utility\NestedArray::mergeDeep($provider['themes'][$version], _bootstrap_cdn_provider_jsdelivr_extract_themes($bootstrap[$version], "//cdn.jsdelivr.net/bootstrap/$version"));
+    $provider['themes'][$version] = NestedArray::mergeDeep($provider['themes'][$version], _bootstrap_cdn_provider_jsdelivr_extract_themes($libraries[$bootstrap][$version], "//cdn.jsdelivr.net/bootstrap/$version"));
 
     // Extract Bootswatch themes.
-    if (isset($bootswatch[$version])) {
-      $provider['themes'][$version] = \Drupal\Component\Utility\NestedArray::mergeDeep($provider['themes'][$version], _bootstrap_cdn_provider_jsdelivr_extract_themes($bootswatch[$version], "//cdn.jsdelivr.net/bootswatch/$version"));
+    if (isset($libraries[$bootswatch][$version])) {
+      $provider['themes'][$version] = NestedArray::mergeDeep($provider['themes'][$version], _bootstrap_cdn_provider_jsdelivr_extract_themes($libraries[$bootswatch][$version], "//cdn.jsdelivr.net/bootswatch/$version"));
     }
   }
 
@@ -215,11 +224,11 @@ function bootstrap_bootstrap_cdn_provider_jsdelivr_alter(&$provider, $response =
           if (!isset($provider['themes'][$version][$theme][$type]) && !empty($provider['themes'][$version]['bootstrap'][$type])) {
             $provider['themes'][$version][$theme][$type] = array();
           }
-          $provider['themes'][$version][$theme][$type] = \Drupal\Component\Utility\NestedArray::mergeDeep($provider['themes'][$version]['bootstrap'][$type], $provider['themes'][$version][$theme][$type]);
+          $provider['themes'][$version][$theme][$type] = NestedArray::mergeDeep($provider['themes'][$version]['bootstrap'][$type], $provider['themes'][$version][$theme][$type]);
           if (!isset($provider['themes'][$version][$theme]['min'][$type]) && !empty($provider['themes'][$version]['bootstrap']['min'][$type])) {
             $provider['themes'][$version][$theme]['min'][$type] = array();
           }
-          $provider['themes'][$version][$theme]['min'][$type] = \Drupal\Component\Utility\NestedArray::mergeDeep($provider['themes'][$version]['bootstrap']['min'][$type], $provider['themes'][$version][$theme]['min'][$type]);
+          $provider['themes'][$version][$theme]['min'][$type] = NestedArray::mergeDeep($provider['themes'][$version]['bootstrap']['min'][$type], $provider['themes'][$version][$theme]['min'][$type]);
         }
       }
       // Some themes do not have a non-minified version, clone them to the
@@ -312,10 +321,11 @@ function bootstrap_bootstrap_cdn_provider_custom_assets_alter(&$provider, $theme
  * @todo Create documentation when hook is real.
  */
 function bootstrap_bootstrap_cdn_provider_jsdelivr_assets_alter(&$provider, $theme = NULL) {
-  $version = bootstrap_setting('cdn_jsdelivr_version', $theme);
-  $theme = bootstrap_setting('cdn_jsdelivr_theme', $theme);
+  $error = !empty($provider['error']);
+  $version = $error ? BOOTSTRAP_VERSION : bootstrap_setting('cdn_jsdelivr_version', $theme);
+  $theme = $error ? 'bootstrap' : bootstrap_setting('cdn_jsdelivr_theme', $theme);
   if (isset($provider['themes'][$version][$theme])) {
-    $provider = \Drupal\Component\Utility\NestedArray::mergeDeep($provider, $provider['themes'][$version][$theme]);
+    $provider = NestedArray::mergeDeep($provider, $provider['themes'][$version][$theme]);
   }
 }
 
