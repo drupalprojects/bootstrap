@@ -435,8 +435,7 @@ function bootstrap_js_callback_filter_xss_alter(array &$allowed_tags = array()) 
  */
 function bootstrap_page_attachments_alter(&$variables) {
   $config = \Drupal::config('bootstrap.settings');
-  $variables['#attached']['drupalSettings'] = array(
-    'bootstrap' => array(
+  $variables['#attached']['drupalSettings']['bootstrap'] = array(
       'anchorsFix' => bootstrap_setting('anchors_fix'),
       'anchorsSmoothScrolling' => bootstrap_setting('anchors_smooth_scrolling'),
       'formHasError' => (int) bootstrap_setting('forms_has_error_value_toggle'),
@@ -463,6 +462,5 @@ function bootstrap_page_attachments_alter(&$variables) {
         'delay' => (int) bootstrap_setting('tooltip_delay'),
         'container' => bootstrap_setting('tooltip_container'),
       ),
-    ),
   );
 }
