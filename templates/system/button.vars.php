@@ -10,8 +10,12 @@
 function bootstrap_preprocess_button(&$vars) {
   $element = &$vars['element'];
 
-  // Set the element's attributes.
-  element_set_attributes($element, array('id', 'name', 'value', 'type'));
+  // Drupal buttons should be of type 'submit'.
+  // @see https://www.drupal.org/node/2540452
+  $element['#attributes']['type'] = 'submit';
+
+  // Set the element's other attributes.
+  element_set_attributes($element, array('id', 'name', 'value'));
 
   // Add the base Bootstrap button class.
   $element['#attributes']['class'][] = 'btn';
