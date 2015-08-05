@@ -133,7 +133,7 @@ function bootstrap_theme_registry_alter(&$registry) {
 
     // Ensure "theme path" is set.
     if (!isset($registry[$hook]['theme path'])) {
-      $registry[$hook]['theme path'] = $GLOBALS['theme_path'];
+      $registry[$hook]['theme path'] = \Drupal::theme()->getActiveTheme()->getPath();
     }
   }
 }
@@ -221,7 +221,7 @@ function _bootstrap_process_theme_registry(&$registry, $themes) {
       }
 
       // Process core's normal functionality.
-      _bootstrap_registry_process_extension($registry, $theme, $GLOBALS['theme_key'] === $theme ? 'theme' : 'base_theme', $theme, $path);
+      _bootstrap_registry_process_extension($registry, $theme, \Drupal::theme()->getActiveTheme()->getName() === $theme ? 'theme' : 'base_theme', $theme, $path);
 
       // Find necessary templates in the theme.
       $registry = NestedArray::mergeDeep($registry, drupal_find_theme_templates($registry, '.html.twig', $path));
@@ -239,7 +239,7 @@ function _bootstrap_process_theme_registry(&$registry, $themes) {
         }
 
         // Correct the type that is implementing this override.
-        $registry[$hook]['type'] = $GLOBALS['theme_path'] === $registry[$hook]['theme path'] ? 'theme' : 'base_theme';
+        $registry[$hook]['type'] = \Drupal::theme()->getActiveTheme()->getPath() === $registry[$hook]['theme path'] ? 'theme' : 'base_theme';
 
         // Sort the phase functions.
         // @see https://www.drupal.org/node/2098551
