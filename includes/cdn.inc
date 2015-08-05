@@ -109,7 +109,7 @@ function bootstrap_cdn_provider($provider = NULL, $reset = FALSE) {
           }
           catch (RequestException $e) {
             $response = new stdClass();
-            $response->code = '400';
+            $response->statusCode = '400';
           }
         }
 
@@ -150,8 +150,8 @@ function bootstrap_bootstrap_cdn_provider_jsdelivr_alter(&$provider, $response =
   $provider['versions'] = array();
   $provider['themes'] = array();
 
-  if ($response->code == 200) {
-    $json = Json::decode($response->getBody(TRUE));
+  if ($response->getStatusCode() == 200) {
+    $json = Json::decode($response->getBody(TRUE)->getContents());
   }
 
   // Expected library names from jsDelivr API v1. Must use "twitter-bootstrap"
@@ -337,8 +337,8 @@ function bootstrap_bootstrap_cdn_provider_jsdelivr_assets_alter(&$provider, $the
  */
 function bootstrap_cdn_provider_settings_form(&$form, FormStateInterface &$form_state, $theme) {
   // Retrieve the provider from form values or the setting.
-  $form_values = $form_state->getValues('cdn_provider');
-  $provider = isset($form_values) ? $form_values : bootstrap_setting('cdn_provider', $theme);
+  $form_values = $form_state->getValue('cdn_provider');
+  $provider = !empty($form_values) ? $form_values : bootstrap_setting('cdn_provider', $theme);
 
   // Intercept possible manual import of API data via AJAX callback.
   if ($form_state->getValue('clicked_button') === t('Save provider data')) {
@@ -365,8 +365,8 @@ function bootstrap_cdn_provider_settings_form(&$form, FormStateInterface &$form_
 
   $providers = bootstrap_cdn_provider();
   $options = array();
-  foreach ($providers as $key => $provider) {
-    $options[$key] = $provider['title'];
+  foreach ($providers as $key => $cdn_provider) {
+    $options[$key] = $cdn_provider['title'];
   }
   $form['advanced']['cdn']['bootstrap_cdn_provider'] = array(
     '#type' => 'select',
