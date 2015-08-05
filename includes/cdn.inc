@@ -11,6 +11,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Form\FormStateInterface;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\Request;
 
 define('BOOTSTRAP_CDN_PROVIDER_PATH', 'public://bootstrap/cdn_providers');
 
@@ -102,7 +103,7 @@ function bootstrap_cdn_provider($provider = NULL, $reset = FALSE) {
         // an "api" URL to use.
         elseif (!empty($data['api'])) {
           $client = Drupal::httpClient();
-          $request = $client->createRequest('GET', $data['api']);
+          $request = new Request('GET', $data['api']);
           try {
             $response = $client->send($request);
           }
