@@ -62,8 +62,10 @@ function bootstrap_preprocess_form_element(&$variables) {
     unset($variables['children']);
     unset($variables['description']);
 
-    // Pass the label attributes to the Label.
-    $variables['label']['#label_attributes'] = $variables['element']['#label_attributes'];
+    // Pass the label attributes to the label, if available.
+    if (isset($variables['element']['#label_attributes'])) {
+      $variables['label']['#label_attributes'] = $variables['element']['#label_attributes'];
+    }
   }
 
   // Create variables for #input_group and #input_group_button flags.
