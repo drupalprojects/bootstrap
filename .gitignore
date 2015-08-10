@@ -1,0 +1,4 @@
+.idea
+bower_components
+starterkits/*/bootstrap
+node_modules

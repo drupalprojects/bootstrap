@@ -1,0 +1,13 @@
+{
+  "name": "drupal-bootstrap",
+  "version": "7.3.0-dev",
+  "private": true,
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-bower-task": "^0.4.0",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-less": "^1.0.1",
+    "grunt-contrib-symlink": "^0.3.0",
+    "grunt-contrib-watch": "^0.6.1"
+  }
+}
