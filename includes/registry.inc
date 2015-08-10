@@ -347,7 +347,7 @@ function _bootstrap_process_theme_registry_suggestions(&$registry, $themes) {
     'process functions'    => 'process',
   );
 
-  $functions = get_defined_functions();
+  $grouped_functions = drupal_group_functions_by_prefix();
 
   // Iterate over each theme passed.
   foreach ($themes as $theme) {
@@ -363,11 +363,15 @@ function _bootstrap_process_theme_registry_suggestions(&$registry, $themes) {
 
       // Iterate over the [pre]process phases.
       foreach ($variable_process_phases as $phase_key => $phase) {
-        // Find functions matching the specific theme, phase and pattern.
-        if ($matches = preg_grep('/^' . $theme . '_' . $phase . '_' . $pattern . '/', $functions['user'])) {
+        // Find functions matching the specific theme and phase prefix.
+        $prefix = $theme . '_' . $phase;
+
+        // Grep only the functions which are within the prefix group.
+        list($first_prefix,) = explode('_', $prefix, 2);
+        if (isset($grouped_functions[$first_prefix]) && ($matches = preg_grep('/^' . $prefix . '_' . $pattern . '/', $grouped_functions[$first_prefix]))) {
           foreach ($matches as $match) {
             // Determine the current theme implementation.
-            $hook = substr($match, strlen($theme . '_' . $phase) + 1);
+            $hook = substr($match, strlen($prefix) + 1);
             $base_hook = $hook;
 
             // If there's no current theme implementation, keep checking for
