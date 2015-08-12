@@ -1,4 +1,6 @@
+.DS_Store
 .idea
 bower_components
-starterkits/*/bootstrap
+config.codekit
 node_modules
+starterkits/*/bootstrap
