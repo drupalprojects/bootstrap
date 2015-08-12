@@ -17,11 +17,23 @@
     "postinstall": "grunt install"
   },
   "githooks": {
+    "post-checkout": [
+      {
+        "files": "*(package.json|Gruntfile.js)",
+        "commands": "npm install",
+        "matchAll": false
+      }
+    ],
+    "post-merge": [
+      {
+        "files": "*(package.json|Gruntfile.js)",
+        "commands": "npm install",
+        "matchAll": false
+      }
+    ],
     "pre-commit": [
       {
-        "files": [
-          "starterkits/less/less/overrides.less"
-        ],
+        "files": "starterkits/less/less/overrides.less",
         "commands": [
           "grunt compile",
           "git add css/overrides.css"
