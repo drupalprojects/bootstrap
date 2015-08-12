@@ -13,19 +13,21 @@ var pkg = require('../../package');
 // @see https://github.com/wecodemore/grunt-githooks/pull/40
 var hooks = pkg.githooks && pkg.githooks['{{ task }}'];
 if (hooks) {
-  var ret, hook, files, commands, staged;
+  var ret, hook, files, commands, staged, matchAll;
+  var filesMatched = [];
 
   // Iterate over all hook definitions.
   for (var h in hooks) {
     hook = hooks[h];
-    commands = hook.commands;
-    staged = hook.staged;
+    commands = hook.commands || [];
+    staged = hook.staged === void 0 ? false : !!hook.staged;
+    matchAll = hook.matchAll === void 0 ? true : !!hook.matchAll;
 
     // Iterate over all files in a hook definition.
     if (hook.files) {
       // Expand all file paths using glob (for pattern matching).
       if (typeof hook.files === 'string') {
-        files = glob.sync(hook.files[f], globOptions) || [];
+        files = glob.sync(hook.files, globOptions) || [];
       }
       if (Array.isArray(hook.files)) {
         files = [];
@@ -42,17 +44,20 @@ if (hooks) {
           // Only continue if file has been staged or modified.
           ret = exec((staged ? 'git diff --name-only --cached ' + file : 'git diff HEAD@{1} --stat -- ' + file));
           exit = ret.status;
-          if (exit > 0 || ret.stdout === '') {
+          if (exit === 0 && ret.stdout !== '') {
+            filesMatched.push(file);
+          }
+          else if (matchAll && (exit > 0 || ret.stdout === '')) {
             console.log(ret.stdout);
-            commands = false;
+            filesMatched = [];
             break;
           }
         }
       }
     }
 
-    // Iterate over all commands that should be executed.
-    if (commands) {
+    // Iterate over all commands that should be executed for matched files.
+    if (filesMatched.length) {
       if (typeof commands === 'string') {
         commands = [commands];
       }
