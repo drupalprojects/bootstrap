@@ -11,7 +11,19 @@ module.exports = function (grunt) {
       }
     },
     clean: {
-      plugin: ['css/**/*']
+      css: ['css/**/*']
+    },
+    githooks: {
+      install: {
+        options: {
+          template: '.githooks.js.hbs'
+        },
+        // Change to something else once the {{ hook }} variable can be used.
+        // @see https://github.com/wecodemore/grunt-githooks/pull/40
+        'pre-commit': 'pre-commit',
+        'post-merge': 'post-merge',
+        'post-checkout': 'post-checkout'
+      }
     },
     less: {
       overrides: {
@@ -46,20 +58,26 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-symlink');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-bower-task');
+  grunt.loadNpmTasks('grunt-githooks');
 
   // Install tasks.
-  grunt.registerTask('install', ['bower', 'symlink']);
+  grunt.registerTask('install', 'Installs the grunt project. NOTE: Only needs to be ran once and should have be done automatically via npm postinstall!', function () {
+    // Install bower and setup symlinks.
+    grunt.task.run(['githooks', 'bower', 'symlink']);
+
+    // Ensure there are no files in the vendor paths that may conflict with
+    // Drupal. @see https://www.drupal.org/node/2329453
+    var files = grunt.file.expand(['node_modules/**/*.info', 'bower_components/**/*.info']);
+    files.forEach(function(file) {
+      grunt.file.delete(file, { force: true });
+      grunt.log.verbose('Removed conflicting Drupal file "' + file.dest + '".');
+    });
+  });
 
   // Compile tasks.
-  grunt.registerTask('compile', ['clean', 'less']);
+  grunt.registerTask('compile', 'Compiles the base theme overrides CSS.', ['clean', 'less']);
 
   // Default tasks.
-  grunt.registerTask('default', function() {
-    // Install bower components if the directory does not exist.
-    if (!grunt.file.isDir('bower_components')) {
-      grunt.task.run('install');
-    }
-    grunt.task.run('compile');
-  });
+  grunt.registerTask('default', ['compile']);
 
 };
