@@ -116,3 +116,7 @@ bootstrap_css_excludes:
   - core/modules/system/css/system.module.css
   - core/misc/dropbutton/dropbutton.css
   - core/misc/dropbutton/dropbutton.theme.css
+  - core/modules/system/css/components/form.theme.css
+  - core/modules/system/css/components/button.theme.css
+  - core/modules/system/css/components/tabs.theme.css
+  - core/modules/system/css/components/messages.theme.css

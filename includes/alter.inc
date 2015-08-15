@@ -41,7 +41,7 @@ function bootstrap_css_alter(&$css) {
         'every_page' => TRUE,
         'media' => 'all',
         'preprocess' => FALSE,
-        'group' => CSS_AGGREGATE_DEFAULT,
+        'group' => CSS_AGGREGATE_THEME,
         'browsers' => array('IE' => TRUE, '!IE' => TRUE),
         'weight' => $cdn_weight,
       );
@@ -62,7 +62,7 @@ function bootstrap_css_alter(&$css) {
         'every_page' => TRUE,
         'media' => 'all',
         'preprocess' => TRUE,
-        'group' => CSS_AGGREGATE_DEFAULT,
+        'group' => CSS_AGGREGATE_THEME,
         'browsers' => array('IE' => TRUE, '!IE' => TRUE),
         'weight' => -1,
       );
