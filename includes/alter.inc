@@ -26,7 +26,8 @@ function bootstrap_css_alter(&$css) {
   $excludes = bootstrap_get_theme_info(NULL, 'exclude][css');
 
   // Add CDN assets, if any.
-  if ($cdn_assets = bootstrap_get_cdn_assets('css')) {
+  $provider = bootstrap_setting('cdn_provider');
+  if ($cdn_assets = bootstrap_get_cdn_assets('css', $provider)) {
     $cdn_weight = -2.99;
     foreach ($cdn_assets as $cdn_asset) {
       $cdn_weight += .01;
@@ -41,18 +42,27 @@ function bootstrap_css_alter(&$css) {
         'weight' => $cdn_weight,
       );
     }
-    // Add the overrides file.
-    $override = $theme_path . '/css/overrides.css';
-    $css[$override] = array(
-      'data' => $override,
-      'type' => 'file',
-      'every_page' => TRUE,
-      'media' => 'all',
-      'preprocess' => TRUE,
-      'group' => CSS_THEME,
-      'browsers' => array('IE' => TRUE, '!IE' => TRUE),
-      'weight' => -1,
-    );
+
+    // Add a specific version and theme CSS overrides file.
+    $version = bootstrap_setting('cdn_' . $provider . '_version');
+    if (!$version) { $version = BOOTSTRAP_VERSION; }
+    $theme = bootstrap_setting('cdn_' . $provider . '_theme');
+    if (!$theme) { $theme = 'bootstrap'; }
+    $theme = $theme === 'bootstrap' || $theme === 'bootstrap_theme' ? '' : "-$theme";
+    $min = variable_get('preprocess_css', FALSE) ? '.min' : '';
+    $overrides = "$theme_path/css/$version/overrides" . $theme . $min . '.css';
+    if (file_exists($overrides)) {
+      $css[$overrides] = array(
+        'data' => $overrides,
+        'type' => 'file',
+        'every_page' => TRUE,
+        'media' => 'all',
+        'preprocess' => TRUE,
+        'group' => CSS_THEME,
+        'browsers' => array('IE' => TRUE, '!IE' => TRUE),
+        'weight' => -1,
+      );
+    }
   }
   if (!empty($excludes)) {
     $css = array_diff_key($css, drupal_map_assoc($excludes));
