@@ -40,8 +40,7 @@
           "package.json",
           "Gruntfile.js",
           ".githooks.js.hbs",
-          "grunt/**/*",
-          "another"
+          "grunt/**/*"
         ],
         "commands": "npm install",
         "matchAll": false
