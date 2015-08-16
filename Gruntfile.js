@@ -8,7 +8,7 @@ module.exports = function (grunt) {
   grunt.registerTask('default', ['compile']);
 
   // Register the "install" task.
-  grunt.registerTask('install', 'Installs or re-installs this grunt project. Read more in: MAINTAINERS.md.', ['githooks', 'sync']);
+  grunt.registerTask('install', 'Installs or re-installs this grunt project. Read more in: MAINTAINERS.md.', ['githooks', 'sync', 'clean-vendor-dirs']);
 
   // Load custom tasks.
   grunt.task.loadTasks('grunt');
