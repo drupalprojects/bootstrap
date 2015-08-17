@@ -13,5 +13,6 @@ function bootstrap_preprocess_block(&$variables) {
     $variables['theme_hook_suggestions'][] = 'block__no_wrapper';
   }
   $variables['title_attributes']['class'][] = 'block-title';
+  $variables['attributes']['class'][] = 'block';
   $variables['attributes']['class'][] = 'clearfix';
 }
