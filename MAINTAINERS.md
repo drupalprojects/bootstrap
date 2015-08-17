@@ -60,6 +60,15 @@ new list needs to be generated and the week cache expiration has not lifted,
 you can either simply remove the file manually or run `grunt sync --force` to
 force an API call and generate a new list.
 
+### `grunt clean-vendor-dirs`
+This is a sub-task used by `grunt install`. Drupal currently does not exclude
+vendor directories when scanning directories of modules/themes to look for
+.info files. Some NodeJS modules actually are installed with files that have
+this same extension, yet cannot be parsed by Drupal. Due to the nature of how
+Drupal currently parses these files, it can cause a PCRE recursion in PHP. This
+ultimately leads to a segmentation fault and thus rendering the site inoperable.
+For more details, see: https://www.drupal.org/node/2329453
+
 ### `grunt compile`
 This task ensures that all the necessary variations of versions and themes of
 Bootstrap and Bootswatch are compile from `starterkits/less/less/overrides.less`.
