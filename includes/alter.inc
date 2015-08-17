@@ -45,12 +45,15 @@ function bootstrap_css_alter(&$css) {
 
     // Add a specific version and theme CSS overrides file.
     $version = bootstrap_setting('cdn_' . $provider . '_version');
-    if (!$version) { $version = BOOTSTRAP_VERSION; }
+    if (!$version) {
+      $version = BOOTSTRAP_VERSION;
+    }
     $theme = bootstrap_setting('cdn_' . $provider . '_theme');
-    if (!$theme) { $theme = 'bootstrap'; }
+    if (!$theme) {
+      $theme = 'bootstrap';
+    }
     $theme = $theme === 'bootstrap' || $theme === 'bootstrap_theme' ? '' : "-$theme";
-    $min = variable_get('preprocess_css', FALSE) ? '.min' : '';
-    $overrides = "$theme_path/css/$version/overrides" . $theme . $min . '.css';
+    $overrides = "$theme_path/css/$version/overrides$theme.min.css";
     if (file_exists($overrides)) {
       $css[$overrides] = array(
         'data' => $overrides,

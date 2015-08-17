@@ -50,6 +50,26 @@ module.exports = function (grunt) {
       var done = this.async();
       var total = {count: 0};
       var less = require('less');
+      var LessPluginAutoPrefix = require('less-plugin-autoprefix');
+      var LessPluginCleanCSS = require('less-plugin-clean-css');
+      var lessPlugins = [
+        new LessPluginCleanCSS({
+          advanced: true
+        }),
+        new LessPluginAutoPrefix({
+          browsers: [
+            "Android 2.3",
+            "Android >= 4",
+            "Chrome >= 20",
+            "Firefox >= 24",
+            "Explorer >= 8",
+            "iOS >= 6",
+            "Opera >= 12",
+            "Safari >= 6"
+          ],
+          map: true
+        })
+      ];
       var queue = require('queue')({concurrency: 1, timeout: 60000});
 
       // Iterate over libraries.
@@ -68,7 +88,7 @@ module.exports = function (grunt) {
                 var latestVariables = path.join(latestVersion, 'bootstrap', 'less', 'variables.less');
                 var themeVariables = path.join(version, library, (library === 'bootstrap' ? 'less' : theme), 'variables.less');
                 var backupVariables = path.join(version, 'bootstrap', 'less', 'variables.less');
-                var fileName = (library === 'bootstrap' ? 'overrides.css' : 'overrides-' + theme + '.css');
+                var fileName = (library === 'bootstrap' ? 'overrides.min.css' : 'overrides-' + theme + '.min.css');
                 var outputFile = path.join(cssPath, version, fileName);
 
                 // Resolve the variable files.
@@ -79,7 +99,8 @@ module.exports = function (grunt) {
 
                 var options = {
                   filename: outputFile,
-                  paths: lessPaths
+                  paths: lessPaths,
+                  plugins: lessPlugins
                 };
                 var imports = [
                   // First, import the latest bootstrap (missing variables).
@@ -125,9 +146,7 @@ module.exports = function (grunt) {
     var subtask = (dev ? 'dev' : 'css');
     grunt.task.run([
       'clean:' + subtask,
-      'compile:overrides',
-      'autoprefixer:' + subtask,
-      'cssmin:' + subtask
+      'compile:overrides'
     ]);
   });
 }
