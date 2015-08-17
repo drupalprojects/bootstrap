@@ -115,7 +115,7 @@ module.exports = function (grunt) {
                 less.render(imports.join(';') + ';', options)
                   .then(function (output) {
                     total.count++;
-                    grunt.verbose.writeln('Compiled '.green + path.join(version, fileName).white.bold);
+                    grunt.log.writeln('Compiled '.green + path.join(version, fileName).white.bold);
                     grunt.file.write(outputFile, output.css);
                     done();
                   }, function (e) {
