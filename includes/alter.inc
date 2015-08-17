@@ -27,8 +27,6 @@ bootstrap_include('bootstrap', 'includes/process.inc');
 function bootstrap_css_alter(&$css) {
   $config = \Drupal::config('bootstrap.settings');
   $theme_path = drupal_get_path('theme', 'bootstrap');
-  // Exclude specified CSS files from theme.
-  $excludes = bootstrap_setting('css_excludes');
   // Add CDN assets, if any.
   $provider = bootstrap_setting('cdn_provider');
   if ($cdn_assets = bootstrap_get_cdn_assets('css', $provider)) {
@@ -70,10 +68,6 @@ function bootstrap_css_alter(&$css) {
         'weight' => -1,
       );
     }
-  }
-
-  if (!empty($excludes)) {
-    $css = array_diff_key($css, array_combine($excludes, $excludes));
   }
 }
 

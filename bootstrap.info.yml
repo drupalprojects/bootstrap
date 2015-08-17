@@ -15,6 +15,17 @@ regions:
   footer: 'Footer'
   page_top: 'Page top'
   page_bottom: 'Page bottom'
+stylesheets-remove:
+  - core/misc/vertical-tabs.css
+  - core/modules/system/css/system.theme.css
+  - core/assets/vendor/normalize-css/normalize.css
+  - core/modules/system/css/system.module.css
+  - core/misc/dropbutton/dropbutton.css
+  - core/misc/dropbutton/dropbutton.theme.css
+  - core/modules/system/css/components/form.theme.css
+  - core/modules/system/css/components/button.theme.css
+  - core/modules/system/css/components/tabs.theme.css
+  - core/modules/system/css/components/messages.theme.css
 
 libraries:
   - bootstrap/globalscripts

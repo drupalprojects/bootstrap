@@ -108,15 +108,3 @@ bootstrap_cdn_jsdelivr_theme: 'bootstrap'
 # --------------
 bootstrap_toggle_name: 1
 bootstrap_toggle_search: 1
-
-bootstrap_css_excludes:
-  - core/misc/vertical-tabs.css
-  - core/modules/system/css/system.theme.css
-  - core/assets/vendor/normalize-css/normalize.css
-  - core/modules/system/css/system.module.css
-  - core/misc/dropbutton/dropbutton.css
-  - core/misc/dropbutton/dropbutton.theme.css
-  - core/modules/system/css/components/form.theme.css
-  - core/modules/system/css/components/button.theme.css
-  - core/modules/system/css/components/tabs.theme.css
-  - core/modules/system/css/components/messages.theme.css
