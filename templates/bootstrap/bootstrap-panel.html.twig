@@ -37,8 +37,8 @@ set classes = [
     <div class="panel-collapse collapse fade {{ collapsed == false ? 'in' : '' }}">
   {% endif %}
   <div class="panel-body">
-    {% if description.content %}
-      <div{{ description.attributes.addClass('description', 'help-block') }}>{{ description.content }}</div>
+    {% if description %}
+      <div class="help-block">{{ description }}</div>
     {% endif %}
     {% if children %}
       {{ children }}
