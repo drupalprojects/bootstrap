@@ -96,7 +96,7 @@ function bootstrap_cdn_provider($provider = NULL, $reset = FALSE) {
         if (!empty($data['api']) && file_exists("$provider_path/$name.json") && ($imported_data = file_get_contents("$provider_path/$name.json"))) {
           $data['imported'] = TRUE;
           $response = new stdClass();
-          $response->code = '200';
+          $response->statusCode = '200';
           $response->data = $imported_data;
         }
         // Otherwise, attempt to request API data if the provider has specified
