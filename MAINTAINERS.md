@@ -88,3 +88,6 @@ recommended running this task as such: `grunt watch --dev`. Keep in mind that
 this limits the rapid development of the `overrides.less` file to the default
 Bootstrap theme. If you have switched themes, you must manually compile all
 the version and theme override files.
+
+## Releases
+Please refer to the RELEASES.md documentation.
