@@ -1,4 +1,9 @@
-(function ($) {
+/**
+ * @file
+ * Autocomplete based on jQuery UI.
+ */
+
+(function ($, Drupal) {
 
   "use strict";
 
@@ -7,7 +12,9 @@
   /**
    * Helper splitting terms from the autocomplete value.
    *
-   * @param {String} value
+   * @function Drupal.autocomplete.splitValues
+   *
+   * @param {string} value
    *
    * @return {Array}
    */
@@ -17,9 +24,9 @@
     var quote = false;
     var current = '';
     var valueLength = value.length;
-    var i, character;
+    var character;
 
-    for (i = 0; i < valueLength; i++) {
+    for (var i = 0; i < valueLength; i++) {
       character = value.charAt(i);
       if (character === '"') {
         current += character;
@@ -43,9 +50,11 @@
   /**
    * Returns the last value of an multi-value textfield.
    *
-   * @param {String} terms
+   * @function Drupal.autocomplete.extractLastTerm
    *
-   * @return {String}
+   * @param {string} terms
+   *
+   * @return {string}
    */
   function extractLastTerm(terms) {
     return autocomplete.splitValues(terms).pop();
@@ -54,49 +63,30 @@
   /**
    * The search handler is called before a search is performed.
    *
-   * @param {Object} event
+   * @function Drupal.autocomplete.options.search
    *
-   * @return {Boolean}
+   * @param {object} event
+   *
+   * @return {bool}
    */
   function searchHandler(event) {
-    // Only search when the term is two characters or larger.
+    var options = autocomplete.options;
+    var term = autocomplete.extractLastTerm(event.target.value);
     $(event.target).next().find('.icon').addClass('glyphicon-spin');
     $(event.target).next().find('.ajax-progress-throbber').removeClass('visually-hidden');
-    var term = autocomplete.extractLastTerm(event.target.value);
-    return term.length >= autocomplete.minLength;
-  }
-
-  /**
-   * The response handler is called after a search is performed.
-   * Adds Bootstrap glyphicon-spin class.
-   *
-   * @param {Object} event
-   */
-  function responseHandler(event) {
-    // Only search when the term is two characters or larger.
-    $(event.target).next().find('.icon').removeClass('glyphicon-spin');
-    $(event.target).next().find('.ajax-progress-throbber').addClass('visually-hidden');
-  }
-
-  /**
-   * The open handler is called after a search is performed.
-   * Adds appropriate Bootstrap classes and wraps the menu in div with dropdown class.
-   *
-   * @param {Object} event*
-   */
-  function openHandler(event) {
-    var $element = $(this);
-    $element.data("ui-autocomplete").menu.element.addClass("dropdown-menu");
-    if (!$element.data("ui-autocomplete").menu.element.parent().hasClass('.dropdown')) {
-      $element.data("ui-autocomplete").menu.element.wrap('<div class="dropdown" />');
+    // Abort search if the first character is in firstCharacterBlacklist.
+    if (term.length > 0 && options.firstCharacterBlacklist.indexOf(term[0]) !== -1) {
+      return false;
     }
+    // Only search when the term is at least the minimum length.
+    return term.length >= options.minLength;
   }
 
   /**
-   * jQuery UI autocomplete source callback.
+   * JQuery UI autocomplete source callback.
    *
-   * @param {Object} request
-   * @param {Function} response
+   * @param {object} request
+   * @param {function} response
    */
   function sourceData(request, response) {
     var elementId = this.element.attr('id');
@@ -109,11 +99,12 @@
      * Filter through the suggestions removing all terms already tagged and
      * display the available terms to the user.
      *
-     * @param {Object} suggestions
+     * @param {object} suggestions
      */
     function showSuggestions(suggestions) {
       var tagged = autocomplete.splitValues(request.term);
-      for (var i = 0, il = tagged.length; i < il; i++) {
+      var il = tagged.length;
+      for (var i = 0; i < il; i++) {
         var index = suggestions.indexOf(tagged[i]);
         if (index >= 0) {
           suggestions.splice(index, 1);
@@ -125,7 +116,7 @@
     /**
      * Transforms the data object into an array and update autocomplete results.
      *
-     * @param {Object} data
+     * @param {object} data
      */
     function sourceCallbackHandler(data) {
       autocomplete.cache[elementId][term] = data;
@@ -150,19 +141,19 @@
   /**
    * Handles an autocompletefocus event.
    *
-   * @return {Boolean}
+   * @return {bool}
    */
-  function focusHandler(event, ui) {
+  function focusHandler() {
     return false;
   }
 
   /**
    * Handles an autocompleteselect event.
    *
-   * @param {Object} event
-   * @param {Object} ui
+   * @param {jQuery.Event} event
+   * @param {object} ui
    *
-   * @return {Boolean}
+   * @return {bool}
    */
   function selectHandler(event, ui) {
     var terms = autocomplete.splitValues(event.target.value);
@@ -181,12 +172,38 @@
   }
 
   /**
+   * The open handler is called after a search is performed.
+   * Adds appropriate Bootstrap classes and wraps the menu in div with dropdown class.
+   *
+   * @param {Object} event*
+   */
+  function openHandler(event) {
+    var $element = $(this);
+    $element.data("ui-autocomplete").menu.element.addClass("dropdown-menu");
+    if (!$element.data("ui-autocomplete").menu.element.parent().hasClass('dropdown')) {
+      $element.data("ui-autocomplete").menu.element.wrap('<div class="dropdown" />');
+    }
+  }
+
+  /**
+   * The response handler is called after a search is performed.
+   * Removes Bootstrap glyphicon-spin class.
+   *
+   * @param {Object} event
+   */
+  function responseHandler(event) {
+    // Only search when the term is two characters or larger.
+    $(event.target).next().find('.icon').removeClass('glyphicon-spin');
+    $(event.target).next().find('.ajax-progress-throbber').addClass('visually-hidden');
+  }
+
+  /**
    * Override jQuery UI _renderItem function to output HTML by default.
    *
-   * @param {Object} ul
-   * @param {Object} item
+   * @param {object} ul
+   * @param {object} item
    *
-   * @return {Object}
+   * @return {object}
    */
   function renderItem(ul, item) {
     return $("<li>")
@@ -196,12 +213,19 @@
 
   /**
    * Attaches the autocomplete behavior to all required fields.
+   *
+   * @type {Drupal~behavior}
    */
   Drupal.behaviors.autocomplete = {
     attach: function (context) {
       // Act on textfields with the "form-autocomplete" class.
       var $autocomplete = $(context).find('input.form-autocomplete').once('autocomplete');
       if ($autocomplete.length) {
+        // Allow options to be overriden per instance.
+        var blacklist = $autocomplete.attr('data-autocomplete-first-character-blacklist');
+        $.extend(autocomplete.options, {
+          firstCharacterBlacklist: (blacklist) ? blacklist : ''
+        });
         // Use jQuery UI Autocomplete on the textfield.
         $autocomplete.autocomplete(autocomplete.options)
           .data("ui-autocomplete")
@@ -219,22 +243,32 @@
 
   /**
    * Autocomplete object implementation.
+   *
+   * @namespace Drupal.autocomplete
    */
   autocomplete = {
     cache: {},
-    // Exposes methods to allow overriding by contrib.
-    minLength: 1,
+    // Exposes options to allow overriding by contrib.
     splitValues: autocompleteSplitValues,
     extractLastTerm: extractLastTerm,
     // jQuery UI autocomplete options.
+
+    /**
+     * JQuery UI option object.
+     *
+     * @name Drupal.autocomplete.options
+     */
     options: {
       source: sourceData,
       focus: focusHandler,
+      open: openHandler,
+      response: responseHandler,
       search: searchHandler,
       select: selectHandler,
       renderItem: renderItem,
-      response: responseHandler,
-      open: openHandler
+      minLength: 1,
+      // Custom options, used by Drupal.autocomplete.
+      firstCharacterBlacklist: ''
     },
     ajax: {
       dataType: 'json'
@@ -243,4 +277,4 @@
 
   Drupal.autocomplete = autocomplete;
 
-})(jQuery);
+})(jQuery, Drupal);
