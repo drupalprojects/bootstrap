@@ -46,6 +46,11 @@ function bootstrap_preprocess_page(&$variables) {
   // Render the top-level administration menu links.
   $parameters = new MenuTreeParameters();
   $tree = $menu_tree->load('main', $parameters);
+  $manipulators = array(
+    array('callable' => 'menu.default_tree_manipulators:checkAccess'),
+    array('callable' => 'menu.default_tree_manipulators:generateIndexAndSort'),
+  );
+  $tree = $menu_tree->transform($tree, $manipulators);
   $variables['primary_nav'] = $menu_tree->build($tree);
   $variables['primary_nav']['#attributes']['class'][] = 'navbar-nav';
 
