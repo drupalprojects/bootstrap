@@ -118,3 +118,7 @@ function _bootstrap_prerender_input(&$variables) {
   }
   return $variables;
 }
+
+function bootstrap_preprocess_input__button(&$variables) {
+  bootstrap_preprocess_input($variables);
+}
