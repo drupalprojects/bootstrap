@@ -347,7 +347,7 @@ function _bootstrap_process_theme_registry_suggestions(&$registry, $themes) {
     'process functions'    => 'process',
   );
 
-  $grouped_functions = drupal_group_functions_by_prefix();
+  $grouped_functions = \Drupal::service('theme.registry')->getPrefixGroupedUserFunctions();
 
   // Iterate over each theme passed.
   foreach ($themes as $theme) {
