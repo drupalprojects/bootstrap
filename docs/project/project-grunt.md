@@ -1,28 +1,8 @@
-# Maintaining the Drupal Bootstrap Project
+<!-- @defgroup -->
+<!-- @ingroup project -->
+<!-- @summary Lists the grunt tasks commonly used in project development. -->
+# Project Grunt Tasks
 
-## Prerequisites
-This project relies heavily on NodeJS/Grunt to automate some very time
-consuming tasks and to ensure effective management. If you do not have these
-CLI tools, please install them now:
-
-* https://nodejs.org
-* http://gruntjs.com
-
-## Installation
-
-This project's installation may initially take a while to complete. Please read
-through this entire README before continuing so you are aware of what to expect.
-Suffice it to say: you will not have to manually update this project again.
-
-After you have installed the prerequisite CLI tools, run `npm install` in this
-directory. This will install the necessary NodeJS modules inside the
-`node_modules` folder.
-
-After NodeJS has finished installing its own modules, it will automatically
-invoke `grunt install` for you. This is a grunt task that is specifically
-designed to keep the project in sync amongst maintainers.
-
-## Grunt
 There are several tasks available to run, please execute `grunt --help` to view
 the full list of tasks currently available. This README only covers the most
 important or commonly used tasks.
@@ -72,11 +52,12 @@ For more details, see: https://www.drupal.org/node/2329453
 ### `grunt compile`
 This task ensures that all the necessary variations of versions and themes of
 Bootstrap and Bootswatch are compile from `starterkits/less/less/overrides.less`.
-Typically, this task generates hundreds of files and can take upwards of
-\~10 seconds to fully complete.
+Typically, this task generates hundreds of files and can take upwards of \~10
+seconds to fully complete.
 
 Optionally, if the `--dev` parameter is specified, this task will only compile
 the starterkit's `overrides.less` file for the latest version of Bootstrap: 
+
 * `./css/<%= latestVersion/overrides.css`
 * `./css/<%= latestVersion/overrides.min.css`
 
@@ -88,6 +69,3 @@ recommended running this task as such: `grunt watch --dev`. Keep in mind that
 this limits the rapid development of the `overrides.less` file to the default
 Bootstrap theme. If you have switched themes, you must manually compile all
 the version and theme override files.
-
-## Releases
-Please refer to the RELEASES.md documentation.
