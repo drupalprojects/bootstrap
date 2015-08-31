@@ -1,6 +1,6 @@
 <!-- @defgroup -->
 <!-- @summary Documentation landing page and topics for maintaining the Drupal Bootstrap project. -->
-# Developing the Drupal Bootstrap Project
+# Overview of Drupal Bootstrap Project Development
 
 Generally speaking, these topics will not be very helpful to you unless you are
 a maintainer for this project. If you're just curious about our process or even
@@ -29,8 +29,8 @@ invoke `grunt install` for you. This is a grunt task that is specifically
 designed to keep the project in sync amongst maintainers.
 
 ## Grunt
-Refer to the @link project_grunt Project Grunt Tasks @endlink topic.
+Refer to the @link project_grunt Grunt Tasks @endlink sub-topic.
 
 
 ## Releases
-Refer to the @link releases project_releases Project Releases @endlink topic.
+Refer to the @link project_releases Releases @endlink sub-topic.

@@ -1,7 +1,7 @@
 <!-- @defgroup -->
-<!-- @ingroup project -->
+<!-- @ingroup -->
 <!-- @summary Provides detailed instructions for creating a release for the project. -->
-# Project Releases
+# Releases
 
 This project attempts to provide more structured release notes. This allows the project to communicate more effectively
 to the users what exactly has changed and where to go for additional information. This documentation is intended for
