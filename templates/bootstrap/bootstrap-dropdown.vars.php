@@ -79,6 +79,10 @@ function bootstrap_process_bootstrap_dropdown(&$variables) {
     elseif (is_array($data) && (!empty($data['disabled']) || !empty($data['#disabled']))) {
       $item_classes[] = 'disabled';
     }
+    // Active.
+    elseif (is_array($data) && (!empty($data['active']) || !empty($data['#active']))) {
+      $item_classes[] = 'active';
+    }
 
     // Construct item_list item.
     $item = array(
