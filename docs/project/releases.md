@@ -35,11 +35,13 @@ However, if it is long, it should really be a change record.
 ```
 
 ## Create a Release Node
-Note: This project currently relies on the [Drush Git Release Notes](https://www.drupal.org/project/grn)
-tool to automatically generate the the bulk of the release notes. This does,
-however, requires maintainers to do the following extra steps. This entire
-process will eventually be converted into a fully automated grunt task. Until
-then, please download and install this tool and follow the remaining steps.
+
+{.alert.alert-info} **NOTE:** This project currently relies on the
+[Drush Git Release Notes](https://www.drupal.org/project/grn) tool to
+automatically generate the the bulk of the release notes. This does, however,
+requires maintainers to do the following extra steps. This entire process will
+eventually be converted into a fully automated grunt task. Until then, please
+download and install this tool and follow the remaining steps.
 
 1. Create a [tag in git](https://www.drupal.org/node/1066342) that follows the
    previous version and push it to the repository.

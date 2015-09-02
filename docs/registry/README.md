@@ -1,3 +1,5 @@
 <!-- @defgroup -->
-<!-- @summary Stub file for topic. @todo finish documentation -->
-# Overview of Drupal Bootstrap and the Theme Registry
+<!-- @summary Overview of the theme registry in Drupal Bootstrap. -->
+# Theme Registry
+
+{.alert.alert-warning} Needs documentation.
