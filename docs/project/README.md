@@ -1,5 +1,5 @@
+<!-- @file Overview for maintaining and developing the Drupal Bootstrap project. -->
 <!-- @defgroup -->
-<!-- @summary Overview for maintaining and developing the Drupal Bootstrap project. -->
 # Project Development
 
 Generally speaking, these topics will not be very helpful to you unless you are

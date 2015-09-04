@@ -1,6 +1,6 @@
+<!-- @file Lists the grunt tasks commonly used in project development. -->
 <!-- @defgroup -->
 <!-- @ingroup -->
-<!-- @summary Lists the grunt tasks commonly used in project development. -->
 # Grunt Tasks
 
 There are several tasks available to run, please execute `grunt --help` to view
