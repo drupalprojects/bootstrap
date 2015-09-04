@@ -1,6 +1,6 @@
+<!-- @file Provides detailed instructions for creating a release for the project. -->
 <!-- @defgroup -->
 <!-- @ingroup -->
-<!-- @summary Provides detailed instructions for creating a release for the project. -->
 # Releases
 
 This project attempts to provide more structured release notes. This allows the project to communicate more effectively

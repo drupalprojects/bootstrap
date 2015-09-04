@@ -1,60 +1,27 @@
-<!-- @mainpage -->
-<!-- @summary Documentation landing page and topics for the http://drupal-bootstrap.org site. -->
-# Drupal Bootstrap Documentation
+<!-- @file Project Page -->
+# Bootstrap
 
-{.lead} The official documentation site for the [Drupal Bootstrap] base theme
+> Sleek, intuitive, and powerful mobile first front-end framework for faster and
+> easier web development. Bootstrap has become one of the most popular front-end
+> frameworks and open source projects in the world.
 
-The majority of this site is automatically generated from source files
-located through out the project's repository. Topics are extracted from Markdown
-files and the rest is extracted from embedded PHP comments.
+This base theme bridges the gap between Drupal and the [Bootstrap Framework].
 
----
+### Features
+- [jsDelivr CDN](http://www.jsdelivr.com) for "out-of-the-box" styling and
+  faster page load times.
+- [Bootswatch](http://bootswatch.com) theme support, if using the CDN.
+- Glyphicons support via [Icon API](https://www.drupal.org/project/icon).
+- Extensive integration and template/preprocessor overrides for most of the
+  [Bootstrap Framework] CSS, Components and JavaScript
+- Theme settings to further enhance the Drupal Bootstrap integration:
+  - [Breadcrumbs](http://getbootstrap.com/components/#breadcrumbs)
+  - [Navbar](http://getbootstrap.com/components/#navbar)
+  - [Popovers](http://getbootstrap.com/javascript/#popovers)
+  - [Tooltips](http://getbootstrap.com/javascript/#tooltips)
+  - [Wells](http://getbootstrap.com/components/#wells) (per region)
 
-## Topics
+### Documentation
+See our dedicated [documentation site](http://drupal-bootstrap.org).
 
-Below are some topics to help get you started using the [Drupal Bootstrap] base
-theme. They are ordered solely on quickest implementation and ease of use. The
-base theme can cover many different use cases. You may find one or more of these
-topics useful. They range from a quick CDN based implementation (with minimal
-coding effort) to full on sub-theme architecture complete with template and
-preprocess overrides.
-
-#### @link settings Theme Settings @endlink
-
-#### @link subtheme Sub-Theming @endlink
-- @link subtheme_drush Drush Support @endlink
-- @link subtheme_utility Utility Functions @endlink
-
-#### @link api APIs @endlink
-
-#### @link registry Theme Registry @endlink
-
-#### @link project Project Development @endlink
-- @link project_grunt Grunt Tasks @endlink
-- @link project_releases Releases @endlink
-
----
-
-## Terminology
-
-The term **"bootstrap"** can be used excessively through out this project's
-documentation. For clarity, we will attempt to use it verbosely in one of the
-following ways:
-
-- **[Drupal Bootstrap]** refers to the Drupal base theme project.
-- **[Bootstrap Framework](http://getbootstrap.com)** refers to the external
-  front end framework.
-- **[drupal_bootstrap](https://api.drupal.org/apis/drupal_bootstrap)** refers
-  to Drupal's bootstrapping process or phase.
-  
-When referring to files inside the [Drupal Bootstrap] project directory, they
-will always start with `./` and continue to specify the full path to the file
-or directory inside it. For example, the file that is responsible for displaying
-this text is located at `./README.md`.
-
-When referring to files inside a sub-theme, they will always start with
-`./example_subtheme/` and continue to specify the full path to the file or
-directory inside it. For example, the main file Drupal will search for:
-`./example_subtheme/template.php`.
-
-[Drupal Bootstrap]: https://www.drupal.org/project/bootstrap
+[Bootstrap Framework]: http://getbootstrap.com
