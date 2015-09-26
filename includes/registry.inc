@@ -120,15 +120,24 @@ function bootstrap_theme_registry_alter(&$registry) {
 
   // Post-process theme registry. This happens after all altering has occurred.
   foreach ($registry as $hook => $info) {
+    // The 'base hook' is only applied to derivative hooks already registered
+    // from a pattern. This is typically set from
+    // drupal_find_theme_functions() and drupal_find_theme_templates().
+    // If a theme hook has a base hook, mark its preprocess functions always
+    // incomplete in order to inherit the base hook's preprocess functions.
+    if (!empty($info['incomplete preprocess functions'])) {
+      _bootstrap_complete_suggestion($hook, $registry);
+      unset($registry[$hook]['incomplete preprocess functions']);
+    }
     // Ensure uniqueness.
     if (!empty($registry[$hook]['includes'])) {
-      $registry[$hook]['includes'] = array_unique($info['includes']);
+      $registry[$hook]['includes'] = array_unique($registry[$hook]['includes']);
     }
     if (!empty($registry[$hook]['preprocess functions'])) {
-      $registry[$hook]['preprocess functions'] = array_unique($info['preprocess functions']);
+      $registry[$hook]['preprocess functions'] = array_unique($registry[$hook]['preprocess functions']);
     }
     if (!empty($registry[$hook]['process functions'])) {
-      $registry[$hook]['process functions'] = array_unique($info['process functions']);
+      $registry[$hook]['process functions'] = array_unique($registry[$hook]['process functions']);
     }
 
     // Ensure "theme path" is set.
@@ -447,6 +456,43 @@ function _bootstrap_process_theme_registry_suggestions(&$registry, $themes) {
 }
 
 /**
+ * Completes the definition of the requested suggestion hook.
+ *
+ * @param string $hook
+ *   The name of the suggestion hook to complete.
+ * @param array $cache
+ *   The theme registry, as documented in
+ *   \Drupal\Core\Theme\Registry::processExtension().
+ */
+function _bootstrap_complete_suggestion($hook, &$cache) {
+  $previous_hook = $hook;
+  $incomplete_previous_hook = array();
+  while ((!isset($cache[$previous_hook]) || isset($cache[$previous_hook]['incomplete preprocess functions']))
+    && $pos = strrpos($previous_hook, '__')) {
+    if (isset($cache[$previous_hook]) && !$incomplete_previous_hook && isset($cache[$previous_hook]['incomplete preprocess functions'])) {
+      $incomplete_previous_hook = $cache[$previous_hook];
+      unset($incomplete_previous_hook['incomplete preprocess functions']);
+    }
+    $previous_hook = substr($previous_hook, 0, $pos);
+
+    // If base hook exists clone of it for the preprocess function
+    // without a template.
+    // @see https://www.drupal.org/node/2457295
+    if (isset($cache[$previous_hook]) && !isset($cache[$previous_hook]['incomplete preprocess functions'])) {
+      $cache[$hook] = $incomplete_previous_hook + $cache[$previous_hook];
+      if (isset($incomplete_previous_hook['preprocess functions'])) {
+        $diff = array_diff($incomplete_previous_hook['preprocess functions'], $cache[$previous_hook]['preprocess functions']);
+        $cache[$hook]['preprocess functions'] = array_merge($cache[$previous_hook]['preprocess functions'], $diff);
+      }
+      // If a base hook isn't set, this is the actual base hook.
+      if (!isset($cache[$previous_hook]['base hook'])) {
+        $cache[$hook]['base hook'] = $previous_hook;
+      }
+    }
+  }
+}
+
+/**
  * Process a single implementation of hook_theme().
  *
  * @param array $cache
@@ -525,6 +571,13 @@ function _bootstrap_registry_process_extension(array &$cache, $name, $type, $the
 
       if (isset($cache[$hook]['includes'])) {
         $result[$hook]['includes'] = $cache[$hook]['includes'];
+      }
+
+      // Load the includes, as they may contain preprocess functions.
+      if (isset($info['includes'])) {
+        foreach ($info['includes'] as $include_file) {
+          include_once $this->root . '/' . $include_file;
+        }
       }
 
       // If the theme implementation defines a file, then also use the path
@@ -643,6 +696,9 @@ function _bootstrap_registry_process_extension(array &$cache, $name, $type, $the
         }
         // Ensure uniqueness.
         $cache[$hook]['preprocess functions'] = array_unique($cache[$hook]['preprocess functions']);
+        if (!empty($cache[$hook]['base hook'])) {
+          $cache[$hook]['incomplete preprocess functions'] = TRUE;
+        }
       }
     }
   }
