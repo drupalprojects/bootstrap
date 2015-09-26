@@ -49,14 +49,14 @@
 <head profile="{{ grddl_profile }}">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  {{ head }}
+  <head-placeholder token="{{ placeholder_token|raw }}">
   <title>{{ head_title|safe_join(' | ') }}</title>
-  {{ styles }}
+  <css-placeholder token="{{ placeholder_token|raw }}">
   <!-- HTML5 element support for IE6-8 -->
   <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
-  {{ scripts }}
+  <js-placeholder token="{{ placeholder_token|raw }}">
 </head>
 <body{{ attributes }}>
   <a href="#main-content" class="visually-hidden focusable skip-link">
@@ -65,6 +65,6 @@
   {{ page_top }}
   {{ page }}
   {{ page_bottom }}
-  {{ scripts_bottom }}
+  <js-bottom-placeholder token="{{ placeholder_token|raw }}">
 </body>
 </html>
