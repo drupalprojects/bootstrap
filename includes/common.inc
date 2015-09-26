@@ -982,45 +982,45 @@ function _bootstrap_colorize_text($string, $default = '') {
       // Text that match these specific strings are checked first.
       'matches' => array(
         // Primary class.
-        t('Download feature')   => 'primary',
+        t('Download feature')->render()   => 'primary',
 
         // Success class.
-        t('Add effect')         => 'success',
-        t('Add and configure')  => 'success',
+        t('Add effect')->render()         => 'success',
+        t('Add and configure')->render()  => 'success',
 
         // Info class.
-        t('Save and add')       => 'info',
-        t('Add another item')   => 'info',
-        t('Update style')       => 'info',
+        t('Save and add')->render()       => 'info',
+        t('Add another item')->render()   => 'info',
+        t('Update style')->render()       => 'info',
       ),
 
       // Text that contain these words anywhere in the string are checked last.
       'contains' => array(
         // Primary class.
-        t('Confirm')            => 'primary',
-        t('Filter')             => 'primary',
-        t('Submit')             => 'primary',
-        t('Search')             => 'primary',
+        t('Confirm')->render()            => 'primary',
+        t('Filter')->render()             => 'primary',
+        t('Submit')->render()             => 'primary',
+        t('Search')->render()             => 'primary',
 
         // Success class.
-        t('Add')                => 'success',
-        t('Create')             => 'success',
-        t('Save')               => 'success',
-        t('Write')              => 'success',
+        t('Add')->render()                => 'success',
+        t('Create')->render()             => 'success',
+        t('Save')->render()               => 'success',
+        t('Write')->render()              => 'success',
 
         // Warning class.
-        t('Export')             => 'warning',
-        t('Import')             => 'warning',
-        t('Restore')            => 'warning',
-        t('Rebuild')            => 'warning',
+        t('Export')->render()             => 'warning',
+        t('Import')->render()             => 'warning',
+        t('Restore')->render()            => 'warning',
+        t('Rebuild')->render()            => 'warning',
 
         // Info class.
-        t('Apply')              => 'info',
-        t('Update')             => 'info',
+        t('Apply')->render()              => 'info',
+        t('Update')->render()             => 'info',
 
         // Danger class.
-        t('Delete')             => 'danger',
-        t('Remove')             => 'danger',
+        t('Delete')->render()             => 'danger',
+        t('Remove')->render()             => 'danger',
       ),
     );
 
