@@ -22,7 +22,7 @@ function bootstrap_preprocess_field_multiple_value_form(&$variables) {
         'data' => array(
           '#prefix' => '<label' . $header_attributes . '>',
           'title' => array(
-            '#markup' => t($element['#title']),
+            '#markup' => $element['#title'],
           ),
           '#suffix' => '</label>',
         ),
