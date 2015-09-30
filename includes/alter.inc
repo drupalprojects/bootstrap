@@ -362,7 +362,6 @@ function bootstrap_form_alter(&$form, FormStateInterface $form_state, $form_id =
         // to add a submit button containing a search icon directly after the
         // input element.
         $form['actions']['submit']['#attributes']['class'][] = 'visually-hidden';
-        //$form['search_block_form']['#theme_wrappers'] = array('bootstrap_search_form_wrapper');
 
         // Apply a clearfix so the results don't overflow onto the form.
         $form['#attributes']['class'][] = 'content-search';
