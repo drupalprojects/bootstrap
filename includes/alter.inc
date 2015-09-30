@@ -355,14 +355,14 @@ function bootstrap_form_alter(&$form, FormStateInterface $form_state, $form_id =
       case 'search_block_form':
         $form['#attributes']['class'][] = 'form-search';
 
-        $form['search_block_form']['#title'] = '';
-        $form['search_block_form']['#attributes']['placeholder'] = t('Search');
+        $form['keys']['#title'] = '';
+        $form['keys']['#placeholder'] = (string) t('Search');
 
         // Hide the default button from display and implement a theme wrapper
         // to add a submit button containing a search icon directly after the
         // input element.
         $form['actions']['submit']['#attributes']['class'][] = 'visually-hidden';
-        $form['search_block_form']['#theme_wrappers'] = array('bootstrap_search_form_wrapper');
+        //$form['search_block_form']['#theme_wrappers'] = array('bootstrap_search_form_wrapper');
 
         // Apply a clearfix so the results don't overflow onto the form.
         $form['#attributes']['class'][] = 'content-search';
