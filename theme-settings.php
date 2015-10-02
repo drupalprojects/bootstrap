@@ -60,7 +60,9 @@ function bootstrap_form_system_theme_settings_alter(&$form, FormStateInterface $
     '#type' => 'checkbox',
     '#title' => t('Fluid container'),
     '#default_value' => bootstrap_setting('fluid_container', $theme),
-    '#description' => t('Use <code>.container-fluid</code> class. See <a href="http://getbootstrap.com/css/#grid-example-fluid">Fluid container</a>'),
+    '#description' => t('Use <code>.container-fluid</code> class. See : !bootstrap_link', array(
+      '!bootstrap_link' => Drupal::l('Fluid container' , Url::fromUri('http://getbootstrap.com/css/' , ['absolute' => TRUE , 'fragment' => 'grid-example-fluid'])),
+    )),
   );
 
   // Buttons.
@@ -85,17 +87,17 @@ function bootstrap_form_system_theme_settings_alter(&$form, FormStateInterface $
     '#type' => 'checkbox',
     '#title' => t('Colorize Buttons'),
     '#default_value' => bootstrap_setting('button_colorize', $theme),
-    '#description' => t('Adds classes to buttons based on their text value. See: <a href="!bootstrap_url" target="_blank">Buttons</a> and <a href="!api_url" target="_blank">hook_bootstrap_colorize_text_alter()</a>', array(
-      '!bootstrap_url' => 'http://getbootstrap.com/css/#buttons',
-      '!api_url' => 'http://drupalcode.org/project/bootstrap.git/blob/refs/heads/7.x-3.x:/bootstrap.api.php#l13',
+    '#description' => t('Adds classes to buttons based on their text value. See: !bootstrap_link and !api_link', array(
+      '!bootstrap_link' => Drupal::l(t('Buttons') , Url::fromUri('http://getbootstrap.com/css/#buttons')),
+      '!api_link' => Drupal::l('hook_bootstrap_colorize_text_alter()' , Url::fromUri('http://drupalcode.org/project/bootstrap.git/blob/refs/heads/7.x-3.x:/bootstrap.api.php' , ['absolute' => TRUE , 'fragment' => '13'])),
     )),
   );
   $form['general']['buttons']['bootstrap_button_iconize'] = array(
     '#type' => 'checkbox',
     '#title' => t('Iconize Buttons'),
     '#default_value' => bootstrap_setting('button_iconize', $theme),
-    '#description' => t('Adds icons to buttons based on the text value. See: <a href="!api_url" target="_blank">hook_bootstrap_iconize_text_alter()</a>', array(
-      '!api_url' => 'http://drupalcode.org/project/bootstrap.git/blob/refs/heads/7.x-3.x:/bootstrap.api.php#l37',
+    '#description' => t('Adds icons to buttons based on the text value. See: !api_link', array(
+      '!api_link' => Drupal::l('hook_bootstrap_iconize_text_alter()' , Url::fromUri('http://drupalcode.org/project/bootstrap.git/blob/refs/heads/7.x-3.x:/bootstrap.api.php' , ['absolute' => TRUE , 'fragment' => '37'])),
     )),
   );
 
@@ -151,8 +153,8 @@ function bootstrap_form_system_theme_settings_alter(&$form, FormStateInterface $
   $form['general']['images']['bootstrap_image_shape'] = array(
     '#type' => 'select',
     '#title' => t('Default image shape'),
-    '#description' => t('Add classes to an <code>&lt;img&gt;</code> element to easily style images in any project. Note: Internet Explorer 8 lacks support for rounded corners. See: <a href="!bootstrap_url" target="_blank">Image Shapes</a>', array(
-      '!bootstrap_url' => 'http://getbootstrap.com/css/#images-shapes',
+    '#description' => t('Add classes to an <code>&lt;img&gt;</code> element to easily style images in any project. Note: Internet Explorer 8 lacks support for rounded corners. See: !bootstrap_link', array(
+      '!bootstrap_link' => Drupal::l(t('Image Shapes') , Url::fromUri('http://getbootstrap.com/css/' , ['absolute' => TRUE , 'fragment' => 'images-shapes'])),
     )),
     '#default_value' => bootstrap_setting('image_shape', $theme),
     '#empty_option' => t('None'),
