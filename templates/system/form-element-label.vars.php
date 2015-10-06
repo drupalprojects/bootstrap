@@ -12,7 +12,7 @@ use Drupal\Component\Utility\Xss;
 function bootstrap_preprocess_form_element_label(&$variables) {
   $element = $variables['element'];
   // If title and required marker are both empty, output no label.
-  $variables['title'] = !empty($element['#title']) ? Xss::filterAdmin($element['#title']) : '';
+  $variables['title'] = !empty($element['#title']) ? $element['#title'] : '';
   $variables['attributes'] = array();
 
   // Pass elements title_display to template.
