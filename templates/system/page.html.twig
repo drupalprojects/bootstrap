@@ -64,15 +64,7 @@
 <header{{ navbar_attributes }} id="navbar" role="banner">
   <div class="container">
     <div class="navbar-header">
-      {% if logo %}
-        <a class="logo navbar-btn pull-left" href="{{ front_page }}" title="{{ 'Home'|t }}">
-          <img src="{{ logo }}" alt="{{ 'Home'|t }}" />
-        </a>
-      {% endif %}
-
-      {% if site_name %}
-        <a class="name navbar-brand" href="{{ font_page }}" title="{{ 'Home'|t }}">{{ site_name }}</a>
-      {% endif %}
+      {{ page.header }}
 
       <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -83,7 +75,6 @@
       </button>
     </div>
 
-
       <div class="navbar-collapse collapse">
         <nav role="navigation">
           {{ primary_nav }}
@@ -93,16 +84,7 @@
   </div>
 </header>
 
-<div class="main-container container">
-
-  <header role="banner" id="page-header">
-    {% if site_slogan %}
-      <p class="lead">{{ site_slogan }}</p>
-    {% endif %}
-
-    {{ page.header }}
-  </header> <!-- /#page-header -->
-
+<div role="main" class="main-container container js-quickedit-main-content">
   <div class="row">
 
     {% if page.sidebar_first %}
@@ -113,15 +95,10 @@
 
     <section{{ content_column_attributes }}>
       {% if page.highlighted %}
-        <div class="highlighted jumbotron">{{ page.highlighted }}</div>
+        <div class="highlighted">{{ page.highlighted }}</div>
       {% endif %}
       {{ breadcrumb }}
       <a id="main-content"></a>
-      {{ title_prefix }}
-      {% if title %}
-        <h1 class="page-header">{{ title }}</h1>
-      {% endif %}
-      {{ title_suffix }}
 
       {{ messages }}
       {{ tabs }}
