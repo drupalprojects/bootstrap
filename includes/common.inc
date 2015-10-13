@@ -1204,26 +1204,28 @@ function _bootstrap_process_theme_suggestion(&$variables) {
  *   Returns TRUE if the $string is considered "simple", FALSE otherwise.
  */
 function _bootstrap_is_simple_string($string, $length = 250, $allowed_tags = NULL, &$html = FALSE) {
+  // Check if string is an object.
+  $string_clone = is_object($string) ? $string->__toString() : $string;
   // Use the advanced drupal_static() pattern, since this is called very often.
   static $drupal_static_fast;
   if (!isset($drupal_static_fast)) {
     $drupal_static_fast['strings'] = &drupal_static(__FUNCTION__);
   }
   $strings = &$drupal_static_fast['strings'];
-  if (!isset($strings[$string])) {
-    $plain_string = strip_tags($string);
+  if (!isset($strings[$string_clone])) {
+    $plain_string = strip_tags($string_clone);
     $simple = TRUE;
     if ($allowed_tags !== FALSE) {
-      $filtered_string = Xss::filter($string, $allowed_tags);
+      $filtered_string = Xss::filter($string_clone, $allowed_tags);
       $html = $filtered_string !== $plain_string;
-      $simple = $simple && $string === $filtered_string;
+      $simple = $simple && $string_clone === $filtered_string;
     }
     if ($length !== FALSE) {
       $simple = $simple && strlen($plain_string) <= intval($length);
     }
-    $strings[$string] = $simple;
+    $strings[$string_clone] = $simple;
   }
-  return $strings[$string];
+  return $strings[$string_clone];
 }
 
 /**
