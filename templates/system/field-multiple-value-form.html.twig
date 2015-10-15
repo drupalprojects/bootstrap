@@ -22,8 +22,8 @@
 {% if multiple %}
   <div class="form-item">
     {{ table }}
-    {% if description %}
-      <div class="description help-block">{{ description }}</div>
+    {% if description.content %}
+      <div class="description help-block">{{ description.content }}</div>
     {% endif %}
     {% if button %}
       <div class="clearfix">{{ button }}</div>
