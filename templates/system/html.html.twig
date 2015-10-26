@@ -45,10 +45,8 @@
  */
 #}
 <!DOCTYPE html>
-<html lang="{{ language.language }}" dir="{{ language.dir }}"{{ rdf_namespaces }}>
+<html {{ html_attributes }}>
 <head profile="{{ grddl_profile }}">
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <head-placeholder token="{{ placeholder_token|raw }}">
   <title>{{ head_title|safe_join(' | ') }}</title>
   <css-placeholder token="{{ placeholder_token|raw }}">
