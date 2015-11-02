@@ -22,7 +22,6 @@ theme. They are ordered solely on quickest implementation and ease of use.
 #### @link settings Theme Settings @endlink
 
 #### @link subtheme Sub-Theming @endlink
-- @link subtheme_drush Drush Support @endlink
 - @link subtheme_utility Utility Functions @endlink
 
 #### @link api APIs @endlink
