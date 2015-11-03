@@ -1,0 +1,20 @@
+name: 'Bootstrap Sub-Theme (CDN)'
+description: 'Uses the jsDelivr CDN for all CSS and JavaScript. No source files or compiling is necessary and is recommended for simple sites or beginners.'
+type: theme
+core: 8.x
+version: VERSION
+base theme: bootstrap
+regions:
+  navigation: 'Navigation'
+  header: 'Top Bar'
+  highlighted: 'Highlighted'
+  help: 'Help'
+  content: 'Content'
+  sidebar_first: 'Primary'
+  sidebar_second: 'Secondary'
+  footer: 'Footer'
+  page_top: 'Page top'
+  page_bottom: 'Page bottom'
+
+libraries:
+  - THEMENAME/global-styling
