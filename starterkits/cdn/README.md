@@ -1,1 +1,0 @@
-http://drupal-bootstrap.org/api/bootstrap/docs%21subtheme%21README.md/group/subtheme/8.x-3.x-dev

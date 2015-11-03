@@ -48,17 +48,17 @@ you are attempting to integrate with. You are sailing into the unknown:
 
 ## Setup
 
-Copy the starter kit sub-theme into `themes` or a respective
-`` directory. You should never modify a theme or a sub-theme bundled
+Copy the starter kit sub-theme into `sites/all/themes` or a respective
+`sites/*/themes` folder. You should never modify a theme or a sub-theme bundled
 directly as all changes would be lost if the base theme were to be updated.
-Once copied, rename the directory to something of your choosing:
+Once copied, rename the folder to something of your choosing:
 `my_bootstrap_theme`. Then make sure you rename the
-`bootstrap_subtheme.starterkit.yml` file to match the directory name, like:
-`my_bootstrap_theme.info.yml`. Be sure to change the name and description properties
+`bootstrap_subtheme.info.starterkit` file to match the folder name, like:
+`my_bootstrap_theme.info`. Be sure to change the name and description properties
 inside the file as well.
 
 {.alert.alert-info} **IMPORTANT NOTE:** Ensure that the `.starterkit` suffix is
-not added to your sub-theme's .info.yml filename. This suffix is simply a stop-gap
+not added to your sub-theme's .info filename. This suffix is simply a stop-gap
 measure to ensure that the bundled starter kit sub-theme cannot be enabled or
 used directly. This helps people unfamiliar with Drupal avoid modifying the
 starter kit sub-theme directly and forces the new sub-theme to be properly
@@ -77,7 +77,7 @@ theme. It is very static and will require you to override existing styling in
 your sub-theme.
 
 Regardless of which method you choose, you will need to un-comment the
-appropriate lines for your desired method in your sub-theme's .info.yml file.
+appropriate lines for your desired method in your sub-theme's .info file.
 
 #### Method 1: Bootstrap Source Files
 Download and extract the [Latest Bootstrap source](https://github.com/twbs/bootstrap/releases)
