@@ -1,0 +1,1 @@
+Documentation for subtheming has been moved to /docs/subtheme/README.md or see [Drupal Bootstrap Subtheming](http://drupal-bootstrap.org/api/bootstrap/docs%21subtheme%21README.md/group/subtheme/8.x-3.x-dev)
