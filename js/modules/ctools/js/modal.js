@@ -115,18 +115,18 @@
    */
   Drupal.theme.prototype.CToolsModalDialog = function () {
     var html = '';
-    html += '  <div id="ctools-modal">';
-    html += '    <div class="ctools-modal-dialog modal-dialog">';
-    html += '      <div class="modal-content">';
-    html += '        <div class="modal-header">';
-    html += '          <button type="button" class="close ctools-close-modal" aria-hidden="true">&times;</button>';
-    html += '          <h4 id="modal-title" class="modal-title">&nbsp;</h4>';
-    html += '        </div>';
-    html += '        <div id="modal-content" class="modal-body">';
-    html += '        </div>';
+    html += '<div id="ctools-modal">';
+    html += '  <div class="ctools-modal-dialog modal-dialog">';
+    html += '    <div class="modal-content">';
+    html += '      <div class="modal-header">';
+    html += '        <button type="button" class="close ctools-close-modal" aria-hidden="true">&times;</button>';
+    html += '        <h4 id="modal-title" class="modal-title">&nbsp;</h4>';
+    html += '      </div>';
+    html += '      <div id="modal-content" class="modal-body">';
     html += '      </div>';
     html += '    </div>';
     html += '  </div>';
+    html += '</div>';
 
     return html;
   };
@@ -136,11 +136,11 @@
    */
   Drupal.theme.prototype.CToolsModalThrobber = function () {
     var html = '';
-    html += '  <div class="loading-spinner" style="width: 200px; margin: -20px 0 0 -100px; position: absolute; top: 45%; left: 50%">';
-    html += '    <div class="progress progress-striped active">';
-    html += '      <div class="progress-bar" style="width: 100%;"></div>';
-    html += '    </div>';
+    html += '<div class="loading-spinner" style="width: 200px; margin: -20px 0 0 -100px; position: absolute; top: 45%; left: 50%">';
+    html += '  <div class="progress progress-striped active">';
+    html += '    <div class="progress-bar" style="width: 100%;"></div>';
     html += '  </div>';
+    html += '</div>';
 
     return html;
   };
