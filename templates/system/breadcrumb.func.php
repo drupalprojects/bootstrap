@@ -14,7 +14,7 @@
  * @return string
  *   The constructed HTML.
  *
- * @see theme_file_upload_help()
+ * @see theme_breadcrumb()
  *
  * @ingroup theme_functions
  */

@@ -93,7 +93,7 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
     '#default_value' => bootstrap_setting('button_colorize', $theme),
     '#description' => t('Adds classes to buttons based on their text value. See: <a href="!bootstrap_url" target="_blank">Buttons</a> and <a href="!api_url" target="_blank">hook_bootstrap_colorize_text_alter()</a>', array(
       '!bootstrap_url' => 'http://getbootstrap.com/css/#buttons',
-      '!api_url' => 'http://drupalcode.org/project/bootstrap.git/blob/refs/heads/7.x-3.x:/bootstrap.api.php#l13',
+      '!api_url' => 'http://drupal-bootstrap.org/apis/hook_bootstrap_colorize_text_alter',
     )),
   );
   $form['general']['buttons']['bootstrap_button_iconize'] = array(
@@ -101,7 +101,7 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
     '#title' => t('Iconize Buttons'),
     '#default_value' => bootstrap_setting('button_iconize', $theme),
     '#description' => t('Adds icons to buttons based on the text value. See: <a href="!api_url" target="_blank">hook_bootstrap_iconize_text_alter()</a>', array(
-      '!api_url' => 'http://drupalcode.org/project/bootstrap.git/blob/refs/heads/7.x-3.x:/bootstrap.api.php#l37',
+      '!api_url' => 'http://drupal-bootstrap.org/apis/hook_bootstrap_iconize_text_alter',
     )),
   );
 
