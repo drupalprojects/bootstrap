@@ -1,11 +1,17 @@
 <?php
 /**
  * @file
- * views-view-table.vars.php
+ * Stub file for "views_view_table" theme hook [pre]process functions.
  */
 
 /**
- * Implements hook_preprocess_views_view_table().
+ * Pre-processes variables for the "views_view_table" theme hook.
+ *
+ * See template for list of available variables.
+ *
+ * @see views-view-table.tpl.php
+ *
+ * @ingroup theme_preprocess
  */
 function bootstrap_preprocess_views_view_table(&$variables) {
   bootstrap_include('bootstrap', 'templates/system/table.vars.php');

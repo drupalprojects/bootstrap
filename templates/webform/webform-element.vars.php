@@ -1,11 +1,17 @@
 <?php
 /**
  * @file
- * webform-element.func.php
+ * Stub file for "webform_element" theme hook [pre]process functions.
  */
 
 /**
- * Implements hook_preprocess_webform_element().
+ * Pre-processes variables for the "webform_element" theme hook.
+ *
+ * See theme function for list of available variables.
+ *
+ * @see theme_webform_element()
+ *
+ * @ingroup theme_preprocess
  */
 function bootstrap_preprocess_webform_element(&$variables) {
   $element = $variables['element'];

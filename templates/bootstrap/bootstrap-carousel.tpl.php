@@ -1,7 +1,11 @@
 <?php
 /**
  * @file
- * bootstrap-carousel.tpl.php
+ * Default theme implementation to display a Bootstrap carousel component.
+ *
+ * @todo Fill out list of available variables.
+ *
+ * @ingroup templates
  */
 ?>
 <div<?php print $attributes; ?>>

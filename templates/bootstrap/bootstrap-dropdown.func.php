@@ -1,11 +1,13 @@
 <?php
 /**
  * @file
- * bootstrap-dropdown.func.php
+ * Stub file for bootstrap_bootstrap_dropdown().
  */
 
 /**
- * Renders the Bootstrap dropdown.
+ * Returns HTML for a Bootstrap dropdown component.
+ *
+ * @ingroup theme_functions
  */
 function bootstrap_bootstrap_dropdown($variables) {
   return drupal_render($variables['dropdown']);

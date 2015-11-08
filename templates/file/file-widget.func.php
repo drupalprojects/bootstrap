@@ -1,11 +1,22 @@
 <?php
 /**
  * @file
- * file-widget.func.php
+ * Stub file for bootstrap_file_widget().
  */
 
 /**
- * Overrides theme_file_widget().
+ * Returns HTML for an individual file upload widget.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: A render element representing the widget.
+ *
+ * @return string
+ *   The constructed HTML.
+ *
+ * @see theme_file_widget()
+ *
+ * @ingroup theme_functions
  */
 function bootstrap_file_widget($variables) {
   $output = '';

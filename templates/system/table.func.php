@@ -1,12 +1,10 @@
 <?php
 /**
  * @file
- * table.func.php
+ * Stub file for bootstrap_table().
  */
 
 /**
- * Overrides theme_table().
- *
  * Returns HTML for a table.
  *
  * @param array $variables
@@ -93,6 +91,13 @@
  *   - sticky: Use a "sticky" table header.
  *   - empty: The message to display in an extra row if table does not have any
  *     rows.
+ *
+ * @return string
+ *   The constructed HTML.
+ *
+ * @see theme_table()
+ *
+ * @ingroup theme_functions
  */
 function bootstrap_table($variables) {
   $header = $variables['header'];

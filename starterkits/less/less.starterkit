@@ -1,5 +1,5 @@
-name = LESS (source)
-description = Uses the LESS Bootstrap framework source files and must be compiled (not for beginners).
+name = Bootstrap Sub-Theme (LESS)
+description = Uses the Bootstrap Framework LESS source files and must be compiled (not for beginners).
 core = 7.x
 base theme = bootstrap
 

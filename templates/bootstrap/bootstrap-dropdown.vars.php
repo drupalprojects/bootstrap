@@ -1,11 +1,17 @@
 <?php
 /**
  * @file
- * bootstrap-dropdown.vars.php
+ * Stub file for "bootstrap_dropdown" theme hook [pre]process functions.
  */
 
 /**
- * Implements hook_preprocess_bootstrap_dropdown().
+ * Pre-processes variables for the "bootstrap_dropdown" theme hook.
+ *
+ * See theme function for list of available variables.
+ *
+ * @see bootstrap_bootstrap_dropdown()
+ *
+ * @ingroup theme_preprocess
  */
 function bootstrap_preprocess_bootstrap_dropdown(&$variables) {
   $element = &$variables['element'];
@@ -57,7 +63,13 @@ function bootstrap_preprocess_bootstrap_dropdown(&$variables) {
 }
 
 /**
- * Implements hook_process_bootstrap_dropdown().
+ * Processes variables for the "bootstrap_dropdown" theme hook.
+ *
+ * See theme function for list of available variables.
+ *
+ * @see bootstrap_bootstrap_dropdown()
+ *
+ * @ingroup theme_process
  */
 function bootstrap_process_bootstrap_dropdown(&$variables) {
   $element = &$variables['element'];

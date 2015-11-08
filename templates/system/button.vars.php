@@ -1,11 +1,18 @@
 <?php
 /**
  * @file
- * button.vars.php
+ * Stub file for "button" theme hook [pre]process functions.
  */
 
 /**
- * Implements hook_preprocess_button().
+ * Pre-processes variables for the "button" theme hook.
+ *
+ * See theme function for list of available variables.
+ *
+ * @see bootstrap_button()
+ * @see theme_button()
+ *
+ * @ingroup theme_preprocess
  */
 function bootstrap_preprocess_button(&$vars) {
   $element = &$vars['element'];

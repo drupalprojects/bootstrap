@@ -42,7 +42,7 @@
  * @see bootstrap_process_block()
  * @see template_process()
  *
- * @ingroup themeable
+ * @ingroup templates
  */
 ?>
 <section id="<?php print $block_html_id; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>

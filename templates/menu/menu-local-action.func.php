@@ -1,11 +1,24 @@
 <?php
 /**
  * @file
- * menu-local-action.func.php
+ * Stub file for bootstrap_menu_local_action().
  */
 
 /**
- * Overrides theme_menu_local_action().
+ * Returns HTML for a single local action link.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: A render element containing:
+ *     - #link: A menu link array with 'title', 'href', and 'localized_options'
+ *       keys.
+ *
+ * @return string
+ *   The constructed HTML.
+ *
+ * @see theme_menu_local_action()
+ *
+ * @ingroup theme_functions
  */
 function bootstrap_menu_local_action($variables) {
   $link = $variables['element']['#link'];

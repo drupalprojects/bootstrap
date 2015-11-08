@@ -1,5 +1,5 @@
 <?php
 /**
  * @file
- * template.php
+ * The primary PHP file for this theme.
  */

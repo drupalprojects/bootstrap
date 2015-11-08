@@ -1,14 +1,16 @@
 <?php
 /**
  * @file
- * Hooks provided by the Bootstrap base-theme.
+ * List of available hook and alter APIs for use in your sub-theme.
  */
 
 /**
- * @addtogroup hooks
+ * @defgroup api APIs
+ *
+ * List of available hook and alter APIs for use in your sub-theme.
+ *
  * @{
  */
-
 
 /**
  * Allows sub-themes to alter the array used for colorizing text.
@@ -183,5 +185,5 @@ function hook_pre_render_HOOK($element) {
 }
 
 /**
- * @} End of "addtogroup hooks".
+ * @} End of "defgroup subtheme_api".
  */

@@ -1,11 +1,17 @@
 <?php
 /**
  * @file
- * bootstrap-carousel.vars.php
+ * Stub file for "bootstrap_carousel" theme hook [pre]process functions.
  */
 
 /**
- * Implements hook_preprocess_bootstrap_carousel().
+ * Pre-processes variables for the "bootstrap_carousel" theme hook.
+ *
+ * See template for list of available variables.
+ *
+ * @see bootstrap-carousel.tpl.php
+ *
+ * @ingroup theme_preprocess
  */
 function bootstrap_preprocess_bootstrap_carousel(&$variables) {
   $variables['attributes']['class'][] = 'carousel';
@@ -32,7 +38,13 @@ function bootstrap_preprocess_bootstrap_carousel(&$variables) {
 }
 
 /**
- * Implements hook_process_bootstrap_carousel().
+ * Processes variables for the "bootstrap_carousel" theme hook.
+ *
+ * See template for list of available variables.
+ *
+ * @see bootstrap-carousel.tpl.php
+ *
+ * @ingroup theme_process
  */
 function bootstrap_process_bootstrap_carousel(&$variables) {
   $variables['target'] = '#' . $variables['attributes']['id'];

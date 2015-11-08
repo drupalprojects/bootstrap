@@ -1,11 +1,24 @@
 <?php
 /**
  * @file
- * textfield.func.php
+ * Stub file for bootstrap_textfield().
  */
 
 /**
- * Overrides theme_textfield().
+ * Returns HTML for a textfield form element.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: An associative array containing the properties of the element.
+ *     Properties used: #title, #value, #description, #size, #maxlength,
+ *     #required, #attributes, #autocomplete_path.
+ *
+ * @return string
+ *   The constructed HTML.
+ *
+ * @see theme_textfield()
+ *
+ * @ingroup theme_functions
  */
 function bootstrap_textfield($variables) {
   $element = $variables['element'];

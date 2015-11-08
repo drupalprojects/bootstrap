@@ -1,11 +1,27 @@
 <?php
 /**
  * @file
- * status-messages.func.php
+ * Stub file for bootstrap_status_messages().
  */
 
 /**
- * Overrides theme_status_messages().
+ * Returns HTML for status and/or error messages, grouped by type.
+ *
+ * An invisible heading identifies the messages for assistive technology.
+ * Sighted users see a colored box. See http://www.w3.org/TR/WCAG-TECHS/H69.html
+ * for info.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - display: (optional) Set to 'status' or 'error' to display only messages
+ *     of that type.
+ *
+ * @return string
+ *   The constructed HTML.
+ *
+ * @see theme_status_messages()
+ *
+ * @ingroup theme_functions
  */
 function bootstrap_status_messages($variables) {
   $display = $variables['display'];

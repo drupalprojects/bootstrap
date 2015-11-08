@@ -1,13 +1,18 @@
 <?php
 /**
  * @file
- * filter-tips-more-info.func.php
+ * Stub file for bootstrap_filter_tips_more_info().
  */
 
 /**
  * Returns HTML for a link to the more extensive filter tips.
  *
- * @ingroup themeable
+ * @return string
+ *   The constructed HTML.
+ *
+ * @see theme_filter_tips_more_info()
+ *
+ * @ingroup theme_functions
  */
 function bootstrap_filter_tips_more_info() {
   $attributes = array(

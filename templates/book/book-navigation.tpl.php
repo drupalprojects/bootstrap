@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * Default theme implementation to navigate books.
@@ -29,7 +28,7 @@
  *
  * @see template_preprocess_book_navigation()
  *
- * @ingroup themeable
+ * @ingroup templates
  */
 ?>
 <?php if ($tree || $has_links): ?>

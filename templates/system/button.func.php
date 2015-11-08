@@ -1,11 +1,23 @@
 <?php
 /**
  * @file
- * button.func.php
+ * Stub file for bootstrap_button().
  */
 
 /**
- * Overrides theme_button().
+ * Returns HTML for a button form element.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: An associative array containing the properties of the element.
+ *     Properties used: #attributes, #button_type, #name, #value.
+ *
+ * @return string
+ *   The constructed HTML.
+ *
+ * @see theme_button()
+ *
+ * @ingroup theme_functions
  */
 function bootstrap_button($variables) {
   $element = $variables['element'];

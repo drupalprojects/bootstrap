@@ -1,11 +1,17 @@
 <?php
 /**
  * @file
- * bootstrap-panel.vars.php
+ * Stub file for "bootstrap_panel" theme hook [pre]process functions.
  */
 
 /**
- * Implements hook_preprocess_bootstrap_panel().
+ * Pre-processes variables for the "bootstrap_panel" theme hook.
+ *
+ * See template for list of available variables.
+ *
+ * @see bootstrap-panel.tpl.php
+ *
+ * @ingroup theme_preprocess
  */
 function bootstrap_preprocess_bootstrap_panel(&$variables) {
   $element = &$variables['element'];
@@ -54,7 +60,13 @@ function bootstrap_preprocess_bootstrap_panel(&$variables) {
 }
 
 /**
- * Implements hook_process_bootstrap_panel().
+ * Processes variables for the "bootstrap_panel" theme hook.
+ *
+ * See template for list of available variables.
+ *
+ * @see bootstrap-panel.tpl.php
+ *
+ * @ingroup theme_process
  */
 function bootstrap_process_bootstrap_panel(&$variables) {
   $variables['attributes'] = drupal_attributes($variables['attributes']);

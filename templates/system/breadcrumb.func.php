@@ -1,13 +1,22 @@
 <?php
 /**
  * @file
- * breadcrumb.func.php
+ * Stub file for bootstrap_breadcrumb().
  */
 
 /**
- * Overrides theme_breadcrumb().
+ * Returns HTML for a breadcrumb trail.
  *
- * Print breadcrumbs as an ordered list.
+ * @param array $variables
+ *   An associative array containing:
+ *   - breadcrumb: An array containing the breadcrumb links.
+ *
+ * @return string
+ *   The constructed HTML.
+ *
+ * @see theme_file_upload_help()
+ *
+ * @ingroup theme_functions
  */
 function bootstrap_breadcrumb($variables) {
   $output = '';

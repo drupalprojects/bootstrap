@@ -1,9 +1,7 @@
 <?php
 /**
  * @file
- * common.inc
- *
- * Contains common functionality for the entire base theme.
+ * List of common helper functions for use in Bootstrap based themes.
  */
 
 define('BOOTSTRAP_VERSION_MAJOR', 3);
@@ -12,7 +10,16 @@ define('BOOTSTRAP_VERSION_PATCH', 5);
 define('BOOTSTRAP_VERSION', BOOTSTRAP_VERSION_MAJOR . '.' . BOOTSTRAP_VERSION_MINOR . '.' . BOOTSTRAP_VERSION_PATCH);
 
 /**
- * Helper function for smartly converting an element description into a tooltip.
+ * @defgroup subtheme_helper_functions Helper Functions
+ * @ingroup subtheme
+ *
+ * List of common helper functions for use in Drupal Bootstrap based themes.
+ *
+ * @{
+ */
+
+/**
+ * Converts an element description into a tooltip based on certain criteria.
  *
  * @param array $element
  *   An element render array, passed by reference.
@@ -33,7 +40,7 @@ function bootstrap_element_smart_description(&$element, &$target = NULL, $input_
 
   // Immediately return if "simple" tooltip descriptions are not enabled.
   if (!$enabled) {
-    return FALSE;
+    return;
   }
 
   // Allow a different element to attach the tooltip.
@@ -250,7 +257,7 @@ function bootstrap_get_theme_info($theme_key = NULL, $key = NULL, $base_themes =
 }
 
 /**
- * Helper function for including theme files.
+ * Includes a theme file.
  *
  * @param string $theme
  *   Name of the theme to use for base path.
@@ -332,7 +339,7 @@ function bootstrap_setting($name, $theme = NULL, $prefix = 'bootstrap') {
 }
 
 /**
- * Helper function for retrieving an element attributes array.
+ * Retrieves an element's "attributes" array.
  *
  * @param array $element
  *   The individual renderable array element. It is possible to also pass the
@@ -381,7 +388,7 @@ function &_bootstrap_get_attributes(&$element, $property = 'attributes') {
 }
 
 /**
- * Helper function for retrieving an element classes array.
+ * Retrieves an element's "class" array.
  *
  * @param array $element
  *   The individual renderable array element. It is possible to also pass the
@@ -415,7 +422,7 @@ function &_bootstrap_get_classes(&$element, $property = 'attributes') {
 }
 
 /**
- * Helper function for adding a class to an element.
+ * Adds a class to an element's render array.
  *
  * @param string|array $class
  *   An individual class or an array of classes to add.
@@ -448,7 +455,7 @@ function _bootstrap_add_class($class, &$element, $property = 'attributes') {
 }
 
 /**
- * Helper function for removing a class from an element.
+ * Removes a class from an element's render array.
  *
  * @param string|array $class
  *   An individual class or an array of classes to remove.
@@ -481,7 +488,7 @@ function _bootstrap_remove_class($class, &$element, $property = 'attributes') {
 }
 
 /**
- * Helper function for returning whether a theme is Bootstrap based.
+ * Returns a list of base themes for active or provided theme.
  *
  * @param string $theme_key
  *   The machine name of the theme to check, if not set the active theme name
@@ -507,7 +514,7 @@ function _bootstrap_get_base_themes($theme_key = NULL, $include_theme_key = FALS
 }
 
 /**
- * Helper function that wraps file_scan_directory().
+ * Wrapper for the core file_scan_directory() function.
  *
  * Finds all files that match a given mask in a given directory and then caches
  * the results. A general site cache clear will force new scans to be initiated
@@ -544,7 +551,7 @@ function _bootstrap_file_scan_directory($dir, $mask, array $options = array()) {
 }
 
 /**
- * Helper function for returning an array of Bootstrap Glyphicons.
+ * Returns a list of available Bootstrap Glyphicons.
  *
  * @param string $version
  *   The specific version of glyphicons to return. If not set, the latest
@@ -849,7 +856,7 @@ function _bootstrap_glyphicons($version = NULL) {
 }
 
 /**
- * Helper function for returning a Bootstrap Glyphicon.
+ * Returns a specific Bootstrap Glyphicon.
  *
  * @param string $name
  *   The icon name, minus the "glyphicon-" prefix.
@@ -883,7 +890,7 @@ function _bootstrap_icon($name, $default = NULL) {
 }
 
 /**
- * Helper function for determining if Bootstrap Glyphicons can be used.
+ * Determine whether or not Bootstrap Glyphicons can be used.
  */
 function _bootstrap_glyphicons_supported() {
   // Use the advanced drupal_static() pattern, since this has the potential to
@@ -939,7 +946,7 @@ function _bootstrap_glyphicons_supported() {
 }
 
 /**
- * Helper function for determining whether an element is a button.
+ * Determine whether a specific element is a button.
  *
  * @param array $element
  *   A renderable element.
@@ -958,7 +965,7 @@ function _bootstrap_is_button($element) {
 }
 
 /**
- * Helper function for adding colors to button elements.
+ * Adds a specific Bootstrap class to color a button based on its text value.
  *
  * @param array $element
  *   The form element, passed by reference.
@@ -989,7 +996,7 @@ function _bootstrap_colorize_button(&$element) {
 }
 
 /**
- * Helper function for associating Bootstrap classes based on a string's value.
+ * Matches a Bootstrap class based on a string value.
  *
  * @param string $string
  *   The string to match classes against.
@@ -1077,7 +1084,7 @@ function _bootstrap_colorize_text($string, $default = '') {
 }
 
 /**
- * Helper function for adding icons to button elements.
+ * Adds an icon to button element based on its text value.
  *
  * @param array $element
  *   The form element, passed by reference.
@@ -1089,7 +1096,7 @@ function _bootstrap_iconize_button(&$element) {
 }
 
 /**
- * Helper function for associating Bootstrap icons with text.
+ * Matches a Bootstrap Glyphicon based on a string value.
  *
  * @param string $string
  *   The string to match classes against.
@@ -1155,7 +1162,7 @@ function _bootstrap_iconize_text($string, $default = '') {
 }
 
 /**
- * Helper function for invoking a specific suggestion's preprocess functions.
+ * Invokes a specific suggestion's preprocess functions.
  *
  * @param array $variables
  *   The theme implementation variables array.
@@ -1183,7 +1190,7 @@ function _bootstrap_preprocess_theme_suggestion(&$variables) {
 }
 
 /**
- * Helper function for invoking a specific suggestion's process functions.
+ * Invokes a specific suggestion's process functions.
  *
  * @param array $variables
  *   The theme implementation variables array.
@@ -1211,7 +1218,7 @@ function _bootstrap_process_theme_suggestion(&$variables) {
 }
 
 /**
- * Helper function to determine if a string of text is considered "simple".
+ * Determines if a string of text is considered "simple".
  *
  * @param string $string
  *   The string of text to check "simple" criteria on.
@@ -1250,3 +1257,7 @@ function _bootstrap_is_simple_string($string, $length = 250, $allowed_tags = NUL
   }
   return $strings[$string];
 }
+
+/**
+ * @} End of "defgroup subtheme_helper_functions".
+ */

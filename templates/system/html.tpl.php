@@ -51,7 +51,7 @@
  * @see template_preprocess_html()
  * @see template_process()
  *
- * @ingroup themeable
+ * @ingroup templates
  */
 ?><!DOCTYPE html>
 <html<?php print $html_attributes;?><?php print $rdf_namespaces;?>>

@@ -76,7 +76,7 @@
  * @see template_preprocess_node()
  * @see template_process()
  *
- * @ingroup themeable
+ * @ingroup templates
  */
 ?>
 <article id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>

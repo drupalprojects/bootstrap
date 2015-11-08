@@ -1,11 +1,15 @@
 <?php
 /**
  * @file
- * progress-bar.tpl.php
+ * Template implementation to display a progress bar.
  *
- * Variables
+ * Available variables:
  * - $percent: The percentage of the progress.
  * - $message: A string containing information to be displayed.
+ *
+ * @see theme_progress_bar()
+ *
+ * @ingroup templates
  */
 ?>
 <div class="progress-wrapper" aria-live="polite">

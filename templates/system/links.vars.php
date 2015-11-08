@@ -1,11 +1,17 @@
 <?php
 /**
  * @file
- * links.vars.php
+ * Stub file for "links" theme hook [pre]process functions.
  */
 
 /**
- * Implements hook_preprocess_links().
+ * Pre-processes variables for the "links" theme hook.
+ *
+ * See theme function for list of available variables.
+ *
+ * @see theme_links()
+ *
+ * @ingroup theme_preprocess
  */
 function bootstrap_preprocess_links(&$variables) {
   if (isset($variables['attributes']) && isset($variables['attributes']['class'])) {

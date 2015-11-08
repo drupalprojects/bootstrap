@@ -1,11 +1,11 @@
 <?php
 /**
  * @file
- * item-list.func.php
+ * Stub file for bootstrap_item_list().
  */
 
 /**
- * Overrides theme_item_list().
+ * Returns HTML for a list or nested list of items.
  *
  * - Uses an early D8 version of the theme function, which fixes bugs (and was
  *   refused for commit because it was "too late to change theme output)".
@@ -13,6 +13,25 @@
  * - Removes useless div.item-list wrapper, allows optional #wrapper_attributes.
  * - Removes hard-coded #title as <h3>, introduce support for #title as an array
  *   containing, text, tag and optional attributes.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - items: An array of items to be displayed in the list. If an item is a
+ *     string, then it is used as is. If an item is an array, then the "data"
+ *     element of the array is used as the contents of the list item. If an item
+ *     is an array with a "children" element, those children are displayed in a
+ *     nested list. All other elements are treated as attributes of the list
+ *     item element.
+ *   - title: The title of the list.
+ *   - type: The type of list to return (e.g. "ul", "ol").
+ *   - attributes: The attributes applied to the list element.
+ *
+ * @return string
+ *   The constructed HTML.
+ *
+ * @see theme_item_list()
+ *
+ * @ingroup theme_functions
  */
 function bootstrap_item_list($variables) {
   $items = $variables['items'];

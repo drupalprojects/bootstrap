@@ -1,11 +1,12 @@
 <?php
 /**
  * @file
- * bootstrap-panel.tpl.php
+ * Default theme implementation to display a Bootstrap panel component.
  *
- * Markup for Bootstrap panels ([collapsible] fieldsets).
+ * @todo Fill out list of available variables.
+ *
+ * @ingroup templates
  */
-
 ?>
 <fieldset <?php print $attributes; ?>>
   <?php if ($title): ?>

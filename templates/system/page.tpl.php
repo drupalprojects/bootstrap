@@ -70,7 +70,7 @@
  * @see template_process()
  * @see html.tpl.php
  *
- * @ingroup themeable
+ * @ingroup templates
  */
 ?>
 <header id="navbar" role="banner" class="<?php print $navbar_classes; ?>">

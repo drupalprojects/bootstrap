@@ -1,13 +1,17 @@
 <?php
 /**
  * @file
- * html.vars.php
- *
- * @see html.tpl.php
+ * Stub file for "html" theme hook [pre]process functions.
  */
 
 /**
- * Implements hook_preprocess_html().
+ * Pre-processes variables for the "html" theme hook.
+ *
+ * See template for list of available variables.
+ *
+ * @see html.tpl.php
+ *
+ * @ingroup theme_preprocess
  */
 function bootstrap_preprocess_html(&$variables) {
   // Backport from Drupal 8 RDFa/HTML5 implementation.
@@ -56,7 +60,13 @@ function bootstrap_preprocess_html(&$variables) {
 }
 
 /**
- * Implements hook_process_html().
+ * Processes variables for the "html" theme hook.
+ *
+ * See template for list of available variables.
+ *
+ * @see html.tpl.php
+ *
+ * @ingroup theme_process
  */
 function bootstrap_process_html(&$variables) {
   $variables['html_attributes'] = drupal_attributes($variables['html_attributes_array']);

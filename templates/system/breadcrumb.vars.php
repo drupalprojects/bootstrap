@@ -1,11 +1,18 @@
 <?php
 /**
  * @file
- * breadcrumb.vars.php
+ * Stub file for "breadcrumb" theme hook [pre]process functions.
  */
 
 /**
- * Implements hook_preprocess_breadcrumb().
+ * Pre-processes variables for the "breadcrumb" theme hook.
+ *
+ * See theme function for list of available variables.
+ *
+ * @see bootstrap_breadcrumb()
+ * @see theme_breadcrumb()
+ *
+ * @ingroup theme_preprocess
  */
 function bootstrap_preprocess_breadcrumb(&$variables) {
   $breadcrumb = &$variables['breadcrumb'];

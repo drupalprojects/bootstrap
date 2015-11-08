@@ -1,13 +1,17 @@
 <?php
 /**
  * @file
- * page.vars.php
+ * Stub file for "page" theme hook [pre]process functions.
  */
 
 /**
- * Implements hook_preprocess_page().
+ * Pre-processes variables for the "page" theme hook.
+ *
+ * See template for list of available variables.
  *
  * @see page.tpl.php
+ *
+ * @ingroup theme_preprocess
  */
 function bootstrap_preprocess_page(&$variables) {
   // Add information about the number of sidebars.
@@ -66,9 +70,13 @@ function bootstrap_preprocess_page(&$variables) {
 }
 
 /**
- * Implements hook_process_page().
+ * Processes variables for the "page" theme hook.
+ *
+ * See template for list of available variables.
  *
  * @see page.tpl.php
+ *
+ * @ingroup theme_process
  */
 function bootstrap_process_page(&$variables) {
   $variables['navbar_classes'] = implode(' ', $variables['navbar_classes_array']);

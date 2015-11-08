@@ -1,11 +1,22 @@
 <?php
 /**
  * @file
- * exposed-filters.func.php
+ * Stub file for bootstrap_exposed_filters().
  */
 
 /**
- * Overrides theme_exposed_filters().
+ * Returns HTML for an exposed filter form.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - form: An associative array containing the structure of the form.
+ *
+ * @return string
+ *   The constructed HTML.
+ *
+ * @see theme_exposed_filters()
+ *
+ * @ingroup theme_functions
  */
 function bootstrap_exposed_filters($variables) {
   $form = $variables['form'];

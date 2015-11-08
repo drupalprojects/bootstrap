@@ -26,6 +26,8 @@
  * @endcode
  *
  * @see template_preprocess_search_block_form()
+ *
+ * @ingroup templates
  */
 ?>
 <div>

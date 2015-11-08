@@ -1,11 +1,23 @@
 <?php
 /**
  * @file
- * menu-tree.func.php
+ * Stub file for bootstrap_menu_tree() and suggestion(s).
  */
 
 /**
- * Overrides theme_menu_tree().
+ * Returns HTML for a wrapper for a menu sub-tree.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - tree: An HTML string containing the tree's items.
+ *
+ * @return string
+ *   The constructed HTML.
+ *
+ * @see template_preprocess_menu_tree()
+ * @see theme_menu_tree()
+ *
+ * @ingroup theme_functions
  */
 function bootstrap_menu_tree(&$variables) {
   return '<ul class="menu nav">' . $variables['tree'] . '</ul>';

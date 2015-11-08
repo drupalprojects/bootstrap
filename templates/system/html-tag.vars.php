@@ -1,11 +1,17 @@
 <?php
 /**
  * @file
- * html-tag.vars.php
+ * Stub file for "html_tag" theme hook [pre]process functions.
  */
 
 /**
- * Implements hook_process_html_tag().
+ * Processes variables for the "html_tag" theme hook.
+ *
+ * See theme function for list of available variables.
+ *
+ * @see theme_html_tag()
+ *
+ * @ingroup theme_process
  */
 function bootstrap_process_html_tag(&$variables) {
   // Reference the element and tag name for easier coding below.

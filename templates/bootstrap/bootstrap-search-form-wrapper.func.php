@@ -1,11 +1,13 @@
 <?php
 /**
  * @file
- * bootstrap-search-form-wrapper.func.php
+ * Stub file for bootstrap_bootstrap_search_form_wrapper().
  */
 
 /**
- * Theme function implementation for bootstrap_search_form_wrapper.
+ * Returns HTML for the Bootstrap search form wrapper.
+ *
+ * @ingroup theme_functions
  */
 function bootstrap_bootstrap_search_form_wrapper($variables) {
   $output = '<div class="input-group">';

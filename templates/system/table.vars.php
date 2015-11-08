@@ -1,11 +1,18 @@
 <?php
 /**
  * @file
- * table.vars.php
+ * Stub file for "table" theme hook [pre]process functions.
  */
 
 /**
- * Implements hook_preprocess_table().
+ * Pre-processes variables for the "table" theme hook.
+ *
+ * See theme function for list of available variables.
+ *
+ * @see bootstrap_table()
+ * @see theme_table()
+ *
+ * @ingroup theme_preprocess
  */
 function bootstrap_preprocess_table(&$variables) {
   // Prepare classes array if necessary.

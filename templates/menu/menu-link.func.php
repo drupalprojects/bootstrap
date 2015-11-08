@@ -1,11 +1,22 @@
 <?php
 /**
  * @file
- * menu-link.func.php
+ * Stub file for bootstrap_menu_link() and suggestion(s).
  */
 
 /**
- * Overrides theme_menu_link().
+ * Returns HTML for a menu link and submenu.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: Structured array data for a menu link.
+ *
+ * @return string
+ *   The constructed HTML.
+ *
+ * @see theme_menu_link()
+ *
+ * @ingroup theme_functions
  */
 function bootstrap_menu_link(array $variables) {
   $element = $variables['element'];
