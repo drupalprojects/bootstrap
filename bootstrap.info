@@ -186,9 +186,9 @@ exclude[css][] = 'modules/user/user.css'
 ;; Breakpoints
 ;;;;;;;;;;;;;;;;;;;;;
 breakpoints[screen-xs-max] = (max-width: 767px)
-breakpoints[screen-sm-min] = (max-width: 768px)
+breakpoints[screen-sm-min] = (min-width: 768px)
 breakpoints[screen-sm-max] = (max-width: 991px)
-breakpoints[screen-md-min] = (max-width: 992px)
+breakpoints[screen-md-min] = (min-width: 992px)
 breakpoints[screen-md-max] = (max-width: 1199px)
 breakpoints[screen-lg-min] = (min-width: 1200px)
 ; Multipiers
