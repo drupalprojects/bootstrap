@@ -1,11 +1,17 @@
 <?php
 /**
  * @file
- * book-navigation.vars.php
+ * Stub file for "book_navigation" theme hook [pre]process functions.
  */
 
 /**
- * Implements hook_preprocess_book_navigation().
+ * Pre-processes variables for the "book_navigation" theme hook.
+ *
+ * See template for list of available variables.
+ *
+ * @see book-navigation.tpl.php
+ *
+ * @ingroup theme_preprocess
  */
 function bootstrap_process_book_navigation(&$variables) {
   $variables['tree'] = _bootstrap_book_children($variables['book_link']);

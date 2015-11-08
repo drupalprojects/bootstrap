@@ -1,14 +1,17 @@
 <?php
 /**
  * @file
- * html.vars.php
- *
- * @see html.tpl.php
+ * Stub file for "html" theme hook [pre]process functions.
  */
 
-
 /**
- * Implements hook_preprocess_html().
+ * Pre-processes variables for the "html" theme hook.
+ *
+ * See template for list of available variables.
+ *
+ * @see html.tpl.php
+ *
+ * @ingroup theme_preprocess
  */
 function bootstrap_preprocess_html(&$variables) {
   switch (bootstrap_setting('navbar_position')) {

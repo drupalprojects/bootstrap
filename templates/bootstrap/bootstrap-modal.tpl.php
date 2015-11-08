@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * bootstrap-modal.tpl.php
+ * Default theme implementation to display a Bootstrap modal component.
  *
  * Markup for Bootstrap modals.
  *
@@ -10,6 +10,8 @@
  * - $heading: Modal title.
  * - $body: The rendered body of the modal.
  * - $footer: The rendered footer of the modal.
+ *
+ * @ingroup templates
  */
 ?>
 <div<?php print $attributes; ?>>

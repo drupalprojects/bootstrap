@@ -1,17 +1,22 @@
 <?php
 /**
  * @file
- * image-widget.func.php
+ * Stub file for bootstrap_image_widget().
  */
 
 /**
  * Returns HTML for an image field widget.
  *
- * @param array $variables
+ * @param $variables
  *   An associative array containing:
  *   - element: A render element representing the image field widget.
  *
- * @ingroup themeable
+ * @return string
+ *   The constructed HTML.
+ *
+ * @see theme_image_widget()
+ *
+ * @ingroup theme_functions
  */
 function bootstrap_image_widget($variables) {
   $element = $variables['element'];

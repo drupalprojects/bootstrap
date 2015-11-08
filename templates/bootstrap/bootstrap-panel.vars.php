@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * bootstrap-panel.vars.php
+ * Stub file for "bootstrap_panel" theme hook [pre]process functions.
  */
 
 use Drupal\Core\Render\Element;
@@ -9,7 +9,13 @@ use Drupal\Core\Template\Attribute;
 use Drupal\Component\Utility\Xss;
 
 /**
- * Implements hook_preprocess_bootstrap_panel().
+ * Pre-processes variables for the "bootstrap_panel" theme hook.
+ *
+ * See template for list of available variables.
+ *
+ * @see bootstrap-panel.tpl.php
+ *
+ * @ingroup theme_preprocess
  */
 function bootstrap_preprocess_bootstrap_panel(&$variables) {
   $element = $variables['element'];

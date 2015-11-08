@@ -1,51 +1,48 @@
 <?php
 /**
  * @file
- * registry.inc
+ * List of functions used to alter the theme registry in Bootstrap based themes.
+ */
+
+/**
+ * @addtogroup registry
+ * @{
+ */
+
+// Define additional sub-groups for creating lists for all the theme files.
+/**
+ * @defgroup theme_functions Theme Functions (.func.php)
  *
- * Contains functions specific to the theme registry.
+ * List of theme functions used in the Drupal Bootstrap base theme.
  *
- * Theme templates, functions and [pre]process functions
+ * View the parent topic for additional documentation.
+ */
+/**
+ * @defgroup theme_preprocess Theme Preprocess Functions (.vars.php)
  *
- * Theme templates `*.tpl.php` files are stored in the `theme` directory along
- * with `*.func.php` and `*.vars.php` files. The latter two are enabled by the
- * processing done below. The three types of files can be grouped into
- * sub-directories. It is recommended that they are grouped by the modules
- * they originate from. Theme specific hooks should be grouped into a folder
- * named after the theme itself.
+ * List of theme preprocess functions used in the Drupal Bootstrap base theme.
  *
- * Function files store theme functions directly related to the base file name
- * or "theme hook", e.g., the hook `foo` would be handled by the
- * `bootstrap_foo` function which would be stored in `foo.func.php`.
+ * View the parent topic for additional documentation.
+ */
+/**
+ * @defgroup theme_process Theme Process Functions (.vars.php)
  *
- * Variable files store [pre]process functions directly related to the base file
- * file name or "theme hook" just like function files, e.g., the hook `html`
- * would be handled by the `bootstrap_preprocess_html` function held in
- * `html.vars.php`.
+ * List of theme process functions used in the Drupal Bootstrap base theme.
  *
- * The two types of files mentioned above should also be used to hold support
- * functions specific to the theming hook. When a function grows too large,
- * break it apart so it becomes more readable.
+ * View the parent topic for additional documentation.
+ */
+/**
+ * @defgroup templates Theme Templates (.tpl.php)
  *
- * Files specific to theme functions and variable preprocess/process functions
- * should be named after the `base hook`. Alternate hooks (or what is commonly
- * referred to as "hook suggestions") should not be used for the file name.
- * The contents of the theme functions file can hold hook suggestions and it
- * should be related to the base hook. [Pre]process functions for hook
- * suggestions are not supported in Drupal 7 core.
+ * List of theme templates used in the Drupal Bootstrap base theme.
  *
- * Using these files will keep the `template.php` file clean and grouping them
- * within the theme directory will make it easier to discover and work with.
- *
- * Warning: Using core's `path_to_theme` function may return the wrong path.
- * It is difficult to predict to begin with and the changes made here will
- * make it even worse. Use `drupal_get_path('theme', 'bootstrap')` instead.
+ * View the parent topic for additional documentation.
  */
 
 use Drupal\Component\Utility\NestedArray;
 
 /**
- * Stub implementation for hook_theme().
+ * Stub implementation for bootstrap_theme().
  *
  * This base-theme's custom theme hook implementations. Never define "path"
  * or "template" as these are detected and automatically added.
@@ -703,3 +700,7 @@ function _bootstrap_registry_process_extension(array &$cache, $name, $type, $the
     }
   }
 }
+
+/**
+ * @} End of "addtogroup registry".
+ */

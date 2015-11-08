@@ -13,32 +13,37 @@ files and the rest is extracted from embedded PHP comments.
 ## Topics
 
 Below are some topics to help get you started using the [Drupal Bootstrap] base
-theme. They are ordered solely on quickest implementation and ease of use.
-
-#### @link getting_started Getting Started @endlink
+theme. They are ordered based on the level one typically progresses while using
+a base theme like this.
 
 #### @link faq FAQ @endlink
 
-#### @link settings Theme Settings @endlink
+#### @link getting_started Getting Started @endlink
 
 #### @link subtheme Sub-Theming @endlink
-- @link subtheme_utility Utility Functions @endlink
+- @link subtheme_settings Theme Settings @endlink
+- @link subtheme_helper_functions Helper Functions @endlink
+- @link subtheme_cdn CDN Starterkit @endlink
+- @link subtheme_less LESS Starterkit @endlink
+
+#### @link registry Theme Registry @endlink
+- @link theme_preprocess Preprocess Functions (.vars.php) @endlink
+- @link theme_process Process Functions (.vars.php) @endlink
+- @link templates Templates (.tpl.php) @endlink
+- @link theme_functions Theme Functions (.func.php) @endlink
 
 #### @link api APIs @endlink
 
-#### @link registry Theme Registry @endlink
-
-#### @link project Project Development @endlink
-- @link project_grunt Grunt Tasks @endlink
-- @link project_releases Releases @endlink
+#### @link contribute Contribute @endlink
+- @link contribute_maintainers Project Maintainers @endlink
 
 ---
 
 ## Terminology
 
 The term **"bootstrap"** can be used excessively through out this project's
-documentation. For clarity, we will attempt to use it verbosely in one of the
-following ways:
+documentation. For clarity, we will always attempt to use this word verbosely
+in one of the following ways:
 
 - **[Drupal Bootstrap]** refers to the Drupal base theme project.
 - **[Bootstrap Framework](http://getbootstrap.com)** refers to the external
@@ -47,13 +52,14 @@ following ways:
   to Drupal's bootstrapping process or phase.
   
 When referring to files inside the [Drupal Bootstrap] project directory, they
-will always start with `./` and continue to specify the full path to the file
-or directory inside it. For example, the file that is responsible for displaying
-this text is located at `./README.md`.
+will always start with `./bootstrap` and continue to specify the full path to
+the file or directory inside it. For example, the file that is responsible for
+displaying the text on this page is located at `./bootstrap/docs/README.md`.
 
 When referring to files inside a sub-theme, they will always start with
-`./example_subtheme/` and continue to specify the full path to the file or
-directory inside it. For example, the main file Drupal will search for:
-`./example_subtheme/template.php`.
+`./subtheme/` and continue to specify the full path to the file or directory
+inside it. For example, the primary file Drupal uses to determine if a theme
+exists is: `./subtheme/subtheme.info`, where `subtheme` is the machine name of
+your sub-theme.
 
 [Drupal Bootstrap]: https://www.drupal.org/project/bootstrap

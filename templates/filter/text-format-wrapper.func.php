@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * text-format-wrapper.func.php
+ * Stub file for bootstrap_text_format_wrapper().
  */
 
 /**
@@ -11,7 +11,12 @@
  *   An associative array containing:
  *   - element: A render element containing #children and #description.
  *
- * @ingroup themeable
+ * @return string
+ *   The constructed HTML.
+ *
+ * @see theme_text_format_wrapper()
+ *
+ * @ingroup theme_functions
  */
 function bootstrap_text_format_wrapper($variables) {
   $element = $variables['element'];

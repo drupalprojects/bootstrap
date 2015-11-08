@@ -1,14 +1,13 @@
 <?php
 /**
  * @file
- * filter-tips.php
+ * Stub file for bootstrap_filter_tips().
  */
-
 
 /**
  * Returns HTML for a set of filter tips.
  *
- * @param $variables
+ * @param array $variables
  *   An associative array containing:
  *   - tips: An array containing descriptions and a CSS ID in the form of
  *     'module-name/filter-id' (only used when $long is TRUE) for each
@@ -28,8 +27,13 @@
  *     (TRUE), or are in a short format, i.e. suitable to be displayed below a
  *     form element. Defaults to FALSE.
  *
+ * @return string
+ *   The constructed HTML.
+ *
+ * @see theme_filter_tips()
  * @see _filter_tips()
- * @ingroup themeable
+ *
+ * @ingroup theme_functions
  */
 function bootstrap_filter_tips($variables) {
   $format_id = arg(2);

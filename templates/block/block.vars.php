@@ -1,11 +1,17 @@
 <?php
 /**
  * @file
- * block.vars.php
+ * Stub file for "block" theme hook [pre]process functions.
  */
 
 /**
- * Implements hook_preprocess_block().
+ * Pre-processes variables for the "block" theme hook.
+ *
+ * See template for list of available variables.
+ *
+ * @see block.tpl.php
+ *
+ * @ingroup theme_preprocess
  */
 function bootstrap_preprocess_block(&$variables) {
   // Use a bare template for the page's main content.
