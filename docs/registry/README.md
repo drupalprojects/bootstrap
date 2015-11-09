@@ -18,7 +18,7 @@ It also allows for easier maintenance and organization with as many overrides as
 this base theme implements.
 
 This base theme provides a multitude of [pre]process functions, theme functions
-and templates are stored inside the `./bootstrap/templates` folder. The base
+and templates stored inside the `./bootstrap/templates` folder. The base
 theme will traverse all folders inside this folder as well as a subtheme's
 `./subtheme/templates` folder.
 
