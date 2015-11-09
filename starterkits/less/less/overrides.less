@@ -120,18 +120,24 @@ body {
 }
 
 // Default navbar.
-.navbar.container {
-  @media @tablet {
-    max-width: ((@container-sm - @grid-gutter-width));
+.navbar {
+  &.container {
+    @media @tablet {
+      max-width: ((@container-sm - @grid-gutter-width));
+    }
+    @media @normal {
+      max-width: ((@container-md - @grid-gutter-width));
+    }
+    @media @wide {
+      max-width: ((@container-lg - @grid-gutter-width));
+    }
   }
-  @media @normal {
-    max-width: ((@container-md - @grid-gutter-width));
+  &.container,
+  &.container-fluid {
+    margin-top: 20px;
   }
-  @media @wide {
-    max-width: ((@container-lg - @grid-gutter-width));
-  }
-  margin-top: 20px;
-  > .container {
+  &.container > .container,
+  &.container-fluid > .container-fluid {
     margin: 0;
     padding: 0;
     width: auto;
