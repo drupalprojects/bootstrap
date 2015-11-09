@@ -152,7 +152,7 @@ var Drupal = Drupal || {};
           }
         }
       }
-      if (!settings.bootstrap || !settings.bootstrap.anchorsFix) {
+      if (!settings.bootstrap || settings.bootstrap.anchorsFix !== '1') {
         return;
       }
       var anchors = $(context).find('a').toArray();
