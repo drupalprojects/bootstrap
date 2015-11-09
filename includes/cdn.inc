@@ -56,11 +56,11 @@ function bootstrap_cdn_provider($provider = NULL, $reset = FALSE) {
         'jsdelivr' => array(
           'api' => 'http://api.jsdelivr.com/v1/bootstrap/libraries',
           'title' => t('jsDelivr'),
-          'description' =>  t('<p style="background:#EB4C36"><a href="!jsdelivr" target="_blank"><img src="http://www.jsdelivr.com/img/logo-34.png" alt="jsDelivr Logo" /></a></p><p><a href="!jsdelivr" target="_blank">jsDelivr</a> is a free multi-CDN infrastructure that uses <a href="!maxcdn" target="_blank">MaxCDN</a>, <a href="!cloudflare" target="_blank">Cloudflare</a> and many others to combine their powers for the good of the open source community... <a href="!jsdelivr_about" target="_blank">read more</a></p>', array(
-            '!jsdelivr' => 'http://www.jsdelivr.com',
-            '!jsdelivr_about' => 'http://www.jsdelivr.com/about',
-            '!maxcdn' => 'http://www.maxcdn.com',
-            '!cloudflare' => 'http://www.cloudflare.com',
+          'description' => t('<p style="background:#EB4C36"><a href=":jsdelivr" target="_blank"><img src="http://www.jsdelivr.com/img/logo-34.png" alt="jsDelivr Logo" /></a></p><p><a href=":jsdelivr" target="_blank">jsDelivr</a> is a free multi-CDN infrastructure that uses <a href=":maxcdn" target="_blank">MaxCDN</a>, <a href=":cloudflare" target="_blank">Cloudflare</a> and many others to combine their powers for the good of the open source community... <a href=":jsdelivr_about" target="_blank">read more</a></p>', array(
+            ':jsdelivr' => 'http://www.jsdelivr.com',
+            ':jsdelivr_about' => 'http://www.jsdelivr.com/about',
+            ':maxcdn' => 'http://www.maxcdn.com',
+            ':cloudflare' => 'http://www.cloudflare.com',
           )),
         ),
       );
@@ -395,10 +395,10 @@ function bootstrap_cdn_provider_settings_form(&$form, FormStateInterface &$form_
     // Indicate there was an error retrieving the provider's API data.
     if (!empty($data['error']) || !empty($data['imported'])) {
       if (!empty($data['error'])) {
-        $element['#prefix'] .= '<div class="alert alert-danger messages error"><strong>' . t('ERROR') . ':</strong> ' . t('Unable to reach or parse the data provided by the @title API. Ensure the server this website is hosted on is able to initiate HTTP requests via <a href="!drupal_http_request" target="_blank">drupal_http_request()</a>. If the request consistently fails, it is likely that there are certain PHP functions that have been disabled by the hosting provider for security reasons. It is possible to manually copy and paste the contents of the following URL into the "Imported @title data" section below.<br /><br /><a href="!provider_api" target="_blank">!provider_api</a>.', array(
+        $element['#prefix'] .= '<div class="alert alert-danger messages error"><strong>' . t('ERROR') . ':</strong> ' . t('Unable to reach or parse the data provided by the @title API. Ensure the server this website is hosted on is able to initiate HTTP requests via <a href=":drupal_http_request" target="_blank">drupal_http_request()</a>. If the request consistently fails, it is likely that there are certain PHP functions that have been disabled by the hosting provider for security reasons. It is possible to manually copy and paste the contents of the following URL into the "Imported @title data" section below.<br /><br /><a href=":provider_api" target="_blank">:provider_api</a>.', array(
             '@title' => $data['title'],
-            '!provider_api' => $data['api'],
-            '!drupal_http_request' => 'https://api.drupal.org/api/drupal/includes%21common.inc/function/drupal_http_request/7',
+            ':provider_api' => $data['api'],
+            ':drupal_http_request' => 'https://api.drupal.org/api/drupal/includes%21common.inc/function/drupal_http_request/7',
           )) . '</div>';
       }
       $element['import'] = array(
@@ -406,8 +406,8 @@ function bootstrap_cdn_provider_settings_form(&$form, FormStateInterface &$form_
         '#title' => t('Imported @title data', array(
           '@title' => $data['title'],
         )),
-        '#description' => t('The provider will attempt to parse the data entered here each time it is saved. If no data has been entered, any saved files associated with this provider will be removed and the provider will again attempt to request the API data normally through the following URL: <a href="!provider_api" target="_blank">!provider_api</a>.', array(
-          '!provider_api' => $data['api'],
+        '#description' => t('The provider will attempt to parse the data entered here each time it is saved. If no data has been entered, any saved files associated with this provider will be removed and the provider will again attempt to request the API data normally through the following URL: <a href=":provider_api" target="_blank">:provider_api</a>.', array(
+          ':provider_api' => $data['api'],
         )),
         '#weight' => 10,
         '#collapsible' => TRUE,
@@ -502,9 +502,9 @@ function bootstrap_bootstrap_cdn_provider_jsdelivr_settings_form_alter(&$element
   $element['bootstrap_cdn_jsdelivr_theme'] = array(
     '#type' => 'select',
     '#title' => t('Theme'),
-    '#description' => t('Choose the example <a href="!bootstrap_theme" target="_blank">Bootstrap Theme</a> provided by Bootstrap or one of the many, many <a href="!bootswatch" target="_blank">Bootswatch</a> themes!', array(
-      '!bootswatch' => 'https://bootswatch.com',
-      '!bootstrap_theme' => 'http://getbootstrap.com/examples/theme/',
+    '#description' => t('Choose the example <a href=":bootstrap_theme" target="_blank">Bootstrap Theme</a> provided by Bootstrap or one of the many, many <a href=":bootswatch" target="_blank">Bootswatch</a> themes!', array(
+      ':bootswatch' => 'https://bootswatch.com',
+      ':bootstrap_theme' => 'http://getbootstrap.com/examples/theme/',
     )),
     '#default_value' => bootstrap_setting('cdn_jsdelivr_theme', $theme),
     '#options' => $themes,

@@ -60,8 +60,8 @@ function bootstrap_form_system_theme_settings_alter(&$form, FormStateInterface $
     '#type' => 'checkbox',
     '#title' => t('Fluid container'),
     '#default_value' => bootstrap_setting('fluid_container', $theme),
-    '#description' => t('Use <code>.container-fluid</code> class. See : !bootstrap_link', array(
-      '!bootstrap_link' => Drupal::l('Fluid container' , Url::fromUri('http://getbootstrap.com/css/' , ['absolute' => TRUE , 'fragment' => 'grid-example-fluid'])),
+    '#description' => t('Use <code>.container-fluid</code> class. See <a href=":url">Fluid container</a>', array(
+      ':url' => 'http://getbootstrap.com/css/#grid-example-fluid',
     )),
   );
 
@@ -87,17 +87,17 @@ function bootstrap_form_system_theme_settings_alter(&$form, FormStateInterface $
     '#type' => 'checkbox',
     '#title' => t('Colorize Buttons'),
     '#default_value' => bootstrap_setting('button_colorize', $theme),
-    '#description' => t('Adds classes to buttons based on their text value. See: !bootstrap_link and !api_link', array(
-      '!bootstrap_link' => Drupal::l(t('Buttons') , Url::fromUri('http://getbootstrap.com/css/#buttons')),
-      '!api_link' => Drupal::l('hook_bootstrap_colorize_text_alter()' , Url::fromUri('http://drupal-bootstrap.org/apis/hook_bootstrap_colorize_text_alter' , ['absolute' => TRUE])),
+    '#description' => t('Adds classes to buttons based on their text value. See: <a href=":bootstrap_url" target="_blank">Buttons</a> and <a href=":api_url" target="_blank">hook_bootstrap_colorize_text_alter()</a>', array(
+      ':bootstrap_url' => 'http://getbootstrap.com/css/#buttons',
+      ':api_url' => 'http://drupal-bootstrap.org/apis/hook_bootstrap_colorize_text_alter',
     )),
   );
   $form['general']['buttons']['bootstrap_button_iconize'] = array(
     '#type' => 'checkbox',
     '#title' => t('Iconize Buttons'),
     '#default_value' => bootstrap_setting('button_iconize', $theme),
-    '#description' => t('Adds icons to buttons based on the text value. See: !api_link', array(
-      '!api_link' => Drupal::l('hook_bootstrap_iconize_text_alter()' , Url::fromUri('http://drupal-bootstrap.org/apis/hook_bootstrap_iconize_text_alter' , ['absolute' => TRUE])),
+    '#description' => t('Adds icons to buttons based on the text value. See: <a href=":api_url" target="_blank">hook_bootstrap_iconize_text_alter()</a>', array(
+      ':api_url' => 'http://drupal-bootstrap.org/apis/hook_bootstrap_iconize_text_alter',
     )),
   );
 
@@ -153,8 +153,8 @@ function bootstrap_form_system_theme_settings_alter(&$form, FormStateInterface $
   $form['general']['images']['bootstrap_image_shape'] = array(
     '#type' => 'select',
     '#title' => t('Default image shape'),
-    '#description' => t('Add classes to an <code>&lt;img&gt;</code> element to easily style images in any project. Note: Internet Explorer 8 lacks support for rounded corners. See: !bootstrap_link', array(
-      '!bootstrap_link' => Drupal::l(t('Image Shapes') , Url::fromUri('http://getbootstrap.com/css/' , ['absolute' => TRUE , 'fragment' => 'images-shapes'])),
+    '#description' => t('Add classes to an <code>&lt;img&gt;</code> element to easily style images in any project. Note: Internet Explorer 8 lacks support for rounded corners. See: <a href=":bootstrap_url" target="_blank">Image Shapes</a>', array(
+      ':bootstrap_url' => 'http://getbootstrap.com/css/#images-shapes',
     )),
     '#default_value' => bootstrap_setting('image_shape', $theme),
     '#empty_option' => t('None'),
@@ -292,8 +292,8 @@ function bootstrap_form_system_theme_settings_alter(&$form, FormStateInterface $
   $form['components']['region_wells'] = array(
     '#type' => 'details',
     '#title' => t('Region wells'),
-    '#description' => t('Enable the <code>.well</code>, <code>.well-sm</code> or <code>.well-lg</code> classes for specified regions. See: documentation on !wells.', array(
-      '!wells' => \Drupal::l(t('Bootstrap Wells'), Url::fromUri('http://getbootstrap.com/components/#wells')),
+    '#description' => t('Enable the <code>.well</code>, <code>.well-sm</code> or <code>.well-lg</code> classes for specified regions. See: documentation on :wells.', array(
+      ':wells' => l(t('Bootstrap Wells'), 'http://getbootstrap.com/components/#wells'),
     )),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
@@ -423,9 +423,9 @@ function bootstrap_form_system_theme_settings_alter(&$form, FormStateInterface $
   $form['javascript']['popovers']['options']['bootstrap_popover_selector'] = array(
     '#type' => 'textfield',
     '#title' => t('selector'),
-    '#description' => t('If a selector is provided, tooltip objects will be delegated to the specified targets. In practice, this is used to enable dynamic HTML content to have popovers added. See !this and !example.', array(
-      '!this' => \Drupal::l(t('this'), Url::fromUri('https://github.com/twbs/bootstrap/issues/4215')),
-      '!example' => \Drupal::l(t('an informative example'), Url::fromUri('http://jsfiddle.net/fScua/')),
+    '#description' => t('If a selector is provided, tooltip objects will be delegated to the specified targets. In practice, this is used to enable dynamic HTML content to have popovers added. See <a href=":this" target="_blank">this</a> and <a href=":example" target="_blank">an informative example</a>.', array(
+      ':this' => 'https://github.com/twbs/bootstrap/issues/4215',
+      ':example' => 'http://jsfiddle.net/fScua/',
     )),
     '#default_value' => bootstrap_setting('popover_selector', $theme),
   );
@@ -477,8 +477,8 @@ function bootstrap_form_system_theme_settings_alter(&$form, FormStateInterface $
   $form['javascript']['tooltips'] = array(
     '#type' => 'details',
     '#title' => t('Tooltips'),
-    '#description' => t("Inspired by the excellent jQuery.tipsy plugin written by Jason Frame; Tooltips are an updated version, which don't rely on images, use CSS3 for animations, and data-attributes for local title storage. See !link for more documentation.", array(
-      '!link' => \Drupal::l(t('Bootstrap tooltips'), Url::fromUri('http://getbootstrap.com/javascript/#tooltips')),
+    '#description' => t('Inspired by the excellent jQuery.tipsy plugin written by Jason Frame; Tooltips are an updated version, which don\'t rely on images, use CSS3 for animations, and data-attributes for local title storage. See <a href=":url" target="_blank">Bootstrap tooltips</a> for more documentation.', array(
+      ':url' => 'http://getbootstrap.com/javascript/#tooltips',
     )),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
@@ -575,16 +575,6 @@ function bootstrap_form_system_theme_settings_alter(&$form, FormStateInterface $
     '#type' => 'details',
     '#title' => t('Advanced'),
     '#group' => 'bootstrap',
-  );
-
-  // jQuery Update error suppression.
-  $form['advanced']['bootstrap_toggle_jquery_error'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Suppress jQuery version error message'),
-    '#default_value' => bootstrap_setting('toggle_jquery_error', $theme),
-    '#description' => t('Enable this if the version of jQuery has been upgraded to 1.9+ using a method other than the <a href="!jquery_update" target="_blank">jQuery Update</a> module.', array(
-      '!jquery_update' => 'https://drupal.org/project/jquery_update',
-    )),
   );
 
   // BootstrapCDN.
