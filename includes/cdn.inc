@@ -49,9 +49,9 @@ function bootstrap_cdn_provider($provider = NULL, $reset = FALSE) {
         'jsdelivr' => array(
           'api' => 'http://api.jsdelivr.com/v1/bootstrap/libraries',
           'title' => t('jsDelivr'),
-          'description' =>  t('<p><a href="!jsdelivr" target="_blank"><img src="http://www.jsdelivr.com/img/jsdelivr-logo.png" alt="jsDelivr Logo" /></a></p><p><a href="!jsdelivr" target="_blank">jsDelivr</a> is a free multi-CDN infrastructure that uses <a href="!maxcdn" target="_blank">MaxCDN</a>, <a href="!cloudflare" target="_blank">Cloudflare</a> and many others to combine their powers for the good of the open source community... <a href="!jsdelivr_about" target="_blank">read more</a></p>', array(
+          'description' =>  t('<p style="background:#EB4C36"><a href="!jsdelivr" target="_blank"><img src="http://www.jsdelivr.com/img/logo-34.png" alt="jsDelivr Logo" /></a></p><p><a href="!jsdelivr" target="_blank">jsDelivr</a> is a free multi-CDN infrastructure that uses <a href="!maxcdn" target="_blank">MaxCDN</a>, <a href="!cloudflare" target="_blank">Cloudflare</a> and many others to combine their powers for the good of the open source community... <a href="!jsdelivr_about" target="_blank">read more</a></p>', array(
             '!jsdelivr' => 'http://www.jsdelivr.com',
-            '!jsdelivr_about' => 'http://www.jsdelivr.com/about.php',
+            '!jsdelivr_about' => 'http://www.jsdelivr.com/about',
             '!maxcdn' => 'http://www.maxcdn.com',
             '!cloudflare' => 'http://www.cloudflare.com',
           )),
