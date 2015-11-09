@@ -76,7 +76,9 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
     '#type' => 'checkbox',
     '#title' => t('Fluid container'),
     '#default_value' => bootstrap_setting('fluid_container', $theme),
-    '#description' => t('Use <code>.container-fluid</code> class. See <a href="http://getbootstrap.com/css/#grid-example-fluid">Fluid container</a>'),
+    '#description' => t('Use <code>.container-fluid</code> class. See <a href="!url">Fluid container</a>', array(
+      '!url' => 'http://getbootstrap.com/css/#grid-example-fluid',
+    )),
   );
 
   // Buttons.
@@ -458,9 +460,9 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
   $form['javascript']['popovers']['options']['bootstrap_popover_selector'] = array(
     '#type' => 'textfield',
     '#title' => t('selector'),
-    '#description' => t('If a selector is provided, tooltip objects will be delegated to the specified targets. In practice, this is used to enable dynamic HTML content to have popovers added. See !this and !example.', array(
-      '!this' => l(t('this'), 'https://github.com/twbs/bootstrap/issues/4215'),
-      '!example' => l(t('an informative example'), 'http://jsfiddle.net/fScua/'),
+    '#description' => t('If a selector is provided, tooltip objects will be delegated to the specified targets. In practice, this is used to enable dynamic HTML content to have popovers added. See <a href="!this" target="_blank">this</a> and <a href="!example" target="_blank">an informative example</a>.', array(
+      '!this' => 'https://github.com/twbs/bootstrap/issues/4215',
+      '!example' => 'http://jsfiddle.net/fScua/',
     )),
     '#default_value' => bootstrap_setting('popover_selector', $theme),
   );
@@ -511,8 +513,8 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
   $form['javascript']['tooltips'] = array(
     '#type' => 'fieldset',
     '#title' => t('Tooltips'),
-    '#description' => t("Inspired by the excellent jQuery.tipsy plugin written by Jason Frame; Tooltips are an updated version, which don't rely on images, use CSS3 for animations, and data-attributes for local title storage. See !link for more documentation.", array(
-      '!link' => l(t('Bootstrap tooltips'), 'http://getbootstrap.com/javascript/#tooltips'),
+    '#description' => t('Inspired by the excellent jQuery.tipsy plugin written by Jason Frame; Tooltips are an updated version, which don\'t rely on images, use CSS3 for animations, and data-attributes for local title storage. See <a href="!url" target="_blank">Bootstrap tooltips</a> for more documentation.', array(
+      '!url' => 'http://getbootstrap.com/javascript/#tooltips',
     )),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
