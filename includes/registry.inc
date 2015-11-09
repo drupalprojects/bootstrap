@@ -76,7 +76,9 @@ function _bootstrap_theme(&$existing, $type, $theme, $path) {
       'heading' => '',
       'body' => '',
       'footer' => '',
+      'dialog_attributes' => array(),
       'attributes' => array(),
+      'size' => '',
       'html_heading' => FALSE,
     ),
   );
