@@ -81,8 +81,8 @@ settings[bootstrap_region_well-footer] = ''
 
 ; Anchors
 ; --------------
-settings[bootstrap_anchors_fix] = 1
-settings[bootstrap_anchors_smooth_scrolling] = 1
+settings[bootstrap_anchors_fix] = 0
+settings[bootstrap_anchors_smooth_scrolling] = 0
 
 ; Forms
 ; --------------

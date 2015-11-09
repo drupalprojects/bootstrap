@@ -344,12 +344,17 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
     '#title' => t('Anchors'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
+    '#description' => t('This plugin is not able to be configured from the UI as it is severely broken. In an effort to balance not break backwards compatibility and to prevent new users from running into unforeseen issues, you must manually opt-in/out inside your theme .info file. Please see the following issue for more details: <a href="!url" target="_blank">Replace custom JS with the bootstrap-anchor plugin</a>', array(
+      '!url' => 'https://www.drupal.org/node/2462645',
+    )),
   );
   $form['javascript']['anchors']['bootstrap_anchors_fix'] = array(
     '#type' => 'checkbox',
     '#title' => t('Fix anchor positions'),
     '#default_value' => bootstrap_setting('anchors_fix', $theme),
     '#description' => t('Ensures anchors are correctly positioned only when there is margin or padding detected on the BODY element. This is useful when fixed navbar or administration menus are used.'),
+    // Prevent UI edits, see description above.
+    '#disabled' => TRUE,
   );
   $form['javascript']['anchors']['bootstrap_anchors_smooth_scrolling'] = array(
     '#type' => 'checkbox',
@@ -361,6 +366,8 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
         ':input[name="bootstrap_anchors_fix"]' => array('checked' => FALSE),
       ),
     ),
+    // Prevent UI edits, see description above.
+    '#disabled' => TRUE,
   );
 
   // Forms.
