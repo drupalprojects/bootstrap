@@ -136,6 +136,9 @@ settings[bootstrap_cdn_jsdelivr_theme] = 'bootstrap'
 settings[toggle_name] = 1
 settings[toggle_search] = 1
 
+; jQuery Update
+; --------------
+settings[jquery_update_jquery_version] = 2.1
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;; Excludes
