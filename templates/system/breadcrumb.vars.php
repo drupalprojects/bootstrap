@@ -15,6 +15,11 @@
  * @ingroup theme_preprocess
  */
 function bootstrap_preprocess_breadcrumb(&$variables) {
+  // Do not modify breadcrumbs if the Path Breadcrumbs module should be used.
+  if (_bootstrap_use_path_breadcrumbs()) {
+    return;
+  }
+
   $breadcrumb = &$variables['breadcrumb'];
 
   // Optionally get rid of the homepage link.

@@ -236,41 +236,52 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
   $form['components']['breadcrumbs'] = array(
     '#type' => 'fieldset',
     '#title' => t('Breadcrumbs'),
-    '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
   );
-  $form['components']['breadcrumbs']['bootstrap_breadcrumb'] = array(
-    '#type' => 'select',
-    '#title' => t('Breadcrumb visibility'),
-    '#default_value' => bootstrap_setting('breadcrumb', $theme),
-    '#options' => array(
-      0 => t('Hidden'),
-      1 => t('Visible'),
-      2 => t('Only in admin areas'),
-    ),
-  );
-  $form['components']['breadcrumbs']['bootstrap_breadcrumb_home'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Show "Home" breadcrumb link'),
-    '#default_value' => bootstrap_setting('breadcrumb_home', $theme),
-    '#description' => t('If your site has a module dedicated to handling breadcrumbs already, ensure this setting is enabled.'),
-    '#states' => array(
-      'invisible' => array(
-        ':input[name="bootstrap_breadcrumb"]' => array('value' => 0),
+
+  // Show message for Path Breadcrumbs module support.
+  if (_bootstrap_use_path_breadcrumbs($theme)) {
+    $form['components']['breadcrumbs']['#description'] = t('The <a href="!path_breadcrumbs" target="_blank">Path Breadcrumbs</a> module is being used to manage this site\'s breadcrumbs display and cannot be configured via theme settings. To configure this site\'s breadcrumbs display, enable the <a href="!enable">Path Breadcrumbs UI</a> sub-module and then visit <a href="!settings">Path Breadcrumbs Settings</a>.', array(
+      '!path_breadcrumbs' => 'https://www.drupal.org/project/path_breadcrumbs',
+      '!enable' => url('admin/modules', array('fragment' => 'edit-modules-path-breadcrumbs')),
+      '!settings' => url('admin/structure/path-breadcrumbs/settings'),
+    ));
+  }
+  else {
+    $form['components']['breadcrumbs']['#collapsible'] = TRUE;
+    $form['components']['breadcrumbs']['#collapsed'] = TRUE;
+    $form['components']['breadcrumbs']['bootstrap_breadcrumb'] = array(
+      '#type' => 'select',
+      '#title' => t('Breadcrumb visibility'),
+      '#default_value' => bootstrap_setting('breadcrumb', $theme),
+      '#options' => array(
+        0 => t('Hidden'),
+        1 => t('Visible'),
+        2 => t('Only in admin areas'),
       ),
-    ),
-  );
-  $form['components']['breadcrumbs']['bootstrap_breadcrumb_title'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Show current page title at end'),
-    '#default_value' => bootstrap_setting('breadcrumb_title', $theme),
-    '#description' => t('If your site has a module dedicated to handling breadcrumbs already, ensure this setting is disabled.'),
-    '#states' => array(
-      'invisible' => array(
-        ':input[name="bootstrap_breadcrumb"]' => array('value' => 0),
+    );
+    $form['components']['breadcrumbs']['bootstrap_breadcrumb_home'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show "Home" breadcrumb link'),
+      '#default_value' => bootstrap_setting('breadcrumb_home', $theme),
+      '#description' => t('If your site has a module dedicated to handling breadcrumbs already, ensure this setting is enabled.'),
+      '#states' => array(
+        'invisible' => array(
+          ':input[name="bootstrap_breadcrumb"]' => array('value' => 0),
+        ),
       ),
-    ),
-  );
+    );
+    $form['components']['breadcrumbs']['bootstrap_breadcrumb_title'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show current page title at end'),
+      '#default_value' => bootstrap_setting('breadcrumb_title', $theme),
+      '#description' => t('If your site has a module dedicated to handling breadcrumbs already, ensure this setting is disabled.'),
+      '#states' => array(
+        'invisible' => array(
+          ':input[name="bootstrap_breadcrumb"]' => array('value' => 0),
+        ),
+      ),
+    );
+  }
 
   // Navbar.
   $form['components']['navbar'] = array(

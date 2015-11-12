@@ -1259,5 +1259,39 @@ function _bootstrap_is_simple_string($string, $length = 250, $allowed_tags = NUL
 }
 
 /**
+ * Determines if the Path Breadcrumbs module theme function should be used.
+ *
+ * @param string $theme
+ *   The machine name of a specific theme to determine status if the Path
+ *   Breadcrumbs module has been configured to only use its internal function
+ *   on a specific list of themes.
+ *
+ * @return bool
+ *   TRUE or FALSE
+ */
+function _bootstrap_use_path_breadcrumbs($theme = NULL) {
+  static $path_breadcrumbs;
+
+  if (!isset($path_breadcrumbs)) {
+    $path_breadcrumbs = FALSE;
+
+    // Use active theme as the theme key if not explicitly set.
+    if (!isset($theme)) {
+      $theme = $GLOBALS['theme_key'];
+    }
+
+    // Determine whether or not the internal Path Breadcrumbs theme function
+    // should be used or not.
+    if (function_exists('path_breadcrumbs_breadcrumb') && module_exists('path_breadcrumbs')) {
+      $internal_render = variable_get('path_breadcrumbs_internal_render', 1);
+      $themes = variable_get('path_breadcrumbs_internal_render_themes', array());
+      $path_breadcrumbs = ($internal_render && (empty($themes) || in_array($theme, $themes)));
+    }
+  }
+
+  return $path_breadcrumbs;
+}
+
+/**
  * @} End of "defgroup subtheme_helper_functions".
  */
