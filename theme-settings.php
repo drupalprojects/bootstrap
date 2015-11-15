@@ -292,8 +292,8 @@ function bootstrap_form_system_theme_settings_alter(&$form, FormStateInterface $
   $form['components']['region_wells'] = array(
     '#type' => 'details',
     '#title' => t('Region wells'),
-    '#description' => t('Enable the <code>.well</code>, <code>.well-sm</code> or <code>.well-lg</code> classes for specified regions. See: documentation on :wells.', array(
-      ':wells' => l(t('Bootstrap Wells'), 'http://getbootstrap.com/components/#wells'),
+    '#description' => t('Enable the <code>.well</code>, <code>.well-sm</code> or <code>.well-lg</code> classes for specified regions. See: documentation on <a href=":wells" target="_blank">Bootstrap Wells</a>.', array(
+      ':wells' => 'http://getbootstrap.com/components/#wells',
     )),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
