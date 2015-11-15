@@ -13,7 +13,7 @@ use Drupal\Component\Utility\Xss;
  *
  * See template for list of available variables.
  *
- * @see bootstrap-panel.tpl.php
+ * @see bootstrap-panel.html.twig
  *
  * @ingroup theme_preprocess
  */

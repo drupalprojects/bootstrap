@@ -1,4 +1,3 @@
-
 (function ($) {
   "use strict";
 
@@ -15,7 +14,10 @@
    */
   Drupal.behaviors.verticalTabs = {
     attach: function (context) {
-      if (!Drupal.checkWidthBreakpoint()) {
+      var width = drupalSettings.widthBreakpoint || 640;
+      var mq = '(max-width: ' + width + 'px)';
+
+      if (window.matchMedia(mq).matches) {
         return;
       }
 

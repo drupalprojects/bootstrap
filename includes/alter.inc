@@ -293,23 +293,13 @@ function bootstrap_theme_suggestions_alter(array &$suggestions, array $variables
     case 'details':
       $suggestions[] = 'bootstrap_panel';
       break;
-  }
-}
 
-/**
- * Implements hook_theme_suggestions_HOOK_alter().
- */
-function bootstrap_theme_suggestions_input_alter(array &$suggestions, array $variables) {
-  if (!empty($variables['element']['#is_button'])) {
-    $suggestions[] = 'input__button';
+    case 'input':
+      if (!empty($variables['element']['#is_button'])) {
+        $suggestions[] = 'input__button';
+      }
+      break;
   }
-}
-
-/**
- * Implements hook_theme_suggestions_HOOK_alter().
- */
-function bootstrap_theme_suggestions_fieldset_alter(array &$suggestions, array $variables) {
-  $suggestions[] = 'bootstrap_panel';
 }
 
 /**
