@@ -301,7 +301,7 @@ function bootstrap_form_system_theme_settings_alter(&$form, FormStateInterface $
   // Get defined regions.
   $regions = system_region_list('bootstrap');
   foreach ($regions as $name => $title) {
-    $form['components']['region_wells']['region_well-' . $name] = array(
+    $form['components']['region_wells']['bootstrap_region_well-' . $name] = array(
       '#title' => $title,
       '#type' => 'select',
       '#attributes' => array(
