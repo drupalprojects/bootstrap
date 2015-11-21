@@ -196,7 +196,7 @@ function bootstrap_form_system_theme_settings_alter(&$form, FormStateInterface $
     '#default_value' => bootstrap_setting('table_hover', $theme),
     '#description' => t('Enable a hover state on table rows.'),
   );
-  $form['general']['tables']['table_striped'] = array(
+  $form['general']['tables']['bootstrap_table_striped'] = array(
     '#type' => 'checkbox',
     '#title' => t('Striped rows'),
     '#default_value' => bootstrap_setting('table_striped', $theme),
@@ -396,7 +396,7 @@ function bootstrap_form_system_theme_settings_alter(&$form, FormStateInterface $
     '#description' => t('Apply a CSS fade transition to the popover.'),
     '#default_value' => bootstrap_setting('popover_animation', $theme),
   );
-  $form['javascript']['popovers']['options']['popover_html'] = array(
+  $form['javascript']['popovers']['options']['bootstrap_popover_html'] = array(
     '#type' => 'checkbox',
     '#title' => t('HTML'),
     '#description' => t("Insert HTML into the popover. If false, jQuery's text method will be used to insert content into the DOM. Use text if you're worried about XSS attacks."),
