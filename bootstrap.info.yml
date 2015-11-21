@@ -36,4 +36,4 @@ stylesheets-remove:
   - '@system/css/components/tabs.theme.css'
 
 libraries:
-  - 'bootstrap/globalscripts
+  - 'bootstrap/globalscripts'
