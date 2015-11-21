@@ -66,9 +66,7 @@ bootstrap_popover_placement: 'right'
 bootstrap_popover_selector: ''
 bootstrap_popover_trigger:
   hover: 0
-bootstrap_popover_trigger:
   focus: 0
-bootstrap_popover_trigger:
   click: 'click'
 bootstrap_popover_trigger_autoclose: 1
 bootstrap_popover_title: ''
@@ -87,9 +85,7 @@ bootstrap_tooltip_placement: 'auto left'
 bootstrap_tooltip_selector: ''
 bootstrap_tooltip_trigger:
   hover: 'hover'
-bootstrap_tooltip_trigger:
   focus: 'focus'
-bootstrap_tooltip_trigger:
   click: 0
 bootstrap_tooltip_delay: 0
 bootstrap_tooltip_container: 'body'
