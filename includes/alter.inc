@@ -1,25 +1,11 @@
 <?php
 /**
  * @file
- * alter.inc
- *
  * Contains various implementations of hook_*_alter().
  */
 
 use \Drupal\Core\Form\FormStateInterface;
-use \Drupal\Core\Template\Attribute;
 use \Drupal\Core\Render\Element;
-
-
-/**
- * Include #pre_render callbacks for elements.
- */
-bootstrap_include('bootstrap', 'includes/pre-render.inc');
-
-/**
- * Include #process callbacks for elements.
- */
-bootstrap_include('bootstrap', 'includes/process.inc');
 
 /**
  * Implements hook_css_alter().
@@ -286,23 +272,6 @@ function bootstrap_js_alter(&$js) {
 }
 
 /**
- * Implements hook_theme_suggestions_alter().
- */
-function bootstrap_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
-  switch ($hook) {
-    case 'details':
-      $suggestions[] = 'bootstrap_panel';
-      break;
-
-    case 'input':
-      if (!empty($variables['element']['#is_button'])) {
-        $suggestions[] = 'input__button';
-      }
-      break;
-  }
-}
-
-/**
  * Implements hook_form_alter().
  */
 function bootstrap_form_alter(&$form, FormStateInterface $form_state, $form_id = NULL) {
@@ -459,4 +428,56 @@ function bootstrap_page_attachments_alter(&$variables) {
         'container' => bootstrap_setting('tooltip_container'),
       ),
   );
+}
+
+/**
+ * Implements hook_theme_registry_alter().
+ *
+ * @todo Remove once \Drupal\bootstrap\Theme\Registry can properly replace
+ * the theme.registry service in a bootstrap_core sub-module.
+ *
+ * @see \Drupal\bootstrap\Theme\Registry::alter()
+ */
+function bootstrap_theme_registry_alter(&$registry) {
+  /** @var Drupal\Core\Theme\ThemeManager $theme_manager */
+  $theme_manager = \Drupal::service('theme.manager');
+  $active_theme = $theme_manager->getActiveTheme();
+
+  // Return the theme registry unaltered if it is not Bootstrap based.
+  if ($active_theme->getName() === 'bootstrap' || in_array('bootstrap', array_keys($active_theme->getBaseThemes()))) {
+    // Load custom theme registry class (not the site's service). It's merely
+    // used so it can be extended from core's to use its protected functions.
+    $theme_registry = new \Drupal\bootstrap\Theme\Registry(
+      \Drupal::service('app.root'),
+      \Drupal::service('cache.default'),
+      \Drupal::service('lock'),
+      \Drupal::service('module_handler'),
+      \Drupal::service('theme_handler'),
+      \Drupal::service('theme.initialization'),
+      $active_theme->getName()
+    );
+
+    // Set the theme manager.
+    $theme_registry->setThemeManager($theme_manager);
+
+    // Invoke custom extend method.
+    $theme_registry->alter($registry);
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_alter().
+ */
+function bootstrap_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
+  switch ($hook) {
+    case 'details':
+      $suggestions[] = 'bootstrap_panel';
+      break;
+
+    case 'input':
+      if (!empty($variables['element']['#is_button'])) {
+        $suggestions[] = 'input__button';
+      }
+      break;
+  }
 }
