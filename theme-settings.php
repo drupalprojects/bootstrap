@@ -334,8 +334,8 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
   $form['components']['region_wells'] = array(
     '#type' => 'fieldset',
     '#title' => t('Region wells'),
-    '#description' => t('Enable the <code>.well</code>, <code>.well-sm</code> or <code>.well-lg</code> classes for specified regions. See: documentation on !wells.', array(
-      '!wells' => l(t('Bootstrap Wells'), 'http://getbootstrap.com/components/#wells'),
+    '#description' => t('Enable the <code>.well</code>, <code>.well-sm</code> or <code>.well-lg</code> classes for specified regions. See: documentation on <a href="!wells" target="_blank>Bootstrap Wells</a>.', array(
+      '!wells' => 'http://getbootstrap.com/components/#wells',
     )),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
@@ -418,19 +418,13 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
   $form['javascript']['popovers']['bootstrap_popover_enabled'] = array(
     '#type' => 'checkbox',
     '#title' => t('Enable popovers.'),
-    '#description' => t('Elements that have the !code attribute set will automatically initialize the popover upon page load. !warning', array(
-      '!code' => '<code>data-toggle="popover"</code>',
-      '!warning' => '<strong class="error text-error">WARNING: This feature can sometimes impact performance. Disable if pages appear to "hang" after initial load.</strong>',
-    )),
+    '#description' => t('Elements that have the <code>data-toggle="popover"</code> attribute set will automatically initialize the popover upon page load. <strong class="error text-error">WARNING: This feature can sometimes impact performance. Disable if pages appear to "hang" after initial load.</strong>'),
     '#default_value' => bootstrap_setting('popover_enabled', $theme),
   );
   $form['javascript']['popovers']['options'] = array(
     '#type' => 'fieldset',
     '#title' => t('Options'),
-    '#description' => t('These are global options. Each popover can independently override desired settings by appending the option name to !data. Example: !data-animation.', array(
-      '!data' => '<code>data-</code>',
-      '!data-animation' => '<code>data-animation="false"</code>',
-    )),
+    '#description' => t('These are global options. Each popover can independently override desired settings by appending the option name to <code>data-</code>. Example: <code>data-animation="false"</code>.'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
     '#states' => array(
@@ -533,19 +527,13 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
   $form['javascript']['tooltips']['bootstrap_tooltip_enabled'] = array(
     '#type' => 'checkbox',
     '#title' => t('Enable tooltips'),
-    '#description' => t('Elements that have the !code attribute set will automatically initialize the tooltip upon page load. !warning', array(
-      '!code' => '<code>data-toggle="tooltip"</code>',
-      '!warning' => '<strong class="error text-error">WARNING: This feature can sometimes impact performance. Disable if pages appear to "hang" after initial load.</strong>',
-    )),
+    '#description' => t('Elements that have the <code>data-toggle="tooltip"</code> attribute set will automatically initialize the tooltip upon page load. <strong class="error text-error">WARNING: This feature can sometimes impact performance. Disable if pages appear to "hang" after initial load.</strong>'),
     '#default_value' => bootstrap_setting('tooltip_enabled', $theme),
   );
   $form['javascript']['tooltips']['options'] = array(
     '#type' => 'fieldset',
     '#title' => t('Options'),
-    '#description' => t('These are global options. Each tooltip can independently override desired settings by appending the option name to !data. Example: !data-animation.', array(
-      '!data' => '<code>data-</code>',
-      '!data-animation' => '<code>data-animation="false"</code>',
-    )),
+    '#description' => t('These are global options. Each tooltip can independently override desired settings by appending the option name to <code>data-</code>. Example: <code>data-animation="false"</code>.'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
     '#states' => array(
