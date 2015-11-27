@@ -153,7 +153,7 @@ var Drupal = Drupal || {};
           }
         }
       }
-      if (!drupalSettings.bootstrap || !drupalSettings.bootstrap.anchorsFix) {
+      if (!drupalSettings.bootstrap || drupalSettings.bootstrap.anchorsFix !== '1') {
         return;
       }
       var anchors = $(context).find('a').toArray();
