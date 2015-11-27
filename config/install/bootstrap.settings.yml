@@ -45,8 +45,8 @@ bootstrap_region_well-footer: ''
 
 # Anchors
 # --------------
-bootstrap_anchors_fix: 1
-bootstrap_anchors_smooth_scrolling: 1
+bootstrap_anchors_fix: 0
+bootstrap_anchors_smooth_scrolling: 0
 
 # Forms
 # --------------
