@@ -139,7 +139,7 @@ class ThemeRegistry extends Registry implements AlterInterface {
         else {
           include_once DRUPAL_ROOT . '/' . $file->uri;
           if (!isset($cache[$hook]['includes'])) {
-            $cache[$hook]['includes'] = array();
+            $cache[$hook]['includes'] = [];
           }
           if (!in_array($file->uri, $cache[$hook]['includes'])) {
             $cache[$hook]['includes'][] = $file->uri;
@@ -147,7 +147,7 @@ class ThemeRegistry extends Registry implements AlterInterface {
         }
 
         if (!isset($cache[$hook]['preprocess functions'])) {
-          $cache[$hook]['preprocess functions'] = array();
+          $cache[$hook]['preprocess functions'] = [];
         }
         if (isset($cache[$hook]['template']) && function_exists($name . '_preprocess')) {
           $cache[$hook]['preprocess functions'][] = $name . '_preprocess';
@@ -167,10 +167,10 @@ class ThemeRegistry extends Registry implements AlterInterface {
     parent::postProcessExtension($cache, $theme);
 
     foreach ($cache as $hook => $info) {
-      foreach (array('includes', 'preprocess functions') as $type) {
+      foreach (['includes', 'preprocess functions'] as $type) {
         // Ensure properties exist (temporarily at least).
         if (!isset($cache[$hook][$type])) {
-          $cache[$hook][$type] = array();
+          $cache[$hook][$type] = [];
         }
 
         // Merge in base hook values.
@@ -198,16 +198,16 @@ class ThemeRegistry extends Registry implements AlterInterface {
 
       // Add extra variables to all theme hooks.
       if (isset($info['variables'])) {
-        $variables = array(
+        $variables = [
           // Allow #context to be passed to every template and theme function.
           // @see https://drupal.org/node/2035055
-          'context' => array(),
+          'context' => [],
 
           // Allow #icon to be passed to every template and theme function.
           // @see https://drupal.org/node/2219965
           'icon' => NULL,
           'icon_position' => 'before',
-        );
+        ];
         foreach ($variables as $name => $value) {
           if (!isset($info['variables'][$name])) {
             $cache[$hook]['variables'][$name] = $value;
@@ -245,7 +245,7 @@ class ThemeRegistry extends Registry implements AlterInterface {
     $themes[] = $theme->getName();
 
     // Create an associative array of theme functions to ensure sort order.
-    $theme_functions = array_fill_keys($themes, array());
+    $theme_functions = array_fill_keys($themes, []);
 
     // Iterate over all the themes.
     foreach ($themes as $theme) {

@@ -23,14 +23,14 @@
 function bootstrap_textfield($variables) {
   $element = $variables['element'];
   $element['#attributes']['type'] = 'text';
-  element_set_attributes($element, array(
+  element_set_attributes($element, [
     'id',
     'name',
     'value',
     'size',
     'maxlength',
-  ));
-  _form_set_class($element, array('form-text'));
+  ]);
+  _form_set_class($element, ['form-text']);
 
   $output = '<input' . drupal_attributes($element['#attributes']) . ' />';
 
@@ -39,7 +39,7 @@ function bootstrap_textfield($variables) {
     drupal_add_library('system', 'drupal.autocomplete');
     $element['#attributes']['class'][] = 'form-autocomplete';
 
-    $attributes = array();
+    $attributes = [];
     $attributes['type'] = 'hidden';
     $attributes['id'] = $element['#autocomplete_input']['#id'];
     $attributes['value'] = $element['#autocomplete_input']['#url_value'];

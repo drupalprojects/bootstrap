@@ -15,7 +15,7 @@
  */
 function bootstrap_preprocess_webform_element(&$variables) {
   $element = $variables['element'];
-  $wrapper_attributes = array();
+  $wrapper_attributes = [];
   if (isset($element['#wrapper_attributes'])) {
     $wrapper_attributes = $element['#wrapper_attributes'];
   }

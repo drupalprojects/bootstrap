@@ -16,21 +16,21 @@ function bootstrap_preprocess_field_multiple_value_form(&$variables) {
 
   // Wrap header columns in label element for Bootstrap.
   if ($variables['multiple']) {
-    $header_attributes = new Attribute(array('class' => array('label')));
-    $header = array(
-      array(
-        'data' => array(
+    $header_attributes = new Attribute([
+      'class' => ['label'],
+    ]);
+    $header = [
+      [
+        'data' => [
           '#prefix' => '<label' . $header_attributes . '>',
-          'title' => array(
-            '#markup' => $element['#title'],
-          ),
+          'title' => ['#markup' => $element['#title']],
           '#suffix' => '</label>',
-        ),
+        ],
         'colspan' => 2,
-        'class' => array('field-label'),
-      ),
-      t('Order', array(), array('context' => 'Sort order')),
-    );
+        'class' => ['field-label'],
+      ],
+      t('Order', [], ['context' => 'Sort order']),
+    ];
 
     $variables['table']['#header'] = $header;
   }

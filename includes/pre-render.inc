@@ -17,7 +17,7 @@ function bootstrap_pre_render($element) {
   }
 
   // Only add the "form-control" class for specific element input types.
-  $types = array(
+  $types = [
     // Core.
     'password',
     'password_confirm',
@@ -44,7 +44,7 @@ function bootstrap_pre_render($element) {
     // Webform module.
     'webform_email',
     'webform_number',
-  );
+  ];
 
   // Add necessary classes for specific types.
   if (!empty($element['#type']) && (in_array($element['#type'], $types) || ($element['#type'] === 'file' && empty($element['#managed_file'])))) {

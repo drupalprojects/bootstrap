@@ -17,13 +17,13 @@ function bootstrap_preprocess_bootstrap_dropdown(&$variables) {
   $element = &$variables['element'];
 
   // Provide defaults.
-  $element += array(
+  $element += [
     '#wrapper_attributes' => NULL,
     '#attributes' => NULL,
     '#alignment' => NULL,
     '#toggle' => NULL,
     '#items' => NULL,
-  );
+  ];
 
   // Dropdown vertical alignment.
   $element['#wrapper_attributes']['class'][] = 'dropdown';
@@ -33,16 +33,16 @@ function bootstrap_preprocess_bootstrap_dropdown(&$variables) {
 
   if (isset($element['#toggle'])) {
     if (is_string($element['#toggle'])) {
-      $element['#toggle'] = array(
+      $element['#toggle'] = [
         '#theme' => 'link__bootstrap_dropdown__toggle',
         '#text' => $element['#toggle'],
         '#path' => '#',
-        '#options' => array(
-          'attributes' => array(),
+        '#options' => [
+          'attributes' => [],
           'html' => TRUE,
           'external' => TRUE,
-        ),
-      );
+        ],
+      ];
     }
     if (isset($element['#toggle']['#options']['attributes'])) {
       $element['#toggle']['#options']['attributes']['class'][] = 'dropdown-toggle';
@@ -74,9 +74,9 @@ function bootstrap_preprocess_bootstrap_dropdown(&$variables) {
 function bootstrap_process_bootstrap_dropdown(&$variables) {
   $element = &$variables['element'];
 
-  $items = array();
+  $items = [];
   foreach ($element['#items'] as $data) {
-    $item_classes = array();
+    $item_classes = [];
 
     // Dividers.
     if (empty($data)) {
@@ -97,10 +97,7 @@ function bootstrap_process_bootstrap_dropdown(&$variables) {
     }
 
     // Construct item_list item.
-    $item = array(
-      'data' => render($data),
-      'role' => 'presentation',
-    );
+    $item = ['data' => render($data), 'role' => 'presentation'];
     if (!empty($item_classes)) {
       $item['class'] = $item_classes;
     }
@@ -108,14 +105,14 @@ function bootstrap_process_bootstrap_dropdown(&$variables) {
   }
 
   // Create the dropdown.
-  $variables['dropdown'] = array(
-    '#theme_wrappers' => array('container'),
+  $variables['dropdown'] = [
+    '#theme_wrappers' => ['container'],
     '#attributes' => $element['#wrapper_attributes'],
     'toggle' => $element['#toggle'],
-    'items' => array(
+    'items' => [
       '#theme' => 'item_list__bootstrap_dropdown',
       '#items' => $items,
       '#attributes' => $element['#attributes'],
-    ),
-  );
+    ],
+  ];
 }

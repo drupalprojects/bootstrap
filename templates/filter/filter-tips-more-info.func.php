@@ -17,15 +17,15 @@ use Drupal\bootstrap\Bootstrap;
  * @ingroup theme_functions
  */
 function bootstrap_filter_tips_more_info() {
-  $attributes = array(
+  $attributes = [
     'target' => '_blank',
     'title' => t('Opens in new window'),
-  );
+  ];
   if (Bootstrap::getTheme()->getSetting('tooltip_enabled')) {
     $attributes['data-toggle'] = 'tooltip';
   }
-  return l(_bootstrap_icon('question-sign') . t('More information about text formats'), 'filter/tips', array(
+  return l(_bootstrap_icon('question-sign') . t('More information about text formats'), 'filter/tips', [
     'html' => TRUE,
     'attributes' => $attributes,
-  ));
+  ]);
 }

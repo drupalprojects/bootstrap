@@ -33,10 +33,10 @@ function bootstrap_preprocess_breadcrumb(&$variables) {
     $page_title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());
 
     if (!empty($page_title)) {
-      $breadcrumb[] = array(
+      $breadcrumb[] = [
         'text' => $page_title,
-        'attributes' => new Attribute(array('class' => array('active'))),
-      );
+        'attributes' => new Attribute(['class' => ['active']]),
+      ];
     }
   }
 }

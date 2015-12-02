@@ -114,18 +114,17 @@ class Theme {
    * @param string|array $dir
    *   The base directory or URI to scan, without trailing slash. If not set,
    *   the current theme path will be used.
-   * @param int|FALSE $flags
-   *   A bitmask to indicate which directories (if any) should be skipped during
-   *   the scan. Must also not contain a "nomask" property in $options. Value
-   *   can be any of the following:
-   *   - \Drupal\bootstrap\Theme::IGNORE_CORE
-   *   - \Drupal\bootstrap\Theme::IGNORE_ASSETS
-   *   - \Drupal\bootstrap\Theme::IGNORE_DOCS
-   *   - \Drupal\bootstrap\Theme::IGNORE_DEV
-   *   - \Drupal\bootstrap\Theme::IGNORE_THEME
-   *   Pass FALSE to iterate over all directories in $dir.
    * @param array $options
-   *   Additional options to pass to file_scan_directory().
+   *   Options to pass, see file_scan_directory() for addition options:
+   *   - ignore_flags: (int|FALSE) A bitmask to indicate which directories (if
+   *     any) should be skipped during the scan. Must also not contain a
+   *     "nomask" property in $options. Value can be any of the following:
+   *     - \Drupal\bootstrap\Theme::IGNORE_CORE
+   *     - \Drupal\bootstrap\Theme::IGNORE_ASSETS
+   *     - \Drupal\bootstrap\Theme::IGNORE_DOCS
+   *     - \Drupal\bootstrap\Theme::IGNORE_DEV
+   *     - \Drupal\bootstrap\Theme::IGNORE_THEME
+   *     Pass FALSE to iterate over all directories in $dir.
    *
    * @return array
    *   An associative array (keyed on the chosen key) of objects with 'uri',
@@ -133,16 +132,22 @@ class Theme {
    *
    * @see file_scan_directory()
    */
-  public function fileScan($mask, $dir = NULL, $flags = self::IGNORE_DEFAULT, array $options = []) {
+  public function fileScan($mask, $dir = NULL, array $options = []) {
     if (!isset($dir)) {
       $dir = $this->getPath();
     }
 
+    // Default ignore flags.
+    $options += [
+      'ignore_flags' => static::IGNORE_DEFAULT,
+    ];
+    $flags = $options['ignore_flags'];
+    if ($flags === static::IGNORE_DEFAULT) {
+      $flags = static::IGNORE_CORE | static::IGNORE_ASSETS | static::IGNORE_DOCS | static::IGNORE_DEV;
+    }
+
     // Save effort by skipping directories that are flagged.
     if (!isset($options['nomask']) && $flags) {
-      if ($flags === static::IGNORE_DEFAULT) {
-        $flags = static::IGNORE_CORE | static::IGNORE_ASSETS | static::IGNORE_DOCS | static::IGNORE_DEV;
-      }
       $ignore_directories = [];
       if ($flags & static::IGNORE_ASSETS) {
         $ignore_directories += ['assets', 'css', 'images', 'js'];
@@ -170,7 +175,7 @@ class Theme {
 
     // Generate a unique hash for all parameters passed as a change in any of
     // them would return different results.
-    $hash = Crypt::hashBase64(serialize(func_get_args()));
+    $hash = Crypt::hashBase64(serialize([$mask, $dir, $options]));
     if (!isset($files[$hash])) {
       $files[$hash] = file_scan_directory($dir, $mask, $options);
       $cache->set('files', $files);
@@ -211,7 +216,7 @@ class Theme {
    *   TRUE if the file exists and is included successfully, FALSE otherwise.
    */
   public function includeOnce($file, $path = 'includes') {
-    static $includes = array();
+    static $includes = [];
     if (strpos($file, '/') !== 0) {
       $file = "/$file";
     }

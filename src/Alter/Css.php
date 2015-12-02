@@ -25,16 +25,16 @@ class Css implements AlterInterface {
       $cdn_weight = -2.99;
       foreach ($cdn_assets as $cdn_asset) {
         $cdn_weight += .01;
-        $css[$cdn_asset] = array(
+        $css[$cdn_asset] = [
           'data' => $cdn_asset,
           'type' => 'external',
           'every_page' => TRUE,
           'media' => 'all',
           'preprocess' => FALSE,
           'group' => CSS_AGGREGATE_THEME,
-          'browsers' => array('IE' => TRUE, '!IE' => TRUE),
+          'browsers' => ['IE' => TRUE, '!IE' => TRUE],
           'weight' => $cdn_weight,
-        );
+        ];
       }
 
       // Add a specific version and theme CSS overrides file.
@@ -49,16 +49,16 @@ class Css implements AlterInterface {
       $provider_theme = $provider_theme === 'bootstrap' || $provider_theme === 'bootstrap_theme' ? '' : "-$provider_theme";
       $overrides = $theme->getPath() . "/css/$version/overrides$provider_theme.min.css";
       if (file_exists($overrides)) {
-        $css[$overrides] = array(
+        $css[$overrides] = [
           'data' => $overrides,
           'type' => 'file',
           'every_page' => TRUE,
           'media' => 'all',
           'preprocess' => TRUE,
           'group' => CSS_AGGREGATE_THEME,
-          'browsers' => array('IE' => TRUE, '!IE' => TRUE),
+          'browsers' => ['IE' => TRUE, '!IE' => TRUE],
           'weight' => -1,
-        );
+        ];
       }
     }
   }

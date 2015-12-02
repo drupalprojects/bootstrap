@@ -30,19 +30,16 @@ function bootstrap_exposed_filters($variables) {
   $form['status']['actions']['#attributes']['class'][] = 'col-sm-10';
 
   if (isset($form['current'])) {
-    $items = array();
+    $items = [];
     foreach (element_children($form['current']) as $key) {
       $items[] = drupal_render($form['current'][$key]);
     }
-    $output .= theme('item_list', array(
+    $output .= theme('item_list', [
       'items' => $items,
-      'attributes' => array(
-        'class' => array(
-          'clearfix',
-          'current-filters',
-        ),
-      ),
-    ));
+      'attributes' => [
+        'class' => ['clearfix', 'current-filters'],
+      ],
+    ]);
   }
   $output .= drupal_render_children($form);
   return '<div class="form-horizontal">' . $output . '</div>';

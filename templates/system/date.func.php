@@ -23,7 +23,7 @@
 function bootstrap_date($variables) {
   $element = $variables['element'];
 
-  $attributes = array();
+  $attributes = [];
   if (isset($element['#id'])) {
     $attributes['id'] = $element['#id'];
   }

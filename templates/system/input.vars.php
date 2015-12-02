@@ -16,7 +16,7 @@ function bootstrap_preprocess_input(&$variables) {
   $attributes = new Attribute($variables['attributes']);
 
   // Set the element's attributes.
-  Element::setAttributes($element, array('id', 'name', 'value', 'type'));
+  Element::setAttributes($element, ['id', 'name', 'value', 'type']);
 
   // Handle button inputs.
   if (_bootstrap_is_button($element)) {
@@ -53,23 +53,23 @@ function bootstrap_preprocess_input(&$variables) {
 
     // Fallback to using core's throbber.
     if (empty($icon)) {
-      $icon = array(
+      $icon = [
         '#type' => 'container',
-        '#attributes' => array(
-          'class' => array(
+        '#attributes' => [
+          'class' => [
             'ajax-progress',
             'ajax-progress-throbber',
             'invisible',
-          ),
-        ),
-        'throbber' => array(
+          ],
+        ],
+        'throbber' => [
           '#type' => 'html_tag',
           '#tag' => 'div',
-          '#attributes' => array(
-            'class' => array('throbber'),
-          ),
-        ),
-      );
+          '#attributes' => [
+            'class' => ['throbber'],
+          ],
+        ],
+      ];
     }
     $variables['autocomplete_icon'] = $icon;
     $variables['autocomplete_attributes'] = $autocomplete_attributes;
@@ -91,7 +91,7 @@ function _bootstrap_prerender_input(&$variables) {
   $type = $element['#type'];
 
   // Only add the "form-control" class for specific element input types.
-  $types = array(
+  $types = [
     // Core.
     'password',
     'password_confirm',
@@ -113,7 +113,7 @@ function _bootstrap_prerender_input(&$variables) {
     'search',
     'tel',
     'url',
-  );
+  ];
 
   if (!empty($type) && (in_array($type, $types) || ($type === 'file' && empty($element['#managed_file'])))) {
     $variables['attributes']['class'][] = 'form-control';

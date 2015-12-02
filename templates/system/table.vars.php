@@ -19,7 +19,7 @@ use Drupal\bootstrap\Bootstrap;
 function bootstrap_preprocess_table(&$variables) {
   // Prepare classes array if necessary.
   if (!isset($variables['attributes']['class'])) {
-    $variables['attributes']['class'] = array();
+    $variables['attributes']['class'] = [];
   }
   // Convert classes to an array.
   elseif (isset($variables['attributes']['class']) && is_string($variables['attributes']['class'])) {

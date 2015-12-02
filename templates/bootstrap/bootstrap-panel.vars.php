@@ -19,7 +19,7 @@ use Drupal\Component\Utility\Xss;
  */
 function bootstrap_preprocess_bootstrap_panel(&$variables) {
   $element = $variables['element'];
-  Element::setAttributes($element, array('id'));
+  Element::setAttributes($element, ['id']);
   Element\RenderElement::setAttributes($element);
   $variables['attributes'] = $element['#attributes'];
   $variables['prefix'] = isset($element['#field_prefix']) ? $element['#field_prefix'] : NULL;
@@ -72,13 +72,13 @@ function bootstrap_preprocess_bootstrap_panel(&$variables) {
   }
 
   // Iterate over optional variables.
-  $keys = array(
+  $keys = [
     'description',
     'prefix',
     'suffix',
     'title',
     'value',
-  );
+  ];
   foreach ($keys as $key) {
     $variables[$key] = !empty($element["#$key"]) ? $element["#$key"] : FALSE;
   }

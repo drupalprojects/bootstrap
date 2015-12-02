@@ -30,14 +30,10 @@ function bootstrap_preprocess_region(&$variables) {
   // Help region.
   elseif ($region === 'help' && !empty($variables['content'])) {
     $content = $variables['content'];
-    $variables['content'] = array(
-      'icon' => array(
-        '#markup' => _bootstrap_icon('question-sign'),
-      ),
-      'content' => array(
-        '#markup' => $content,
-      ),
-    );
+    $variables['content'] = [
+      'icon' => ['#markup' => _bootstrap_icon('question-sign')],
+      'content' => ['#markup' => $content],
+    ];
     $variables['attributes']['class'][] = 'alert';
     $variables['attributes']['class'][] = 'alert-info';
     $variables['attributes']['class'][] = 'messages';

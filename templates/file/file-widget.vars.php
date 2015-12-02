@@ -15,18 +15,18 @@ function bootstrap_preprocess_file_widget(&$variables) {
     $element['file_' . $file->id()]['filename']['#suffix'] = ' <span class="file-size badge">' . format_size($file->getSize()) . '</span> ';
   }
   // The "form-managed-file" class is required for proper Ajax functionality.
-  $variables['attributes'] = array(
-    'class' => array(
+  $variables['attributes'] = [
+    'class' => [
       'file-widget',
       'form-managed-file',
       'clearfix',
-    ),
-  );
+    ],
+  ];
 
   $element['upload']['#prefix'] = '<div class="input-group">';
   $element['upload_button']['#prefix'] = '<span class="input-group-btn">';
   $element['upload_button']['#suffix'] = '</span></div>';
-  $element['upload_button']['#attributes']['class'] = array('btn', 'btn-primary');
+  $element['upload_button']['#attributes']['class'] = ['btn', 'btn-primary'];
   $variables['element'] = $element;
 }
 

@@ -22,7 +22,7 @@ class Form implements AlterInterface {
           $form['#attributes']['class'][] = 'clearfix';
 
           // Remove container-inline from the container classes.
-          $form['basic']['#attributes']['class'] = array();
+          $form['basic']['#attributes']['class'] = [];
 
           // Hide the default button from display.
           $form['basic']['submit']['#attributes']['class'][] = 'visually-hidden';

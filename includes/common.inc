@@ -5,7 +5,6 @@
  */
 
 use Drupal\bootstrap\Bootstrap;
-use Drupal\Component\Utility\Crypt;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Url;
@@ -134,23 +133,23 @@ function bootstrap_get_cdn_assets($type = NULL, $provider = NULL, $theme = NULL)
   $theme = Bootstrap::getTheme($theme);
 
   $original_type = $type;
-  $assets = array();
-  $types = array();
+  $assets = [];
+  $types = [];
 
   // If no type is set, return all CSS and JS.
   if (!isset($type)) {
-    $types = array('css', 'js');
+    $types = ['css', 'js'];
   }
   elseif (isset($type)) {
     if (!is_array($type)) {
-      $type = array($type);
+      $type = [$type];
     }
     $types = $type;
   }
 
   // Ensure default arrays exist for the requested types.
   foreach ($types as $type) {
-    $assets[$type] = array();
+    $assets[$type] = [];
   }
 
   // Retrieve the active CDN provider from the theme.
@@ -210,7 +209,7 @@ function &_bootstrap_get_attributes(&$element, $property = 'attributes') {
     isset($element["#$property"])
   ) {
     if (!isset($element["#$property"])) {
-      $element["#$property"] = array();
+      $element["#$property"] = [];
     }
     return $element["#$property"];
   }
@@ -218,7 +217,7 @@ function &_bootstrap_get_attributes(&$element, $property = 'attributes') {
   // and look for a renderable "element".
   elseif (isset($element['element'])) {
     if (!isset($element['element']["#$property"])) {
-      $element['element']["#$property"] = array();
+      $element['element']["#$property"] = [];
     }
     return $element['element']["#$property"];
   }
@@ -226,7 +225,7 @@ function &_bootstrap_get_attributes(&$element, $property = 'attributes') {
   // If all else fails, create (if needed) a default "attributes" array. This
   // will, at the very least, either work or cause an error that can be tracked.
   if (!isset($element[$property])) {
-    $element[$property] = array();
+    $element[$property] = [];
   }
 
   return $element[$property];
@@ -252,7 +251,7 @@ function &_bootstrap_get_classes(&$element, $property = 'attributes') {
   $attributes = &_bootstrap_get_attributes($element, $property);
 
   if (!isset($attributes['class'])) {
-    $attributes['class'] = array();
+    $attributes['class'] = [];
   }
   // Contrib modules have a very bad habit of frequently adding classes as
   // strings, convert them to a proper array.
@@ -287,7 +286,7 @@ function _bootstrap_add_class($class, &$element, $property = 'attributes') {
 
   // Convert the class to an array.
   if (!is_array($class)) {
-    $class = array($class);
+    $class = [$class];
   }
 
   // Iterate over all classes to add.
@@ -320,7 +319,7 @@ function _bootstrap_remove_class($class, &$element, $property = 'attributes') {
 
   // Convert the class to an array.
   if (!is_array($class)) {
-    $class = array($class);
+    $class = [$class];
   }
 
   // Iterate over all classes to add.
@@ -345,8 +344,8 @@ function _bootstrap_remove_class($class, &$element, $property = 'attributes') {
 function _bootstrap_glyphicons($version = NULL) {
   static $versions;
   if (!isset($versions)) {
-    $versions = array();
-    $versions['3.0.0'] = array(
+    $versions = [];
+    $versions['3.0.0'] = [
       // Class => Name.
       'glyphicon-adjust' => 'adjust',
       'glyphicon-align-center' => 'align-center',
@@ -548,18 +547,18 @@ function _bootstrap_glyphicons($version = NULL) {
       'glyphicon-wrench' => 'wrench',
       'glyphicon-zoom-in' => 'zoom-in',
       'glyphicon-zoom-out' => 'zoom-out',
-    );
+    ];
     $versions['3.0.1'] = $versions['3.0.0'];
     $versions['3.0.2'] = $versions['3.0.1'];
     $versions['3.0.3'] = $versions['3.0.2'];
     $versions['3.1.0'] = $versions['3.0.3'];
     $versions['3.1.1'] = $versions['3.1.0'];
     $versions['3.2.0'] = $versions['3.1.1'];
-    $versions['3.3.0'] = array_merge($versions['3.2.0'], array(
+    $versions['3.3.0'] = array_merge($versions['3.2.0'], [
       'glyphicon-eur' => 'eur',
-    ));
+    ]);
     $versions['3.3.1'] = $versions['3.3.0'];
-    $versions['3.3.2'] = array_merge($versions['3.3.1'], array(
+    $versions['3.3.2'] = array_merge($versions['3.3.1'], [
       'glyphicon-alert' => 'alert',
       'glyphicon-apple' => 'apple',
       'glyphicon-baby-formula' => 'baby-formula',
@@ -618,13 +617,13 @@ function _bootstrap_glyphicons($version = NULL) {
       'glyphicon-triangle-right' => 'triangle-right',
       'glyphicon-triangle-top' => 'triangle-top',
       'glyphicon-yen' => 'yen',
-    ));
-    $versions['3.3.4'] = array_merge($versions['3.3.2'], array(
+    ]);
+    $versions['3.3.4'] = array_merge($versions['3.3.2'], [
       'glyphicon-btc' => 'btc',
       'glyphicon-jpy' => 'jpy',
       'glyphicon-rub' => 'rub',
       'glyphicon-xbt' => 'xbt',
-    ));
+    ]);
     $versions['3.3.5'] = $versions['3.3.4'];
   }
 
@@ -657,22 +656,22 @@ function _bootstrap_icon($name, $default = NULL) {
   if (_bootstrap_glyphicons_supported() && in_array($name, _bootstrap_glyphicons())) {
     // Attempt to use the Icon API module, if enabled and it generates output.
     if (\Drupal::moduleHandler()->moduleExists('icon')) {
-      $icon = array(
+      $icon = [
         '#type' => 'icon',
         '#bundle' => 'bootstrap',
         '#icon' => 'glyphicon-' . $name,
-      );
+      ];
     }
     else {
-      $icon = array(
+      $icon = [
         '#type' => 'html_tag',
         '#tag' => 'span',
         '#value' => '',
-        '#attributes' => array(
-          'class' => array('icon', 'glyphicon', 'glyphicon-' . $name),
+        '#attributes' => [
+          'class' => ['icon', 'glyphicon', 'glyphicon-' . $name],
           'aria-hidden' => 'true',
-        ),
-      );
+        ],
+      ];
     }
 
     $output = \Drupal::service('renderer')->render($icon);
@@ -699,7 +698,7 @@ function _bootstrap_glyphicons_supported() {
 
   // Retrieve supported themes.
   if (!isset($supported)) {
-    $supported = array();
+    $supported = [];
 
     // Retrieve cache.
     $supported = $theme->cache()->get('icon_support', []);
@@ -716,7 +715,9 @@ function _bootstrap_glyphicons_supported() {
       if (!$supported[(string) $theme]) {
         foreach ($theme->getAncestry() as $ancestor) {
           // Scan the theme for files.
-          $fonts = $ancestor->fileScan('/glyphicons-halflings-regular\.(eot|svg|ttf|woff)$/', NULL, FALSE);
+          $fonts = $ancestor->fileScan('/glyphicons-halflings-regular\.(eot|svg|ttf|woff)$/', NULL, [
+            'ignore_flags' => FALSE,
+          ]);
 
           // Fonts found, stop the search.
           if (!empty($fonts)) {
@@ -762,7 +763,7 @@ function _bootstrap_colorize_button(&$variables) {
   $theme = Bootstrap::getTheme();
 
   // Do not add the class if one is already present in the array.
-  $button_classes = array(
+  $button_classes = [
     'btn-default',
     'btn-primary',
     'btn-success',
@@ -770,7 +771,7 @@ function _bootstrap_colorize_button(&$variables) {
     'btn-warning',
     'btn-danger',
     'btn-link',
-  );
+  ];
   $class_intersection = array_intersect($button_classes, $variables['attributes']['class']);
   if (empty($class_intersection)) {
     // Get the matched class.
@@ -798,9 +799,9 @@ function _bootstrap_colorize_button(&$variables) {
 function _bootstrap_colorize_text($string, $default = '') {
   static $texts;
   if (!isset($texts)) {
-    $texts = array(
+    $texts = [
       // Text that match these specific strings are checked first.
-      'matches' => array(
+      'matches' => [
         // Primary class.
         t('Download feature')->render()   => 'primary',
 
@@ -812,10 +813,10 @@ function _bootstrap_colorize_text($string, $default = '') {
         t('Save and add')->render()       => 'info',
         t('Add another item')->render()   => 'info',
         t('Update style')->render()       => 'info',
-      ),
+      ],
 
       // Text that contain these words anywhere in the string are checked last.
-      'contains' => array(
+      'contains' => [
         // Primary class.
         t('Confirm')->render()            => 'primary',
         t('Filter')->render()             => 'primary',
@@ -841,8 +842,8 @@ function _bootstrap_colorize_text($string, $default = '') {
         // Danger class.
         t('Delete')->render()             => 'danger',
         t('Remove')->render()             => 'danger',
-      ),
-    );
+      ],
+    ];
 
     // Allow sub-themes to alter this array of patterns.
     \Drupal::moduleHandler()->alter('bootstrap_colorize_text', $texts);
@@ -898,12 +899,12 @@ function _bootstrap_iconize_button(&$element) {
 function _bootstrap_iconize_text($string, $default = '') {
   static $texts;
   if (!isset($texts)) {
-    $texts = array(
+    $texts = [
       // Text that match these specific strings are checked first.
-      'matches' => array(),
+      'matches' => [],
 
       // Text that contain these words anywhere in the string are checked last.
-      'contains' => array(
+      'contains' => [
         t('Manage')->render()     => 'cog',
         t('Configure')->render()  => 'cog',
         t('Download')->render()   => 'download',
@@ -919,8 +920,8 @@ function _bootstrap_iconize_text($string, $default = '') {
         t('Delete')->render()     => 'trash',
         t('Remove')->render()     => 'trash',
         t('Upload')->render()     => 'upload',
-      ),
-    );
+      ],
+    ];
 
     // Allow sub-themes to alter this array of patterns.
     \Drupal::moduleHandler()->alter('bootstrap_iconize_text', $texts);
@@ -1008,20 +1009,20 @@ function _bootstrap_is_simple_string($string, $length = 250, $allowed_tags = NUL
  *   A renderable array of the popover link.
  */
 function _bootstrap_popover_link($link_title, $id, $popover_title, $placement = 'top') {
-  $popover = array(
+  $popover = [
     '#type' => 'link',
     '#url' => Url::fromRoute('<current>'),
     '#title' =>$link_title,
-    '#options' => array(
-      'attributes' => array(
+    '#options' => [
+      'attributes' => [
         'data-toggle' => 'popover',
         'data-target' => '#' . $id,
         'data-html' => 'true',
         'data-placement' => $placement,
         'data-title' => $popover_title,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
   return $popover;
 }
 
@@ -1036,17 +1037,17 @@ function _bootstrap_popover_link($link_title, $id, $popover_title, $placement = 
  *   Renderable array.
  */
 function _bootstrap_popover_content($id, $content) {
-  $popup_content = array(
+  $popup_content = [
     '#type' => 'container',
-    '#attributes' => array(
+    '#attributes' => [
       'id' => $id,
-      'class' => array(
+      'class' => [
         'visually-hidden',
         'help-block',
-      ),
-    ),
+      ],
+    ],
     'content' => $content,
-  );
+  ];
 
   return $popup_content;
 }

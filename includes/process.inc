@@ -32,7 +32,7 @@ function bootstrap_form_process($element, &$form_state, &$form) {
   // #input_group_button exists.
   if (!empty($element['#input_group_button'])) {
     // Obtain the parent array to limit search.
-    $array_parents = array();
+    $array_parents = [];
     if (!empty($element['#array_parents'])) {
       $array_parents += $element['#array_parents'];
       // Remove the current element from the array.

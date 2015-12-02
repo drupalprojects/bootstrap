@@ -13,7 +13,7 @@ function bootstrap_preprocess_form_element_label(&$variables) {
   $element = $variables['element'];
   // If title and required marker are both empty, output no label.
   $variables['title'] = !empty($element['#title']) ? $element['#title'] : '';
-  $variables['attributes'] = array();
+  $variables['attributes'] = [];
 
   // Pass elements title_display to template.
   $variables['title_display'] = $element['#title_display'];

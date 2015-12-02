@@ -45,15 +45,13 @@ function bootstrap_item_list($variables) {
   if (!empty($title)) {
     // If it's a string, normalize into an array.
     if (is_string($title)) {
-      $title = array(
-        'text' => $title,
-      );
+      $title = ['text' => $title];
     }
     // Set defaults.
-    $title += array(
+    $title += [
       'level' => 'h3',
-      'attributes' => array(),
-    );
+      'attributes' => [],
+    ];
     // Heading outputs only when it has text.
     if (!empty($title['text'])) {
       $heading .= '<' . $title['level'] . drupal_attributes($title['attributes']) . '>';
@@ -66,7 +64,7 @@ function bootstrap_item_list($variables) {
   if ($items) {
     $output .= '<' . $type . drupal_attributes($list_attributes) . '>';
     foreach ($items as $key => $item) {
-      $attributes = array();
+      $attributes = [];
 
       if (is_array($item)) {
         $value = '';
@@ -79,25 +77,25 @@ function bootstrap_item_list($variables) {
             $value .= $item['data'];
           }
         }
-        $attributes = array_diff_key($item, array('data' => 0, 'children' => 0));
+        $attributes = array_diff_key($item, ['data' => 0, 'children' => 0]);
 
         // Append nested child list, if any.
         if (isset($item['children'])) {
           // HTML attributes for the outer list are defined in the 'attributes'
           // theme variable, but not inherited by children. For nested lists,
           // all non-numeric keys in 'children' are used as list attributes.
-          $child_list_attributes = array();
+          $child_list_attributes = [];
           foreach ($item['children'] as $child_key => $child_item) {
             if (is_string($child_key)) {
               $child_list_attributes[$child_key] = $child_item;
               unset($item['children'][$child_key]);
             }
           }
-          $value .= theme('item_list', array(
+          $value .= theme('item_list', [
             'items' => $item['children'],
             'type' => $type,
             'attributes' => $child_list_attributes,
-          ));
+          ]);
         }
       }
       else {

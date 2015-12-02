@@ -23,7 +23,7 @@ use \Drupal\Component\Utility\SafeMarkup;
 function bootstrap_preprocess_file_upload_help(&$variables) {
   $upload_validators = $variables['upload_validators'];
   $cardinality = $variables['cardinality'];
-  $descriptions = array();
+  $descriptions = [];
 
   if (isset($cardinality)) {
     if ($cardinality == -1) {
@@ -34,26 +34,26 @@ function bootstrap_preprocess_file_upload_help(&$variables) {
     }
   }
   if (isset($upload_validators['file_validate_size'])) {
-    $descriptions[] = t('@size limit.', array('@size' => format_size($upload_validators['file_validate_size'][0])));
+    $descriptions[] = t('@size limit.', ['@size' => format_size($upload_validators['file_validate_size'][0])]);
   }
   if (isset($upload_validators['file_validate_extensions'])) {
-    $descriptions[] = t('Allowed types: @extensions.', array('@extensions' => $upload_validators['file_validate_extensions'][0]));
+    $descriptions[] = t('Allowed types: @extensions.', ['@extensions' => $upload_validators['file_validate_extensions'][0]]);
   }
 
   if (isset($upload_validators['file_validate_image_resolution'])) {
     $max = $upload_validators['file_validate_image_resolution'][0];
     $min = $upload_validators['file_validate_image_resolution'][1];
     if ($min && $max && $min == $max) {
-      $descriptions[] = t('Images must be exactly <strong>@size</strong> pixels.', array('@size' => $max));
+      $descriptions[] = t('Images must be exactly <strong>@size</strong> pixels.', ['@size' => $max]);
     }
     elseif ($min && $max) {
-      $descriptions[] = t('Images must be larger than <strong>@min</strong> pixels. Images larger than <strong>@max</strong> pixels will be resized.', array('@min' => $min, '@max' => $max));
+      $descriptions[] = t('Images must be larger than <strong>@min</strong> pixels. Images larger than <strong>@max</strong> pixels will be resized.', ['@min' => $min, '@max' => $max]);
     }
     elseif ($min) {
-      $descriptions[] = t('Images must be larger than <strong>@min</strong> pixels.', array('@min' => $min));
+      $descriptions[] = t('Images must be larger than <strong>@min</strong> pixels.', ['@min' => $min]);
     }
     elseif ($max) {
-      $descriptions[] = t('Images larger than <strong>@max</strong> pixels will be resized.', array('@max' => $max));
+      $descriptions[] = t('Images larger than <strong>@max</strong> pixels will be resized.', ['@max' => $max]);
     }
   }
 
@@ -62,14 +62,14 @@ function bootstrap_preprocess_file_upload_help(&$variables) {
     $id = html::getUniqueId('upload-instructions');
 
     $icon = _bootstrap_icon('question-sign');
-    $link_title = SafeMarkup::format($icon . ' ' . '@text', array('@text' => 'More information'));
+    $link_title = SafeMarkup::format($icon . ' ' . '@text', ['@text' => 'More information']);
     $variables['popover_link'] = _bootstrap_popover_link($link_title, $id, t('File requirements'), 'bottom');
 
-    $description_content = array(
+    $description_content = [
       '#theme' => 'item_list',
       '#items' => $descriptions,
-    );
-    $variables['popover_content'] = _bootstrap_popover_content($id, array($description_content));
+    ];
+    $variables['popover_content'] = _bootstrap_popover_content($id, [$description_content]);
   }
 
   $variables['descriptions'] = $descriptions;

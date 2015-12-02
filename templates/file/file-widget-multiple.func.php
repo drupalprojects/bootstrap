@@ -26,26 +26,26 @@ function bootstrap_file_widget_multiple($variables) {
   $table_id = $element['#id'] . '-table';
 
   // Build up a table of applicable fields.
-  $headers = array();
+  $headers = [];
   $headers[] = t('File information');
   if ($element['#display_field']) {
-    $headers[] = array(
+    $headers[] = [
       'data' => t('Display'),
-      'class' => array('checkbox'),
-    );
+      'class' => ['checkbox'],
+    ];
   }
   $headers[] = t('Weight');
   $headers[] = t('Operations');
 
   // Get our list of widgets in order (needed when the form comes back after
   // preview or failed validation).
-  $widgets = array();
+  $widgets = [];
   foreach (element_children($element) as $key) {
     $widgets[] = &$element[$key];
   }
   usort($widgets, '_field_sort_items_value_helper');
 
-  $rows = array();
+  $rows = [];
   foreach ($widgets as $key => &$widget) {
     // Save the uploading row for last.
     if ($widget['#file'] == FALSE) {
@@ -56,7 +56,7 @@ function bootstrap_file_widget_multiple($variables) {
 
     // Delay rendering of the buttons, so that they can be rendered later in the
     // "operations" column.
-    $operations_elements = array();
+    $operations_elements = [];
     foreach (element_children($widget) as $sub_key) {
       if (isset($widget[$sub_key]['#type']) && $widget[$sub_key]['#type'] == 'submit') {
         hide($widget[$sub_key]);
@@ -72,7 +72,7 @@ function bootstrap_file_widget_multiple($variables) {
     hide($widget['_weight']);
 
     // Render everything else together in a column, without the normal wrappers.
-    $widget['#theme_wrappers'] = array();
+    $widget['#theme_wrappers'] = [];
     $information = drupal_render($widget);
 
     // Render the previously hidden elements, using render() instead of
@@ -90,43 +90,41 @@ function bootstrap_file_widget_multiple($variables) {
     $display = '';
     if ($element['#display_field']) {
       unset($widget['display']['#title']);
-      $display = array(
+      $display = [
         'data' => render($widget['display']),
-        'class' => array('checkbox'),
-      );
+        'class' => ['checkbox'],
+      ];
     }
-    $widget['_weight']['#attributes']['class'] = array($weight_class);
+    $widget['_weight']['#attributes']['class'] = [$weight_class];
     $weight = render($widget['_weight']);
 
     // Arrange the row with all of the rendered columns.
-    $row = array();
+    $row = [];
     $row[] = $information;
     if ($element['#display_field']) {
       $row[] = $display;
     }
     $row[] = $weight;
     $row[] = $operations;
-    $rows[] = array(
+    $rows[] = [
       'data' => $row,
-      'class' => isset($widget['#attributes']['class']) ? array_merge($widget['#attributes']['class'], array('draggable')) : array('draggable'),
-    );
+      'class' => isset($widget['#attributes']['class']) ? array_merge($widget['#attributes']['class'], ['draggable']) : ['draggable'],
+    ];
   }
 
   drupal_add_tabledrag($table_id, 'order', 'sibling', $weight_class);
 
   $output = '';
   if (!empty($rows)) {
-    $table = array(
+    $table = [
       '#theme' => 'table',
       '#header' => $headers,
       '#rows' => $rows,
-      '#attributes' => array(
+      '#attributes' => [
         'id' => $table_id,
-        'class' => array(
-          'managed-files',
-        ),
-      ),
-    );
+        'class' => ['managed-files'],
+      ],
+    ];
     $output = drupal_render($table);
   }
   $output .= drupal_render_children($element);

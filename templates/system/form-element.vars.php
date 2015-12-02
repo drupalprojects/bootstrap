@@ -21,9 +21,7 @@ function bootstrap_preprocess_form_element(&$variables) {
 
   // This function is invoked as theme wrapper, but the rendered form element
   // may not necessarily have been processed by Drupal::formBuilder()->doBuildForm().
-  $element += array(
-    '#title_display' => 'before',
-  );
+  $element += ['#title_display' => 'before'];
 
   // Check for errors and set correct error class.
   $formState = new FormState();
@@ -81,21 +79,21 @@ function bootstrap_preprocess_form_element(&$variables) {
   if (isset($element['#field_prefix']) || isset($element['#field_suffix'])) {
     // Determine if "#input_group" was specified.
     if (!empty($element['#input_group'])) {
-      $prefix = array(
+      $prefix = [
         '#markup' => '<div class="input-group">' . (isset($element['#field_prefix']) ? '<span class="input-group-addon">' . $element['#field_prefix'] . '</span>' : ''),
-      );
-      $suffix = array(
+      ];
+      $suffix = [
         '#markup' => (isset($element['#field_suffix']) ? '<span class="input-group-addon">' . $element['#field_suffix'] . '</span>' : '') . '</div>',
-      );
+      ];
     }
     // Determine if "#input_group_button" was specified.
     elseif (!empty($element['#input_group_button'])) {
-      $prefix = array(
+      $prefix = [
         '#markup' => '<div class="input-group">' . (isset($element['#field_prefix']) ? '<span class="input-group-btn">' . $element['#field_prefix'] . '</span>' : ''),
-      );
-      $suffix = array(
+      ];
+      $suffix = [
         '#markup' => (isset($element['#field_suffix']) ? '<span class="input-group-btn">' . $element['#field_suffix'] . '</span>' : '') . '</div>',
-      );
+      ];
     }
     $render = \Drupal::service('renderer');
     $variables['prefix'] = $render->render($prefix);

@@ -107,8 +107,8 @@ define('BOOTSTRAP_VERSION', Bootstrap::VERSION);
  * @see \Drupal\bootstrap\Theme::fileScan()
  * @see file_scan_directory()
  */
-function _bootstrap_file_scan_directory($dir, $mask, array $options = array()) {
-  return Bootstrap::getTheme()->fileScan($mask, $dir, FALSE, $options);
+function _bootstrap_file_scan_directory($dir, $mask, array $options = []) {
+  return Bootstrap::getTheme()->fileScan($mask, $dir, $options);
 }
 
 /**
@@ -200,7 +200,7 @@ function bootstrap_get_theme_info($theme_key = NULL, $key = NULL, $base_themes =
           if (is_array($value)) {
             if (!empty($info)) {
               if (!is_array($info)) {
-                $info = array($info);
+                $info = [$info];
               }
               $value = NestedArray::mergeDeep($value, $info);
             }
@@ -212,10 +212,10 @@ function bootstrap_get_theme_info($theme_key = NULL, $key = NULL, $base_themes =
               }
               else {
                 if (!is_array($value)) {
-                  $value = array($value);
+                  $value = [$value];
                 }
                 if (!is_array($info)) {
-                  $info = array($info);
+                  $info = [$info];
                 }
                 $value = NestedArray::mergeDeep($value, $info);
               }

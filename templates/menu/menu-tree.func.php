@@ -43,10 +43,10 @@ function bootstrap_menu_tree__secondary(&$variables) {
 function bootstrap_menu_tree__book_toc(&$variables) {
   $output = '<div class="book-toc btn-group pull-right">';
   $output .= '  <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown">';
-  $output .= t('!icon Outline !caret', array(
+  $output .= t('!icon Outline !caret', [
     '!icon' => _bootstrap_icon('list'),
     '!caret' => '<span class="caret"></span>',
-  ));
+  ]);
   $output .= '</button>';
   $output .= '<ul class="dropdown-menu" role="menu">' . $variables['tree'] . '</ul>';
   $output .= '</div>';

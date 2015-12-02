@@ -24,7 +24,7 @@
 function bootstrap_menu_local_task($variables) {
   $link = $variables['element']['#link'];
   $link_text = $link['title'];
-  $attributes = array();
+  $attributes = [];
 
   if (!empty($variables['element']['#active'])) {
     // Add text to indicate active tab for non-visual users.
@@ -36,7 +36,7 @@ function bootstrap_menu_local_task($variables) {
       $link['title'] = check_plain($link['title']);
     }
     $link['localized_options']['html'] = TRUE;
-    $link_text = t('!local-task-title!active', array('!local-task-title' => $link['title'], '!active' => $active));
+    $link_text = t('!local-task-title!active', ['!local-task-title' => $link['title'], '!active' => $active]);
 
     $attributes['class'][] = 'active';
   }

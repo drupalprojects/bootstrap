@@ -27,8 +27,9 @@ class Js implements AlterInterface {
 
     // Add or replace JavaScript files when matching paths are detected.
     // Replacement files must begin with '_', like '_node.js'.
-    $flags = Theme::IGNORE_CORE | Theme::IGNORE_DEV | Theme::IGNORE_DOCS;
-    $files = $theme->fileScan('/\.js$/', $theme->getPath() . '/js', $flags);
+    $files = $theme->fileScan('/\.js$/', $theme->getPath() . '/js', [
+      'ignore_flags' => Theme::IGNORE_CORE | Theme::IGNORE_DEV | Theme::IGNORE_DOCS,
+    ]);
     foreach ($files as $file) {
       if ($file->name == 'bootstrap' || $file->name == 'bootstrap.admin') {
         continue;
@@ -40,7 +41,7 @@ class Js implements AlterInterface {
         $replace = TRUE;
         $path = dirname($path) . '/' . preg_replace('/^[_]/', '', $file->filename);
       }
-      $matches = array();
+      $matches = [];
       if (preg_match('/^modules\/([^\/]*)/', $path, $matches)) {
         if (!\Drupal::moduleHandler()->moduleExists($matches[1])) {
           continue;
@@ -51,7 +52,7 @@ class Js implements AlterInterface {
       }
       // Path should always exist to either add or replace JavaScript file.
       if (!empty($path) && array_key_exists($path, $js)) {
-        $bootstrap_js_defaults = array(
+        $bootstrap_js_defaults = [
           'type' => 'file',
           'group' => JS_DEFAULT,
           'every_page' => FALSE,
@@ -59,11 +60,11 @@ class Js implements AlterInterface {
           'scope' => 'footer',
           'cache' => TRUE,
           'preprocess' => TRUE,
-          'attributes' => array(),
+          'attributes' => [],
           'version' => NULL,
           'data' => $file->uri,
-          'browsers' => array(),
-        );
+          'browsers' => [],
+        ];
         // Replace file.
         if ($replace) {
           $js[$file->uri] = $bootstrap_js_defaults;

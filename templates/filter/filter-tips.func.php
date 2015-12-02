@@ -13,14 +13,14 @@
  *     'module-name/filter-id' (only used when $long is TRUE) for each
  *     filter in one or more text formats. Example:
  *     @code
- *       array(
- *         'Full HTML' => array(
- *           0 => array(
+ *       [
+ *         'Full HTML' => [
+ *           0 => [
  *             'tip' => 'Web page addresses and e-mail addresses turn into links automatically.',
  *             'id' => 'filter/2',
- *           ),
- *         ),
- *       );
+ *           ],
+ *         ],
+ *       ];
  *     @endcode
  *   - long: (optional) Whether the passed-in filter tips contain extended
  *     explanations, i.e. intended to be output on the path 'filter/tips'
@@ -41,44 +41,39 @@ function bootstrap_filter_tips($variables) {
   $tips = _filter_tips(-1, TRUE);
 
   // Create a place holder for the tabs.
-  $build['tabs'] = array(
+  $build['tabs'] = [
     '#theme' => 'item_list',
-    '#items' => array(),
-    '#attributes' => array(
-      'class' => array(
-        'nav',
-        'nav-tabs',
-      ),
+    '#items' => [],
+    '#attributes' => [
+      'class' => ['nav', 'nav-tabs'],
       'role' => 'tablist',
-    ),
-  );
+    ],
+  ];
 
   // Create a placeholder for the panes.
-  $build['panes'] = array(
-    '#theme_wrappers' => array('container'),
-    '#attributes' => array(
-      'class' => array(
-        'tab-content',
-      ),
-    ),
-  );
+  $build['panes'] = [
+    '#theme_wrappers' => ['container'],
+    '#attributes' => [
+      'class' => ['tab-content'],
+    ],
+  ];
 
   foreach ($tips as $name => $list) {
     $machine_name = str_replace('-', '_', drupal_html_class($name));
-    $tab = array(
-      'data' => array(
+    $tab = [
+      'data' => [
         '#type' => 'link',
         '#title' => check_plain($name),
         '#href' => $current_path,
-        '#attributes' => array(
+        '#attributes' => [
           'role' => 'tab',
           'data-toggle' => 'tab',
-        ),
-        '#options' => array(
+        ],
+        '#options' => [
           'fragment' => $machine_name,
-        ),
-      ),
-    );
+        ],
+      ],
+    ];
     if (!$format_id || $format_id === $machine_name) {
       $tab['class'][] = 'active';
       $format_id = $machine_name;
@@ -86,26 +81,23 @@ function bootstrap_filter_tips($variables) {
     $build['tabs']['#items'][] = $tab;
 
     // Extract the actual tip.
-    $tiplist = array();
+    $tiplist = [];
     foreach ($list as $tip) {
       $tiplist[] = $tip['tip'];
     }
 
     // Construct the pane.
-    $pane = array(
-      '#theme_wrappers' => array('container'),
-      '#attributes' => array(
-        'class' => array(
-          'tab-pane',
-          'fade',
-        ),
+    $pane = [
+      '#theme_wrappers' => ['container'],
+      '#attributes' => [
+        'class' => ['tab-pane', 'fade'],
         'id' => $machine_name,
-      ),
-      'list' => array(
+      ],
+      'list' => [
         '#theme' => 'item_list',
         '#items' => $tiplist,
-      ),
-    );
+      ],
+    ];
     if ($format_id === $machine_name) {
       $pane['#attributes']['class'][] = 'active';
       $pane['#attributes']['class'][] = 'in';

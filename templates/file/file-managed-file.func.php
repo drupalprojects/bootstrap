@@ -22,7 +22,7 @@ function bootstrap_file_managed_file($variables) {
   $output = '';
   $element = $variables['element'];
 
-  $attributes = array();
+  $attributes = [];
   if (isset($element['#id'])) {
     $attributes['id'] = $element['#id'];
   }

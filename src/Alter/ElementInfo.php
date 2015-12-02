@@ -43,16 +43,16 @@ class ElementInfo implements AlterInterface {
         $element['#icon_position'] = 'before';
       }
 
-      $properties = array(
-        '#process' => array(
+      $properties = [
+        '#process' => [
           'form_process',
           'form_process_' . $type,
-        ),
-        '#pre_render' => array(
+        ],
+        '#pre_render' => [
           'pre_render',
           'pre_render_' . $type,
-        ),
-      );
+        ],
+      ];
       foreach ($properties as $property => $callbacks) {
         foreach ($callbacks as $callback) {
           foreach (Bootstrap::getTheme()->getAncestry() as $ancestor) {

@@ -107,7 +107,7 @@ class Bootstrap {
       return $theme;
     }
 
-    static $themes = array();
+    static $themes = [];
 
     if (!isset($theme_handler)) {
       $theme_handler = \Drupal::service('theme_handler');

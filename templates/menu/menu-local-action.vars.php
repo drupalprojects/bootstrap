@@ -24,19 +24,17 @@ use Drupal\Component\Utility\SafeMarkup;
  */
 function bootstrap_preprocess_menu_local_action(&$variables) {
   $link = $variables['element']['#link'];
-  $link += array(
-    'localized_options' => array(),
-  );
+  $link += ['localized_options' => []];
   $link['localized_options']['set_active_class'] = TRUE;
 
   $icon = _bootstrap_iconize_text($link['title']);
-  $options = isset($link['localized_options']) ? $link['localized_options'] : array();
+  $options = isset($link['localized_options']) ? $link['localized_options'] : [];
 
   if (isset($link['url'])) {
     // Turn link into a mini-button and colorize based on title.
     if ($class = _bootstrap_colorize_text($link['title'])) {
       if (!isset($options['attributes']['class'])) {
-        $options['attributes']['class'] = array();
+        $options['attributes']['class'] = [];
       }
       $string = is_string($options['attributes']['class']);
       if ($string) {
@@ -50,19 +48,19 @@ function bootstrap_preprocess_menu_local_action(&$variables) {
       }
     }
 
-    $variables['link'] = array(
+    $variables['link'] = [
       '#type' => 'link',
-      '#title' => SafeMarkup::format($icon . '@text', array('@text' => $link['title'])),
+      '#title' => SafeMarkup::format($icon . '@text', ['@text' => $link['title']]),
       '#options' => $options,
       '#url' => $link['url'],
-    );
+    ];
   }
   else {
-    $variables['link'] = array(
+    $variables['link'] = [
       '#type' => 'link',
       '#title' => $link['title'],
       '#options' => $options,
       '#url' => $link['url'],
-    );
+    ];
   }
 }

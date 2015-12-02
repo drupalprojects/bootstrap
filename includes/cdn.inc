@@ -51,39 +51,39 @@ function bootstrap_cdn_provider($provider = NULL, $reset = FALSE) {
     $providers = $cache->get('cdn_providers');
 
     if ($reset || !isset($providers)) {
-      $providers = array(
-        'custom' => array(
+      $providers = [
+        'custom' => [
           'title' => (string) t('Custom'),
-        ),
-        'jsdelivr' => array(
+        ],
+        'jsdelivr' => [
           'api' => 'http://api.jsdelivr.com/v1/bootstrap/libraries',
           'title' => (string) t('jsDelivr'),
-          'description' => (string) t('<p style="background:#EB4C36"><a href=":jsdelivr" target="_blank"><img src="http://www.jsdelivr.com/img/logo-34.png" alt="jsDelivr Logo" /></a></p><p><a href=":jsdelivr" target="_blank">jsDelivr</a> is a free multi-CDN infrastructure that uses <a href=":maxcdn" target="_blank">MaxCDN</a>, <a href=":cloudflare" target="_blank">Cloudflare</a> and many others to combine their powers for the good of the open source community... <a href=":jsdelivr_about" target="_blank">read more</a></p>', array(
+          'description' => (string) t('<p style="background:#EB4C36"><a href=":jsdelivr" target="_blank"><img src="http://www.jsdelivr.com/img/logo-34.png" alt="jsDelivr Logo" /></a></p><p><a href=":jsdelivr" target="_blank">jsDelivr</a> is a free multi-CDN infrastructure that uses <a href=":maxcdn" target="_blank">MaxCDN</a>, <a href=":cloudflare" target="_blank">Cloudflare</a> and many others to combine their powers for the good of the open source community... <a href=":jsdelivr_about" target="_blank">read more</a></p>', [
             ':jsdelivr' => 'http://www.jsdelivr.com',
             ':jsdelivr_about' => 'http://www.jsdelivr.com/about',
             ':maxcdn' => 'http://www.maxcdn.com',
             ':cloudflare' => 'http://www.cloudflare.com',
-          )),
-        ),
-      );
+          ]),
+        ],
+      ];
 
       // @todo Use drupal_alter() once CDN is in bootstrap_core companion module.
       // drupal_alter('bootstrap_cdn_provider', $providers);
 
       // Defaults properties each provider must have.
-      $defaults = array(
+      $defaults = [
         'api' => NULL,
-        'css' => array(),
+        'css' => [],
         'description' => NULL,
         'error' => FALSE,
-        'js' => array(),
+        'js' => [],
         'imported' => FALSE,
-        'min' => array(
-          'css' => array(),
-          'js' => array(),
-        ),
+        'min' => [
+          'css' => [],
+          'js' => [],
+        ],
         'title' => NULL,
-      );
+      ];
 
       // Process the providers.
       foreach ($providers as $name => &$data) {
@@ -150,9 +150,9 @@ function bootstrap_cdn_provider($provider = NULL, $reset = FALSE) {
  * @todo Finish documentation when hook is real.
  */
 function bootstrap_bootstrap_cdn_provider_jsdelivr_alter(&$provider, $response = NULL) {
-  $json = array();
-  $provider['versions'] = array();
-  $provider['themes'] = array();
+  $json = [];
+  $provider['versions'] = [];
+  $provider['themes'] = [];
 
   if ($response->getStatusCode() == 200) {
     $json = Json::decode($response->getBody(TRUE)->getContents());
@@ -166,7 +166,7 @@ function bootstrap_bootstrap_cdn_provider_jsdelivr_alter(&$provider, $response =
   $bootswatch = 'bootswatch';
 
   // Extract the raw asset files from the JSON data for each framework.
-  $libraries = array();
+  $libraries = [];
   if ($json) {
     foreach ($json as $data) {
       if ($data['name'] === $bootstrap || $data['name'] === $bootswatch) {
@@ -183,17 +183,17 @@ function bootstrap_bootstrap_cdn_provider_jsdelivr_alter(&$provider, $response =
   if (!isset($libraries[$bootstrap])) {
     $provider['error'] = TRUE;
     $provider['versions'][Bootstrap::VERSION] = Bootstrap::VERSION;
-    $provider['themes'][Bootstrap::VERSION] = array(
-      'bootstrap' => array(
+    $provider['themes'][Bootstrap::VERSION] = [
+      'bootstrap' => [
         'title' => (string) t('Bootstrap'),
-        'css' => array('//cdn.jsdelivr.net/bootstrap/' . Bootstrap::VERSION . '/css/bootstrap.css'),
-        'js' => array('//cdn.jsdelivr.net/bootstrap/' . Bootstrap::VERSION . '/js/bootstrap.js'),
-        'min' => array(
-          'css' => array('//cdn.jsdelivr.net/bootstrap/' . Bootstrap::VERSION . '/css/bootstrap.min.css'),
-          'js' => array('//cdn.jsdelivr.net/bootstrap/' . Bootstrap::VERSION . '/js/bootstrap.min.js'),
-        ),
-      ),
-    );
+        'css' => ['//cdn.jsdelivr.net/bootstrap/' . Bootstrap::VERSION . '/css/bootstrap.css'],
+        'js' => ['//cdn.jsdelivr.net/bootstrap/' . Bootstrap::VERSION . '/js/bootstrap.js'],
+        'min' => [
+          'css' => ['//cdn.jsdelivr.net/bootstrap/' . Bootstrap::VERSION . '/css/bootstrap.min.css'],
+          'js' => ['//cdn.jsdelivr.net/bootstrap/' . Bootstrap::VERSION . '/js/bootstrap.min.js'],
+        ],
+      ],
+    ];
     return;
   }
 
@@ -202,7 +202,7 @@ function bootstrap_bootstrap_cdn_provider_jsdelivr_alter(&$provider, $response =
     $provider['versions'][$version] = $version;
 
     if (!isset($provider['themes'][$version])) {
-      $provider['themes'][$version] = array();
+      $provider['themes'][$version] = [];
     }
 
     // Extract Bootstrap themes.
@@ -220,18 +220,18 @@ function bootstrap_bootstrap_cdn_provider_jsdelivr_alter(&$provider, $response =
       // Some themes actually require Bootstrap framework assets to still
       // function properly.
       if ($theme !== 'bootstrap') {
-        foreach (array('css', 'js') as $type) {
+        foreach (['css', 'js'] as $type) {
           // Bootswatch themes include the Bootstrap framework in their CSS.
           // Skip the CSS portions.
           if ($theme !== 'bootstrap_theme' && $type === 'css') {
             continue;
           }
           if (!isset($provider['themes'][$version][$theme][$type]) && !empty($provider['themes'][$version]['bootstrap'][$type])) {
-            $provider['themes'][$version][$theme][$type] = array();
+            $provider['themes'][$version][$theme][$type] = [];
           }
           $provider['themes'][$version][$theme][$type] = NestedArray::mergeDeep($provider['themes'][$version]['bootstrap'][$type], $provider['themes'][$version][$theme][$type]);
           if (!isset($provider['themes'][$version][$theme]['min'][$type]) && !empty($provider['themes'][$version]['bootstrap']['min'][$type])) {
-            $provider['themes'][$version][$theme]['min'][$type] = array();
+            $provider['themes'][$version][$theme]['min'][$type] = [];
           }
           $provider['themes'][$version][$theme]['min'][$type] = NestedArray::mergeDeep($provider['themes'][$version]['bootstrap']['min'][$type], $provider['themes'][$version][$theme]['min'][$type]);
         }
@@ -239,7 +239,7 @@ function bootstrap_bootstrap_cdn_provider_jsdelivr_alter(&$provider, $response =
       // Some themes do not have a non-minified version, clone them to the
       // "normal" css/js arrays to ensure that the theme still loads if
       // aggregation (minification) is disabled.
-      foreach (array('css', 'js') as $type) {
+      foreach (['css', 'js'] as $type) {
         if (!isset($provider['themes'][$version][$theme][$type]) && isset($provider['themes'][$version][$theme]['min'][$type])) {
           $provider['themes'][$version][$theme][$type] = $provider['themes'][$version][$theme]['min'][$type];
         }
@@ -269,8 +269,8 @@ function bootstrap_bootstrap_cdn_provider_jsdelivr_alter(&$provider, $response =
  *     - css
  *     - js
  */
-function _bootstrap_cdn_provider_jsdelivr_extract_themes($files, $base_url = '') {
-  $themes = array();
+function _bootstrap_cdn_provider_jsdelivr_extract_themes(array $files, $base_url = '') {
+  $themes = [];
   foreach ($files as $file) {
     preg_match('`([^/]*)/bootstrap(-theme)?(\.min)?\.(js|css)$`', $file, $matches);
     if (!empty($matches[1]) && !empty($matches[4])) {
@@ -311,7 +311,7 @@ function _bootstrap_cdn_provider_jsdelivr_extract_themes($files, $base_url = '')
  */
 function bootstrap_bootstrap_cdn_provider_custom_assets_alter(&$provider, $theme = NULL) {
   $theme = Bootstrap::getTheme($theme);
-  foreach (array('css', 'js') as $type) {
+  foreach (['css', 'js'] as $type) {
     if ($setting = $theme->getSetting('cdn_custom_' . $type)) {
       $provider[$type][] = $setting;
     }
@@ -361,39 +361,39 @@ function bootstrap_cdn_provider_settings_form(&$form, FormStateInterface &$form_
     bootstrap_cdn_provider(NULL, TRUE);
   }
 
-  $form['advanced']['cdn'] = array(
+  $form['advanced']['cdn'] = [
     '#type' => 'fieldset',
     '#title' => t('CDN (Content Delivery Network)'),
     '#description' => '<div class="alert alert-info messages warning"><strong>' . t('NOTE') . ':</strong> ' . t('Using one of the "CDN Provider" options below is the preferred method for loading Bootstrap CSS and JS on simpler sites that do not use a site-wide CDN. Using a "CDN Provider" for loading Bootstrap, however, does mean that it depends on a third-party service. There is no obligation or commitment by these third-parties that guarantees any up-time or service quality. If you need to customize Bootstrap and have chosen to compile the source code locally (served from this site), you must disable the "CDN Provider" option below by choosing "- None -" and alternatively enable a site-wide CDN implementation. All local (served from this site) versions of Bootstrap will be superseded by any enabled "CDN Provider" below. <strong>Do not do both</strong>.') . '</div>',
     '#collapsible' => TRUE,
     '#collapsed' => !$provider,
-  );
+  ];
 
   $providers = bootstrap_cdn_provider();
-  $options = array();
+  $options = [];
   foreach ($providers as $key => $cdn_provider) {
     $options[$key] = $cdn_provider['title'];
   }
-  $form['advanced']['cdn']['cdn_provider'] = array(
+  $form['advanced']['cdn']['cdn_provider'] = [
     '#type' => 'select',
     '#title' => t('CDN Provider'),
     '#default_value' => $provider,
     '#empty_value' => '',
     '#options' => $options,
-  );
+  ];
 
   // Render each provider.
   foreach ($providers as $name => $data) {
-    $form['advanced']['cdn']['provider'][$name] = array(
+    $form['advanced']['cdn']['provider'][$name] = [
       '#type' => 'container',
       '#prefix' => '<div id="bootstrap-cdn-provider-' . $name . '">',
       '#suffix' => '</div>',
-      '#states' => array(
-        'visible' => array(
-          ':input[name="cdn_provider"]' => array('value' => $name),
-        ),
-      ),
-    );
+      '#states' => [
+        'visible' => [
+          ':input[name="cdn_provider"]' => ['value' => $name],
+        ],
+      ],
+    ];
     $element = &$form['advanced']['cdn']['provider'][$name];
 
     $element['description']['#markup'] = '<div class="lead">' . $data['description'] . '</div>';
@@ -401,37 +401,37 @@ function bootstrap_cdn_provider_settings_form(&$form, FormStateInterface &$form_
     // Indicate there was an error retrieving the provider's API data.
     if (!empty($data['error']) || !empty($data['imported'])) {
       if (!empty($data['error'])) {
-        $element['#prefix'] .= '<div class="alert alert-danger messages error"><strong>' . t('ERROR') . ':</strong> ' . t('Unable to reach or parse the data provided by the @title API. Ensure the server this website is hosted on is able to initiate HTTP requests via <a href=":drupal_http_request" target="_blank">drupal_http_request()</a>. If the request consistently fails, it is likely that there are certain PHP functions that have been disabled by the hosting provider for security reasons. It is possible to manually copy and paste the contents of the following URL into the "Imported @title data" section below.<br /><br /><a href=":provider_api" target="_blank">:provider_api</a>.', array(
+        $element['#prefix'] .= '<div class="alert alert-danger messages error"><strong>' . t('ERROR') . ':</strong> ' . t('Unable to reach or parse the data provided by the @title API. Ensure the server this website is hosted on is able to initiate HTTP requests via <a href=":drupal_http_request" target="_blank">drupal_http_request()</a>. If the request consistently fails, it is likely that there are certain PHP functions that have been disabled by the hosting provider for security reasons. It is possible to manually copy and paste the contents of the following URL into the "Imported @title data" section below.<br /><br /><a href=":provider_api" target="_blank">:provider_api</a>.', [
             '@title' => $data['title'],
             ':provider_api' => $data['api'],
             ':drupal_http_request' => 'https://api.drupal.org/api/drupal/includes%21common.inc/function/drupal_http_request/7',
-          )) . '</div>';
+          ]) . '</div>';
       }
-      $element['import'] = array(
+      $element['import'] = [
         '#type' => 'fieldset',
-        '#title' => t('Imported @title data', array(
+        '#title' => t('Imported @title data', [
           '@title' => $data['title'],
-        )),
-        '#description' => t('The provider will attempt to parse the data entered here each time it is saved. If no data has been entered, any saved files associated with this provider will be removed and the provider will again attempt to request the API data normally through the following URL: <a href=":provider_api" target="_blank">:provider_api</a>.', array(
+        ]),
+        '#description' => t('The provider will attempt to parse the data entered here each time it is saved. If no data has been entered, any saved files associated with this provider will be removed and the provider will again attempt to request the API data normally through the following URL: <a href=":provider_api" target="_blank">:provider_api</a>.', [
           ':provider_api' => $data['api'],
-        )),
+        ]),
         '#weight' => 10,
         '#collapsible' => TRUE,
         '#collapsed' => TRUE,
-      );
-      $element['import']['cdn_provider_import_data'] = array(
+      ];
+      $element['import']['cdn_provider_import_data'] = [
         '#type' => 'textarea',
         '#default_value' => file_exists(BOOTSTRAP_CDN_PROVIDER_PATH . '/' . $name . '.json') ? file_get_contents(BOOTSTRAP_CDN_PROVIDER_PATH . '/' . $name . '.json') : NULL,
-      );
-      $element['import']['submit'] = array(
+      ];
+      $element['import']['submit'] = [
         '#type' => 'submit',
         '#value' => t('Save provider data'),
         '#executes_submit_callback' => FALSE,
-        '#ajax' => array(
+        '#ajax' => [
           'callback' => 'bootstrap_cdn_provider_settings_form_ajax_reload_provider',
           'wrapper' => 'bootstrap-cdn-provider-' . $name,
-        ),
-      );
+        ],
+      ];
     }
 
     // Alter the specific provider.
@@ -454,70 +454,70 @@ function bootstrap_cdn_provider_settings_form_ajax_reload_provider($form, FormSt
 /**
  * Implements hook_bootstrap_cdn_provider_PROVIDER_settings_form_alter().
  */
-function bootstrap_bootstrap_cdn_provider_custom_settings_form_alter(&$element, FormStateInterface &$form_state, $provider = array(), $theme = NULL) {
+function bootstrap_bootstrap_cdn_provider_custom_settings_form_alter(&$element, FormStateInterface &$form_state, $provider = [], $theme = NULL) {
   $theme = Bootstrap::getTheme($theme);
-  foreach (array('css', 'js') as $type) {
+  foreach (['css', 'js'] as $type) {
     $setting = $theme->getSetting('cdn_custom_' . $type);
     $setting_min = $theme->getSetting('cdn_custom_' . $type . '_min');
-    $element['cdn_custom_' . $type] = array(
+    $element['cdn_custom_' . $type] = [
       '#type' => 'textfield',
-      '#title' => t('Bootstrap @type URL', array(
+      '#title' => t('Bootstrap @type URL', [
         '@type' => Unicode::strtoupper($type),
-      )),
+      ]),
       '#description' => t('It is best to use protocol relative URLs (i.e. without http: or https:) here as it will allow more flexibility if the need ever arises.'),
       '#default_value' => $setting,
-    );
-    $element['cdn_custom_' . $type . '_min'] = array(
+    ];
+    $element['cdn_custom_' . $type . '_min'] = [
       '#type' => 'textfield',
-      '#title' => t('Minified Bootstrap @type URL', array(
+      '#title' => t('Minified Bootstrap @type URL', [
         '@type' => Unicode::strtoupper($type),
-      )),
+      ]),
       '#description' => t('Additionally, you can provide the minimized version of the file. It will be used instead if site aggregation is enabled.'),
       '#default_value' => $setting_min,
-    );
+    ];
   }
 }
 
 /**
  * Implements hook_bootstrap_cdn_provider_PROVIDER_settings_form_alter().
  */
-function bootstrap_bootstrap_cdn_provider_jsdelivr_settings_form_alter(&$element, FormStateInterface &$form_state, $provider = array(), $theme = NULL) {
+function bootstrap_bootstrap_cdn_provider_jsdelivr_settings_form_alter(&$element, FormStateInterface &$form_state, $provider = [], $theme = NULL) {
   $theme = Bootstrap::getTheme($theme);
   $version = $form_state->getValue('bootstrap_cdn_jsdelivr_version') != NULL ? $form_state->getValue('bootstrap_cdn_jsdelivr_version') : $theme->getSetting('cdn_jsdelivr_version');
-  $element['cdn_jsdelivr_version'] = array(
+  $element['cdn_jsdelivr_version'] = [
     '#type' => 'select',
     '#title' => t('Version'),
-    '#options' => isset($provider['versions']) ? $provider['versions'] : array(),
+    '#options' => isset($provider['versions']) ? $provider['versions'] : [],
     '#default_value' => $version,
-    '#ajax' => array(
+    '#ajax' => [
       'callback' => 'bootstrap_cdn_provider_settings_form_ajax_reload_provider',
       'wrapper' => 'bootstrap-cdn-provider-jsdelivr',
-    ),
-  );
+    ],
+  ];
   if (empty($provider['error']) && empty($provider['imported'])) {
-    $element['cdn_jsdelivr_version']['#description'] = t('These versions are automatically populated by the @provider API upon cache clear and newer versions may appear over time. It is highly recommended the version that the site was built with stays at that version. Until a newer version has been properly tested for updatability by the site maintainer, you should not arbitrarily "update" just because there is a newer version. This can cause many inconsistencies and undesired effects with an existing site.', array(
+    $element['cdn_jsdelivr_version']['#description'] = t('These versions are automatically populated by the @provider API upon cache clear and newer versions may appear over time. It is highly recommended the version that the site was built with stays at that version. Until a newer version has been properly tested for updatability by the site maintainer, you should not arbitrarily "update" just because there is a newer version. This can cause many inconsistencies and undesired effects with an existing site.', [
       '@provider' => $provider['title'],
-    ));
+    ]);
   }
 
   // Bootswatch.
-  $themes = array();
+  $themes = [];
   if (isset($provider['themes'][$version])) {
     foreach ($provider['themes'][$version] as $_theme => $data) {
       $themes[$_theme] = $data['title'];
     }
   }
-  $element['cdn_jsdelivr_theme'] = array(
+  $element['cdn_jsdelivr_theme'] = [
     '#type' => 'select',
     '#title' => t('Theme'),
-    '#description' => t('Choose the example <a href=":bootstrap_theme" target="_blank">Bootstrap Theme</a> provided by Bootstrap or one of the many, many <a href=":bootswatch" target="_blank">Bootswatch</a> themes!', array(
+    '#description' => t('Choose the example <a href=":bootstrap_theme" target="_blank">Bootstrap Theme</a> provided by Bootstrap or one of the many, many <a href=":bootswatch" target="_blank">Bootswatch</a> themes!', [
       ':bootswatch' => 'https://bootswatch.com',
       ':bootstrap_theme' => 'http://getbootstrap.com/examples/theme/',
-    )),
+    ]),
     '#default_value' => $theme->getSetting('cdn_jsdelivr_theme'),
     '#options' => $themes,
     '#empty_option' => t('Bootstrap (default)'),
     '#empty_value' => 'bootstrap',
     '#suffix' => '<div id="bootstrap-theme-preview"></div>',
-  );
+  ];
 }

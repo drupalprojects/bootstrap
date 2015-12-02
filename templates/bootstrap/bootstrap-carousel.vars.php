@@ -20,11 +20,11 @@ function bootstrap_preprocess_bootstrap_carousel(&$variables) {
   if (empty($variables['attributes']['id'])) {
     $variables['attributes']['id'] = drupal_html_id('carousel');
   }
-  $default_data_attributes = array(
+  $default_data_attributes = [
     'interval' => 5000,
     'pause' => TRUE,
     'wrap' => TRUE,
-  );
+  ];
   foreach ($default_data_attributes as $name => $value) {
     if ($variables[$name] !== $value) {
       // Convert PHP booleans to the JSON equivalent, otherwise they'll be
@@ -54,15 +54,13 @@ function bootstrap_process_bootstrap_carousel(&$variables) {
   foreach ($variables['items'] as $delta => $item) {
     // Convert items that are string into the appropriate array structure.
     if (is_string($item)) {
-      $variables['items'][$delta] = array(
-        'image' => $item,
-      );
+      $variables['items'][$delta] = ['image' => $item];
     }
     // Populate defaults.
-    $variables['items'][$delta] += array(
+    $variables['items'][$delta] += [
       'title' => NULL,
       'description' => NULL,
       'url' => NULL,
-    );
+    ];
   }
 }

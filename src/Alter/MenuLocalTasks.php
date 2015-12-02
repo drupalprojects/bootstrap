@@ -16,19 +16,19 @@ class MenuLocalTasks implements AlterInterface {
    */
   public static function alter(&$data, &$route_name = NULL, &$context2 = NULL) {
     if (!empty($data['actions']['output'])) {
-      $items = array();
+      $items = [];
       foreach ($data['actions']['output'] as $item) {
-        $items[] = array(
+        $items[] = [
           'data' => $item,
-        );
+        ];
       }
-      $data['actions']['output'] = array(
+      $data['actions']['output'] = [
         '#theme' => 'item_list__action_links',
         '#items' => $items,
-        '#attributes' => array(
-          'class' => array('action-links'),
-        ),
-      );
+        '#attributes' => [
+          'class' => ['action-links'],
+        ],
+      ];
     }
   }
 

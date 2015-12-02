@@ -22,26 +22,26 @@ function bootstrap_process_html_tag(&$variables) {
     // needed and used for other purposes.
     // @see http://stackoverflow.com/a/5265361/1226717
     // @see https://drupal.org/node/2201779
-    $types = array(
+    $types = [
       // @see http://www.w3.org/TR/html5/document-metadata.html#attr-style-type
       'style' => 'text/css',
       // @see http://www.w3.org/TR/html5/scripting-1.html#attr-script-type
       'script' => 'text/javascript',
-    );
+    ];
     if (!empty($element['#attributes']['type']) && $element['#attributes']['type'] === $types[$tag]) {
       unset($element['#attributes']['type']);
     }
 
     // Remove CDATA comments. CDATA is only required for DOCTYPES that are XML
     // based, HTML5 is not.
-    $cdata_prefix = array(
+    $cdata_prefix = [
       'style' => "\n<!--/*--><![CDATA[/*><!--*/\n",
       'script' => "\n<!--//--><![CDATA[//><!--\n",
-    );
-    $cdata_suffix = array(
+    ];
+    $cdata_suffix = [
       'style' => "\n/*]]>*/-->\n",
       'script' => "\n//--><!]]>\n",
-    );
+    ];
     if (
       !empty($element['#value_prefix']) && $element['#value_prefix'] === $cdata_prefix[$tag] &&
       !empty($element['#value_suffix']) && $element['#value_suffix'] === $cdata_suffix[$tag]
