@@ -11,10 +11,10 @@ use Drupal\Component\Annotation\Plugin;
 /**
  * Defines a BootstrapForm annotation object.
  *
- * Plugin Namespace: "Form".
+ * Plugin Namespace: "Plugin/Form".
  *
- * @see \Drupal\bootstrap\Form\FormInterface
- * @see \Drupal\bootstrap\FormManager
+ * @see \Drupal\bootstrap\Plugin\FormInterface
+ * @see \Drupal\bootstrap\Plugin\FormManager
  * @see plugin_api
  *
  * @Annotation

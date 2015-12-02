@@ -4,6 +4,7 @@
  * Stub file for bootstrap_menu_local_action().
  */
 
+use Drupal\bootstrap\Bootstrap;
 use Drupal\Component\Utility\SafeMarkup;
 
 /**
@@ -27,12 +28,12 @@ function bootstrap_preprocess_menu_local_action(&$variables) {
   $link += ['localized_options' => []];
   $link['localized_options']['set_active_class'] = TRUE;
 
-  $icon = _bootstrap_iconize_text($link['title']);
+  $icon = Bootstrap::glyphiconFromString($link['title']);
   $options = isset($link['localized_options']) ? $link['localized_options'] : [];
 
   if (isset($link['url'])) {
     // Turn link into a mini-button and colorize based on title.
-    if ($class = _bootstrap_colorize_text($link['title'])) {
+    if ($class = Bootstrap::cssClassFromString($link['title'])) {
       if (!isset($options['attributes']['class'])) {
         $options['attributes']['class'] = [];
       }

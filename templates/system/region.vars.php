@@ -31,7 +31,7 @@ function bootstrap_preprocess_region(&$variables) {
   elseif ($region === 'help' && !empty($variables['content'])) {
     $content = $variables['content'];
     $variables['content'] = [
-      'icon' => ['#markup' => _bootstrap_icon('question-sign')],
+      'icon' => Bootstrap::glyphicon('question-sign'),
       'content' => ['#markup' => $content],
     ];
     $variables['attributes']['class'][] = 'alert';

@@ -11,10 +11,10 @@ use Drupal\Component\Annotation\Plugin;
 /**
  * Defines a BootstrapAlter annotation object.
  *
- * Plugin Namespace: "Alter".
+ * Plugin Namespace: "Plugin/Alter".
  *
- * @see \Drupal\bootstrap\Alter\AlterInterface
- * @see \Drupal\bootstrap\AlterManager
+ * @see \Drupal\bootstrap\Plugin\AlterInterface
+ * @see \Drupal\bootstrap\Plugin\AlterManager
  * @see plugin_api
  *
  * @Annotation

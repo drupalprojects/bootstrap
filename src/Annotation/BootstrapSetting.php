@@ -11,10 +11,10 @@ use Drupal\Component\Annotation\Plugin;
 /**
  * Defines a BootstrapSetting type annotation object.
  *
- * Plugin Namespace: "Setting".
+ * Plugin Namespace: "Plugin/Setting".
  *
- * @see \Drupal\bootstrap\Setting\SettingInterface
- * @see \Drupal\bootstrap\SettingManager
+ * @see \Drupal\bootstrap\Plugin\SettingInterface
+ * @see \Drupal\bootstrap\Plugin\SettingManager
  * @see plugin_api
  *
  * @Annotation

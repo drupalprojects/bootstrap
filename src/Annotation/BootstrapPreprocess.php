@@ -11,10 +11,10 @@ use Drupal\Component\Annotation\Plugin;
 /**
  * Defines a BootstrapPreprocess annotation object.
  *
- * Plugin Namespace: "Preprocess".
+ * Plugin Namespace: "Plugin/Preprocess".
  *
- * @see \Drupal\bootstrap\Preprocess\PreprocessInterface
- * @see \Drupal\bootstrap\PreprocessManager
+ * @see \Drupal\bootstrap\Plugin\PreprocessInterface
+ * @see \Drupal\bootstrap\Plugin\PreprocessManager
  * @see plugin_api
  *
  * @Annotation

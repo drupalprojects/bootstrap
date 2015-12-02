@@ -6,9 +6,10 @@
 
 namespace Drupal\bootstrap;
 
-use Drupal\bootstrap\Alter\AlterInterface;
-use Drupal\bootstrap\Form\FormInterface;
-use Drupal\bootstrap\Preprocess\PreprocessInterface;
+use Drupal\bootstrap\Plugin\ProviderManager;
+use Drupal\bootstrap\Utility\Crypt;
+use Drupal\bootstrap\Utility\Storage;
+use Drupal\bootstrap\Utility\StorageItem;
 use Drupal\Core\Extension\Extension;
 use Drupal\Core\Extension\ThemeHandlerInterface;
 
@@ -90,69 +91,6 @@ class Theme {
   }
 
   /**
-   * Manages theme alter hooks as classes and allows sub-themes to sub-class.
-   *
-   * @param string $function
-   *   The procedural function name of the alter (e.g. __FUNCTION__).
-   * @param mixed $data
-   *   The variable that was passed to the hook_TYPE_alter() implementation to
-   *   be altered. The type of this variable depends on the value of the $type
-   *   argument. For example, when altering a 'form', $data will be a structured
-   *   array. When altering a 'profile', $data will be an object.
-   * @param mixed $context1
-   *   (optional) An additional variable that is passed by reference.
-   * @param mixed $context2
-   *   (optional) An additional variable that is passed by reference. If more
-   *   context needs to be provided to implementations, then this should be an
-   *   associative array as described above.
-   */
-  public function alter($function, &$data, &$context1 = NULL, &$context2 = NULL) {
-    // Immediately return if the active theme is not Bootstrap based.
-    if (!$this->subthemeOf('bootstrap')) {
-      return;
-    }
-
-    // Extract the alter hook name.
-    $hook = Utility::extractHook($function, 'alter');
-
-    // Handle form alters separately.
-    if (strpos($hook, 'form') === 0) {
-      $form_id = $context2;
-      if (!$form_id) {
-        $form_id = Utility::extractHook($function, 'alter', 'form');
-      }
-
-      // Due to a core bug that affects admin themes, we should not double
-      // process the "system_theme_settings" form twice in the global
-      // hook_form_alter() invocation.
-      // @see https://drupal.org/node/943212
-      if ($context2 === 'system_theme_settings') {
-        return;
-      }
-
-      // Retrieve a list of form definitions.
-      $form_manager = new FormManager($this);
-
-      /** @var FormInterface $form */
-      if ($form_manager->hasDefinition($form_id) && ($form = $form_manager->createInstance($form_id))) {
-        $data['#submit'][] = [$form, 'submit'];
-        $data['#validate'][] = [$form, 'validate'];
-        $form->alter($data, $context1, $context2);
-      }
-    }
-    // Process hook alter normally.
-    else {
-      // Retrieve a list of alter definitions.
-      $alter_manager = new AlterManager($this);
-
-      /** @var AlterInterface $class */
-      if ($alter_manager->hasDefinition($hook) && ($class = $alter_manager->createInstance($hook))) {
-        $class->alter($data, $context2, $context2);
-      }
-    }
-  }
-
-  /**
    * Wrapper for the core file_scan_directory() function.
    *
    * Finds all files that match a given mask in the given directories and then
@@ -224,7 +162,7 @@ class Theme {
 
     // Generate a unique hash for all parameters passed as a change in any of
     // them could potentially return different results.
-    $hash = Utility::generateHash($mask, $dir, $options);
+    $hash = Crypt::generateHash($mask, $dir, $options);
 
     if (!$files->has($hash)) {
       $files->set($hash, file_scan_directory($dir, $mask, $options));
@@ -259,7 +197,7 @@ class Theme {
   /**
    * Retrieves the theme's cache from the database.
    *
-   * @return \Drupal\bootstrap\Storage
+   * @return \Drupal\bootstrap\Utility\Storage
    *   The cache object.
    */
   public function getStorage() {
@@ -279,7 +217,7 @@ class Theme {
    * @param mixed $default
    *   The default value to use if $name does not exist.
    *
-   * @return mixed|\Drupal\bootstrap\StorageItem
+   * @return mixed|\Drupal\bootstrap\Utility\StorageItem
    *   The cached value for $name.
    */
   public function getCache($name, $default = []) {
@@ -293,6 +231,38 @@ class Theme {
       $cache[$theme][$name] = $theme_cache->get($name);
     }
     return $cache[$theme][$name];
+  }
+
+  /**
+   * Retrieves the CDN provider.
+   *
+   * @param string $provider
+   *   A CDN provider name. Defaults to the provider set in the theme settings.
+   *
+   * @return \Drupal\bootstrap\Plugin\Provider\ProviderInterface
+   *   A provider instance.
+   */
+  public function getProvider($provider = NULL) {
+    $provider_manager = new ProviderManager($this);
+    return $provider_manager->createInstance($provider ?: $this->getSetting('cdn_provider'), ['theme' => $this]);
+  }
+
+  /**
+   * Retrieves all CDN providers.
+   *
+   * @return \Drupal\bootstrap\Plugin\Provider\ProviderInterface[]
+   *   All provider instances.
+   */
+  public function getProviders() {
+    $providers = [];
+    $provider_manager = new ProviderManager($this);
+    foreach (array_keys($provider_manager->getDefinitions()) as $provider) {
+      if ($provider === 'none') {
+        continue;
+      }
+      $providers[$provider] = $provider_manager->createInstance($provider, ['theme' => $this]);
+    }
+    return $providers;
   }
 
   /**
@@ -331,6 +301,24 @@ class Theme {
   }
 
   /**
+   * Determines whether or not if the theme has Bootstrap Framework Glyphicons.
+   */
+  public function hasGlyphicons() {
+    $glyphicons = $this->getCache('glyphicons', []);
+    if (!$glyphicons->has($this->getName())) {
+      $exists = FALSE;
+      foreach ($this->getAncestry(TRUE) as $ancestor) {
+        if ($ancestor->getSetting('cdn_provider') || $ancestor->fileScan('/glyphicons-halflings-regular\.(eot|svg|ttf|woff)$/', NULL, ['ignore_flags' => FALSE])) {
+          $exists = TRUE;
+          break;
+        }
+      }
+      $glyphicons->set($this->getName(), $exists);
+    }
+    return $glyphicons->get($this->getName(), FALSE);
+  }
+
+  /**
    * Includes a file from the theme.
    *
    * @param string $file
@@ -361,45 +349,6 @@ class Theme {
       }
     }
     return $includes[$include];
-  }
-
-  /**
-   * Preprocess theme hook variables.
-   *
-   * @param array $variables
-   *   The variables array, passed by reference.
-   * @param string $hook
-   *   The name of the theme hook.
-   */
-  public function preprocess(array &$variables, $hook) {
-    // Add extra variables to all theme hooks.
-    $extra = [
-      // Allow #context to be passed to every template and theme function.
-      // @see https://drupal.org/node/2035055
-      'context' => [],
-
-      // Allow #icon to be passed to every template and theme function.
-      // @see https://drupal.org/node/2219965
-      'icon' => NULL,
-      'icon_position' => 'before',
-    ];
-    foreach ($extra as $key => $value) {
-      if (!isset($variables[$key])) {
-        $variables[$key] = $value;
-      }
-    }
-
-    // Retrieve a list of preprocess definitions.
-    $preprocess_manager = new PreprocessManager($this);
-
-    $hooks = array_unique([$hook, $variables['theme_hook_original']]);
-    foreach ($hooks as $hook) {
-      /** @var PreprocessInterface $class */
-      if ($preprocess_manager->hasDefinition($hook) && ($class = $preprocess_manager->createInstance($hook))) {
-        $class->preprocess($variables);
-      }
-    }
-
   }
 
   /**
