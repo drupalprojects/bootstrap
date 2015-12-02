@@ -6,7 +6,8 @@
 
 namespace Drupal\bootstrap;
 
-use Drupal\Component\Utility\Crypt;
+use Drupal\bootstrap\Theme\Storage;
+use Drupal\bootstrap\Theme\StorageItem;
 use Drupal\Core\Extension\Extension;
 use Drupal\Core\Extension\ThemeHandlerInterface;
 
@@ -158,8 +159,9 @@ class Theme {
     $files = static::getCache('files', []);
 
     // Generate a unique hash for all parameters passed as a change in any of
-    // them would return different results.
-    $hash = Crypt::hashBase64(serialize([$mask, $dir, $options]));
+    // them could potentially return different results.
+    $hash = Utility::generateHash($mask, $dir, $options);
+
     if (!$files->has($hash)) {
       $files->set($hash, file_scan_directory($dir, $mask, $options));
     }
@@ -169,11 +171,15 @@ class Theme {
   /**
    * Retrieves the full base/sub-theme ancestry of a theme.
    *
+   * @param bool $reverse
+   *   Whether or not to return the array of themes in reverse order, where the
+   *   active theme is the first entry.
+   *
    * @return \Drupal\bootstrap\Theme[]
    *   An associative array of \Drupal\bootstrap\Theme objects (theme), keyed
    *   by machine name.
    */
-  public function getAncestry() {
+  public function getAncestry($reverse = FALSE) {
     static $themes;
     if (!isset($themes)) {
       $themes = $this->themeHandler->listInfo();
@@ -183,20 +189,20 @@ class Theme {
       $ancestry[$name] = new static($this->themeHandler->getTheme($name), $this->themeHandler);
     }
     $ancestry[$this->getName()] = $this;
-    return $ancestry;
+    return $reverse ? array_reverse($ancestry) : $ancestry;
   }
 
   /**
    * Retrieves the theme's cache from the database.
    *
-   * @return \Drupal\bootstrap\ThemeStorage
+   * @return \Drupal\bootstrap\Theme\Storage
    *   The cache object.
    */
-  public function getThemeStorage() {
+  public function getStorage() {
     static $cache = [];
     $theme = $this->getName();
     if (!isset($cache[$theme])) {
-      $cache[$theme] = new ThemeStorage($theme);
+      $cache[$theme] = new Storage($theme);
     }
     return $cache[$theme];
   }
@@ -209,16 +215,16 @@ class Theme {
    * @param mixed $default
    *   The default value to use if $name does not exist.
    *
-   * @return mixed|\Drupal\bootstrap\ThemeStorageItem
+   * @return mixed|\Drupal\bootstrap\Theme\StorageItem
    *   The cached value for $name.
    */
   public function getCache($name, $default = []) {
     static $cache = [];
     $theme = $this->getName();
-    $theme_cache = static::getThemeStorage();
+    $theme_cache = static::getStorage();
     if (!isset($cache[$theme][$name])) {
       if (!$theme_cache->has($name)) {
-        $theme_cache->set($name, is_array($default) ? new ThemeStorageItem($default, $theme_cache) : $default);
+        $theme_cache->set($name, is_array($default) ? new StorageItem($default, $theme_cache) : $default);
       }
       $cache[$theme][$name] = $theme_cache->get($name);
     }

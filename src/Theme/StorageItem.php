@@ -1,25 +1,25 @@
 <?php
 /**
  * @file
- * Contains \Drupal\bootstrap\ThemeStorageItem.
+ * Contains \Drupal\bootstrap\StorageItem.
  */
 
-namespace Drupal\bootstrap;
+namespace Drupal\bootstrap\Theme;
 
 use Drupal\Core\KeyValueStore\MemoryStorage;
 
 /**
  * Theme Storage Item.
  *
- * This is essentially the same object as ThemeStorage. The only exception is
- * delegating any data changes to the primary ThemeStorage object this
- * ThemeStorageItem object lives in.
+ * This is essentially the same object as Storage. The only exception is
+ * delegating any data changes to the primary Storage object this
+ * StorageItem object lives in.
  *
  * This storage object can be used in `foreach` loops.
  *
- * @see \Drupal\bootstrap\ThemeCacheStorage
+ * @see \Drupal\bootstrap\Theme\Storage
  */
-class ThemeStorageItem extends MemoryStorage implements \Iterator {
+class StorageItem extends MemoryStorage implements \Iterator {
 
   /**
    * Flag determining whether or not object has been initialized yet.
@@ -29,23 +29,23 @@ class ThemeStorageItem extends MemoryStorage implements \Iterator {
   protected $initialized = FALSE;
 
   /**
-   * The \Drupal\bootstrap\ThemeStorage instance this item belongs to.
+   * The \Drupal\bootstrap\Storage instance this item belongs to.
    *
-   * @var \Drupal\bootstrap\ThemeStorage
+   * @var \Drupal\bootstrap\Theme\Storage
    */
   protected $storage;
 
   /**
    * {@inheritdoc}
    */
-  public function __construct($data, ThemeStorage $storage) {
+  public function __construct($data, Storage $storage) {
     $this->storage = $storage;
     $this->setMultiple($data);
     $this->initialized = TRUE;
   }
 
   /**
-   * Notifies the main ThemeStorage object that data has changed.
+   * Notifies the main Storage object that data has changed.
    */
   public function changed() {
     if ($this->initialized) {

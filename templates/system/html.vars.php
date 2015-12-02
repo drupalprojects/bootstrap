@@ -5,7 +5,6 @@
  */
 
 use Drupal\bootstrap\Bootstrap;
-use Drupal\bootstrap\BaseTheme;
 
 /**
  * Pre-processes variables for the "html" theme hook.
@@ -17,7 +16,7 @@ use Drupal\bootstrap\BaseTheme;
  * @ingroup theme_preprocess
  */
 function bootstrap_preprocess_html(&$variables) {
-  switch (BaseTheme::getTheme()->getSetting('navbar_position')) {
+  switch (Bootstrap::getTheme()->getSetting('navbar_position')) {
     case 'fixed-top':
       $variables['attributes']['class'][] = 'navbar-is-fixed-top';
       break;

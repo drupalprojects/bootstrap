@@ -5,9 +5,8 @@
  */
 
 use Drupal\bootstrap\Bootstrap;
-use Drupal\bootstrap\BaseTheme;
-use \Drupal\Component\Utility\Html;
-use \Drupal\Component\Utility\SafeMarkup;
+use Drupal\Component\Utility\Html;
+use Drupal\Component\Utility\SafeMarkup;
 
 /**
  * Prepares variables for file upload help text templates.
@@ -59,7 +58,7 @@ function bootstrap_preprocess_file_upload_help(&$variables) {
   }
 
   // If popovers are enabled.
-  if (BaseTheme::getTheme()->getSetting('popover_enabled')) {
+  if (Bootstrap::getTheme()->getSetting('popover_enabled')) {
     $id = html::getUniqueId('upload-instructions');
 
     $icon = _bootstrap_icon('question-sign');

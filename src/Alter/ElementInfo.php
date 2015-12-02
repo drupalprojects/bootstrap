@@ -6,8 +6,7 @@
 
 namespace Drupal\bootstrap\Alter;
 
-use \Drupal\bootstrap\Bootstrap;
-use Drupal\bootstrap\BaseTheme;
+use Drupal\bootstrap\Bootstrap;
 
 /**
  * Defines a base class for an object oriented alter.
@@ -56,7 +55,7 @@ class ElementInfo implements AlterInterface {
       ];
       foreach ($properties as $property => $callbacks) {
         foreach ($callbacks as $callback) {
-          foreach (BaseTheme::getTheme()->getAncestry() as $ancestor) {
+          foreach (Bootstrap::getTheme()->getAncestry() as $ancestor) {
             $function = $ancestor->getName() . '_' . $callback;
             if (function_exists($function)) {
               // Replace core function.

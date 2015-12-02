@@ -6,6 +6,9 @@
 
 namespace Drupal\bootstrap\Alter;
 
+use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\Utility;
+
 /**
  * Implements hook_form_alter().
  */
@@ -16,42 +19,39 @@ class Form implements AlterInterface {
    */
   public static function alter(&$form, &$form_state = NULL, &$form_id = NULL) {
     if ($form_id) {
-      switch ($form_id) {
-        case 'search_form':
-          // Add a clearfix class so the results don't overflow onto the form.
-          $form['#attributes']['class'][] = 'clearfix';
+      // Due to a core bug that affects admin themes, we should not double
+      // process the "system_theme_settings" form twice.
+      // @see https://drupal.org/node/943212
+      if ($form_id === 'system_theme_settings') {
+        return;
+      }
 
-          // Remove container-inline from the container classes.
-          $form['basic']['#attributes']['class'] = [];
+      $theme = Bootstrap::getTheme();
 
-          // Hide the default button from display.
-          $form['basic']['submit']['#attributes']['class'][] = 'visually-hidden';
-          break;
+      // Retrieve cache.
+      $form_alter = $theme->getCache('form_alter', []);
+      if (!$form_alter->has($form_id)) {
+        $class = FALSE;
 
-        case 'search_block_form':
-          $form['#attributes']['class'][] = 'form-search';
+        // Convert the form ID to a proper class name.
+        $name = Utility::snakeToCamelCase($form_id);
 
-          $form['keys']['#title'] = '';
-          $form['keys']['#placeholder'] = (string) t('Search');
+        // Determine if the function has a valid class counterpart.
+        if ($reflection = Utility::findClass($name, 'Form')) {
+          if ($reflection->implementsInterface('\\Drupal\\bootstrap\\Form\\FormAlterInterface')) {
+            $class = $reflection->getName();
+          }
+        }
 
-          // Hide the default button from display and implement a theme wrapper
-          // to add a submit button containing a search icon directly after the
-          // input element.
-          $form['actions']['submit']['#attributes']['class'][] = 'visually-hidden';
+        $form_alter->set($form_id, $class);
+      }
 
-          // Apply a clearfix so the results don't overflow onto the form.
-          $form['#attributes']['class'][] = 'content-search';
-          break;
-
-        // @todo Check to see if this still works.
-        case 'image_style_edit_form':
-          $form['effects']['new']['effect']['data']['new']['#input_group_button'] = TRUE;
-          break;
-
-        // @todo Check to see if this still works.
-        case 'path_admin_filter_form':
-          $form['basic']['filter']['#input_group_button'] = TRUE;
-          break;
+      // Only continue if there is a valid callback.
+      if ($class = $form_alter->get($form_id)) {
+        $callback = [$class, 'alter'];
+        $form['#submit'][] = [$class, 'submit'];
+        $form['#validate'][] = [$class, 'validate'];
+        call_user_func_array($callback, array(&$form, &$form_state, $form_id));
       }
     }
   }

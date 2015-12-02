@@ -22,14 +22,13 @@
  * @see \Drupal\bootstrap\Registry
  */
 
-use Drupal\bootstrap\BaseTheme;
 use Drupal\bootstrap\Bootstrap;
 
 /******************************************************************************
  * Include necessary theme files, all of which need to be discoverable here.
  *****************************************************************************/
 
-$bootstrap = BaseTheme::getTheme('bootstrap');
+$bootstrap = Bootstrap::getTheme('bootstrap');
 $bootstrap->includeOnce('common.inc');
 $bootstrap->includeOnce('deprecated.inc');
 $bootstrap->includeOnce('pre-render.inc');
@@ -58,7 +57,7 @@ function bootstrap_theme() {
  * @see \Drupal\bootstrap\Alter\Css::alter()
  */
 function bootstrap_css_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
-  BaseTheme::alter(__FUNCTION__, $data, $context1, $context2);
+  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
 }
 
 /**
@@ -67,7 +66,7 @@ function bootstrap_css_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
  * @see \Drupal\bootstrap\Alter\ElementInfo::alter()
  */
 function bootstrap_element_info_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
-  BaseTheme::alter(__FUNCTION__, $data, $context1, $context2);
+  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
 }
 
 /**
@@ -76,16 +75,16 @@ function bootstrap_element_info_alter(&$data, &$context1 = NULL, &$context2 = NU
  * @see \Drupal\bootstrap\Alter\Form::alter()
  */
 function bootstrap_form_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
-  BaseTheme::alter(__FUNCTION__, $data, $context1, $context2);
+  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
 }
 
 /**
  * {@inheritdoc}
  *
- * @see \Drupal\bootstrap\Alter\FormSystemThemeSettings::alter()
+ * @see \Drupal\bootstrap\Form\SystemThemeSettings::alter()
  */
 function bootstrap_form_system_theme_settings_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
-  BaseTheme::alter(__FUNCTION__, $data, $context1, $context2);
+  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
 }
 
 /**
@@ -94,7 +93,7 @@ function bootstrap_form_system_theme_settings_alter(&$data, &$context1 = NULL, &
  * @see \Drupal\bootstrap\Alter\IconBundleList::alter()
  */
 function bootstrap_icon_bundle_list_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
-  BaseTheme::alter(__FUNCTION__, $data, $context1, $context2);
+  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
 }
 
 /**
@@ -103,7 +102,7 @@ function bootstrap_icon_bundle_list_alter(&$data, &$context1 = NULL, &$context2 
  * @see \Drupal\bootstrap\Alter\Js::alter()
  */
 function bootstrap_js_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
-  BaseTheme::alter(__FUNCTION__, $data, $context1, $context2);
+  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
 }
 
 /**
@@ -112,7 +111,7 @@ function bootstrap_js_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
  * @see \Drupal\bootstrap\Alter\JsCallbackFilterXss::alter()
  */
 function bootstrap_js_callback_filter_xss_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
-  BaseTheme::alter(__FUNCTION__, $data, $context1, $context2);
+  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
 }
 
 /**
@@ -121,7 +120,7 @@ function bootstrap_js_callback_filter_xss_alter(&$data, &$context1 = NULL, &$con
  * @see \Drupal\bootstrap\Alter\MenuLocalTasks::alter()
  */
 function bootstrap_menu_local_tasks_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
-  BaseTheme::alter(__FUNCTION__, $data, $context1, $context2);
+  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
 }
 
 /**
@@ -130,7 +129,7 @@ function bootstrap_menu_local_tasks_alter(&$data, &$context1 = NULL, &$context2 
  * @see \Drupal\bootstrap\Alter\PageAttachments::alter()
  */
 function bootstrap_page_attachments_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
-  BaseTheme::alter(__FUNCTION__, $data, $context1, $context2);
+  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
 }
 
 /**
@@ -138,11 +137,11 @@ function bootstrap_page_attachments_alter(&$data, &$context1 = NULL, &$context2 
  *
  * @see \Drupal\bootstrap\Alter\ThemeRegistry::alter()
  *
- * @todo Remove once \Drupal\bootstrap\Theme\Registry can properly replace
- * the theme.registry service in a bootstrap_core sub-module.
+ * @todo Remove once a proper replacement for the theme.registry service can be
+ * created in a bootstrap_core sub-module.
  */
 function bootstrap_theme_registry_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
-  BaseTheme::alter(__FUNCTION__, $data, $context1, $context2);
+  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
 }
 
 /**
@@ -151,5 +150,5 @@ function bootstrap_theme_registry_alter(&$data, &$context1 = NULL, &$context2 = 
  * @see \Drupal\bootstrap\Alter\ThemeSuggestions::alter()
  */
 function bootstrap_theme_suggestions_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
-  BaseTheme::alter(__FUNCTION__, $data, $context1, $context2);
+  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
 }

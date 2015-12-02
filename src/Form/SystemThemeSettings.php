@@ -1,21 +1,19 @@
 <?php
 /**
  * @file
- * Contains \Drupal\bootstrap\Alter\FormSystemThemeSettings.
+ * Contains \Drupal\bootstrap\Form\SystemThemeSettings.
  */
 
-namespace Drupal\bootstrap\Alter;
+namespace Drupal\bootstrap\Form;
 
-use Drupal\bootstrap\BaseTheme;
+use Drupal\bootstrap\Bootstrap;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 
-BaseTheme::getTheme('bootstrap')->includeOnce('cdn.inc');
-
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_form_system_theme_settings_alter().
  */
-class FormSystemThemeSettings implements FormInterface {
+class SystemThemeSettings extends FormAlterBase {
 
   /**
    * {@inheritdoc}
@@ -29,10 +27,12 @@ class FormSystemThemeSettings implements FormInterface {
     }
 
     // Do not add Bootstrap specific settings to non-bootstrap based themes,
-    $theme = BaseTheme::getTheme($args[0]);
+    $theme = Bootstrap::getTheme($args[0]);
     if (!$theme->subthemeOf('bootstrap')) {
       return;
     }
+
+    Bootstrap::getTheme('bootstrap')->includeOnce('cdn.inc');
 
     // Create vertical tabs for global settings (provided by core or other
     // contrib modules).

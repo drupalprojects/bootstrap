@@ -1,10 +1,10 @@
 <?php
 /**
  * @file
- * Contains \Drupal\bootstrap\ThemeStorage.
+ * Contains \Drupal\bootstrap\Storage.
  */
 
-namespace Drupal\bootstrap;
+namespace Drupal\bootstrap\Theme;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\KeyValueStore\MemoryStorage;
@@ -24,9 +24,9 @@ use Drupal\Core\KeyValueStore\MemoryStorage;
  *
  * This storage object can be used in `foreach` loops.
  *
- * @see \Drupal\bootstrap\ThemeCacheItem
+ * @see \Drupal\bootstrap\Theme\StorageItem
  */
-class ThemeStorage extends MemoryStorage implements \Iterator {
+class Storage extends MemoryStorage implements \Iterator {
 
   /**
    * The bin (table) data should be stored in (not prefixed with "cache_").
@@ -140,7 +140,7 @@ class ThemeStorage extends MemoryStorage implements \Iterator {
     $data = $this->data;
     if ($arrays) {
       foreach ($data as $key => $value) {
-        if ($value instanceof ThemeStorageItem) {
+        if ($value instanceof StorageItem) {
           $data[$key] = $value->getAll();
         }
       }
@@ -201,7 +201,7 @@ class ThemeStorage extends MemoryStorage implements \Iterator {
    */
   public function set($key, $value) {
     if (is_array($value)) {
-      $value = new ThemeStorageItem($value, $this);
+      $value = new StorageItem($value, $this);
     }
     parent::set($key, $value);
     $this->changed();
@@ -213,7 +213,7 @@ class ThemeStorage extends MemoryStorage implements \Iterator {
   public function setIfNotExists($key, $value) {
     if (!isset($this->data[$key])) {
       if (is_array($value)) {
-        $value = new ThemeStorageItem($value, $this);
+        $value = new StorageItem($value, $this);
       }
       $this->data[$key] = $value;
       $this->changed();
@@ -228,7 +228,7 @@ class ThemeStorage extends MemoryStorage implements \Iterator {
   public function setMultiple(array $data) {
     foreach ($data as $key => $value) {
       if (is_array($value)) {
-        $data[$key] = new ThemeStorageItem($value, $this);
+        $data[$key] = new StorageItem($value, $this);
       }
     }
     parent::setMultiple($data);

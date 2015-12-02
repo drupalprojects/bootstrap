@@ -7,8 +7,6 @@
  */
 
 use Drupal\bootstrap\Bootstrap;
-use Drupal\bootstrap\BaseTheme;
-use Drupal\bootstrap\Theme;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Unicode;
@@ -49,7 +47,7 @@ function bootstrap_cdn_provider($provider = NULL, $reset = FALSE) {
     file_prepare_directory($provider_path, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
 
     // Retrieve cache.
-    $providers = BaseTheme::getTheme()->getCache('cdn_providers', []);
+    $providers = Bootstrap::getTheme()->getCache('cdn_providers', []);
 
     if ($reset || $providers->isEmpty()) {
       $providers->setMultiple([
@@ -307,7 +305,7 @@ function _bootstrap_cdn_provider_jsdelivr_extract_themes(array $files, $base_url
  * @todo Create documentation when hook is real.
  */
 function bootstrap_bootstrap_cdn_provider_custom_assets_alter(&$provider, $theme = NULL) {
-  $theme = BaseTheme::getTheme($theme);
+  $theme = Bootstrap::getTheme($theme);
   foreach (['css', 'js'] as $type) {
     if ($setting = $theme->getSetting('cdn_custom_' . $type)) {
       $provider[$type][] = $setting;
@@ -324,7 +322,7 @@ function bootstrap_bootstrap_cdn_provider_custom_assets_alter(&$provider, $theme
  * @todo Create documentation when hook is real.
  */
 function bootstrap_bootstrap_cdn_provider_jsdelivr_assets_alter(&$provider, $theme = NULL) {
-  $theme = BaseTheme::getTheme($theme);
+  $theme = Bootstrap::getTheme($theme);
   $error = !empty($provider['error']);
   $version = $error ? Bootstrap::FRAMEWORK_VERSION : $theme->getSetting('cdn_jsdelivr_version');
   $theme = $error ? 'bootstrap' : $theme->getSetting('cdn_jsdelivr_theme');
@@ -452,7 +450,7 @@ function bootstrap_cdn_provider_settings_form_ajax_reload_provider($form, FormSt
  * Implements hook_bootstrap_cdn_provider_PROVIDER_settings_form_alter().
  */
 function bootstrap_bootstrap_cdn_provider_custom_settings_form_alter(&$element, FormStateInterface &$form_state, $provider = [], $theme = NULL) {
-  $theme = BaseTheme::getTheme($theme);
+  $theme = Bootstrap::getTheme($theme);
   foreach (['css', 'js'] as $type) {
     $setting = $theme->getSetting('cdn_custom_' . $type);
     $setting_min = $theme->getSetting('cdn_custom_' . $type . '_min');
@@ -479,7 +477,7 @@ function bootstrap_bootstrap_cdn_provider_custom_settings_form_alter(&$element, 
  * Implements hook_bootstrap_cdn_provider_PROVIDER_settings_form_alter().
  */
 function bootstrap_bootstrap_cdn_provider_jsdelivr_settings_form_alter(&$element, FormStateInterface &$form_state, $provider = [], $theme = NULL) {
-  $theme = BaseTheme::getTheme($theme);
+  $theme = Bootstrap::getTheme($theme);
   $version = $form_state->getValue('bootstrap_cdn_jsdelivr_version') != NULL ? $form_state->getValue('bootstrap_cdn_jsdelivr_version') : $theme->getSetting('cdn_jsdelivr_version');
   $element['cdn_jsdelivr_version'] = [
     '#type' => 'select',

@@ -5,7 +5,6 @@
  */
 
 use Drupal\bootstrap\Bootstrap;
-use Drupal\bootstrap\BaseTheme;
 
 /**
  * Pre-processes variables for the "table" theme hook.
@@ -40,7 +39,7 @@ function bootstrap_preprocess_table(&$variables) {
  *   The variables of the theme hook, passed by reference.
  */
 function _bootstrap_table_add_classes(&$classes, &$variables) {
-  $theme = BaseTheme::getTheme();
+  $theme = Bootstrap::getTheme();
 
   $context = $variables['context'];
 

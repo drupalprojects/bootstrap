@@ -6,9 +6,7 @@
 
 namespace Drupal\bootstrap\Alter;
 
-use \Drupal\bootstrap\Bootstrap;
-use Drupal\bootstrap\BaseTheme;
-use Drupal\bootstrap\Theme;
+use Drupal\bootstrap\Bootstrap;
 
 /**
  * Implements hook_js_alter().
@@ -19,7 +17,7 @@ class Js implements AlterInterface {
    * {@inheritdoc}
    */
   public static function alter(&$js, &$context1 = NULL, &$context2 = NULL) {
-    $theme = BaseTheme::getTheme();
+    $theme = Bootstrap::getTheme();
     $config = \Drupal::config('bootstrap.settings');
 
     // Exclude specified JavaScript files from theme.

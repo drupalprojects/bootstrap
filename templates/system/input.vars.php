@@ -5,7 +5,6 @@
  */
 
 use Drupal\bootstrap\Bootstrap;
-use Drupal\bootstrap\BaseTheme;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Template\Attribute;
 
@@ -26,7 +25,7 @@ function bootstrap_preprocess_input(&$variables) {
     _bootstrap_iconize_button($element);
 
     // Add button size, if necessary.
-    if ($size = BaseTheme::getTheme()->getSetting('button_size')) {
+    if ($size = Bootstrap::getTheme()->getSetting('button_size')) {
       $variables['attributes']['class'][] = $size;
     }
 

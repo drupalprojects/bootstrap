@@ -5,7 +5,6 @@
  */
 
 use Drupal\bootstrap\Bootstrap;
-use Drupal\bootstrap\BaseTheme;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Url;
@@ -38,7 +37,7 @@ use Drupal\Core\Url;
  *   is returned keyed by the type.
  */
 function bootstrap_get_cdn_assets($type = NULL, $provider = NULL, $theme = NULL) {
-  $theme = BaseTheme::getTheme($theme);
+  $theme = Bootstrap::getTheme($theme);
 
   $original_type = $type;
   $assets = [];
@@ -66,7 +65,7 @@ function bootstrap_get_cdn_assets($type = NULL, $provider = NULL, $theme = NULL)
   }
 
   // Load the CDN provider data.
-  BaseTheme::getTheme('bootstrap')->includeOnce('cdn.inc');
+  Bootstrap::getTheme('bootstrap')->includeOnce('cdn.inc');
   if (!empty($provider) && ($data = bootstrap_cdn_provider($provider))) {
     // Alter the assets based on provider.
     $function = 'bootstrap_bootstrap_cdn_provider_' . $provider . '_assets_alter';
@@ -602,7 +601,7 @@ function _bootstrap_glyphicons_supported() {
 
   // Get static data.
   $supported = &$drupal_static_fast['supported'];
-  $theme = BaseTheme::getTheme($drupal_static_fast['theme']);
+  $theme = Bootstrap::getTheme($drupal_static_fast['theme']);
 
   // Retrieve supported themes.
   if (!isset($supported)) {
@@ -667,7 +666,7 @@ function _bootstrap_is_button($element) {
  *   The form variables of the element, passed by reference.
  */
 function _bootstrap_colorize_button(&$variables) {
-  $theme = BaseTheme::getTheme();
+  $theme = Bootstrap::getTheme();
 
   // Do not add the class if one is already present in the array.
   $button_classes = [
@@ -786,7 +785,7 @@ function _bootstrap_colorize_text($string, $default = '') {
  *   The form element, passed by reference.
  */
 function _bootstrap_iconize_button(&$element) {
-  if (BaseTheme::getTheme()->getSetting('button_iconize') && _bootstrap_is_button($element) && ($icon = _bootstrap_iconize_text($element['#value']))) {
+  if (Bootstrap::getTheme()->getSetting('button_iconize') && _bootstrap_is_button($element) && ($icon = _bootstrap_iconize_text($element['#value']))) {
     $element['#icon'] = $icon;
   }
 }

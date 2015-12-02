@@ -117,7 +117,7 @@ class Element {
    *   The length of characters to determine if description is "simple".
    */
   public function smartDescription(array &$target = NULL, $input_only = TRUE, $length = NULL) {
-    $theme = BaseTheme::getTheme();
+    $theme = Bootstrap::getTheme();
 
     // Determine if tooltips are enabled.
     static $enabled;

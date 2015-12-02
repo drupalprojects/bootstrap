@@ -7,7 +7,6 @@
 namespace Drupal\bootstrap\Alter;
 
 use Drupal\bootstrap\Bootstrap;
-use Drupal\bootstrap\BaseTheme;
 
 /**
  * Implements hook_page_attachments_alter().
@@ -18,7 +17,7 @@ class PageAttachments implements AlterInterface {
    * {@inheritdoc}
    */
   public static function alter(&$attachments, &$context1 = NULL, &$context2 = NULL) {
-    $theme = BaseTheme::getTheme();
+    $theme = Bootstrap::getTheme();
     $attachments['#attached']['drupalSettings']['bootstrap'] = [
       'anchorsFix' => $theme->getSetting('anchors_fix'),
       'anchorsSmoothScrolling' => $theme->getSetting('anchors_smooth_scrolling'),

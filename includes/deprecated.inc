@@ -4,7 +4,6 @@
  * This contains deprecated functions that will be removed in a future release.
  */
 
-use Drupal\bootstrap\BaseTheme;
 use Drupal\bootstrap\Bootstrap;
 use Drupal\bootstrap\Element;
 use Drupal\Component\Utility\NestedArray;
@@ -111,7 +110,7 @@ define('BOOTSTRAP_VERSION', Bootstrap::FRAMEWORK_VERSION);
  */
 function _bootstrap_file_scan_directory($dir, $mask, array $options = []) {
   Bootstrap::deprecated();
-  return BaseTheme::getTheme()->fileScan($mask, $dir, $options);
+  return Bootstrap::getTheme()->fileScan($mask, $dir, $options);
 }
 
 /**
@@ -147,7 +146,7 @@ function _bootstrap_file_scan_directory($dir, $mask, array $options = []) {
  */
 function _bootstrap_get_base_themes($theme_key = NULL, $include_theme_key = FALSE) {
   Bootstrap::deprecated();
-  $themes = array_keys(BaseTheme::getTheme($theme_key)->getAncestry());
+  $themes = array_keys(Bootstrap::getTheme($theme_key)->getAncestry());
   if (!$include_theme_key) {
     array_pop($themes);
   }
@@ -281,7 +280,7 @@ function bootstrap_get_theme_info($theme_key = NULL, $key = NULL, $base_themes =
  */
 function bootstrap_include($theme, $path) {
   Bootstrap::deprecated();
-  $theme = BaseTheme::getTheme($theme);
+  $theme = Bootstrap::getTheme($theme);
   $parts = explode('/', $path);
   $file = array_pop($parts);
   $dir = implode('/', $parts);
@@ -320,7 +319,7 @@ function bootstrap_include($theme, $path) {
  */
 function bootstrap_setting($name, $theme = NULL, $prefix = 'bootstrap') {
   Bootstrap::deprecated();
-  $theme = BaseTheme::getTheme($theme);
+  $theme = Bootstrap::getTheme($theme);
   $prefix = !empty($prefix) ? $prefix . '_' : '';
   return $theme->getSetting($prefix . $name);
 }

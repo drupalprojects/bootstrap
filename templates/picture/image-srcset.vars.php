@@ -5,7 +5,6 @@
  */
 
 use Drupal\bootstrap\Bootstrap;
-use Drupal\bootstrap\BaseTheme;
 
 /**
  * Pre-processes variables for the "image_srcset" theme hook.
@@ -18,7 +17,7 @@ use Drupal\bootstrap\BaseTheme;
  */
 function bootstrap_preprocess_image_srcset(&$variables) {
   // Add image shape, if necessary.
-  if ($shape = BaseTheme::getTheme()->getSetting('image_shape')) {
+  if ($shape = Bootstrap::getTheme()->getSetting('image_shape')) {
     $variables['attributes']['class'][] = $shape;
   }
 }
