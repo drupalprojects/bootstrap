@@ -797,8 +797,22 @@ class Bootstrap {
     // Retrieve a list of preprocess definitions.
     $preprocess_manager = new PreprocessManager($theme);
 
+    // Extrapolate the theme hooks (with __ suggestions).
+    // @todo This is really ugly, hook_preprocess() currently has limitations.
+    $preprocess = [];
     $hooks = array_unique([$hook, $variables['theme_hook_original']]);
     foreach ($hooks as $hook) {
+      $suggestions = explode('__', $hook);
+      $hook = array_shift($suggestions);
+      $preprocess[] = $hook;
+      foreach ($suggestions as $suggestion) {
+        $hook .= "__$suggestion";
+        $preprocess[] = $hook;
+      }
+    }
+
+    // Invoke necessary preprocess plugins.
+    foreach ($preprocess as $hook) {
       /** @var \Drupal\bootstrap\Plugin\Preprocess\PreprocessInterface $class */
       if ($preprocess_manager->hasDefinition($hook) && ($class = $preprocess_manager->createInstance($hook))) {
         $class->preprocess($variables);

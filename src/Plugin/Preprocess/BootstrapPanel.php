@@ -14,10 +14,6 @@ use Drupal\Component\Utility\Xss;
 /**
  * Pre-processes variables for the "bootstrap_panel" theme hook.
  *
- * See template for list of available variables.
- *
- * @see bootstrap-panel.html.twig
- *
  * @ingroup theme_preprocess
  *
  * @BootstrapPreprocess(

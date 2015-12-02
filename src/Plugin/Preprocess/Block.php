@@ -9,10 +9,6 @@ namespace Drupal\bootstrap\Plugin\Preprocess;
 /**
  * Pre-processes variables for the "block" theme hook.
  *
- * See template for list of available variables.
- *
- * @see block.html.twig
- *
  * @ingroup theme_preprocess
  *
  * @BootstrapPreprocess(
