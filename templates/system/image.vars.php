@@ -5,7 +5,7 @@
  */
 
 use Drupal\bootstrap\Bootstrap;
-use Drupal\bootstrap\Utility\Element;
+use Drupal\Core\Template\Attribute;
 
 /**
  * Pre-processes variables for the "image" theme hook.
@@ -18,15 +18,17 @@ use Drupal\bootstrap\Utility\Element;
  */
 function bootstrap_preprocess_image(&$variables) {
   $theme = Bootstrap::getTheme();
-  $e = new Element($variables['element']);
+  $attributes = new Attribute($variables['attributes']);
 
   // Add image shape, if necessary.
   if ($shape = $theme->getSetting('image_shape')) {
-    $e->addClass($shape);
+    $attributes->addClass($shape);
   }
 
   // Add responsiveness, if necessary.
   if ($theme->getSetting('image_responsive')) {
-    $e->addClass('img-responsive');
+    $attributes->addClass('img-responsive');
   }
+
+  $variables['attributes'] = $attributes->toArray();
 }

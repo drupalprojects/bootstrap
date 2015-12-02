@@ -33,25 +33,25 @@ function bootstrap_preprocess_menu_local_action(&$variables) {
 
   if (isset($link['url'])) {
     // Turn link into a mini-button and colorize based on title.
-    if ($class = Bootstrap::cssClassFromString($link['title'])) {
-      if (!isset($options['attributes']['class'])) {
-        $options['attributes']['class'] = [];
-      }
-      $string = is_string($options['attributes']['class']);
-      if ($string) {
-        $options['attributes']['class'] = explode(' ', $options['attributes']['class']);
-      }
-      $options['attributes']['class'][] = 'btn';
-      $options['attributes']['class'][] = 'btn-xs';
-      $options['attributes']['class'][] = 'btn-' . $class;
-      if ($string) {
-        $options['attributes']['class'] = implode(' ', $options['attributes']['class']);
-      }
+    $class = Bootstrap::cssClassFromString($link['title'], 'default');
+    if (!isset($options['attributes']['class'])) {
+      $options['attributes']['class'] = [];
+    }
+    $string = is_string($options['attributes']['class']);
+    if ($string) {
+      $options['attributes']['class'] = explode(' ', $options['attributes']['class']);
+    }
+    $options['attributes']['class'][] = 'btn';
+    $options['attributes']['class'][] = 'btn-xs';
+    $options['attributes']['class'][] = 'btn-' . $class;
+    if ($string) {
+      $options['attributes']['class'] = implode(' ', $options['attributes']['class']);
     }
 
     $variables['link'] = [
       '#type' => 'link',
-      '#title' => SafeMarkup::format($icon . '@text', ['@text' => $link['title']]),
+      '#title' => SafeMarkup::format(\Drupal::service('renderer')
+          ->render($icon) . '@text', ['@text' => $link['title']]),
       '#options' => $options,
       '#url' => $link['url'],
     ];
