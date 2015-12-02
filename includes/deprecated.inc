@@ -4,7 +4,9 @@
  * This contains deprecated functions that will be removed in a future release.
  */
 
+use Drupal\bootstrap\BaseTheme;
 use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\Element;
 use Drupal\Component\Utility\NestedArray;
 
 /**
@@ -20,9 +22,9 @@ use Drupal\Component\Utility\NestedArray;
  *   echo substr(\Drupal\bootstrap\Bootstrap::VERSION, 0, 1);
  * @endcode
  *
- * @see \Drupal\bootstrap\Bootstrap::VERSION
+ * @see \Drupal\bootstrap\Bootstrap::FRAMEWORK_VERSION
  */
-define('BOOTSTRAP_VERSION_MAJOR', substr(Bootstrap::VERSION, 0, 1));
+define('BOOTSTRAP_VERSION_MAJOR', substr(Bootstrap::FRAMEWORK_VERSION, 0, 1));
 
 /**
  * The current supported Bootstrap framework minor version number.
@@ -37,9 +39,9 @@ define('BOOTSTRAP_VERSION_MAJOR', substr(Bootstrap::VERSION, 0, 1));
  *   echo substr(\Drupal\bootstrap\Bootstrap::VERSION, 2, 1);
  * @endcode
  *
- * @see \Drupal\bootstrap\Bootstrap::VERSION
+ * @see \Drupal\bootstrap\Bootstrap::FRAMEWORK_VERSION
  */
-define('BOOTSTRAP_VERSION_MINOR', substr(Bootstrap::VERSION, 2, 1));
+define('BOOTSTRAP_VERSION_MINOR', substr(Bootstrap::FRAMEWORK_VERSION, 2, 1));
 
 /**
  * The current supported Bootstrap framework patch version number.
@@ -54,9 +56,9 @@ define('BOOTSTRAP_VERSION_MINOR', substr(Bootstrap::VERSION, 2, 1));
  *   echo substr(\Drupal\bootstrap\Bootstrap::VERSION, 4, 1);
  * @endcode
  *
- * @see \Drupal\bootstrap\Bootstrap::VERSION
+ * @see \Drupal\bootstrap\Bootstrap::FRAMEWORK_VERSION
  */
-define('BOOTSTRAP_VERSION_PATCH', substr(Bootstrap::VERSION, 4, 1));
+define('BOOTSTRAP_VERSION_PATCH', substr(Bootstrap::FRAMEWORK_VERSION, 4, 1));
 
 /**
  * The current supported Bootstrap framework version.
@@ -71,9 +73,9 @@ define('BOOTSTRAP_VERSION_PATCH', substr(Bootstrap::VERSION, 4, 1));
  *   echo \Drupal\bootstrap\Bootstrap::VERSION;
  * @endcode
  *
- * @see \Drupal\bootstrap\Bootstrap::VERSION
+ * @see \Drupal\bootstrap\Bootstrap::FRAMEWORK_VERSION
  */
-define('BOOTSTRAP_VERSION', Bootstrap::VERSION);
+define('BOOTSTRAP_VERSION', Bootstrap::FRAMEWORK_VERSION);
 
 /**
  * Wrapper for the core file_scan_directory() function.
@@ -108,7 +110,8 @@ define('BOOTSTRAP_VERSION', Bootstrap::VERSION);
  * @see file_scan_directory()
  */
 function _bootstrap_file_scan_directory($dir, $mask, array $options = []) {
-  return Bootstrap::getTheme()->fileScan($mask, $dir, $options);
+  Bootstrap::deprecated();
+  return BaseTheme::getTheme()->fileScan($mask, $dir, $options);
 }
 
 /**
@@ -143,11 +146,31 @@ function _bootstrap_file_scan_directory($dir, $mask, array $options = []) {
  * @see \Drupal\bootstrap\Theme::getAncestry()
  */
 function _bootstrap_get_base_themes($theme_key = NULL, $include_theme_key = FALSE) {
-  $themes = array_keys(Bootstrap::getTheme($theme_key)->getAncestry());
+  Bootstrap::deprecated();
+  $themes = array_keys(BaseTheme::getTheme($theme_key)->getAncestry());
   if (!$include_theme_key) {
     array_pop($themes);
   }
   return $themes;
+}
+
+/**
+ * Converts an element description into a tooltip based on certain criteria.
+ *
+ * @param array $element
+ *   An element render array, passed by reference.
+ * @param array $target
+ *   The target element render array the tooltip is to be attached to, passed
+ *   by reference. If not set, it will default to the $element passed.
+ * @param bool $input_only
+ *   Toggle determining whether or not to only convert input elements.
+ * @param int $length
+ *   The length of characters to determine if description is "simple".
+ */
+function bootstrap_element_smart_description(array &$element, array &$target = NULL, $input_only = TRUE, $length = NULL) {
+  Bootstrap::deprecated();
+  $e = new Element($element);
+  $e->smartDescription($target, $input_only, $length);
 }
 
 /**
@@ -168,6 +191,7 @@ function _bootstrap_get_base_themes($theme_key = NULL, $include_theme_key = FALS
  * @deprecated Will be removed in a future release. There is no replacement.
  */
 function bootstrap_get_theme_info($theme_key = NULL, $key = NULL, $base_themes = TRUE) {
+  Bootstrap::deprecated();
   // If no $theme_key is given, use the current theme if we can determine it.
   if (!isset($theme_key)) {
     $theme_key = !empty($GLOBALS['theme_key']) ? $GLOBALS['theme_key'] : FALSE;
@@ -256,7 +280,8 @@ function bootstrap_get_theme_info($theme_key = NULL, $key = NULL, $base_themes =
  * @see \Drupal\bootstrap\Bootstrap::getTheme()
  */
 function bootstrap_include($theme, $path) {
-  $theme = Bootstrap::getTheme($theme);
+  Bootstrap::deprecated();
+  $theme = BaseTheme::getTheme($theme);
   $parts = explode('/', $path);
   $file = array_pop($parts);
   $dir = implode('/', $parts);
@@ -294,7 +319,8 @@ function bootstrap_include($theme, $path) {
  * @see \Drupal\bootstrap\Bootstrap::getTheme()
  */
 function bootstrap_setting($name, $theme = NULL, $prefix = 'bootstrap') {
-  $theme = Bootstrap::getTheme($theme);
+  Bootstrap::deprecated();
+  $theme = BaseTheme::getTheme($theme);
   $prefix = !empty($prefix) ? $prefix . '_' : '';
   return $theme->getSetting($prefix . $name);
 }

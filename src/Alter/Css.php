@@ -7,6 +7,7 @@
 namespace Drupal\bootstrap\Alter;
 
 use \Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\BaseTheme;
 
 /**
  * Implements hook_css_alter().
@@ -17,7 +18,7 @@ class Css implements AlterInterface {
    * {@inheritdoc}
    */
   public static function alter(&$css, &$context1 = NULL, &$context2 = NULL) {
-    $theme = Bootstrap::getTheme();
+    $theme = BaseTheme::getTheme();
 
     // Add CDN assets, if any.
     $provider = $theme->getSetting('cdn_provider');
@@ -40,7 +41,7 @@ class Css implements AlterInterface {
       // Add a specific version and theme CSS overrides file.
       $version = $theme->getSetting('cdn_' . $provider . '_version');
       if (!$version) {
-        $version = Bootstrap::VERSION;
+        $version = Bootstrap::FRAMEWORK_VERSION;
       }
       $provider_theme = $theme->getSetting('cdn_' . $provider . '_theme');
       if (!$provider_theme) {

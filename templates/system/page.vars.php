@@ -5,6 +5,7 @@
  */
 
 use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\BaseTheme;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Menu\MenuTreeParameters;
 
@@ -18,7 +19,7 @@ use Drupal\Core\Menu\MenuTreeParameters;
  * @ingroup theme_preprocess
  */
 function bootstrap_preprocess_page(&$variables) {
-  $theme = Bootstrap::getTheme();
+  $theme = BaseTheme::getTheme();
 
   // Add information about the number of sidebars.
   $variables['content_column_attributes'] = new Attribute();

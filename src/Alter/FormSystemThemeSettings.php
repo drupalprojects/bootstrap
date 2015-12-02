@@ -6,11 +6,11 @@
 
 namespace Drupal\bootstrap\Alter;
 
-use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\BaseTheme;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 
-Bootstrap::getTheme('bootstrap')->includeOnce('cdn.inc');
+BaseTheme::getTheme('bootstrap')->includeOnce('cdn.inc');
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -29,7 +29,7 @@ class FormSystemThemeSettings implements FormInterface {
     }
 
     // Do not add Bootstrap specific settings to non-bootstrap based themes,
-    $theme = Bootstrap::getTheme($args[0]);
+    $theme = BaseTheme::getTheme($args[0]);
     if (!$theme->subthemeOf('bootstrap')) {
       return;
     }
@@ -584,6 +584,14 @@ class FormSystemThemeSettings implements FormInterface {
       '#type' => 'details',
       '#title' => t('Advanced'),
       '#group' => 'bootstrap',
+    ];
+
+    // Suppress deprecated warnings.
+    $form['advanced']['suppress_deprecated_warnings'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Suppress deprecated function or method warnings'),
+      '#default_value' => $theme->getSetting('suppress_deprecated_warnings'),
+      '#description' => t('Enable this setting if you wish to suppress any deprecated function or method warnings. WARNING: Suppressing these messages does not "fix" the problem and you will inevitably encounter issues when they are removed in future updates. Only use this setting in extreme and necessary circumstances.'),
     ];
 
     // BootstrapCDN.

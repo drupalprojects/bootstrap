@@ -39,8 +39,8 @@ region_well-header: ''
 region_well-highlighted: ''
 region_well-help: ''
 region_well-content: ''
-region_well-sidebar_first: 'well'
-region_well-sidebar_second: ''
+region_well-sidebar_first: ''
+region_well-sidebar_second: 'well'
 region_well-footer: ''
 
 # Anchors
@@ -99,6 +99,8 @@ cdn_custom_js: 'https://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.js'
 cdn_custom_js_min: 'https://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js'
 cdn_jsdelivr_version: '3.3.5'
 cdn_jsdelivr_theme: 'bootstrap'
+
+suppress_deprecated_warnings: 0
 
 # Global
 # --------------

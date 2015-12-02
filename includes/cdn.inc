@@ -7,6 +7,7 @@
  */
 
 use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\BaseTheme;
 use Drupal\bootstrap\Theme;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\NestedArray;
@@ -42,16 +43,16 @@ function bootstrap_cdn_provider($provider = NULL, $reset = FALSE) {
     $drupal_static_fast['providers'] = &drupal_static(__FUNCTION__);
   }
   $providers = &$drupal_static_fast['providers'];
+
   if ($reset || !isset($providers)) {
     $provider_path = BOOTSTRAP_CDN_PROVIDER_PATH;
     file_prepare_directory($provider_path, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
 
     // Retrieve cache.
-    $cache = Bootstrap::getTheme()->cache();
-    $providers = $cache->get('cdn_providers');
+    $providers = BaseTheme::getTheme()->getCache('cdn_providers', []);
 
-    if ($reset || !isset($providers)) {
-      $providers = [
+    if ($reset || $providers->isEmpty()) {
+      $providers->setMultiple([
         'custom' => [
           'title' => (string) t('Custom'),
         ],
@@ -65,7 +66,7 @@ function bootstrap_cdn_provider($provider = NULL, $reset = FALSE) {
             ':cloudflare' => 'http://www.cloudflare.com',
           ]),
         ],
-      ];
+      ]);
 
       // @todo Use drupal_alter() once CDN is in bootstrap_core companion module.
       // drupal_alter('bootstrap_cdn_provider', $providers);
@@ -86,7 +87,7 @@ function bootstrap_cdn_provider($provider = NULL, $reset = FALSE) {
       ];
 
       // Process the providers.
-      foreach ($providers as $name => &$data) {
+      foreach ($providers as $name => $data) {
         $data += $defaults;
         $data['name'] = $name;
         if (empty($name)) {
@@ -122,17 +123,13 @@ function bootstrap_cdn_provider($provider = NULL, $reset = FALSE) {
         }
         // @todo Use drupal_alter() once CDN is in bootstrap_core companion module.
         // drupal_alter('bootstrap_cdn_provider_' . $name, $data, $request);
-      }
 
-      // Cache the providers.
-      $cache->set('cdn_providers', $providers);
+        $providers->set($name, $data);
+      }
     }
   }
   if (isset($original_provider)) {
-    if (!isset($providers[$original_provider])) {
-      return FALSE;
-    }
-    return $providers[$original_provider];
+    return $providers->get($original_provider, FALSE);
   }
   return $providers;
 }
@@ -171,7 +168,7 @@ function bootstrap_bootstrap_cdn_provider_jsdelivr_alter(&$provider, $response =
     foreach ($json as $data) {
       if ($data['name'] === $bootstrap || $data['name'] === $bootswatch) {
         foreach ($data['assets'] as $asset) {
-          if (preg_match('/^' . substr(Bootstrap::VERSION, 0, 1) . '\.\d\.\d$/', $asset['version'])) {
+          if (preg_match('/^' . substr(Bootstrap::FRAMEWORK_VERSION, 0, 1) . '\.\d\.\d$/', $asset['version'])) {
             $libraries[$data['name']][$asset['version']] = $asset['files'];
           }
         }
@@ -182,15 +179,15 @@ function bootstrap_bootstrap_cdn_provider_jsdelivr_alter(&$provider, $response =
   // If the main bootstrap library could not be found, then provide defaults.
   if (!isset($libraries[$bootstrap])) {
     $provider['error'] = TRUE;
-    $provider['versions'][Bootstrap::VERSION] = Bootstrap::VERSION;
-    $provider['themes'][Bootstrap::VERSION] = [
+    $provider['versions'][Bootstrap::FRAMEWORK_VERSION] = Bootstrap::FRAMEWORK_VERSION;
+    $provider['themes'][Bootstrap::FRAMEWORK_VERSION] = [
       'bootstrap' => [
         'title' => (string) t('Bootstrap'),
-        'css' => ['//cdn.jsdelivr.net/bootstrap/' . Bootstrap::VERSION . '/css/bootstrap.css'],
-        'js' => ['//cdn.jsdelivr.net/bootstrap/' . Bootstrap::VERSION . '/js/bootstrap.js'],
+        'css' => ['//cdn.jsdelivr.net/bootstrap/' . Bootstrap::FRAMEWORK_VERSION . '/css/bootstrap.css'],
+        'js' => ['//cdn.jsdelivr.net/bootstrap/' . Bootstrap::FRAMEWORK_VERSION . '/js/bootstrap.js'],
         'min' => [
-          'css' => ['//cdn.jsdelivr.net/bootstrap/' . Bootstrap::VERSION . '/css/bootstrap.min.css'],
-          'js' => ['//cdn.jsdelivr.net/bootstrap/' . Bootstrap::VERSION . '/js/bootstrap.min.js'],
+          'css' => ['//cdn.jsdelivr.net/bootstrap/' . Bootstrap::FRAMEWORK_VERSION . '/css/bootstrap.min.css'],
+          'js' => ['//cdn.jsdelivr.net/bootstrap/' . Bootstrap::FRAMEWORK_VERSION . '/js/bootstrap.min.js'],
         ],
       ],
     ];
@@ -310,7 +307,7 @@ function _bootstrap_cdn_provider_jsdelivr_extract_themes(array $files, $base_url
  * @todo Create documentation when hook is real.
  */
 function bootstrap_bootstrap_cdn_provider_custom_assets_alter(&$provider, $theme = NULL) {
-  $theme = Bootstrap::getTheme($theme);
+  $theme = BaseTheme::getTheme($theme);
   foreach (['css', 'js'] as $type) {
     if ($setting = $theme->getSetting('cdn_custom_' . $type)) {
       $provider[$type][] = $setting;
@@ -327,9 +324,9 @@ function bootstrap_bootstrap_cdn_provider_custom_assets_alter(&$provider, $theme
  * @todo Create documentation when hook is real.
  */
 function bootstrap_bootstrap_cdn_provider_jsdelivr_assets_alter(&$provider, $theme = NULL) {
-  $theme = Bootstrap::getTheme($theme);
+  $theme = BaseTheme::getTheme($theme);
   $error = !empty($provider['error']);
-  $version = $error ? Bootstrap::VERSION : $theme->getSetting('cdn_jsdelivr_version');
+  $version = $error ? Bootstrap::FRAMEWORK_VERSION : $theme->getSetting('cdn_jsdelivr_version');
   $theme = $error ? 'bootstrap' : $theme->getSetting('cdn_jsdelivr_theme');
   if (isset($provider['themes'][$version][$theme])) {
     $provider = NestedArray::mergeDeep($provider, $provider['themes'][$version][$theme]);
@@ -455,7 +452,7 @@ function bootstrap_cdn_provider_settings_form_ajax_reload_provider($form, FormSt
  * Implements hook_bootstrap_cdn_provider_PROVIDER_settings_form_alter().
  */
 function bootstrap_bootstrap_cdn_provider_custom_settings_form_alter(&$element, FormStateInterface &$form_state, $provider = [], $theme = NULL) {
-  $theme = Bootstrap::getTheme($theme);
+  $theme = BaseTheme::getTheme($theme);
   foreach (['css', 'js'] as $type) {
     $setting = $theme->getSetting('cdn_custom_' . $type);
     $setting_min = $theme->getSetting('cdn_custom_' . $type . '_min');
@@ -482,7 +479,7 @@ function bootstrap_bootstrap_cdn_provider_custom_settings_form_alter(&$element, 
  * Implements hook_bootstrap_cdn_provider_PROVIDER_settings_form_alter().
  */
 function bootstrap_bootstrap_cdn_provider_jsdelivr_settings_form_alter(&$element, FormStateInterface &$form_state, $provider = [], $theme = NULL) {
-  $theme = Bootstrap::getTheme($theme);
+  $theme = BaseTheme::getTheme($theme);
   $version = $form_state->getValue('bootstrap_cdn_jsdelivr_version') != NULL ? $form_state->getValue('bootstrap_cdn_jsdelivr_version') : $theme->getSetting('cdn_jsdelivr_version');
   $element['cdn_jsdelivr_version'] = [
     '#type' => 'select',

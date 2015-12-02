@@ -5,6 +5,7 @@
  */
 
 use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\BaseTheme;
 
 /**
  * Pre-processes variables for the "image" theme hook.
@@ -16,7 +17,7 @@ use Drupal\bootstrap\Bootstrap;
  * @ingroup theme_preprocess
  */
 function bootstrap_preprocess_image(&$variables) {
-  $theme = Bootstrap::getTheme();
+  $theme = BaseTheme::getTheme();
 
   // Add image shape, if necessary.
   if ($shape = $theme->getSetting('image_shape')) {

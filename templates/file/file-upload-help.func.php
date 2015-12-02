@@ -5,6 +5,7 @@
  */
 
 use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\BaseTheme;
 
 /**
  * Returns HTML for help text based on file upload validators.
@@ -25,7 +26,7 @@ use Drupal\bootstrap\Bootstrap;
  */
 function bootstrap_file_upload_help($variables) {
   // If popover's are disabled, just theme this normally.
-  if (!Bootstrap::getTheme()->getSetting('popover_enabled')) {
+  if (!BaseTheme::getTheme()->getSetting('popover_enabled')) {
     return theme_file_upload_help($variables);
   }
 

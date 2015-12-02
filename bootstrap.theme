@@ -22,165 +22,134 @@
  * @see \Drupal\bootstrap\Registry
  */
 
+use Drupal\bootstrap\BaseTheme;
 use Drupal\bootstrap\Bootstrap;
 
-/**
+/******************************************************************************
  * Include necessary theme files, all of which need to be discoverable here.
- */
-$bootstrap = Bootstrap::getTheme('bootstrap');
+ *****************************************************************************/
+
+$bootstrap = BaseTheme::getTheme('bootstrap');
 $bootstrap->includeOnce('common.inc');
 $bootstrap->includeOnce('deprecated.inc');
 $bootstrap->includeOnce('pre-render.inc');
 $bootstrap->includeOnce('process.inc');
 
+/******************************************************************************
+ * Procedural Hooks
+ *****************************************************************************/
+
 /**
- * Implements hook_theme().
+ * {@inheritdoc}
  *
- * This base-theme's custom theme hook implementations. Never define "path"
- * or "template" as these are detected and automatically added.
- *
- * @see bootstrap_theme_registry_alter()
- * @see \Drupal\bootstrap\Registry
- * @see hook_theme()
+ * @see \Drupal\bootstrap\Bootstrap::getInfo()
  */
 function bootstrap_theme() {
-  // Bootstrap Carousels.
-  $hooks['bootstrap_carousel'] = [
-    'variables' => [
-      'attributes' => [],
-      'items' => [],
-      'start_index' => 0,
-      'controls' => TRUE,
-      'indicators' => TRUE,
-      'interval' => 5000,
-      'pause' => 'hover',
-      'wrap' => TRUE,
-    ],
-  ];
-
-  // Bootstrap Dropdowns.
-  $hooks['bootstrap_dropdown'] = [
-    'render element' => 'element',
-  ];
-
-  // Bootstrap Modals.
-  $hooks['bootstrap_modal'] = [
-    'variables' => [
-      'heading' => '',
-      'body' => '',
-      'footer' => '',
-      'dialog_attributes' => [],
-      'attributes' => [],
-      'size' => '',
-      'html_heading' => FALSE,
-    ],
-  ];
-
-  // Bootstrap Panels.
-  $hooks['bootstrap_panel'] = [
-    'render element' => 'element',
-  ];
-  return $hooks;
+  return Bootstrap::getInfo();
 }
 
+/******************************************************************************
+ * Procedural Hook Alters
+ *****************************************************************************/
+
 /**
- * Implements hook_css_alter().
+ * {@inheritdoc}
  *
  * @see \Drupal\bootstrap\Alter\Css::alter()
  */
 function bootstrap_css_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
-  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
+  BaseTheme::alter(__FUNCTION__, $data, $context1, $context2);
 }
 
 /**
- * Implements hook_element_info_alter().
+ * {@inheritdoc}
  *
  * @see \Drupal\bootstrap\Alter\ElementInfo::alter()
  */
 function bootstrap_element_info_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
-  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
+  BaseTheme::alter(__FUNCTION__, $data, $context1, $context2);
 }
 
 /**
- * Implements hook_form_alter().
+ * {@inheritdoc}
  *
  * @see \Drupal\bootstrap\Alter\Form::alter()
  */
 function bootstrap_form_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
-  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
+  BaseTheme::alter(__FUNCTION__, $data, $context1, $context2);
 }
 
 /**
- * Implements hook_form_system_theme_settings_alter().
+ * {@inheritdoc}
  *
  * @see \Drupal\bootstrap\Alter\FormSystemThemeSettings::alter()
  */
 function bootstrap_form_system_theme_settings_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
-  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
+  BaseTheme::alter(__FUNCTION__, $data, $context1, $context2);
 }
 
 /**
- * Implements hook_icon_bundle_list_alter().
+ * {@inheritdoc}
  *
  * @see \Drupal\bootstrap\Alter\IconBundleList::alter()
  */
 function bootstrap_icon_bundle_list_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
-  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
+  BaseTheme::alter(__FUNCTION__, $data, $context1, $context2);
 }
 
 /**
- * Implements hook_js_alter().
+ * {@inheritdoc}
  *
  * @see \Drupal\bootstrap\Alter\Js::alter()
  */
 function bootstrap_js_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
-  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
+  BaseTheme::alter(__FUNCTION__, $data, $context1, $context2);
 }
 
 /**
- * Implements hook_js_callback_filter_xss_alter().
+ * {@inheritdoc}
  *
  * @see \Drupal\bootstrap\Alter\JsCallbackFilterXss::alter()
  */
 function bootstrap_js_callback_filter_xss_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
-  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
+  BaseTheme::alter(__FUNCTION__, $data, $context1, $context2);
 }
 
 /**
- * Implements hook_menu_local_tasks_alter().
+ * {@inheritdoc}
  *
  * @see \Drupal\bootstrap\Alter\MenuLocalTasks::alter()
  */
 function bootstrap_menu_local_tasks_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
-  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
+  BaseTheme::alter(__FUNCTION__, $data, $context1, $context2);
 }
 
 /**
- * Implements hook_page_attachments_alter().
+ * {@inheritdoc}
  *
  * @see \Drupal\bootstrap\Alter\PageAttachments::alter()
  */
 function bootstrap_page_attachments_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
-  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
+  BaseTheme::alter(__FUNCTION__, $data, $context1, $context2);
 }
 
 /**
- * Implements hook_theme_registry_alter().
+ * {@inheritdoc}
+ *
+ * @see \Drupal\bootstrap\Alter\ThemeRegistry::alter()
  *
  * @todo Remove once \Drupal\bootstrap\Theme\Registry can properly replace
  * the theme.registry service in a bootstrap_core sub-module.
- *
- * @see \Drupal\bootstrap\Alter\ThemeRegistry::alter()
  */
 function bootstrap_theme_registry_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
-  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
+  BaseTheme::alter(__FUNCTION__, $data, $context1, $context2);
 }
 
 /**
- * Implements hook_theme_suggestions_alter().
+ * {@inheritdoc}
  *
  * @see \Drupal\bootstrap\Alter\ThemeSuggestions::alter()
  */
 function bootstrap_theme_suggestions_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
-  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
+  BaseTheme::alter(__FUNCTION__, $data, $context1, $context2);
 }

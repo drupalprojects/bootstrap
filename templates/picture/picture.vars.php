@@ -5,6 +5,7 @@
  */
 
 use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\BaseTheme;
 
 /**
  * Pre-processes variables for the "picture" theme hook.
@@ -17,7 +18,7 @@ use Drupal\bootstrap\Bootstrap;
  */
 function bootstrap_preprocess_picture(&$variables) {
   // Add responsiveness, if necessary.
-  if ($shape = Bootstrap::getTheme()->getSetting('image_responsive')) {
+  if ($shape = BaseTheme::getTheme()->getSetting('image_responsive')) {
     $variables['attributes']['class'][] = 'img-responsive';
   }
 }

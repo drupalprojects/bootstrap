@@ -5,6 +5,7 @@
  */
 
 use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\BaseTheme;
 use Drupal\Core\Form\FormState;
 
 /**
@@ -25,7 +26,8 @@ function bootstrap_preprocess_form_element(&$variables) {
 
   // Check for errors and set correct error class.
   $formState = new FormState();
-  if ((isset($element['#parents']) && $formState->getError($element)) || (!empty($element['#required']) && Bootstrap::getTheme()->getSetting('forms_required_has_error'))) {
+  if ((isset($element['#parents']) && $formState->getError($element)) || (!empty($element['#required']) && BaseTheme::getTheme()
+        ->getSetting('forms_required_has_error'))) {
     $variables['has_error'] = TRUE;
   }
 

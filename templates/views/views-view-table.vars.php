@@ -5,6 +5,7 @@
  */
 
 use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\BaseTheme;
 
 /**
  * Pre-processes variables for the "views_view_table" theme hook.
@@ -16,6 +17,6 @@ use Drupal\bootstrap\Bootstrap;
  * @ingroup theme_preprocess
  */
 function bootstrap_preprocess_views_view_table(&$variables) {
-  Bootstrap::getTheme('bootstrap')->includeOnce('table.vars.php', 'templates/system');
+  BaseTheme::getTheme('bootstrap')->includeOnce('table.vars.php', 'templates/system');
   _bootstrap_table_add_classes($variables['attributes']['class'], $variables);
 }

@@ -55,7 +55,8 @@ function bootstrap_pre_render($element) {
   }
 
   // Add smart descriptions to the element, if necessary.
-  bootstrap_element_smart_description($element);
+  $e = new \Drupal\bootstrap\Element($element);
+  $e->smartDescription();
 
   return $element;
 }

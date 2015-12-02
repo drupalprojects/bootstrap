@@ -8,6 +8,7 @@
 namespace Drupal\bootstrap\Alter;
 
 use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\BaseTheme;
 use Drupal\bootstrap\Theme;
 use Drupal\Core\Theme\ActiveTheme;
 use Drupal\Core\Theme\Registry;
@@ -93,7 +94,7 @@ class ThemeRegistry extends Registry implements AlterInterface {
     ksort($cache);
 
     // Discover all theme files.
-    $theme = Bootstrap::getTheme();
+    $theme = BaseTheme::getTheme();
     foreach ($theme->getAncestry() as $ancestor) {
       $this->discoverFiles($cache, $ancestor);
     }

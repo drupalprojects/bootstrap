@@ -5,6 +5,7 @@
  */
 
 use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\BaseTheme;
 
 /**
  * Pre-processes variables for the "region" theme hook.
@@ -20,7 +21,7 @@ function bootstrap_preprocess_region(&$variables) {
   $variables['region'] = $region;
   $variables['content'] = $variables['elements']['#children'];
 
-  $theme = Bootstrap::getTheme();
+  $theme = BaseTheme::getTheme();
 
   // Content region.
   if ($region === 'content') {

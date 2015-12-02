@@ -92,7 +92,8 @@ function bootstrap_form_process_text_format($element, &$form_state, &$form) {
   }
 
   // Provide smart description on the value text area.
-  bootstrap_element_smart_description($element, $element['value']);
+  $e = new \Drupal\bootstrap\Element($element);
+  $e->smartDescription($element['value']);
 
   // Allow the elements inside to be displayed inline.
   $element['format']['#attributes']['class'][] = 'form-inline';

@@ -4,7 +4,6 @@
  * Contains \Drupal\bootstrap\Theme.
  */
 
-// Name of the base theme must be lowercase for it to be autoload discoverable.
 namespace Drupal\bootstrap;
 
 use Drupal\Component\Utility\Crypt;
@@ -89,20 +88,6 @@ class Theme {
   }
 
   /**
-   * Retrieves the theme's cache from the database.
-   *
-   * @return \Drupal\bootstrap\Cache
-   *   The cache object.
-   */
-  public function cache() {
-    static $cache = [];
-    if (!isset($cache[$this->getName()])) {
-      $cache[$this->getName()] = new Cache('theme_registry:cache:' . $this->getName());
-    }
-    return $cache[$this->getName()];
-  }
-
-  /**
    * Wrapper for the core file_scan_directory() function.
    *
    * Finds all files that match a given mask in the given directories and then
@@ -170,17 +155,15 @@ class Theme {
     }
 
     // Retrieve cache.
-    $cache = static::cache();
-    $files = $cache->get('files', []);
+    $files = static::getCache('files', []);
 
     // Generate a unique hash for all parameters passed as a change in any of
     // them would return different results.
     $hash = Crypt::hashBase64(serialize([$mask, $dir, $options]));
-    if (!isset($files[$hash])) {
-      $files[$hash] = file_scan_directory($dir, $mask, $options);
-      $cache->set('files', $files);
+    if (!$files->has($hash)) {
+      $files->set($hash, file_scan_directory($dir, $mask, $options));
     }
-    return $files[$hash];
+    return $files->get($hash, []);
   }
 
   /**
@@ -204,36 +187,42 @@ class Theme {
   }
 
   /**
-   * Includes a file from the theme.
+   * Retrieves the theme's cache from the database.
    *
-   * @param string $file
-   *   The file name, including the extension.
-   * @param string $path
-   *   The path to the file in the theme. Defaults to: "includes". Set to FALSE
-   *   or and empty string if the file resides in the theme's root directory.
-   *
-   * @return bool
-   *   TRUE if the file exists and is included successfully, FALSE otherwise.
+   * @return \Drupal\bootstrap\ThemeStorage
+   *   The cache object.
    */
-  public function includeOnce($file, $path = 'includes') {
-    static $includes = [];
-    if (strpos($file, '/') !== 0) {
-      $file = "/$file";
+  public function getThemeStorage() {
+    static $cache = [];
+    $theme = $this->getName();
+    if (!isset($cache[$theme])) {
+      $cache[$theme] = new ThemeStorage($theme);
     }
-    if (is_string($path) && !empty($path) && strpos($path, '/') !== 0) {
-      $path = "/$path";
-    }
-    else {
-      $path = '';
-    }
-    $include = DRUPAL_ROOT . base_path() . $this->getPath() . $path . $file;
-    if (!isset($includes[$include])) {
-      $includes[$include] = @include_once $include;
-      if (!$includes[$include]) {
-        drupal_set_message(t('Could not include file: @include', ['@include' => $include]), 'error');
+    return $cache[$theme];
+  }
+
+  /**
+   * Retrieves an individual item from a theme's cache in the database.
+   *
+   * @param string $name
+   *   The name of the item to retrieve from the theme cache.
+   * @param mixed $default
+   *   The default value to use if $name does not exist.
+   *
+   * @return mixed|\Drupal\bootstrap\ThemeStorageItem
+   *   The cached value for $name.
+   */
+  public function getCache($name, $default = []) {
+    static $cache = [];
+    $theme = $this->getName();
+    $theme_cache = static::getThemeStorage();
+    if (!isset($cache[$theme][$name])) {
+      if (!$theme_cache->has($name)) {
+        $theme_cache->set($name, is_array($default) ? new ThemeStorageItem($default, $theme_cache) : $default);
       }
+      $cache[$theme][$name] = $theme_cache->get($name);
     }
-    return $includes[$include];
+    return $cache[$theme][$name];
   }
 
   /**
@@ -272,6 +261,39 @@ class Theme {
   }
 
   /**
+   * Includes a file from the theme.
+   *
+   * @param string $file
+   *   The file name, including the extension.
+   * @param string $path
+   *   The path to the file in the theme. Defaults to: "includes". Set to FALSE
+   *   or and empty string if the file resides in the theme's root directory.
+   *
+   * @return bool
+   *   TRUE if the file exists and is included successfully, FALSE otherwise.
+   */
+  public function includeOnce($file, $path = 'includes') {
+    static $includes = [];
+    if (strpos($file, '/') !== 0) {
+      $file = "/$file";
+    }
+    if (is_string($path) && !empty($path) && strpos($path, '/') !== 0) {
+      $path = "/$path";
+    }
+    else {
+      $path = '';
+    }
+    $include = DRUPAL_ROOT . base_path() . $this->getPath() . $path . $file;
+    if (!isset($includes[$include])) {
+      $includes[$include] = @include_once $include;
+      if (!$includes[$include]) {
+        drupal_set_message(t('Could not include file: @include', ['@include' => $include]), 'error');
+      }
+    }
+    return $includes[$include];
+  }
+
+  /**
    * Determines whether or not a theme is a sub-theme of another.
    *
    * @param string|\Drupal\bootstrap\Theme $theme
@@ -283,6 +305,5 @@ class Theme {
   public function subthemeOf($theme) {
     return (string) $theme === $this->getName() || in_array($theme, array_keys(static::getAncestry()));
   }
-
 
 }

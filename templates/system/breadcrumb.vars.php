@@ -5,6 +5,7 @@
  */
 
 use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\BaseTheme;
 use Drupal\Core\Template\Attribute;
 
 /**
@@ -18,7 +19,7 @@ use Drupal\Core\Template\Attribute;
  * @ingroup theme_preprocess
  */
 function bootstrap_preprocess_breadcrumb(&$variables) {
-  $theme = Bootstrap::getTheme();
+  $theme = BaseTheme::getTheme();
   $breadcrumb = &$variables['breadcrumb'];
 
   // Optionally get rid of the homepage link.

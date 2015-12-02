@@ -5,6 +5,7 @@
  */
 
 use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\BaseTheme;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Url;
@@ -17,99 +18,6 @@ use Drupal\Core\Url;
  *
  * @{
  */
-
-/**
- * Converts an element description into a tooltip based on certain criteria.
- *
- * @param array $element
- *   An element render array, passed by reference.
- * @param array $target
- *   The target element render array the tooltip is to be attached to, passed
- *   by reference. If not set, it will default to the $element passed.
- * @param bool $input_only
- *   Toggle determining whether or not to only convert input elements.
- * @param int $length
- *   The length of characters to determine if description is "simple".
- */
-function bootstrap_element_smart_description(&$element, &$target = NULL, $input_only = TRUE, $length = NULL) {
-  $theme = Bootstrap::getTheme();
-
-  // Determine if tooltips are enabled.
-  static $enabled;
-  if (!isset($enabled)) {
-    $enabled = $theme->getSetting('tooltip_enabled') && $theme->getSetting('forms_smart_descriptions');
-  }
-
-  // Immediately return if "simple" tooltip descriptions are not enabled.
-  if (!$enabled) {
-    return;
-  }
-
-  // Allow a different element to attach the tooltip.
-  if (!isset($target)) {
-    $target = &$element;
-  }
-
-  // Retrieve the length limit for smart descriptions.
-  if (!isset($length)) {
-    $length = (int) $theme->getSetting('forms_smart_descriptions_limit');
-    // Disable length checking by setting it to FALSE if empty.
-    if (empty($length)) {
-      $length = FALSE;
-    }
-  }
-
-  // Retrieve the allowed tags for smart descriptions. This is primarily used
-  // for display purposes only (i.e. non-UI/UX related elements that wouldn't
-  // require a user to "click", like a link).
-  $allowed_tags = array_filter(array_unique(array_map('trim', explode(',', $theme->getSetting('forms_smart_descriptions_allowed_tags') . ''))));
-
-  // Disable length checking by setting it to FALSE if empty.
-  if (empty($allowed_tags)) {
-    $allowed_tags = FALSE;
-  }
-
-  $html = FALSE;
-  $type = !empty($element['#type']) ? $element['#type'] : FALSE;
-  if (!$input_only || !empty($target['#input']) || !empty($element['#smart_description']) || !empty($target['#smart_description'])) {
-    if (!empty($element['#description']) && empty($target['#attributes']['title']) && empty($target['#attributes']['data-toggle'])) {
-      if (_bootstrap_is_simple_string($element['#description'], $length, $allowed_tags, $html)) {
-
-        // Default property (on the element itself).
-        $property = 'attributes';
-
-        // Add the tooltip to the #label_attributes property for 'checkbox'
-        // and 'radio' elements.
-        if ($type === 'checkbox' || $type === 'radio') {
-          $property = 'label_attributes';
-        }
-        // Add the tooltip to the #wrapper_attributes property for 'checkboxes'
-        // and 'radios' elements.
-        elseif ($type === 'checkboxes' || $type === 'radios') {
-          $property = 'attributes';
-        }
-        // Add the tooltip to the #input_group_attributes property for elements
-        // that have valid input groups set.
-        elseif ((!empty($element['#field_prefix']) || !empty($element['#field_suffix'])) && (!empty($element['#input_group']) || !empty($element['#input_group_button']))) {
-          $property = 'attributes';
-        }
-
-        // Retrieve the proper attributes array.
-        $attributes = &_bootstrap_get_attributes($target, $property);
-
-        // Set the tooltip attributes.
-        $attributes['title'] = $allowed_tags !== FALSE ? Xss::filter($element['#description'], $allowed_tags) : $element['#description'];
-        $attributes['data-toggle'] = 'tooltip';
-        if ($html || $allowed_tags === FALSE) {
-          $attributes['data-html'] = 'true';
-        }
-
-        // Remove the element description so it isn't (re-)rendered later.
-        unset($element['#description']);
-      }
-    }
-  }
-}
 
 /**
  * Retrieves CDN assets for the active provider, if any.
@@ -130,7 +38,7 @@ function bootstrap_element_smart_description(&$element, &$target = NULL, $input_
  *   is returned keyed by the type.
  */
 function bootstrap_get_cdn_assets($type = NULL, $provider = NULL, $theme = NULL) {
-  $theme = Bootstrap::getTheme($theme);
+  $theme = BaseTheme::getTheme($theme);
 
   $original_type = $type;
   $assets = [];
@@ -158,7 +66,7 @@ function bootstrap_get_cdn_assets($type = NULL, $provider = NULL, $theme = NULL)
   }
 
   // Load the CDN provider data.
-  Bootstrap::getTheme('bootstrap')->includeOnce('cdn.inc');
+  BaseTheme::getTheme('bootstrap')->includeOnce('cdn.inc');
   if (!empty($provider) && ($data = bootstrap_cdn_provider($provider))) {
     // Alter the assets based on provider.
     $function = 'bootstrap_bootstrap_cdn_provider_' . $provider . '_assets_alter';
@@ -633,7 +541,7 @@ function _bootstrap_glyphicons($version = NULL) {
   }
 
   // Return the latest version.
-  return $versions[Bootstrap::VERSION];
+  return $versions[Bootstrap::FRAMEWORK_VERSION];
 }
 
 /**
@@ -694,25 +602,25 @@ function _bootstrap_glyphicons_supported() {
 
   // Get static data.
   $supported = &$drupal_static_fast['supported'];
-  $theme = Bootstrap::getTheme($drupal_static_fast['theme']);
+  $theme = BaseTheme::getTheme($drupal_static_fast['theme']);
 
   // Retrieve supported themes.
   if (!isset($supported)) {
     $supported = [];
 
     // Retrieve cache.
-    $supported = $theme->cache()->get('icon_support', []);
+    $supported = $theme->getCache('icon_support', []);
 
-    if (!isset($supported[(string) $theme])) {
+    if (!$supported->has((string) $theme)) {
       // Bootstrap based themes are enabled by default to use CDN. Check if
       // that is the case here so no file discovery is necessary. If the active
       // theme does not have this setting, it falls back to the base theme that
       // does.
-      $supported[(string) $theme] = !!bootstrap_get_cdn_assets('css', NULL, (string) $theme);
+      $support = !!bootstrap_get_cdn_assets('css', NULL, (string) $theme);
 
       // CDN not used, iterate over all of the active (base) themes to determine
       // if they contain glyphicon font files.
-      if (!$supported[(string) $theme]) {
+      if (!$support) {
         foreach ($theme->getAncestry() as $ancestor) {
           // Scan the theme for files.
           $fonts = $ancestor->fileScan('/glyphicons-halflings-regular\.(eot|svg|ttf|woff)$/', NULL, [
@@ -721,17 +629,16 @@ function _bootstrap_glyphicons_supported() {
 
           // Fonts found, stop the search.
           if (!empty($fonts)) {
-            $supported[(string) $theme] = TRUE;
+            $support = TRUE;
             break;
           }
         }
       }
 
-      // Cache all supported themes now that this theme is added to the array.
-      $theme->cache()->set('icon_support', $supported);
+      $supported->set((string) $theme, $support);
     }
   }
-  return $supported[(string) $theme];
+  return $supported->get((string) $theme, FALSE);
 }
 
 /**
@@ -760,7 +667,7 @@ function _bootstrap_is_button($element) {
  *   The form variables of the element, passed by reference.
  */
 function _bootstrap_colorize_button(&$variables) {
-  $theme = Bootstrap::getTheme();
+  $theme = BaseTheme::getTheme();
 
   // Do not add the class if one is already present in the array.
   $button_classes = [
@@ -879,7 +786,7 @@ function _bootstrap_colorize_text($string, $default = '') {
  *   The form element, passed by reference.
  */
 function _bootstrap_iconize_button(&$element) {
-  if (Bootstrap::getTheme()->getSetting('button_iconize') && _bootstrap_is_button($element) && ($icon = _bootstrap_iconize_text($element['#value']))) {
+  if (BaseTheme::getTheme()->getSetting('button_iconize') && _bootstrap_is_button($element) && ($icon = _bootstrap_iconize_text($element['#value']))) {
     $element['#icon'] = $icon;
   }
 }

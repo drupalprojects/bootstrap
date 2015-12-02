@@ -27,7 +27,7 @@
   {% import _self as menus %}
   {% if items %}
     {% if menu_level == 0 %}
-      <ul{{ attributes.addClass('menu', 'nav') }}>
+      <ul{{ attributes.addClass('menu', 'nav', 'navbar-nav', 'secondary') }}>
     {% else %}
       <ul{{ attributes.addClass('dropdown-menu') }}>
     {% endif %}
