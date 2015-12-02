@@ -6,6 +6,8 @@
 
 namespace Drupal\bootstrap;
 
+use Drupal\bootstrap\Alter\AlterInterface;
+use Drupal\bootstrap\Form\FormInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Extension\Extension;
 use Drupal\Core\Extension\ThemeHandlerInterface;
@@ -72,42 +74,43 @@ class Bootstrap {
       return;
     }
 
-    // Retrieve cache.
-    $alter = $theme->getCache('alter', []);
-    if (!$alter->has($function)) {
-      $callback = FALSE;
+    // Extract the alter hook name.
+    $hook = Utility::extractHook($function, 'alter');
 
-      // Extract the alter hook name and convert it to a proper class name.
-      $name = Utility::extractHook($function, 'alter');
-      $namespace = 'Alter';
-      $interface = 'AlterInterface';
-
-      // There is only one form alter hook that need to be processed by this
-      // method: form_system_theme_settings. All other forms alters should be
-      // processed by \Drupal\bootstrap\Alter\Form::alter().
-      if ($name === 'form_system_theme_settings') {
-        $name = Utility::extractHook($function, 'alter', 'form');
-        $namespace = 'Form';
-        $interface = 'FormAlterInterface';
+    // Handle form alters separately.
+    if (strpos($hook, 'form') === 0) {
+      $form_id = $context2;
+      if (!$form_id) {
+        $form_id = Utility::extractHook($function, 'alter', 'form');
       }
 
-      // Get the proper class name.
-      $name = Utility::snakeToCamelCase($name);
-
-      // Determine if the function has a valid class counterpart.
-      if ($reflection = Utility::findClass($name, $namespace)) {
-        if ($reflection->implementsInterface("\\Drupal\\bootstrap\\$namespace\\$interface")) {
-          $callback = $reflection->getName();
-        }
+      // Due to a core bug that affects admin themes, we should not double
+      // process the "system_theme_settings" form twice in the global
+      // hook_form_alter() invocation.
+      // @see https://drupal.org/node/943212
+      if ($context2 === 'system_theme_settings') {
+        return;
       }
 
-      $alter->set($function, $callback);
+      // Retrieve a list of form definitions.
+      $form_manager = new FormManager($theme);
+
+      /** @var FormInterface $form */
+      if ($form_manager->hasDefinition($form_id) && ($form = $form_manager->createInstance($form_id))) {
+        $data['#submit'][] = [$form, 'submit'];
+        $data['#validate'][] = [$form, 'validate'];
+        $form->alter($data, $context1, $context2);
+      }
     }
+    // Process hook alter normally.
+    else {
+      // Retrieve a list of alter definitions.
+      $alter_manager = new AlterManager($theme);
 
-    // Only continue if there is a valid callback.
-    if ($class = $alter->get($function)) {
-      $callback = [$class, 'alter'];
-      call_user_func_array($callback, array(&$data, &$context1, &$context2));
+      /** @var AlterInterface $class */
+      if ($alter_manager->hasDefinition($hook) && ($class = $alter_manager->createInstance($hook))) {
+        $class->alter($data, $context2, $context2);
+      }
     }
   }
 

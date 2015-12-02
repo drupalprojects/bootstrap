@@ -9,14 +9,18 @@ namespace Drupal\bootstrap\Alter;
 use Drupal\bootstrap\Bootstrap;
 
 /**
- * Defines a base class for an object oriented alter.
+ * Implements hook_element_info_alter().
+ *
+ * @BootstrapAlter(
+ *   id = "element_info"
+ * )
  */
 class ElementInfo implements AlterInterface {
 
   /**
    * {@inheritdoc}
    */
-  public static function alter(&$types, &$context1 = NULL, &$context2 = NULL) {
+  public function alter(&$types, &$context1 = NULL, &$context2 = NULL) {
     foreach (array_keys($types) as $type) {
       $element = &$types[$type];
 

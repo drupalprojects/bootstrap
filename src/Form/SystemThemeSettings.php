@@ -12,13 +12,17 @@ use Drupal\Core\Render\Element;
 
 /**
  * Implements hook_form_system_theme_settings_alter().
+ *
+ * @BootstrapForm(
+ *   id = "system_theme_settings",
+ * )
  */
-class SystemThemeSettings extends FormAlterBase {
+class SystemThemeSettings extends FormBase {
 
   /**
    * {@inheritdoc}
    */
-  public static function alter(array &$form, FormStateInterface &$form_state, $form_id = NULL) {
+  public function alter(array &$form, FormStateInterface $form_state, $form_id = NULL) {
     // Work-around for a core bug affecting admin themes.
     // @see https://drupal.org/node/943212
     $args = $form_state->getBuildInfo()['args'];

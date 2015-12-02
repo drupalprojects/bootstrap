@@ -14,6 +14,6 @@ interface AlterInterface {
   /**
    * The alter method to store the code.
    */
-  public static function alter(&$data, &$context1 = NULL, &$context2 = NULL);
+  public function alter(&$data, &$context1 = NULL, &$context2 = NULL);
 
 }

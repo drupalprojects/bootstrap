@@ -35,63 +35,6 @@ abstract class Utility {
   }
 
   /**
-   * Finds proper class to use for the active theme, inheriting theme ancestry.
-   *
-   * @param string|array $class
-   *   A single class name or an array of class names to search for, with out
-   *   the namespace. The first matching class will be used.
-   * @param string $namespace
-   *   An additional namespace to use. Due to how core autoloads namespaces,
-   *   any additional namespace provided will automatically be prefixed with
-   *   the project namespace (e.g. \Drupal\bootstrap). This will traverse the
-   *   active theme's ancestry and will match the first theme that implements
-   *   the entire namespace.
-   *
-   * @return \ReflectionClass|FALSE
-   *   The reflection class instance or FALSE if the class could not be found.
-   */
-  public static function findClass($class, $namespace = NULL) {
-    $theme = Bootstrap::getTheme();
-
-    // Retrieve cache.
-    $classes = $theme->getCache('classes', []);
-
-    // Generate a unique hash for all parameters passed as a change in any of
-    // them could potentially return different results.
-    $hash = static::generateHash($class, $namespace);
-
-    // Retrieve cached entry.
-    if ($name = $classes->get($hash)) {
-      try {
-        $reflection = new \ReflectionClass($name);
-        return $reflection;
-      }
-      catch (\Exception $e) {
-      }
-    }
-
-    // Generate namespace possibilities from theme ancestry.
-    $namespaces = [];
-    foreach ((array) $class as $name) {
-      foreach ($theme->getAncestry(TRUE) as $ancestor) {
-        $namespaces[] = '\\Drupal\\' . $ancestor->getName() . ($namespace ? '\\' . $namespace : '') . '\\' . $name;
-      }
-    }
-    foreach ($namespaces as $name) {
-      try {
-        $reflection = new \ReflectionClass($name);
-        $classes->set($hash, $reflection->getName());
-        return $reflection;
-      }
-      catch (\Exception $e) {
-      }
-    }
-
-    $classes->set($hash, FALSE);
-    return FALSE;
-  }
-
-  /**
    * Generates a unique hash name.
    *
    * @param ...
@@ -111,29 +54,6 @@ abstract class Utility {
     }
     $hash .= Crypt::hashBase64(serialize($args));
     return $hash;
-  }
-
-  /**
-   * Converts a snake_cased string to CamelCase.
-   *
-   * @param string $string
-   *   The string to convert.
-   *
-   * @return string
-   *   The converted string to class name.
-   */
-  public static function snakeToCamelCase($string) {
-    static $strings = [];
-    if (!isset($strings[$string])) {
-      $name = preg_replace('/(_|-)+/', '_', Unicode::strtolower($string));
-      $name = preg_replace('/[^a-z0-9_]+/', '', $name);
-      $name = explode('_', $name);
-      foreach ($name as &$word) {
-        $word = Unicode::ucfirst($word);
-      }
-      $strings[$string] = implode('', $name);
-    }
-    return $strings[$string];
   }
 
 }

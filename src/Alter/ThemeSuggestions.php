@@ -8,13 +8,17 @@ namespace Drupal\bootstrap\Alter;
 
 /**
  * Implements hook_theme_suggestions_alter().
+ *
+ * @BootstrapAlter(
+ *   id = "theme_suggestions"
+ * )
  */
 class ThemeSuggestions implements AlterInterface {
 
   /**
    * {@inheritdoc}
    */
-  public static function alter(&$suggestions, &$variables = NULL, &$hook = NULL) {
+  public function alter(&$suggestions, &$variables = NULL, &$hook = NULL) {
     switch ($hook) {
       case 'details':
         $suggestions[] = 'bootstrap_panel';

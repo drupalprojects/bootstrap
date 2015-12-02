@@ -10,13 +10,17 @@ use Drupal\bootstrap\Bootstrap;
 
 /**
  * Implements hook_css_alter().
+ *
+ * @BootstrapAlter(
+ *   id = "css"
+ * )
  */
 class Css implements AlterInterface {
 
   /**
    * {@inheritdoc}
    */
-  public static function alter(&$css, &$context1 = NULL, &$context2 = NULL) {
+  public function alter(&$css, &$context1 = NULL, &$context2 = NULL) {
     $theme = Bootstrap::getTheme();
 
     // Add CDN assets, if any.

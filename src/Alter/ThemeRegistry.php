@@ -8,6 +8,7 @@
 namespace Drupal\bootstrap\Alter;
 
 use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\Theme;
 use Drupal\Core\Theme\ActiveTheme;
 use Drupal\Core\Theme\Registry;
 
@@ -46,54 +47,43 @@ use Drupal\Core\Theme\Registry;
  * bootstrap_core sub-module once this theme can add it as a dependency.
  *
  * @see https://www.drupal.org/node/474684
+ *
+ * @BootstrapAlter(
+ *   id = "theme_registry"
+ * )
  */
 class ThemeRegistry extends Registry implements AlterInterface {
 
   /**
    * {@inheritdoc}
    */
-  public static function alter(&$cache, &$context1 = NULL, &$context2 = NULL) {
-    /** @var \Drupal\Core\Theme\ThemeManager $theme_manager */
-    $theme_manager = \Drupal::service('theme.manager');
-    $active_theme = $theme_manager->getActiveTheme();
-
-    // Return the theme registry unaltered if it is not Bootstrap based.
-    if ($active_theme->getName() === 'bootstrap' || in_array('bootstrap', array_keys($active_theme->getBaseThemes()))) {
-      // Load custom theme registry class (not the site's service). It's merely
-      // used so it can be extended from core's to use its protected functions.
-      $theme_registry = new static(
-        \Drupal::service('app.root'),
-        \Drupal::service('cache.default'),
-        \Drupal::service('lock'),
-        \Drupal::service('module_handler'),
-        \Drupal::service('theme_handler'),
-        \Drupal::service('theme.initialization'),
-        $active_theme->getName()
-      );
-
-      // Set the theme manager.
-      $theme_registry->setThemeManager($theme_manager);
-
-      // Invoke custom alter init method.
-      $theme_registry->alterInit($cache);
-    }
+  public function __construct(array $configuration, $plugin_id, $plugin_definition) {
+    // This is technically a plugin constructor, but because we wish to use the
+    // protected methods of the Registry class, we must extend from it. Thus,
+    // to properly construct the extended Registry object, we must pass the
+    // arguments it would normally get from the service container to "fake" it.
+    parent::__construct(
+      \Drupal::service('app.root'),
+      \Drupal::service('cache.default'),
+      \Drupal::service('lock'),
+      \Drupal::service('module_handler'),
+      \Drupal::service('theme_handler'),
+      \Drupal::service('theme.initialization'),
+      Bootstrap::getTheme()->getName()
+    );
+    $this->setThemeManager(\Drupal::service('theme.manager'));
+    $this->init();
   }
 
   /**
-   * Custom init method used during theme registry alter.
-   *
-   * @param array $cache
-   *   The cached theme registry array.
+   * {@inheritdoc}
    */
-  public function alterInit(array &$cache) {
-    $this->init();
-
+  public function alter(&$cache, &$context1 = NULL, &$context2 = NULL) {
     // Sort the registry alphabetically (for easier debugging).
     ksort($cache);
 
     // Discover all theme files.
-    $theme = Bootstrap::getTheme();
-    foreach ($theme->getAncestry() as $ancestor) {
+    foreach (Bootstrap::getTheme()->getAncestry() as $ancestor) {
       $this->discoverFiles($cache, $ancestor);
     }
 

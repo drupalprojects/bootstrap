@@ -10,13 +10,17 @@ use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Implements hook_form_FORM_ID_alter().
+ *
+ * @BootstrapForm(
+ *   id = "search_block_form",
+ * )
  */
-class SearchBlockForm extends FormAlterBase {
+class SearchBlockForm extends FormBase {
 
   /**
    * {@inheritdoc}
    */
-  public static function alter(array &$form, FormStateInterface &$form_state) {
+  public function alter(array &$form, FormStateInterface $form_state, $form_id = NULL) {
     $form['#attributes']['class'][] = 'form-search';
 
     $form['keys']['#title'] = '';

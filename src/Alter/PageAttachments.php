@@ -10,13 +10,17 @@ use Drupal\bootstrap\Bootstrap;
 
 /**
  * Implements hook_page_attachments_alter().
+ *
+ * @BootstrapAlter(
+ *   id = "page_attachments"
+ * )
  */
 class PageAttachments implements AlterInterface {
 
   /**
    * {@inheritdoc}
    */
-  public static function alter(&$attachments, &$context1 = NULL, &$context2 = NULL) {
+  public function alter(&$attachments, &$context1 = NULL, &$context2 = NULL) {
     $theme = Bootstrap::getTheme();
     $attachments['#attached']['drupalSettings']['bootstrap'] = [
       'anchorsFix' => $theme->getSetting('anchors_fix'),

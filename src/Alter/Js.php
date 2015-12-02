@@ -7,16 +7,21 @@
 namespace Drupal\bootstrap\Alter;
 
 use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\Theme;
 
 /**
  * Implements hook_js_alter().
+ *
+ * @BootstrapAlter(
+ *   id = "js"
+ * )
  */
 class Js implements AlterInterface {
 
   /**
    * {@inheritdoc}
    */
-  public static function alter(&$js, &$context1 = NULL, &$context2 = NULL) {
+  public function alter(&$js, &$context1 = NULL, &$context2 = NULL) {
     $theme = Bootstrap::getTheme();
     $config = \Drupal::config('bootstrap.settings');
 

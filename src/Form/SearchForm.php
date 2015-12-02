@@ -10,13 +10,17 @@ use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Implements hook_form_FORM_ID_alter().
+ *
+ * @BootstrapForm(
+ *   id = "search_form",
+ * )
  */
-class SearchForm extends FormAlterBase {
+class SearchForm extends FormBase {
 
   /**
    * {@inheritdoc}
    */
-  public static function alter(array &$form, FormStateInterface &$form_state) {
+  public function alter(array &$form, FormStateInterface $form_state, $form_id = NULL) {
     // Add a clearfix class so the results don't overflow onto the form.
     $form['#attributes']['class'][] = 'clearfix';
 
