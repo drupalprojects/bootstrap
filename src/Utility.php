@@ -7,7 +7,6 @@
 namespace Drupal\bootstrap;
 
 use Drupal\Component\Utility\Crypt;
-use Drupal\Component\Utility\Unicode;
 
 /**
  * Contains useful helper methods.

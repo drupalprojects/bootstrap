@@ -1,13 +1,14 @@
 <?php
 /**
  * @file
- * Contains \Drupal\bootstrap\Theme.
+ * Contains \Drupal\bootstrap.
  */
 
 namespace Drupal\bootstrap;
 
-use Drupal\bootstrap\Theme\Storage;
-use Drupal\bootstrap\Theme\StorageItem;
+use Drupal\bootstrap\Alter\AlterInterface;
+use Drupal\bootstrap\Form\FormInterface;
+use Drupal\bootstrap\Preprocess\PreprocessInterface;
 use Drupal\Core\Extension\Extension;
 use Drupal\Core\Extension\ThemeHandlerInterface;
 
@@ -89,6 +90,69 @@ class Theme {
   }
 
   /**
+   * Manages theme alter hooks as classes and allows sub-themes to sub-class.
+   *
+   * @param string $function
+   *   The procedural function name of the alter (e.g. __FUNCTION__).
+   * @param mixed $data
+   *   The variable that was passed to the hook_TYPE_alter() implementation to
+   *   be altered. The type of this variable depends on the value of the $type
+   *   argument. For example, when altering a 'form', $data will be a structured
+   *   array. When altering a 'profile', $data will be an object.
+   * @param mixed $context1
+   *   (optional) An additional variable that is passed by reference.
+   * @param mixed $context2
+   *   (optional) An additional variable that is passed by reference. If more
+   *   context needs to be provided to implementations, then this should be an
+   *   associative array as described above.
+   */
+  public function alter($function, &$data, &$context1 = NULL, &$context2 = NULL) {
+    // Immediately return if the active theme is not Bootstrap based.
+    if (!$this->subthemeOf('bootstrap')) {
+      return;
+    }
+
+    // Extract the alter hook name.
+    $hook = Utility::extractHook($function, 'alter');
+
+    // Handle form alters separately.
+    if (strpos($hook, 'form') === 0) {
+      $form_id = $context2;
+      if (!$form_id) {
+        $form_id = Utility::extractHook($function, 'alter', 'form');
+      }
+
+      // Due to a core bug that affects admin themes, we should not double
+      // process the "system_theme_settings" form twice in the global
+      // hook_form_alter() invocation.
+      // @see https://drupal.org/node/943212
+      if ($context2 === 'system_theme_settings') {
+        return;
+      }
+
+      // Retrieve a list of form definitions.
+      $form_manager = new FormManager($this);
+
+      /** @var FormInterface $form */
+      if ($form_manager->hasDefinition($form_id) && ($form = $form_manager->createInstance($form_id))) {
+        $data['#submit'][] = [$form, 'submit'];
+        $data['#validate'][] = [$form, 'validate'];
+        $form->alter($data, $context1, $context2);
+      }
+    }
+    // Process hook alter normally.
+    else {
+      // Retrieve a list of alter definitions.
+      $alter_manager = new AlterManager($this);
+
+      /** @var AlterInterface $class */
+      if ($alter_manager->hasDefinition($hook) && ($class = $alter_manager->createInstance($hook))) {
+        $class->alter($data, $context2, $context2);
+      }
+    }
+  }
+
+  /**
    * Wrapper for the core file_scan_directory() function.
    *
    * Finds all files that match a given mask in the given directories and then
@@ -105,11 +169,11 @@ class Theme {
    *   - ignore_flags: (int|FALSE) A bitmask to indicate which directories (if
    *     any) should be skipped during the scan. Must also not contain a
    *     "nomask" property in $options. Value can be any of the following:
-   *     - \Drupal\bootstrap\Theme::IGNORE_CORE
-   *     - \Drupal\bootstrap\Theme::IGNORE_ASSETS
-   *     - \Drupal\bootstrap\Theme::IGNORE_DOCS
-   *     - \Drupal\bootstrap\Theme::IGNORE_DEV
-   *     - \Drupal\bootstrap\Theme::IGNORE_THEME
+   *     - \Drupal\bootstrap::IGNORE_CORE
+   *     - \Drupal\bootstrap::IGNORE_ASSETS
+   *     - \Drupal\bootstrap::IGNORE_DOCS
+   *     - \Drupal\bootstrap::IGNORE_DEV
+   *     - \Drupal\bootstrap::IGNORE_THEME
    *     Pass FALSE to iterate over all directories in $dir.
    *
    * @return array
@@ -176,7 +240,7 @@ class Theme {
    *   active theme is the first entry.
    *
    * @return \Drupal\bootstrap\Theme[]
-   *   An associative array of \Drupal\bootstrap\Theme objects (theme), keyed
+   *   An associative array of \Drupal\bootstrap objects (theme), keyed
    *   by machine name.
    */
   public function getAncestry($reverse = FALSE) {
@@ -195,7 +259,7 @@ class Theme {
   /**
    * Retrieves the theme's cache from the database.
    *
-   * @return \Drupal\bootstrap\Theme\Storage
+   * @return \Drupal\bootstrap\Storage
    *   The cache object.
    */
   public function getStorage() {
@@ -215,7 +279,7 @@ class Theme {
    * @param mixed $default
    *   The default value to use if $name does not exist.
    *
-   * @return mixed|\Drupal\bootstrap\Theme\StorageItem
+   * @return mixed|\Drupal\bootstrap\StorageItem
    *   The cached value for $name.
    */
   public function getCache($name, $default = []) {
@@ -297,6 +361,45 @@ class Theme {
       }
     }
     return $includes[$include];
+  }
+
+  /**
+   * Preprocess theme hook variables.
+   *
+   * @param array $variables
+   *   The variables array, passed by reference.
+   * @param string $hook
+   *   The name of the theme hook.
+   */
+  public function preprocess(array &$variables, $hook) {
+    // Add extra variables to all theme hooks.
+    $extra = [
+      // Allow #context to be passed to every template and theme function.
+      // @see https://drupal.org/node/2035055
+      'context' => [],
+
+      // Allow #icon to be passed to every template and theme function.
+      // @see https://drupal.org/node/2219965
+      'icon' => NULL,
+      'icon_position' => 'before',
+    ];
+    foreach ($extra as $key => $value) {
+      if (!isset($variables[$key])) {
+        $variables[$key] = $value;
+      }
+    }
+
+    // Retrieve a list of preprocess definitions.
+    $preprocess_manager = new PreprocessManager($this);
+
+    $hooks = array_unique([$hook, $variables['theme_hook_original']]);
+    foreach ($hooks as $hook) {
+      /** @var PreprocessInterface $class */
+      if ($preprocess_manager->hasDefinition($hook) && ($class = $preprocess_manager->createInstance($hook))) {
+        $class->preprocess($variables);
+      }
+    }
+
   }
 
   /**

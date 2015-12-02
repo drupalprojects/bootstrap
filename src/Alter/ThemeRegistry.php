@@ -185,25 +185,6 @@ class ThemeRegistry extends Registry implements AlterInterface {
         $cache[$hook]['theme path'] = $theme->getPath();
       }
 
-      // Add extra variables to all theme hooks.
-      if (isset($info['variables'])) {
-        $variables = [
-          // Allow #context to be passed to every template and theme function.
-          // @see https://drupal.org/node/2035055
-          'context' => [],
-
-          // Allow #icon to be passed to every template and theme function.
-          // @see https://drupal.org/node/2219965
-          'icon' => NULL,
-          'icon_position' => 'before',
-        ];
-        foreach ($variables as $name => $value) {
-          if (!isset($info['variables'][$name])) {
-            $cache[$hook]['variables'][$name] = $value;
-          }
-        }
-      }
-
       // Sort the preprocess functions.
       // @see https://www.drupal.org/node/2098551
       if (isset($info['preprocess functions'])) {

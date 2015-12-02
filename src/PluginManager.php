@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * Contains \Drupal\bootstrap\PluginManager.

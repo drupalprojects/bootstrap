@@ -4,7 +4,7 @@
  * Contains \Drupal\bootstrap\Storage.
  */
 
-namespace Drupal\bootstrap\Theme;
+namespace Drupal\bootstrap;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\KeyValueStore\MemoryStorage;
@@ -24,7 +24,7 @@ use Drupal\Core\KeyValueStore\MemoryStorage;
  *
  * This storage object can be used in `foreach` loops.
  *
- * @see \Drupal\bootstrap\Theme\StorageItem
+ * @see \Drupal\bootstrap\StorageItem
  */
 class Storage extends MemoryStorage implements \Iterator {
 

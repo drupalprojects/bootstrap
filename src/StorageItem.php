@@ -4,7 +4,7 @@
  * Contains \Drupal\bootstrap\StorageItem.
  */
 
-namespace Drupal\bootstrap\Theme;
+namespace Drupal\bootstrap;
 
 use Drupal\Core\KeyValueStore\MemoryStorage;
 
@@ -17,7 +17,7 @@ use Drupal\Core\KeyValueStore\MemoryStorage;
  *
  * This storage object can be used in `foreach` loops.
  *
- * @see \Drupal\bootstrap\Theme\Storage
+ * @see \Drupal\bootstrap\Storage
  */
 class StorageItem extends MemoryStorage implements \Iterator {
 
@@ -31,7 +31,7 @@ class StorageItem extends MemoryStorage implements \Iterator {
   /**
    * The \Drupal\bootstrap\Storage instance this item belongs to.
    *
-   * @var \Drupal\bootstrap\Theme\Storage
+   * @var \Drupal\bootstrap\Storage
    */
   protected $storage;
 

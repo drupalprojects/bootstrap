@@ -29,12 +29,17 @@ class ElementInfo implements AlterInterface {
         $element['#input'] = $types[$element['#base_type']]['#input'];
       }
 
-      // Replace fieldset theme implementations with bootstrap_panel.
-      if (!empty($element['#theme']) && $element['#theme'] === 'fieldset') {
+      // Replace detail and fieldset theme implementations with bootstrap_panel.
+      if (!empty($element['#theme']) && ($element['#theme'] === 'details' || $element['#theme'] === 'fieldset')) {
         $element['#theme'] = 'bootstrap_panel';
       }
-      if (!empty($element['#theme_wrappers']) && is_array($element['#theme_wrappers']) && ($key = array_search('fieldset', $element['#theme_wrappers'])) !== FALSE) {
-        $element['#theme_wrappers'][$key] = 'bootstrap_panel';
+      if (!empty($element['#theme_wrappers']) && is_array($element['#theme_wrappers'])) {
+        if (($key = array_search('details', $element['#theme_wrappers'])) !== FALSE) {
+          $element['#theme_wrappers'][$key] = 'bootstrap_panel';
+        }
+        if (($key = array_search('fieldset', $element['#theme_wrappers'])) !== FALSE) {
+          $element['#theme_wrappers'][$key] = 'bootstrap_panel';
+        }
       }
 
       // Setup a default "icon" variable. This allows #icon to be passed
