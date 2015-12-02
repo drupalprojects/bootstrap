@@ -1,13 +1,16 @@
 <?php
 /**
  * @file
- * Contains \Drupal\bootstrap\Theme\Registry.
+ * Contains \Drupal\bootstrap\Alter\ThemeRegistry.
  */
 
 // Name of the base theme must be lowercase for it to be autoload discoverable.
-namespace Drupal\bootstrap\Theme;
+namespace Drupal\bootstrap\Alter;
 
+use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\Theme;
 use Drupal\Core\Theme\ActiveTheme;
+use Drupal\Core\Theme\Registry;
 
 /**
  * @addtogroup registry
@@ -44,32 +47,56 @@ use Drupal\Core\Theme\ActiveTheme;
  * bootstrap_core sub-module once this theme can add it as a dependency.
  *
  * @see https://www.drupal.org/node/474684
- *
- * @ingroup registry
  */
-class Registry extends \Drupal\Core\Theme\Registry {
+class ThemeRegistry extends Registry implements AlterInterface {
 
   /**
-   * Alters the theme registry.
+   * {@inheritdoc}
+   */
+  public static function alter(&$cache, &$context1 = NULL, &$context2 = NULL) {
+    /** @var \Drupal\Core\Theme\ThemeManager $theme_manager */
+    $theme_manager = \Drupal::service('theme.manager');
+    $active_theme = $theme_manager->getActiveTheme();
+
+    // Return the theme registry unaltered if it is not Bootstrap based.
+    if ($active_theme->getName() === 'bootstrap' || in_array('bootstrap', array_keys($active_theme->getBaseThemes()))) {
+      // Load custom theme registry class (not the site's service). It's merely
+      // used so it can be extended from core's to use its protected functions.
+      $theme_registry = new static(
+        \Drupal::service('app.root'),
+        \Drupal::service('cache.default'),
+        \Drupal::service('lock'),
+        \Drupal::service('module_handler'),
+        \Drupal::service('theme_handler'),
+        \Drupal::service('theme.initialization'),
+        $active_theme->getName()
+      );
+
+      // Set the theme manager.
+      $theme_registry->setThemeManager($theme_manager);
+
+      // Invoke custom alter init method.
+      $theme_registry->alterInit($cache);
+    }
+  }
+
+  /**
+   * Custom init method used during theme registry alter.
    *
    * @param array $cache
-   *   The theme registry, as documented in
-   *   \Drupal\Core\Theme\Registry::processExtension().
+   *   The cached theme registry array.
    */
-  public function alter(array &$cache) {
+  public function alterInit(array &$cache) {
     $this->init();
 
     // Sort the registry alphabetically (for easier debugging).
     ksort($cache);
 
-    // Process each base theme.
-    /** @var ActiveTheme $base */
-    foreach (array_reverse($this->theme->getBaseThemes()) as $base) {
-      $this->discoverFiles($cache, $base);
+    // Discover all theme files.
+    $theme = Bootstrap::getTheme();
+    foreach ($theme->getAncestry() as $ancestor) {
+      $this->discoverFiles($cache, $ancestor);
     }
-
-    // Hooks provided by the theme itself.
-    $this->discoverFiles($cache, $this->theme);
 
     // Discover and add all preprocess functions for theme hook suggestions.
     $this->postProcessExtension($cache, $this->theme);
@@ -81,17 +108,17 @@ class Registry extends \Drupal\Core\Theme\Registry {
    * @param array $cache
    *   The theme registry, as documented in
    *   \Drupal\Core\Theme\Registry::processExtension().
-   * @param \Drupal\Core\Theme\ActiveTheme $theme
+   * @param \Drupal\bootstrap\Theme $theme
    *   Current active theme.
    *
    * @see \Drupal\Core\Theme\Registry::processExtension()
    */
-  protected function discoverFiles(array &$cache, ActiveTheme $theme) {
+  protected function discoverFiles(array &$cache, Theme $theme) {
     $name = $theme->getName();
     $path = $theme->getPath();
 
     // Find theme hook files.
-    foreach (_bootstrap_file_scan_directory($path, '/(\.func\.php|\.vars\.php|\.html\.twig)$/') as $file) {
+    foreach ($theme->fileScan('/(\.func\.php|\.vars\.php|\.html\.twig)$/') as $file) {
       // Transform "-" in file names to "_" to match theme hook naming scheme.
       $hook = strtr($file->name, '-', '_');
 

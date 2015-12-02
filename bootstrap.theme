@@ -18,31 +18,20 @@
  * Visit this project's official documentation site, http://drupal-bootstrap.org
  * or the markdown files inside the `./docs` folder.
  *
- * @see _bootstrap_theme()
+ * @see bootstrap_theme()
+ * @see \Drupal\bootstrap\Registry
  */
 
-/**
- * Include common functions used through out theme.
- */
-include_once __DIR__ . '/includes/common.inc';
+use Drupal\bootstrap\Bootstrap;
 
 /**
- * Declare various hook_*_alter() hooks.
- *
- * All hook_*_alter() implementations must live (via include) inside this file
- * so they are properly detected when drupal_alter() is invoked.
+ * Include necessary theme files, all of which need to be discoverable here.
  */
-bootstrap_include('bootstrap', 'includes/alter.inc');
-
-/**
- * Include #pre_render callbacks for render array elements.
- */
-bootstrap_include('bootstrap', 'includes/pre-render.inc');
-
-/**
- * Include form #process callbacks for form elements.
- */
-bootstrap_include('bootstrap', 'includes/process.inc');
+$bootstrap = Bootstrap::getTheme('bootstrap');
+$bootstrap->includeOnce('common.inc');
+$bootstrap->includeOnce('deprecated.inc');
+$bootstrap->includeOnce('pre-render.inc');
+$bootstrap->includeOnce('process.inc');
 
 /**
  * Implements hook_theme().
@@ -51,7 +40,7 @@ bootstrap_include('bootstrap', 'includes/process.inc');
  * or "template" as these are detected and automatically added.
  *
  * @see bootstrap_theme_registry_alter()
- * @see \Drupal\bootstrap\Theme\Registry
+ * @see \Drupal\bootstrap\Registry
  * @see hook_theme()
  */
 function bootstrap_theme() {
@@ -95,11 +84,103 @@ function bootstrap_theme() {
 }
 
 /**
- * Clear any previously set element_info() static cache.
+ * Implements hook_css_alter().
  *
- * If element_info() was invoked before the theme was fully initialized, this
- * can cause the theme's alter hook to not be invoked.
- *
- * @see https://www.drupal.org/node/2351731
+ * @see \Drupal\bootstrap\Alter\Css::alter()
  */
-drupal_static_reset('element_info');
+function bootstrap_css_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
+  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
+}
+
+/**
+ * Implements hook_element_info_alter().
+ *
+ * @see \Drupal\bootstrap\Alter\ElementInfo::alter()
+ */
+function bootstrap_element_info_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
+  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
+}
+
+/**
+ * Implements hook_form_alter().
+ *
+ * @see \Drupal\bootstrap\Alter\Form::alter()
+ */
+function bootstrap_form_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
+  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
+}
+
+/**
+ * Implements hook_form_system_theme_settings_alter().
+ *
+ * @see \Drupal\bootstrap\Alter\FormSystemThemeSettings::alter()
+ */
+function bootstrap_form_system_theme_settings_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
+  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
+}
+
+/**
+ * Implements hook_icon_bundle_list_alter().
+ *
+ * @see \Drupal\bootstrap\Alter\IconBundleList::alter()
+ */
+function bootstrap_icon_bundle_list_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
+  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
+}
+
+/**
+ * Implements hook_js_alter().
+ *
+ * @see \Drupal\bootstrap\Alter\Js::alter()
+ */
+function bootstrap_js_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
+  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
+}
+
+/**
+ * Implements hook_js_callback_filter_xss_alter().
+ *
+ * @see \Drupal\bootstrap\Alter\JsCallbackFilterXss::alter()
+ */
+function bootstrap_js_callback_filter_xss_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
+  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ *
+ * @see \Drupal\bootstrap\Alter\MenuLocalTasks::alter()
+ */
+function bootstrap_menu_local_tasks_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
+  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ *
+ * @see \Drupal\bootstrap\Alter\PageAttachments::alter()
+ */
+function bootstrap_page_attachments_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
+  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
+}
+
+/**
+ * Implements hook_theme_registry_alter().
+ *
+ * @todo Remove once \Drupal\bootstrap\Theme\Registry can properly replace
+ * the theme.registry service in a bootstrap_core sub-module.
+ *
+ * @see \Drupal\bootstrap\Alter\ThemeRegistry::alter()
+ */
+function bootstrap_theme_registry_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
+  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
+}
+
+/**
+ * Implements hook_theme_suggestions_alter().
+ *
+ * @see \Drupal\bootstrap\Alter\ThemeSuggestions::alter()
+ */
+function bootstrap_theme_suggestions_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
+  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
+}

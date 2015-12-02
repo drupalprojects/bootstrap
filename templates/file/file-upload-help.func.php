@@ -4,6 +4,8 @@
  * Stub file for bootstrap_file_upload_help().
  */
 
+use Drupal\bootstrap\Bootstrap;
+
 /**
  * Returns HTML for help text based on file upload validators.
  *
@@ -23,7 +25,7 @@
  */
 function bootstrap_file_upload_help($variables) {
   // If popover's are disabled, just theme this normally.
-  if (!bootstrap_setting('popover_enabled')) {
+  if (!Bootstrap::getTheme()->getSetting('popover_enabled')) {
     return theme_file_upload_help($variables);
   }
 

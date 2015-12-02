@@ -4,9 +4,9 @@
  * file-upload-help.vars.php
  */
 
+use Drupal\bootstrap\Bootstrap;
 use \Drupal\Component\Utility\Html;
 use \Drupal\Component\Utility\SafeMarkup;
-use \Drupal\Core\Url;
 
 /**
  * Prepares variables for file upload help text templates.
@@ -21,7 +21,6 @@ use \Drupal\Core\Url;
  *     $element['#upload_validators'].
  */
 function bootstrap_preprocess_file_upload_help(&$variables) {
-  $config = \Drupal::config('bootstrap.settings');
   $upload_validators = $variables['upload_validators'];
   $cardinality = $variables['cardinality'];
   $descriptions = array();
@@ -59,7 +58,7 @@ function bootstrap_preprocess_file_upload_help(&$variables) {
   }
 
   // If popovers are enabled.
-  if ($config->get('bootstrap_popover_enabled')) {
+  if (Bootstrap::getTheme()->getSetting('popover_enabled')) {
     $id = html::getUniqueId('upload-instructions');
 
     $icon = _bootstrap_icon('question-sign');

@@ -4,6 +4,7 @@
  * Stub file for "page" theme hook [pre]process functions.
  */
 
+use Drupal\bootstrap\Bootstrap;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Menu\MenuTreeParameters;
 
@@ -17,6 +18,8 @@ use Drupal\Core\Menu\MenuTreeParameters;
  * @ingroup theme_preprocess
  */
 function bootstrap_preprocess_page(&$variables) {
+  $theme = Bootstrap::getTheme();
+
   // Add information about the number of sidebars.
   $variables['content_column_attributes'] = new Attribute();
   $variables['content_column_attributes']['class'] = array();
@@ -32,13 +35,13 @@ function bootstrap_preprocess_page(&$variables) {
 
   $variables['navbar_attributes'] = new Attribute();
   $variables['navbar_attributes']['class'] = array('navbar');
-  if (bootstrap_setting('navbar_position') !== '') {
-    $variables['navbar_attributes']['class'][] = 'navbar-' . bootstrap_setting('navbar_position');
+  if ($theme->getSetting('navbar_position') !== '') {
+    $variables['navbar_attributes']['class'][] = 'navbar-' . $theme->getSetting('navbar_position');
   }
   else {
     $variables['navbar_attributes']['class'][] = 'container';
   }
-  if (bootstrap_setting('navbar_inverse')) {
+  if ($theme->getSetting('navbar_inverse')) {
     $variables['navbar_attributes']['class'][] = 'navbar-inverse';
   }
   else {

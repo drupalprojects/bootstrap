@@ -4,6 +4,7 @@
  * Stub file for "breadcrumb" theme hook [pre]process functions.
  */
 
+use Drupal\bootstrap\Bootstrap;
 use Drupal\Core\Template\Attribute;
 
 /**
@@ -17,15 +18,16 @@ use Drupal\Core\Template\Attribute;
  * @ingroup theme_preprocess
  */
 function bootstrap_preprocess_breadcrumb(&$variables) {
+  $theme = Bootstrap::getTheme();
   $breadcrumb = &$variables['breadcrumb'];
 
   // Optionally get rid of the homepage link.
-  $show_breadcrumb_home = bootstrap_setting('breadcrumb_home');
+  $show_breadcrumb_home = $theme->getSetting('breadcrumb_home');
   if (!$show_breadcrumb_home) {
     array_shift($breadcrumb);
   }
 
-  if (bootstrap_setting('breadcrumb_title') && !empty($breadcrumb)) {
+  if ($theme->getSetting('breadcrumb_title') && !empty($breadcrumb)) {
     $request = \Drupal::request();
     $route_match = \Drupal::routeMatch();
     $page_title = \Drupal::service('title_resolver')->getTitle($request, $route_match->getRouteObject());

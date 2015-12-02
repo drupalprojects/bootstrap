@@ -4,20 +4,11 @@
  * List of common helper functions for use in Bootstrap based themes.
  */
 
-use Drupal\Core\Template\Attribute;
-use Drupal\Component\Utility\NestedArray;
+use Drupal\bootstrap\Bootstrap;
 use Drupal\Component\Utility\Crypt;
 use Drupal\Component\Utility\Unicode;
-use Drupal\Core\Theme\ThemeManager;
-use Drupal\Core\Utility\ThemeRegistry;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Url;
-
-
-define('BOOTSTRAP_VERSION_MAJOR', 3);
-define('BOOTSTRAP_VERSION_MINOR', 3);
-define('BOOTSTRAP_VERSION_PATCH', 5);
-define('BOOTSTRAP_VERSION', BOOTSTRAP_VERSION_MAJOR . '.' . BOOTSTRAP_VERSION_MINOR . '.' . BOOTSTRAP_VERSION_PATCH);
 
 /**
  * @defgroup subtheme_helper_functions Helper Functions
@@ -42,10 +33,12 @@ define('BOOTSTRAP_VERSION', BOOTSTRAP_VERSION_MAJOR . '.' . BOOTSTRAP_VERSION_MI
  *   The length of characters to determine if description is "simple".
  */
 function bootstrap_element_smart_description(&$element, &$target = NULL, $input_only = TRUE, $length = NULL) {
+  $theme = Bootstrap::getTheme();
+
   // Determine if tooltips are enabled.
   static $enabled;
   if (!isset($enabled)) {
-    $enabled = bootstrap_setting('tooltip_enabled') && bootstrap_setting('forms_smart_descriptions');
+    $enabled = $theme->getSetting('tooltip_enabled') && $theme->getSetting('forms_smart_descriptions');
   }
 
   // Immediately return if "simple" tooltip descriptions are not enabled.
@@ -60,7 +53,7 @@ function bootstrap_element_smart_description(&$element, &$target = NULL, $input_
 
   // Retrieve the length limit for smart descriptions.
   if (!isset($length)) {
-    $length = (int) bootstrap_setting('forms_smart_descriptions_limit');
+    $length = (int) $theme->getSetting('forms_smart_descriptions_limit');
     // Disable length checking by setting it to FALSE if empty.
     if (empty($length)) {
       $length = FALSE;
@@ -70,7 +63,7 @@ function bootstrap_element_smart_description(&$element, &$target = NULL, $input_
   // Retrieve the allowed tags for smart descriptions. This is primarily used
   // for display purposes only (i.e. non-UI/UX related elements that wouldn't
   // require a user to "click", like a link).
-  $allowed_tags = array_filter(array_unique(array_map('trim', explode(',', bootstrap_setting('forms_smart_descriptions_allowed_tags') . ''))));
+  $allowed_tags = array_filter(array_unique(array_map('trim', explode(',', $theme->getSetting('forms_smart_descriptions_allowed_tags') . ''))));
 
   // Disable length checking by setting it to FALSE if empty.
   if (empty($allowed_tags)) {
@@ -138,6 +131,8 @@ function bootstrap_element_smart_description(&$element, &$target = NULL, $input_
  *   is returned keyed by the type.
  */
 function bootstrap_get_cdn_assets($type = NULL, $provider = NULL, $theme = NULL) {
+  $theme = Bootstrap::getTheme($theme);
+
   $original_type = $type;
   $assets = array();
   $types = array();
@@ -160,11 +155,11 @@ function bootstrap_get_cdn_assets($type = NULL, $provider = NULL, $theme = NULL)
 
   // Retrieve the active CDN provider from the theme.
   if (!isset($provider)) {
-    $provider = bootstrap_setting('cdn_provider', $theme);
+    $provider = $theme->getSetting('cdn_provider');
   }
 
   // Load the CDN provider data.
-  bootstrap_include('bootstrap', 'includes/cdn.inc');
+  Bootstrap::getTheme('bootstrap')->includeOnce('cdn.inc');
   if (!empty($provider) && ($data = bootstrap_cdn_provider($provider))) {
     // Alter the assets based on provider.
     $function = 'bootstrap_bootstrap_cdn_provider_' . $provider . '_assets_alter';
@@ -186,130 +181,6 @@ function bootstrap_get_cdn_assets($type = NULL, $provider = NULL, $theme = NULL)
   }
 
   return is_string($original_type) ? $assets[$original_type] : $assets;
-}
-
-/**
- * Return information from the .info file of a theme (and possible base themes).
- *
- * @param string $theme_key
- *   The machine name of the theme.
- * @param string $key
- *   The key name of the item to return from the .info file. This value can
- *   include "][" to automatically attempt to traverse any arrays.
- * @param bool $base_themes
- *   Recursively search base themes, defaults to TRUE.
- *
- * @return string|array|false
- *   A string or array depending on the type of value and if a base theme also
- *   contains the same $key, FALSE if no $key is found.
- */
-function bootstrap_get_theme_info($theme_key = NULL, $key = NULL, $base_themes = TRUE) {
-  // If no $theme_key is given, use the current theme if we can determine it.
-  if (!isset($theme_key)) {
-    $theme_key = !empty($GLOBALS['theme_key']) ? $GLOBALS['theme_key'] : FALSE;
-  }
-  if ($theme_key) {
-    $themes = \Drupal::service('theme_handler')->listInfo();
-    if (!empty($themes[$theme_key])) {
-      $theme = $themes[$theme_key];
-      // If a key name was specified, return just that array.
-      if ($key) {
-        $value = FALSE;
-        // Recursively add base theme values.
-        if ($base_themes && isset($theme->base_themes)) {
-          foreach (array_keys($theme->base_themes) as $base_theme) {
-            $value = bootstrap_get_theme_info($base_theme, $key);
-          }
-        }
-        if (!empty($themes[$theme_key])) {
-          $info = $themes[$theme_key]->info;
-          // Allow array traversal.
-          $keys = explode('][', $key);
-          foreach ($keys as $parent) {
-            if (isset($info[$parent])) {
-              $info = $info[$parent];
-            }
-            else {
-              $info = FALSE;
-            }
-          }
-          if (is_array($value)) {
-            if (!empty($info)) {
-              if (!is_array($info)) {
-                $info = array($info);
-              }
-              $value = NestedArray::mergeDeep($value, $info);
-            }
-          }
-          else {
-            if (!empty($info)) {
-              if (empty($value)) {
-                $value = $info;
-              }
-              else {
-                if (!is_array($value)) {
-                  $value = array($value);
-                }
-                if (!is_array($info)) {
-                  $info = array($info);
-                }
-                $value = NestedArray::mergeDeep($value, $info);
-              }
-            }
-          }
-        }
-        return $value;
-      }
-      // If no info $key was specified, just return the entire info array.
-      return $theme->info;
-    }
-  }
-  return FALSE;
-}
-
-/**
- * Includes a theme file.
- *
- * @param string $theme
- *   Name of the theme to use for base path.
- * @param string $path
- *   Path relative to $theme.
- */
-function bootstrap_include($theme, $path) {
-  static $themes = array();
-  if (!isset($themes[$theme])) {
-    $themes[$theme] = drupal_get_path('theme', $theme);
-  }
-  if ($themes[$theme] && ($file = DRUPAL_ROOT . '/' . $themes[$theme] . '/' . $path) && file_exists($file)) {
-    include_once $file;
-  }
-}
-
-/**
- * Retrieves a setting for the current theme or for a given theme.
- *
- * This is a wrapper for theme_get_setting(), ensuring to use deprecated
- * setting values instead.
- *
- * @param string $name
- *   The name of the setting to be retrieved.
- * @param string $theme
- *   The name of a given theme; defaults to the currently active theme.
- * @param string $prefix
- *   The prefix used on the $name of the setting, this will be appended with
- *   "_" automatically if set.
- *
- * @return mixed
- *   The value of the requested setting, NULL if the setting does not exist.
- *
- * @see theme_get_setting()
- *
- * @todo Refactor in 7.x-4.x and get rid of the deprecated settings.
- */
-function bootstrap_setting($name, $theme = NULL, $prefix = 'bootstrap') {
-  $prefix = !empty($prefix) ? $prefix . '_' : '';
-  $setting = theme_get_setting($prefix . $name, $theme);
-  return $setting;
 }
 
 /**
@@ -459,70 +330,6 @@ function _bootstrap_remove_class($class, &$element, $property = 'attributes') {
       unset($classes[$key]);
     }
   }
-}
-
-/**
- * Returns a list of base themes for active or provided theme.
- *
- * @param string $theme_key
- *   The machine name of the theme to check, if not set the active theme name
- *   will be used.
- * @param bool $include_theme_key
- *   Whether to append the returned list with $theme_key.
- *
- * @return array
- *   An indexed array of base themes.
- */
-function _bootstrap_get_base_themes($theme_key = NULL, $include_theme_key = FALSE) {
-  static $themes;
-  if (!isset($theme_key)) {
-    $theme_key = \Drupal::theme()->getActiveTheme()->getName();
-  }
-  if (!isset($themes[$theme_key])) {
-    $themes[$theme_key] = array_unique(array_filter((array) bootstrap_get_theme_info($theme_key, 'base theme')));
-  }
-  if ($include_theme_key) {
-    $themes[$theme_key][] = $theme_key;
-  }
-  return $themes[$theme_key];
-}
-
-/**
- * Wrapper for the core file_scan_directory() function.
- *
- * Finds all files that match a given mask in a given directory and then caches
- * the results. A general site cache clear will force new scans to be initiated
- * for already cached directories.
- *
- * @param string $dir
- *   The base directory or URI to scan, without trailing slash.
- * @param string $mask
- *   The preg_match() regular expression of the files to find.
- * @param array $options
- *   Additional options to pass to file_scan_directory().
- *
- * @return array
- *   An associative array (keyed on the chosen key) of objects with 'uri',
- *   'filename', and 'name' members corresponding to the matching files.
- *
- * @see file_scan_directory()
- */
-function _bootstrap_file_scan_directory($dir, $mask, array $options = array()) {
-  // Retrieve cached data.
-  $cid = 'theme_registry:bootstrap:files';
-  $files = array();
-  if ($cached = \Drupal::cache()->get($cid)) {
-    $files = $cached->data;
-  }
-
-  // Generate a unique hash for all parameters passed as a change in any of
-  // them would return different results.
-  $hash = Crypt::hashBase64(serialize(func_get_args()));
-  if (!isset($files[$hash])) {
-    $files[$hash] = file_scan_directory($dir, $mask, $options);
-    \Drupal::cache()->set($cid, $files);
-  }
-  return $files[$hash];
 }
 
 /**
@@ -827,7 +634,7 @@ function _bootstrap_glyphicons($version = NULL) {
   }
 
   // Return the latest version.
-  return $versions[BOOTSTRAP_VERSION];
+  return $versions[Bootstrap::VERSION];
 }
 
 /**
@@ -888,45 +695,42 @@ function _bootstrap_glyphicons_supported() {
 
   // Get static data.
   $supported = &$drupal_static_fast['supported'];
-  $theme = &$drupal_static_fast['theme'];
+  $theme = Bootstrap::getTheme($drupal_static_fast['theme']);
 
   // Retrieve supported themes.
   if (!isset($supported)) {
     $supported = array();
 
-    // Retrieve cached data.
-    $cid = 'theme_registry:bootstrap:icon_support';
-    if (($cache = \Drupal::cache()->get($cid)) && !empty($cache->data)) {
-      $supported = $cache->data;
-    }
+    // Retrieve cache.
+    $supported = $theme->cache()->get('icon_support', []);
 
-    if (!isset($supported[$theme])) {
+    if (!isset($supported[(string) $theme])) {
       // Bootstrap based themes are enabled by default to use CDN. Check if
       // that is the case here so no file discovery is necessary. If the active
       // theme does not have this setting, it falls back to the base theme that
       // does.
-      $supported[$theme] = !!bootstrap_get_cdn_assets('css', NULL, $theme);
+      $supported[(string) $theme] = !!bootstrap_get_cdn_assets('css', NULL, (string) $theme);
 
       // CDN not used, iterate over all of the active (base) themes to determine
       // if they contain glyphicon font files.
-      if (!$supported[$theme]) {
-        foreach (_bootstrap_get_base_themes($theme, TRUE) as $_theme) {
+      if (!$supported[(string) $theme]) {
+        foreach ($theme->getAncestry() as $ancestor) {
           // Scan the theme for files.
-          $fonts = _bootstrap_file_scan_directory(drupal_get_path('theme', $_theme), '/glyphicons-halflings-regular\.(eot|svg|ttf|woff)$/');
+          $fonts = $ancestor->fileScan('/glyphicons-halflings-regular\.(eot|svg|ttf|woff)$/', NULL, FALSE);
 
           // Fonts found, stop the search.
           if (!empty($fonts)) {
-            $supported[$theme] = TRUE;
+            $supported[(string) $theme] = TRUE;
             break;
           }
         }
       }
 
       // Cache all supported themes now that this theme is added to the array.
-      \Drupal::cache()->set($cid, $supported);
+      $theme->cache()->set('icon_support', $supported);
     }
   }
-  return $supported[$theme];
+  return $supported[(string) $theme];
 }
 
 /**
@@ -955,6 +759,8 @@ function _bootstrap_is_button($element) {
  *   The form variables of the element, passed by reference.
  */
 function _bootstrap_colorize_button(&$variables) {
+  $theme = Bootstrap::getTheme();
+
   // Do not add the class if one is already present in the array.
   $button_classes = array(
     'btn-default',
@@ -968,7 +774,7 @@ function _bootstrap_colorize_button(&$variables) {
   $class_intersection = array_intersect($button_classes, $variables['attributes']['class']);
   if (empty($class_intersection)) {
     // Get the matched class.
-    $class = bootstrap_setting('button_colorize') ? _bootstrap_colorize_text($variables['element']['#value']) : FALSE;
+    $class = $theme->getSetting('button_colorize') ? _bootstrap_colorize_text($variables['element']['#value']) : FALSE;
     // If no particular class matched, use the default style.
     if (!$class) {
       $class = 'default';
@@ -1072,7 +878,7 @@ function _bootstrap_colorize_text($string, $default = '') {
  *   The form element, passed by reference.
  */
 function _bootstrap_iconize_button(&$element) {
-  if (bootstrap_setting('button_iconize') && _bootstrap_is_button($element) && ($icon = _bootstrap_iconize_text($element['#value']))) {
+  if (Bootstrap::getTheme()->getSetting('button_iconize') && _bootstrap_is_button($element) && ($icon = _bootstrap_iconize_text($element['#value']))) {
     $element['#icon'] = $icon;
   }
 }

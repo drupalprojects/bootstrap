@@ -4,6 +4,8 @@
  * input.vars.php
  */
 
+use Drupal\bootstrap\Bootstrap;
+use Drupal\Core\Render\Element;
 use Drupal\Core\Template\Attribute;
 
 /**
@@ -14,7 +16,7 @@ function bootstrap_preprocess_input(&$variables) {
   $attributes = new Attribute($variables['attributes']);
 
   // Set the element's attributes.
-  \Drupal\Core\Render\Element::setAttributes($element, array('id', 'name', 'value', 'type'));
+  Element::setAttributes($element, array('id', 'name', 'value', 'type'));
 
   // Handle button inputs.
   if (_bootstrap_is_button($element)) {
@@ -23,7 +25,7 @@ function bootstrap_preprocess_input(&$variables) {
     _bootstrap_iconize_button($element);
 
     // Add button size, if necessary.
-    if ($size = bootstrap_setting('button_size')) {
+    if ($size = Bootstrap::getTheme()->getSetting('button_size')) {
       $variables['attributes']['class'][] = $size;
     }
 

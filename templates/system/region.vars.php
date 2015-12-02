@@ -4,7 +4,7 @@
  * Stub file for "region" theme hook [pre]process functions.
  */
 
-use Drupal\Core\Template\Attribute;
+use Drupal\bootstrap\Bootstrap;
 
 /**
  * Pre-processes variables for the "region" theme hook.
@@ -20,7 +20,7 @@ function bootstrap_preprocess_region(&$variables) {
   $variables['region'] = $region;
   $variables['content'] = $variables['elements']['#children'];
 
-  $theme = \Drupal::theme()->getActiveTheme()->getName();
+  $theme = Bootstrap::getTheme();
 
   // Content region.
   if ($region === 'content') {
@@ -47,8 +47,8 @@ function bootstrap_preprocess_region(&$variables) {
   // Support for "well" classes in regions.
   static $wells;
   if (!isset($wells)) {
-    foreach (system_region_list($theme) as $name => $title) {
-      $wells[$name] = bootstrap_setting('region_well-' . $name);
+    foreach (system_region_list($theme->getName()) as $name => $title) {
+      $wells[$name] = $theme->getSetting('region_well-' . $name);
     }
   }
   if (!empty($wells[$region])) {

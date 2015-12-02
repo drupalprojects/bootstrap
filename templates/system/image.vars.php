@@ -4,6 +4,8 @@
  * Stub file for "image" theme hook [pre]process functions.
  */
 
+use Drupal\bootstrap\Bootstrap;
+
 /**
  * Pre-processes variables for the "image" theme hook.
  *
@@ -14,13 +16,15 @@
  * @ingroup theme_preprocess
  */
 function bootstrap_preprocess_image(&$variables) {
+  $theme = Bootstrap::getTheme();
+
   // Add image shape, if necessary.
-  if ($shape = bootstrap_setting('image_shape')) {
+  if ($shape = $theme->getSetting('image_shape')) {
     _bootstrap_add_class($shape, $variables);
   }
 
   // Add responsiveness, if necessary.
-  if (bootstrap_setting('image_responsive')) {
+  if ($theme->getSetting('image_responsive')) {
     _bootstrap_add_class('img-responsive', $variables);
   }
 }
