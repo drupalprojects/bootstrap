@@ -6,6 +6,7 @@
 
 namespace Drupal\bootstrap\Plugin\Process;
 
+use Drupal\bootstrap\Annotation\BootstrapProcess;
 use Drupal\bootstrap\Utility\Element;
 use Drupal\Core\Form\FormStateInterface;
 

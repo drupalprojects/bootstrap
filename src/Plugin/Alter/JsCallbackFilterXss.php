@@ -6,6 +6,8 @@
 
 namespace Drupal\bootstrap\Plugin\Alter;
 
+use Drupal\bootstrap\Annotation\BootstrapAlter;
+
 /**
  * Implements hook_js_callback_filter_xss_alter().
  *

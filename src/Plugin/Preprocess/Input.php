@@ -6,6 +6,7 @@
 
 namespace Drupal\bootstrap\Plugin\Preprocess;
 
+use Drupal\bootstrap\Annotation\BootstrapPreprocess;
 use Drupal\bootstrap\Bootstrap;
 use Drupal\bootstrap\Utility\Element;
 use Drupal\Core\Template\Attribute;
@@ -25,19 +26,17 @@ class Input implements PreprocessInterface {
    * {@inheritdoc}
    */
   public function preprocess(array &$variables) {
-    $element = new Element($variables['element']);
-    $attributes = $element->getAttributes();
+    \Drupal\Core\Render\Element::setAttributes($variables['element'], ['id', 'name', 'value', 'type']);
 
-    // Set the element's attributes.
-    $element->setAttributes(['id', 'name', 'value', 'type']);
+    $element = new Element($variables['element']);
 
     // Handle button inputs.
     if ($element->isButton()) {
-      $attributes->addClass('btn');
+      $element->addClass('btn');
       $element->colorize();
       $element->setIcon();
       if ($size = Bootstrap::getTheme()->getSetting('button_size')) {
-        $attributes->addClass($size);
+        $element->addClass($size);
       }
     }
 
@@ -84,13 +83,15 @@ class Input implements PreprocessInterface {
 
     // Search fields.
     if ($element->isType('search')) {
-      $attributes->setAttribute('placeholder', t('Search'));
-      $attributes->setAttribute('data-original-title', t('Enter the terms you wish to search for.'));
+      $element->setAttributes([
+        'placeholder' => t('Search'),
+        'data-original-title' => t('Enter the terms you wish to search for.'),
+      ]);
     }
 
     // Additional Twig variables.
     $variables['icon'] = $element->getProperty('icon');
-    $variables['attributes'] = $attributes->toArray();
+    $variables['attributes'] = $element->getAttributes();
     $variables['element'] = $element->getArray();
     $variables['label'] = $element->getProperty('value');
   }

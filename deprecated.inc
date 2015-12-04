@@ -14,14 +14,14 @@ use Drupal\Component\Utility\NestedArray;
  * The base file system path for CDN providers.
  *
  * @deprecated Will be removed in a future release.
- *
- * @code
+ * ```php
  *   // Before.
  *   echo BOOTSTRAP_CDN_PROVIDER_PATH;
  *
  *   // After.
- *   echo \Drupal\bootstrap\Plugin\ProviderManager::FILE_PATH;
- * @endcode
+ *   use Drupal\bootstrap\Plugin\ProviderManager;
+ *   echo ProviderManager::FILE_PATH;
+ * ```
  *
  * @see \Drupal\bootstrap\Plugin\ProviderManager::FILE_PATH
  */
@@ -31,14 +31,14 @@ define('BOOTSTRAP_CDN_PROVIDER_PATH', ProviderManager::FILE_PATH);
  * The current supported Bootstrap framework major version number.
  *
  * @deprecated Will be removed in a future release.
- *
- * @code
+ * ```php
  *   // Before.
  *   echo BOOTSTRAP_VERSION_MAJOR;
  *
  *   // After.
- *   echo substr(\Drupal\bootstrap\Bootstrap::VERSION, 0, 1);
- * @endcode
+ *   use Drupal\bootstrap\Bootstrap;
+ *   echo substr(Bootstrap::FRAMEWORK_VERSION, 0, 1);
+ * ```
  *
  * @see \Drupal\bootstrap\Bootstrap::FRAMEWORK_VERSION
  */
@@ -48,14 +48,14 @@ define('BOOTSTRAP_VERSION_MAJOR', substr(Bootstrap::FRAMEWORK_VERSION, 0, 1));
  * The current supported Bootstrap framework minor version number.
  *
  * @deprecated Will be removed in a future release.
- *
- * @code
+ * ```php
  *   // Before.
  *   echo BOOTSTRAP_VERSION_MINOR;
  *
  *   // After.
- *   echo substr(\Drupal\bootstrap\Bootstrap::VERSION, 2, 1);
- * @endcode
+ *   use Drupal\bootstrap\Bootstrap;
+ *   echo substr(Bootstrap::FRAMEWORK_VERSION, 2, 1);
+ * ```
  *
  * @see \Drupal\bootstrap\Bootstrap::FRAMEWORK_VERSION
  */
@@ -65,14 +65,14 @@ define('BOOTSTRAP_VERSION_MINOR', substr(Bootstrap::FRAMEWORK_VERSION, 2, 1));
  * The current supported Bootstrap framework patch version number.
  *
  * @deprecated Will be removed in a future release.
- *
- * @code
+ * ```php
  *   // Before.
  *   echo BOOTSTRAP_VERSION_PATCH;
  *
  *   // After.
- *   echo substr(\Drupal\bootstrap\Bootstrap::VERSION, 4, 1);
- * @endcode
+ *   use Drupal\bootstrap\Bootstrap;
+ *   echo substr(Bootstrap::FRAMEWORK_VERSION, 4, 1);
+ * ```
  *
  * @see \Drupal\bootstrap\Bootstrap::FRAMEWORK_VERSION
  */
@@ -82,14 +82,14 @@ define('BOOTSTRAP_VERSION_PATCH', substr(Bootstrap::FRAMEWORK_VERSION, 4, 1));
  * The current supported Bootstrap framework version.
  *
  * @deprecated Will be removed in a future release.
- *
- * @code
+ * ```php
  *   // Before.
  *   echo BOOTSTRAP_VERSION;
  *
  *   // After.
- *   echo \Drupal\bootstrap\Bootstrap::VERSION;
- * @endcode
+ *   use Drupal\bootstrap\Bootstrap;
+ *   echo Bootstrap::FRAMEWORK_VERSION;
+ * ```
  *
  * @see \Drupal\bootstrap\Bootstrap::FRAMEWORK_VERSION
  */
@@ -114,15 +114,15 @@ define('BOOTSTRAP_VERSION', Bootstrap::FRAMEWORK_VERSION);
  *   - "wrapper_attributes".
  *
  * @deprecated Will be removed in a future release.
- *
- * @code
+ * ```php
  *   // Before.
  *   _bootstrap_add_class('my-class', $element);
  *
  *   // After.
- *   $e = new \Drupal\bootstrap\Utility\Element($element);
+ *   use Drupal\bootstrap\Utility\Element;
+ *   $e = new Element($element);
  *   $e->addClass('my-class');
- * @endcode
+ * ```
  *
  * @see \Drupal\bootstrap\Utility\Element::addClass()
  */
@@ -137,7 +137,20 @@ function _bootstrap_add_class($class, array &$element, $property = 'attributes')
  *
  * @param array $element
  *   The form element, passed by reference.
- */
+ *
+ * @deprecated Will be removed in a future release.
+ * ```php
+ *   // Before.
+ *   _bootstrap_colorize_button($element);
+ *
+ *   // After.
+ *   use Drupal\bootstrap\Utility\Element;
+ *   $e = new Element($element);
+ *   $e->colorize();
+ * ```
+ *
+ * @see \Drupal\bootstrap\Utility\Element::colorize()
+ * */
 function _bootstrap_colorize_button(array &$element) {
   Bootstrap::deprecated();
   $e = new Element($element);
@@ -157,14 +170,14 @@ function _bootstrap_colorize_button(array &$element) {
  *   no match could be made.
  *
  * @deprecated Will be removed in a future release.
- *
- * @code
+ * ```php
  *   // Before.
  *   $class = _bootstrap_colorize_text($string, $default);
  *
  *   // After.
- *   $class = \Drupal\bootstrap\Bootstrap::cssClassFromString($string, $default);
- * @endcode
+ *   use Drupal\bootstrap\Bootstrap;
+ *   $class = Bootstrap::cssClassFromString($string, $default);
+ * ```
  *
  * @see \Drupal\bootstrap\Bootstrap::cssClassFromString()
  */
@@ -192,15 +205,15 @@ function _bootstrap_colorize_text($string, $default = '') {
  *   'filename', and 'name' members corresponding to the matching files.
  *
  * @deprecated Will be removed in a future release.
- *
- * @code
+ * ```php
  *   // Before.
  *   $files = _bootstrap_file_scan_directory($theme_path . '/js', '/\.js$/');
  *
  *   // After.
+ *   use Drupal\bootstrap\Bootstrap;
  *   $theme = Bootstrap::getTheme();
  *   $files = $theme->fileScan('/\.js$/', $theme->getPath(). '/js');
- * @endcode
+ * ```
  *
  * @see \Drupal\bootstrap\Theme::fileScan()
  * @see file_scan_directory()
@@ -223,31 +236,25 @@ function _bootstrap_file_scan_directory($dir, $mask, array $options = []) {
  *   - "title_attributes"
  *   - "wrapper_attributes".
  *
- * @return \Drupal\Core\Template\Attribute
- *   The attributes object.
+ * @return array
+ *   The attributes array.
  *
  * @deprecated Will be removed in a future release.
- *
- * Note: this used to be passed by reference in 7.x, however given that all
- * attributes arrays are not objects in 8.x, this function can no longer
- * return the array by reference. You will have to update your code to use
- * the new objects (which does reference the element).
- *
- * @code
+ * ```php
  *   // Before.
  *   $attributes = &_bootstrap_get_attributes($element);
  *   $attributes['class'][] = 'my-class';
  *
  *   // After.
- *   $e = new \Drupal\bootstrap\Utility\Element($element);
- *   $attributes = $e->getAttributes();
- *   $attributes->addClass('my-class');
- * @endcode
+ *   use Drupal\bootstrap\Utility\Element;
+ *   $e = new Element($element);
+ *   $attributes = &$e->getAttributes();
+ *   $attributes['class'][] = 'my-class';
+ * ```
  *
  * @see \Drupal\bootstrap\Utility\Element::getAttributes()
- * @see \Drupal\Core\Template\Attribute
  */
-function _bootstrap_get_attributes(array &$element, $property = 'attributes') {
+function &_bootstrap_get_attributes(array &$element, $property = 'attributes') {
   Bootstrap::deprecated();
   $e = new Element($element);
   return $e->getAttributes($property);
@@ -266,21 +273,24 @@ function _bootstrap_get_attributes(array &$element, $property = 'attributes') {
  *   An indexed array of base themes.
  *
  * @deprecated Will be removed in a future release.
- *
- * @code
+ * ```php
  *   // Before (including active theme).
  *   $base_themes = _bootstrap_get_base_themes(NULL, TRUE);
- *
- *   // After (including active theme).
- *   $base_themes = array_keys(Bootstrap::getTheme()->getAncestry());
  *
  *   // Before (excluding active theme).
  *   $base_themes = _bootstrap_get_base_themes('my_subtheme');
  *
+ *   // After (including active theme).
+ *   use Drupal\bootstrap\Bootstrap;
+ *   $theme = Bootstrap::getTheme();
+ *   $base_themes = array_keys($theme->getAncestry());
+ *
  *   // After (excluding active theme).
- *   $base_themes = array_keys(Bootstrap::getTheme('my_subtheme')->getAncestry());
+ *   use Drupal\bootstrap\Bootstrap;
+ *   $my_subtheme = Bootstrap::getTheme('my_subtheme');
+ *   $base_themes = array_keys($my_subtheme->getAncestry());
  *   array_pop($base_themes);
- * @endcode
+ * ```
  *
  * @see \Drupal\bootstrap\Theme::getAncestry()
  */
@@ -310,29 +320,23 @@ function _bootstrap_get_base_themes($theme_key = NULL, $include_theme_key = FALS
  *   The classes array.
  *
  * @deprecated Will be removed in a future release. There is no replacement.
- *
- * Note: this used to be passed by reference in 7.x, however given that all
- * attributes arrays are not objects in 8.x, this function can no longer
- * return the array by reference. You will have to update your code to use
- * the new objects (which does reference the element).
- *
- * @code
+ * ```php
  *   // Before.
  *   $classes = &_bootstrap_get_classes($element);
  *   $classes[] = 'my-class';
  *
  *   // After.
- *   $e = new \Drupal\bootstrap\Utility\Element($element);
- *   $attributes => $e->getAttributes();
- *   $attributes->addClass('my-class');
- * @endcode
+ *   use Drupal\bootstrap\Utility\Element;
+ *   $e = new Element($element);
+ *   $classes = &$e->getClasses();
+ *   $classes[] = 'my-class';
+ * ```
  *
- * @see \Drupal\bootstrap\Utility\Element::getAttributes()
- * @see \Drupal\Core\Template\Attribute
+ * @see \Drupal\bootstrap\Utility\Element::getClasses()
  */
-function _bootstrap_get_classes(array &$element, $property = 'attributes') {
+function &_bootstrap_get_classes(array &$element, $property = 'attributes') {
   $e = new Element($element);
-  return $e->getAttributes($property)->toArray()['class'];
+  return $e->getClasses($property);
 }
 
 /**
@@ -346,14 +350,14 @@ function _bootstrap_get_classes(array &$element, $property = 'attributes') {
  *   An associative array of icons keyed by their classes.
  *
  * @deprecated Will be removed in a future release.
- *
- * @code
+ * ```php
  *   // Before.
  *   $glyphicons = _bootstrap_glyphicons($version);
  *
  *   // After.
- *   $glyphicons = \Drupal\bootstrap\Bootstrap::glyphicons($version);
- * @endcode
+ *   use Drupal\bootstrap\Bootstrap;
+ *   $glyphicons = Bootstrap::glyphicons($version);
+ * ```
  *
  * @see \Drupal\bootstrap\Bootstrap::glyphicons()
  */
@@ -366,14 +370,15 @@ function _bootstrap_glyphicons($version = NULL) {
  * Determine whether or not Bootstrap Glyphicons can be used.
  *
  * @deprecated Will be removed in a future release.
- *
- * @code
+ * ```php
  *   // Before.
  *   $supported = _bootstrap_glyphicons_supported();
  *
  *   // After.
- *   $supported = \Drupal\bootstrap\Bootstrap::getTheme()->hasGlyphicons();
- * @endcode
+ *   use Drupal\bootstrap\Bootstrap;
+ *   $theme = Bootstrap::getTheme();
+ *   $supported = $theme->hasGlyphicons();
+ * ```
  *
  * @see \Drupal\bootstrap\Theme::hasGlyphicons()
  */
@@ -395,15 +400,15 @@ function _bootstrap_glyphicons_supported() {
  *   icon does not exist or returns empty output for whatever reason.
  *
  * @deprecated Will be removed in a future release.
- *
- * @code
+ * ```php
  *   // Before.
  *   $icon = _bootstrap_icon($name, $default);
  *
  *   // After.
- *   $glyphicon = \Drupal\bootstrap\Bootstrap::glyphicon($name, ['#markup' => $default]);
+ *   use Drupal\bootstrap\Bootstrap;
+ *   $glyphicon = Bootstrap::glyphicon($name, ['#markup' => $default]);
  *   $icon = \Drupal::service('renderer')->render($glyphicon);
- * @endcode
+ * ```
  *
  * @see \Drupal\bootstrap\Bootstrap::glyphicon()
  */
@@ -419,15 +424,15 @@ function _bootstrap_icon($name, $default = NULL) {
  *   The form element, passed by reference.
  *
  * @deprecated Will be removed in a future release.
- *
- * @code
+ * ```php
  *   // Before.
  *   _bootstrap_iconize_button($element);
  *
  *   // After.
- *   $e = new \Drupal\bootstrap\Utility\Element($element);
+ *   use Drupal\bootstrap\Utility\Element;
+ *   $e = new Element($element);
  *   $e->setIcon();
- * @endcode
+ * ```
  *
  * @see \Drupal\bootstrap\Utility\Element::setIcon()
  */
@@ -450,14 +455,14 @@ function _bootstrap_iconize_button(array &$element) {
  *   no match could be made.
  *
  * @deprecated Will be removed in a future release.
- *
- * @code
+ * ```php
  *   // Before.
  *   $icon = _bootstrap_iconize_text($string, $default);
  *
  *   // After.
- *   $icon = \Drupal\bootstrap\Bootstrap::glyphiconFromString($string, ['#markup' => $default]);
- * @endcode
+ *   use Drupal\bootstrap\Bootstrap;
+ *   $icon = Bootstrap::glyphiconFromString($string, ['#markup' => $default]);
+ * ```
  *
  * @see \Drupal\bootstrap\Bootstrap::glyphiconFromString()
  */
@@ -476,21 +481,21 @@ function _bootstrap_iconize_text($string, $default = '') {
  *   TRUE or FALSE.
  *
  * @deprecated Will be removed in a future release.
- *
- * @code
+ * ```php
  *   // Before.
  *   $button = _bootstrap_is_button($element);
  *
  *   // After.
- *   $e = new \Drupal\bootstrap\Utility\Element($element);
+ *   use Drupal\bootstrap\Utility\Element;
+ *   $e = new Element($element);
  *   $button = $e->isButton();
- * @endcode
+ * ```
  *
  * @see \Drupal\bootstrap\Utility\Element::isButton()
  */
 function _bootstrap_is_button(array $element) {
   Bootstrap::deprecated();
-  $e = new \Drupal\bootstrap\Utility\Element($element);
+  $e = new Element($element);
   return $e->isButton();
 }
 
@@ -513,14 +518,14 @@ function _bootstrap_is_button(array $element) {
  *   Returns TRUE if the $string is considered "simple", FALSE otherwise.
  *
  * @deprecated Will be removed in a future release.
- *
- * @code
+ * ```php
  *   // Before.
  *   $simple = _bootstrap_is_simple_string($string, $length, $allowed_tags, $html);
  *
  *   // After.
- *   $simple = \Drupal\bootstrap\Utility\Unicode::isSimple($string, $length, $allowed_tags, $html);
- * @endcode
+ *   use Drupal\bootstrap\Utility\Unicode;
+ *   $simple = Unicode::isSimple($string, $length, $allowed_tags, $html);
+ * ```
  *
  * @see \Drupal\bootstrap\Utility\Unicode::isSimple()
  */
@@ -545,15 +550,15 @@ function _bootstrap_is_simple_string($string, $length = 250, $allowed_tags = NUL
  *   - "wrapper_attributes".
  *
  * @deprecated Will be removed in a future release.
- *
- * @code
+ * ```php
  *   // Before.
  *   _bootstrap_remove_class('my-class', $element);
  *
  *   // After.
- *   $e = new \Drupal\bootstrap\Utility\Element($element);
+ *   use Drupal\bootstrap\Utility\Element;
+ *   $e = new Element($element);
  *   $e->removeClass('my-class');
- * @endcode
+ * ```
  *
  * @see \Drupal\bootstrap\Utility\Element::removeClass()
  */
@@ -578,17 +583,27 @@ function _bootstrap_remove_class($class, array &$element, $property = 'attribute
  *   exist then FALSE will be returned.
  *
  * @deprecated Will be removed in a future release.
- *
- * @code
+ * ```php
  *   // Before.
  *   $providers = bootstrap_cdn_provider();
  *   $jsdelivr = bootstrap_cdn_provider('jsdelivr');
  *
  *   // After.
- *   $provider_manager = new \Drupal\bootstrap\Plugin\ProviderManager(Bootstrap::getTheme());
+ *   use Drupal\bootstrap\Bootstrap;
+ *   use Drupal\bootstrap\Plugin\ProviderManager;
+ *
+ *   $theme = Bootstrap::getTheme();
+ *
+ *   // Get provider definitions, the "equivalent" for bootstrap_cdn_provider().
+ *   $provider_manager = new ProviderManager($theme);
  *   $providers = $provider_manager->getDefinitions();
  *   $jsdelivr = $provider_manager->getDefinition('jsdelivr');
- * @endcode
+ *
+ *   // You should, however, use the the fully initialized classes made
+ *   // available through a theme instance.
+ *   $providers = $theme->getProviders();
+ *   $jsdelivr = $theme->getProvider('jsdelivr');
+ * ```
  *
  * @see \Drupal\bootstrap\Plugin\ProviderManager
  * @see \Drupal\bootstrap\Theme::getProviders()
@@ -623,15 +638,15 @@ function bootstrap_cdn_provider($provider = NULL, $reset = FALSE) {
  *   The length of characters to determine if description is "simple".
  *
  * @deprecated Will be removed in a future release.
- *
- * @code
+ * ```php
  *   // Before.
  *   bootstrap_element_smart_description($element, $target, $input_only, $length);
  *
  *   // After.
- *   $e = new \Drupal\bootstrap\Utility\Element($element);
+ *   use Drupal\bootstrap\Utility\Element;
+ *   $e = new Element($element);
  *   $e->smartDescription($target, $input_only, $length);
- * @endcode
+ * ```
  *
  * @see \Drupal\bootstrap\Utility\Element::smartDescription()
  */
@@ -658,15 +673,29 @@ function bootstrap_element_smart_description(array &$element, array &$target = N
  *   If $type is a string or an array with only one (1) item in it, the assets
  *   are returned as an indexed array of files. Otherwise, an associative array
  *   is returned keyed by the type.
+ *
+ * @deprecated Will be removed in a future release.
+ * ```php
+ *   // Before.
+ *   $assets = bootstrap_get_cdn_assets($type, $provider, $theme);
+ *
+ *   // After.
+ *   use Drupal\bootstrap\Bootstrap;
+ *   $theme = Bootstrap::getTheme($theme);
+ *   $provider = $theme->getProvider($provider);
+ *   $assets = $provider->getAssets($type);
+ * ```
+ *
+ * @see \Drupal\bootstrap\Plugin\Provider\Custom::getAssets()
+ * @see \Drupal\bootstrap\Plugin\Provider\JsDelivr::getAssets()
+ * @see \Drupal\bootstrap\Plugin\Provider\ProviderBase::getAssets()
+ * @see \Drupal\bootstrap\Plugin\Provider\ProviderInterface::getAssets()
+ * @see \Drupal\bootstrap\Theme::getProvider()
+ * @see \Drupal\bootstrap\Bootstrap::getTheme()
  */
 function bootstrap_get_cdn_assets($type = NULL, $provider = NULL, $theme = NULL) {
   Bootstrap::deprecated();
-  $assets = [];
-  $theme = Bootstrap::getTheme($theme);
-  if ($provider = $theme->getProvider($provider)) {
-    $assets = $provider->getAssets($type);
-  }
-  return $assets;
+  return Bootstrap::getTheme($theme)->getProvider($provider)->getAssets($type);
 }
 
 /**
@@ -760,17 +789,17 @@ function bootstrap_get_theme_info($theme_key = NULL, $key = NULL, $base_themes =
  *   Path relative to $theme.
  *
  * @deprecated Will be removed in a future release.
- *
- * @code
+ * ```php
  *   // Before.
  *   bootstrap_include('my_subtheme', 'includes/file.inc');
  *   bootstrap_include('my_subtheme', 'some/other/path/file.inc');
  *
  *   // After.
+ *   use Drupal\bootstrap\Bootstrap;
  *   $my_subtheme = Bootstrap::getTheme('my_subtheme');
  *   $my_subtheme->includeOnce('file.inc');
  *   $my_subtheme->includeOnce('file.inc', 'some/other/path');
- * @endcode
+ * ```
  *
  * @see \Drupal\bootstrap\Theme::includeOnce()
  * @see \Drupal\bootstrap\Bootstrap::getTheme()
@@ -799,17 +828,17 @@ function bootstrap_include($theme, $path) {
  *   The value of the requested setting, NULL if the setting does not exist.
  *
  * @deprecated Will be removed in a future release.
- *
- * @code
+ * ```php
  *   // Before ("button_colorize" and "my_subtheme_custom_option").
  *   $colorize = bootstrap_setting('button_colorize', 'my_subtheme');
  *   $custom_option = bootstrap_setting('custom_option', 'my_subtheme', 'my_subtheme');
  *
  *   // After ("button_colorize" and "my_subtheme_custom_option").
+ *   use Drupal\bootstrap\Bootstrap;
  *   $my_subtheme = Bootstrap::getTheme('my_subtheme');
  *   $my_subtheme->getSetting('button_colorize');
  *   $my_subtheme->getSetting('my_subtheme_custom_option');
- * @endcode
+ * ```
  *
  * @see \Drupal\bootstrap\Theme::getSetting()
  * @see \Drupal\bootstrap\Bootstrap::getTheme()

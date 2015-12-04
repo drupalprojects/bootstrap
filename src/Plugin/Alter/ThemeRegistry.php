@@ -7,6 +7,7 @@
 // Name of the base theme must be lowercase for it to be autoload discoverable.
 namespace Drupal\bootstrap\Plugin\Alter;
 
+use Drupal\bootstrap\Annotation\BootstrapAlter;
 use Drupal\bootstrap\Bootstrap;
 use Drupal\bootstrap\Theme;
 use Drupal\Core\Theme\ActiveTheme;
@@ -18,13 +19,6 @@ use Drupal\Core\Theme\Registry;
  */
 
 // Define additional sub-groups for creating lists for all the theme files.
-/**
- * @defgroup theme_functions Theme Functions (.func.php)
- *
- * List of theme functions used in the Drupal Bootstrap base theme.
- *
- * View the parent topic for additional documentation.
- */
 /**
  * @defgroup theme_preprocess Theme Preprocess Functions (.vars.php)
  *

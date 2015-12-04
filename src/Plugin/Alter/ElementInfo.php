@@ -6,6 +6,7 @@
 
 namespace Drupal\bootstrap\Plugin\Alter;
 
+use Drupal\bootstrap\Annotation\BootstrapAlter;
 use Drupal\bootstrap\Bootstrap;
 use Drupal\bootstrap\Plugin\PrerenderManager;
 use Drupal\bootstrap\Plugin\ProcessManager;

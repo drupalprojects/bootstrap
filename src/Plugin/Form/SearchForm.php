@@ -6,6 +6,7 @@
 
 namespace Drupal\bootstrap\Plugin\Form;
 
+use Drupal\bootstrap\Annotation\BootstrapForm;
 use Drupal\Core\Form\FormStateInterface;
 
 /**

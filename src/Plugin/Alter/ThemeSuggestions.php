@@ -6,6 +6,8 @@
 
 namespace Drupal\bootstrap\Plugin\Alter;
 
+use Drupal\bootstrap\Annotation\BootstrapAlter;
+
 /**
  * Implements hook_theme_suggestions_alter().
  *

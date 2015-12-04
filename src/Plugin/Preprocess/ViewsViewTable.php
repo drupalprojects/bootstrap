@@ -6,6 +6,8 @@
 
 namespace Drupal\bootstrap\Plugin\Preprocess;
 
+use Drupal\bootstrap\Annotation\BootstrapPreprocess;
+
 /**
  * Pre-processes variables for the "views_view_table" theme hook.
  *

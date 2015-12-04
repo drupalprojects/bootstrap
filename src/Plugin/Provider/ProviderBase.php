@@ -6,6 +6,7 @@
 
 namespace Drupal\bootstrap\Plugin\Provider;
 
+use Drupal\bootstrap\Annotation\BootstrapProvider;
 use Drupal\bootstrap\Plugin\ProviderManager;
 use Drupal\bootstrap\Utility\Element;
 use Drupal\Component\Plugin\PluginBase;

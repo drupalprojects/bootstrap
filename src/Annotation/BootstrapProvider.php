@@ -9,7 +9,7 @@ namespace Drupal\bootstrap\Annotation;
 use Drupal\Component\Annotation\Plugin;
 
 /**
- * Defines a BootstrapAlter annotation object.
+ * Defines a BootstrapProvider annotation object.
  *
  * Plugin Namespace: "Plugin/Provider".
  *
