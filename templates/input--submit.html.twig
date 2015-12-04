@@ -15,7 +15,7 @@
  */
 #}
 {% if icon_position == 'after' %}
-    <button{{ attributes }}>{{ label }}{{ icon }}</button>{{ children }}
+    <button{{ attributes.addClass('js-form-submit') }}>{{ label }}{{ icon }}</button>{{ children }}
 {% else %}
-    <button{{ attributes }}>{{ icon }}{{ label }}</button>{{ children }}
+    <button{{ attributes.addClass('js-form-submit') }}>{{ icon }}{{ label }}</button>{{ children }}
 {% endif %}
