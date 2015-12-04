@@ -49,14 +49,12 @@ class Region implements PreprocessInterface {
     }
 
     // Support for "well" classes in regions.
-    static $wells;
+    static $region_wells;
     if (!isset($wells)) {
-      foreach (system_region_list($theme->getName()) as $name => $title) {
-        $wells[$name] = $theme->getSetting('region_well-' . $name);
-      }
+      $region_wells = $theme->getSetting('region_wells');
     }
-    if (!empty($wells[$region])) {
-      $variables['attributes']['class'][] = $wells[$region];
+    if (!empty($region_wells[$region])) {
+      $variables['attributes']['class'][] = $region_wells[$region];
     }
   }
 

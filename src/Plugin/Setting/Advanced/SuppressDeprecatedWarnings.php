@@ -1,0 +1,27 @@
+<?php
+/**
+ * @file
+ * Contains \Drupal\bootstrap\Plugin\Setting\Advanced\SuppressDeprecatedWarnings.
+ */
+
+namespace Drupal\bootstrap\Plugin\Setting\Advanced;
+
+use Drupal\bootstrap\Annotation\BootstrapSetting;
+use Drupal\bootstrap\Plugin\Setting\SettingBase;
+use Drupal\Core\Annotation\Translation;
+
+/**
+ * The "suppress_deprecated_warnings" theme setting.
+ *
+ * @BootstrapSetting(
+ *   id = "suppress_deprecated_warnings",
+ *   type = "checkbox",
+ *   title = @Translation("Suppress deprecated function or method warnings"),
+ *   defaultValue = 0,
+ *   description = @Translation("Enable this setting if you wish to suppress any deprecated function or method warnings. WARNING: Suppressing these messages does not &quote;fix&quote; the problem and you will inevitably encounter issues when they are removed in future updates. Only use this setting in extreme and necessary circumstances."),
+ *   groups = {
+ *     "advanced" = @Translation("Advanced"),
+ *   },
+ * )
+ */
+class SuppressDeprecatedWarnings extends SettingBase {}

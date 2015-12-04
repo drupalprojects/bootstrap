@@ -208,7 +208,7 @@ class JsDelivr extends ProviderBase {
       '#options' => $this->pluginDefinition['versions'],
       '#default_value' => $version,
       '#ajax' => [
-        'callback' => 'Drupal\bootstrap\Provider\JsDelivr::cdnProviderAjax',
+        'callback' => [get_class($this), 'cdnProviderAjax'],
         'wrapper' => 'bootstrap-cdn-provider-jsdelivr',
       ],
     ];

@@ -34,14 +34,8 @@ navbar_inverse: 0
 
 # Region Wells
 # --------------
-region_well-navigation: ''
-region_well-header: ''
-region_well-highlighted: ''
-region_well-help: ''
-region_well-content: ''
-region_well-sidebar_first: ''
-region_well-sidebar_second: 'well'
-region_well-footer: ''
+region_wells:
+  sidebar_second: 'well'
 
 # Anchors
 # --------------
@@ -56,30 +50,29 @@ forms_smart_descriptions: 1
 forms_smart_descriptions_limit: 250
 forms_smart_descriptions_allowed_tags: 'b, code, em, i, kbd, span, strong'
 
-
 # Popovers
 # --------------
-popover_enabled: 1
 popover_animation: 1
+popover_container: 'body'
+popover_content: ''
+popover_delay: 0
+popover_enabled: 1
 popover_html: 0
 popover_placement: 'right'
 popover_selector: ''
+popover_title: ''
 popover_trigger:
   hover: 0
   focus: 0
   click: 'click'
 popover_trigger_autoclose: 1
-popover_title: ''
-popover_content: ''
-popover_delay: 0
-popover_container: 'body'
 
 # Tooltips
 # --------------
-tooltip_enabled: 1
-tooltip_descriptions: 1
-tooltip_descriptions_length: 200
 tooltip_animation: 1
+tooltip_container: 'body'
+tooltip_delay: 0
+tooltip_enabled: 1
 tooltip_html: 0
 tooltip_placement: 'auto left'
 tooltip_selector: ''
@@ -87,8 +80,6 @@ tooltip_trigger:
   hover: 'hover'
   focus: 'focus'
   click: 0
-tooltip_delay: 0
-tooltip_container: 'body'
 
 # Advanced
 # --------------
