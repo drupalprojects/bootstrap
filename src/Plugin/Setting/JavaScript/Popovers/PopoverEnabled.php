@@ -32,8 +32,8 @@ class PopoverEnabled extends SettingBase {
   /**
    * {@inheritdoc}
    */
-  public function alter(array &$form, FormStateInterface $form_state, $form_id = NULL) {
-    $group = $this->getGroupElement($form, $form_state);
+  public function alterForm(array &$form, FormStateInterface $form_state, $form_id = NULL) {
+    $group = $this->getGroup($form, $form_state);
     $group->setProperty('description', t('Add small overlays of content, like those on the iPad, to any element for housing secondary information.'));
   }
 

@@ -20,9 +20,9 @@ use Drupal\Core\Form\FormStateInterface;
  *   title = @Translation("trigger"),
  *   description = @Translation("How a tooltip is triggered."),
  *   defaultValue = {
- *     "click" = 0,
  *     "hover" = "hover",
  *     "focus" = "focus",
+ *     "click" = 0,
  *     "manual" = 0,
  *   },
  *   options = {

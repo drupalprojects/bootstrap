@@ -80,6 +80,16 @@ class PluginManager extends DefaultPluginManager {
   /**
    * {@inheritdoc}
    */
+  public function createInstance($plugin_id, array $configuration = array()) {
+    if (!isset($configuration['theme'])) {
+      $configuration['theme'] = $this->theme;
+    }
+    return parent::createInstance($plugin_id, $configuration);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getDefinitions($sorted = TRUE) {
     $definitions = parent::getDefinitions();
     if ($sorted) {

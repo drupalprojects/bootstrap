@@ -79,4 +79,18 @@ class BootstrapProvider extends Plugin {
    */
   protected $min = ['css' => [], 'js' => []];
 
+  /**
+   * An array of themes supported by the provider.
+   *
+   * @var array
+   */
+  protected $themes = [];
+
+  /**
+   * An array of versions supported by the provider.
+   *
+   * @var array
+   */
+  protected $versions = [];
+
 }

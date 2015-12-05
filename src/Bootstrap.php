@@ -103,9 +103,9 @@ class Bootstrap {
 
       /** @var \Drupal\bootstrap\Plugin\Form\FormInterface $form */
       if ($form_manager->hasDefinition($form_id) && ($form = $form_manager->createInstance($form_id))) {
-        $data['#submit'][] = [$form, 'submit'];
-        $data['#validate'][] = [$form, 'validate'];
-        $form->alter($data, $context1, $context2);
+        $data['#submit'][] = [$form, 'submitForm'];
+        $data['#validate'][] = [$form, 'validateForm'];
+        $form->alterForm($data, $context1, $context2);
       }
     }
     // Process hook alter normally.
@@ -115,7 +115,7 @@ class Bootstrap {
 
       /** @var \Drupal\bootstrap\Plugin\Alter\AlterInterface $class */
       if ($alter_manager->hasDefinition($hook) && ($class = $alter_manager->createInstance($hook))) {
-        $class->alter($data, $context2, $context2);
+        $class->alter($data, $context1, $context2);
       }
     }
   }
@@ -338,7 +338,7 @@ class Bootstrap {
     static $themes = [];
 
     if (!isset($theme_handler)) {
-      $theme_handler = \Drupal::service('theme_handler');
+      $theme_handler = static::getThemeHandler();
     }
     if (!isset($theme)) {
       $theme = \Drupal::theme()->getActiveTheme()->getName();
@@ -356,6 +356,20 @@ class Bootstrap {
     }
 
     return $themes[$theme->getName()];
+  }
+
+  /**
+   * Retrieves the theme handler instance.
+   *
+   * @return \Drupal\Core\Extension\ThemeHandlerInterface
+   *   The theme handler instance.
+   */
+  public static function getThemeHandler() {
+    static $theme_handler;
+    if (!isset($theme_handler)) {
+      $theme_handler = \Drupal::service('theme_handler');
+    }
+    return $theme_handler;
   }
 
   /**
@@ -804,10 +818,14 @@ class Bootstrap {
     foreach ($hooks as $hook) {
       $suggestions = explode('__', $hook);
       $hook = array_shift($suggestions);
-      $preprocess[] = $hook;
+      if (!in_array($hook, $preprocess)) {
+        $preprocess[] = $hook;
+      }
       foreach ($suggestions as $suggestion) {
         $hook .= "__$suggestion";
-        $preprocess[] = $hook;
+        if (!in_array($hook, $preprocess)) {
+          $preprocess[] = $hook;
+        }
       }
     }
 

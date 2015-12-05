@@ -7,6 +7,7 @@
 namespace Drupal\bootstrap;
 
 use Drupal\bootstrap\Plugin\ProviderManager;
+use Drupal\bootstrap\Plugin\SettingManager;
 use Drupal\bootstrap\Utility\Crypt;
 use Drupal\bootstrap\Utility\Storage;
 use Drupal\bootstrap\Utility\StorageItem;
@@ -54,11 +55,25 @@ class Theme {
   const IGNORE_TEMPLATES = 0x16;
 
   /**
+   * The current theme info.
+   *
+   * @var array
+   */
+  protected $info;
+
+  /**
    * The current theme Extension object.
    *
    * @var \Drupal\Core\Extension\Extension
    */
   protected $theme;
+
+  /**
+   * An array of installed themes.
+   *
+   * @var array
+   */
+  protected $themes;
 
   /**
    * Theme handler object.
@@ -76,8 +91,11 @@ class Theme {
    *   The theme handler object.
    */
   public function __construct(Extension $theme, ThemeHandlerInterface $theme_handler) {
+    $name = $theme->getName();
     $this->theme = $theme;
     $this->themeHandler = $theme_handler;
+    $this->themes = $theme_handler->listInfo();
+    $this->info = isset($this->themes[$name]->info) ? $this->themes[$name]->info : [];
   }
 
   /**
@@ -182,31 +200,12 @@ class Theme {
    *   by machine name.
    */
   public function getAncestry($reverse = FALSE) {
-    static $themes;
-    if (!isset($themes)) {
-      $themes = $this->themeHandler->listInfo();
-    }
-    $ancestry = $this->themeHandler->getBaseThemes($themes, $this->getName());
+    $ancestry = $this->themeHandler->getBaseThemes($this->themes, $this->getName());
     foreach (array_keys($ancestry) as $name) {
       $ancestry[$name] = new static($this->themeHandler->getTheme($name), $this->themeHandler);
     }
     $ancestry[$this->getName()] = $this;
     return $reverse ? array_reverse($ancestry) : $ancestry;
-  }
-
-  /**
-   * Retrieves the theme's cache from the database.
-   *
-   * @return \Drupal\bootstrap\Utility\Storage
-   *   The cache object.
-   */
-  public function getStorage() {
-    static $cache = [];
-    $theme = $this->getName();
-    if (!isset($cache[$theme])) {
-      $cache[$theme] = new Storage($theme);
-    }
-    return $cache[$theme];
   }
 
   /**
@@ -231,6 +230,36 @@ class Theme {
       $cache[$theme][$name] = $theme_cache->get($name);
     }
     return $cache[$theme][$name];
+  }
+
+  /**
+   * Retrieves the theme info.
+   *
+   * @return array
+   *   The theme info.
+   */
+  public function getInfo() {
+    return $this->info;
+  }
+
+  /**
+   * Returns the machine name of the theme.
+   *
+   * @return string
+   *   The machine name of the theme.
+   */
+  public function getName() {
+    return $this->theme->getName();
+  }
+
+  /**
+   * Returns the relative path of the theme.
+   *
+   * @return string
+   *   The relative path of the theme.
+   */
+  public function getPath() {
+    return $this->theme->getPath();
   }
 
   /**
@@ -266,38 +295,85 @@ class Theme {
   }
 
   /**
-   * Returns the machine name of the theme.
-   *
-   * @return string
-   *   The machine name of the theme.
-   */
-  public function getName() {
-    return $this->theme->getName();
-  }
-
-  /**
-   * Returns the relative path of the theme.
-   *
-   * @return string
-   *   The relative path of the theme.
-   */
-  public function getPath() {
-    return $this->theme->getPath();
-  }
-
-  /**
    * Retrieves a theme setting.
    *
    * @param string $name
    *   The name of the setting to be retrieved.
+   * @param bool $get_default
+   *   Retrieve the default value from code, not from any potientially stored
+   *   config value.
    *
    * @return mixed
    *   The value of the requested setting, NULL if the setting does not exist.
    *
    * @see theme_get_setting()
    */
-  public function getSetting($name) {
-    return theme_get_setting($name, $this->getName());
+  public function getSetting($name, $get_default = FALSE) {
+    if ($get_default) {
+      $defaults = $this->getSettingDefaults();
+      if (isset($defaults[$name])) {
+        return $defaults[$name];
+      }
+    }
+    return $this->getSettings()->get($name);
+  }
+
+  /**
+   * Retrieves the default values from theme setting discovery.
+   *
+   * @return array
+   *   A key/value associative array.
+   */
+  public function getSettingDefaults() {
+    $defaults = [];
+    foreach ($this->getSettingInstances() as $name => $setting) {
+      $defaults[$name] = $setting->getDefaultValue();
+    }
+    return $defaults;
+  }
+
+  /**
+   * Retrieves the theme settings instance.
+   *
+   * @return \Drupal\bootstrap\ThemeSettings
+   *   All settings.
+   */
+  public function getSettings() {
+    static $themes = [];
+    if (!isset($themes[$this->getName()])) {
+      $themes[$this->getName()] = new ThemeSettings($this, $this->themeHandler);
+    }
+    return $themes[$this->getName()];
+  }
+
+  /**
+   * Retrieves the theme's setting plugin instances.
+   *
+   * @return \Drupal\bootstrap\Plugin\Setting\SettingInterface[]
+   *   An associative array of setting objects, keyed by their name.
+   */
+  public function getSettingInstances() {
+    $settings = [];
+    $setting_manager = new SettingManager($this);
+    foreach (array_keys($setting_manager->getDefinitions()) as $setting) {
+      $settings[$setting] = $setting_manager->createInstance($setting);
+    }
+    return $settings;
+  }
+
+  /**
+   * Retrieves the theme's cache from the database.
+   *
+   * @return \Drupal\bootstrap\Utility\Storage
+   *   The cache object.
+   */
+  public function getStorage() {
+    static $cache = [];
+    $theme = $this->getName();
+    if (!isset($cache[$theme])) {
+      $cache[$theme] = new Storage($theme);
+    }
+    return $cache[$theme];
   }
 
   /**
@@ -349,6 +425,28 @@ class Theme {
       }
     }
     return $includes[$include];
+  }
+
+  /**
+   * Removes a theme setting.
+   *
+   * @param string $name
+   *   Name of the theme setting to remove.
+   */
+  public function removeSetting($name) {
+    $this->getSettings()->clear($name)->save();
+  }
+
+  /**
+   * Sets a value for a theme setting.
+   *
+   * @param string $name
+   *   Name of the theme setting.
+   * @param mixed $value
+   *   Value to associate with the theme setting.
+   */
+  public function setSetting($name, $value) {
+    $this->getSettings()->set($name, $value)->save();
   }
 
   /**

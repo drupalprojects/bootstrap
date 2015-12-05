@@ -14,6 +14,7 @@ use Drupal\Core\Annotation\Translation;
  * The "cdn_custom_css_min" theme setting.
  *
  * @BootstrapSetting(
+ *   cdn_provider = "custom",
  *   id = "cdn_custom_css_min",
  *   type = "textfield",
  *   weight = 2,

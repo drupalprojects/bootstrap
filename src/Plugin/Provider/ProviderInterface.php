@@ -45,6 +45,24 @@ interface ProviderInterface extends PluginInspectionInterface, DerivativeInspect
   public function getLabel();
 
   /**
+   * Retrieves the themes supported by the CDN provider.
+   *
+   * @return array
+   *   An array of themes. If the CDN provider does not support any it will
+   *   just be an empty array.
+   */
+  public function getThemes();
+
+  /**
+   * Retrieves the versions supported by the CDN provider.
+   *
+   * @return array
+   *   An array of versions. If the CDN provider does not support any it will
+   *   just be an empty array.
+   */
+  public function getVersions();
+
+  /**
    * Flag indicating that the API data parsing failed.
    *
    * @return bool

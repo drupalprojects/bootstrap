@@ -38,6 +38,13 @@ class ProviderBase extends PluginBase implements ProviderInterface {
   protected $theme;
 
   /**
+   * The versions supplied by the CDN provider.
+   *
+   * @var array
+   */
+  protected $versions;
+
+  /**
    * {@inheritdoc}
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition) {
@@ -88,6 +95,20 @@ class ProviderBase extends PluginBase implements ProviderInterface {
    */
   public function getLabel() {
     return $this->pluginDefinition['label'] ?: $this->getPluginId();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getThemes() {
+    return $this->pluginDefinition['themes'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getVersions() {
+    return $this->pluginDefinition['versions'];
   }
 
   /**

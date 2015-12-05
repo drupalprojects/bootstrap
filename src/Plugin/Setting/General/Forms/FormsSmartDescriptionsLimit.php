@@ -18,7 +18,7 @@ use Drupal\Core\Form\FormStateInterface;
  *   id = "forms_smart_descriptions_limit",
  *   type = "textfield",
  *   title = @Translation("Smart form descriptions maximum character limit"),
- *   defaultValue = 250,
+ *   defaultValue = "250",
  *   description = @Translation("Prevents descriptions from becoming tooltips by checking the character length of the description (HTML is not counted towards this limit). To disable this filtering criteria, leave an empty value."),
  *   groups = {
  *     "general" = @Translation("General"),
@@ -31,8 +31,8 @@ class FormsSmartDescriptionsLimit extends SettingBase {
   /**
    * {@inheritdoc}
    */
-  public function alter(array &$form, FormStateInterface $form_state, $form_id = NULL) {
-    $element = $this->getSettingElement($form, $form_state);
+  public function alterForm(array &$form, FormStateInterface $form_state, $form_id = NULL) {
+    $element = $this->getElement($form, $form_state);
     $element->setProperty('states', [
       'visible' => [
         ':input[name="forms_smart_descriptions"]' => ['checked' => TRUE],

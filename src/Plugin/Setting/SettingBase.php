@@ -38,7 +38,22 @@ class SettingBase extends PluginBase implements SettingInterface {
   /**
    * {@inheritdoc}
    */
-  public function alter(array &$form, FormStateInterface $form_state, $form_id = NULL) {}
+  public function alterForm(array &$form, FormStateInterface $form_state, $form_id = NULL) {}
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildForm(array $form, FormStateInterface $form_state, $form_id = NULL) {
+    $this->getElement($form, $form_state);
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getFormId() {
+    return 'system_theme_settings';
+  }
 
   /**
    * Retrieves all the form properties from the setting definition.
@@ -46,7 +61,7 @@ class SettingBase extends PluginBase implements SettingInterface {
    * @return array
    *   The form properties.
    */
-  public function getFormProperties() {
+  public function getElementProperties() {
     $properties = $this->getPluginDefinition();
     foreach ($properties as $name => $value) {
       if (in_array($name, ['class', 'defaultValue', 'definition', 'groups', 'id', 'provider', 'see'])) {
@@ -59,13 +74,13 @@ class SettingBase extends PluginBase implements SettingInterface {
   /**
    * {@inheritdoc}
    */
-  public function getSettingElement(array &$form, FormStateInterface $form_state) {
+  public function getElement(array &$form, FormStateInterface $form_state) {
     // Construct the group elements.
-    $group = $this->getGroupElement($form, $form_state);
+    $group = $this->getGroup($form, $form_state);
     $plugin_id = $this->getPluginId();
     if (!isset($group->$plugin_id)) {
       // Set properties from the plugin definition.
-      foreach ($this->getFormProperties() as $name => $value) {
+      foreach ($this->getElementProperties() as $name => $value) {
         $group->$plugin_id->setProperty($name, $value);
       }
 
@@ -109,7 +124,7 @@ class SettingBase extends PluginBase implements SettingInterface {
   /**
    * {@inheritdoc}
    */
-  public function getGroupElement(array &$form, FormStateInterface $form_state) {
+  public function getGroup(array &$form, FormStateInterface $form_state) {
     $groups = $this->getGroups();
     $group = new Element($form);
     $first = TRUE;
@@ -155,11 +170,11 @@ class SettingBase extends PluginBase implements SettingInterface {
   /**
    * {@inheritdoc}
    */
-  public function submit(array $form, FormStateInterface $form_state, $form_id = NULL) {}
+  public function submitForm(array &$form, FormStateInterface $form_state, $form_id = NULL) {}
 
   /**
    * {@inheritdoc}
    */
-  public function validate(array &$form, FormStateInterface $form_state, $form_id = NULL) {}
+  public function validateForm(array &$form, FormStateInterface $form_state, $form_id = NULL) {}
 
 }

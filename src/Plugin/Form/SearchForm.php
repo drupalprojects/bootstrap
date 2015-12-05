@@ -21,7 +21,7 @@ class SearchForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function alter(array &$form, FormStateInterface $form_state, $form_id = NULL) {
+  public function alterForm(array &$form, FormStateInterface $form_state, $form_id = NULL) {
     // Add a clearfix class so the results don't overflow onto the form.
     $form['#attributes']['class'][] = 'clearfix';
 

@@ -12,6 +12,7 @@ use Drupal\bootstrap\Plugin\Provider\ProviderInterface;
 use Drupal\bootstrap\Plugin\ProviderManager;
 use Drupal\bootstrap\Plugin\Setting\SettingBase;
 use Drupal\bootstrap\Utility\Element;
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Annotation\Translation;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -35,6 +36,13 @@ use Drupal\Core\Form\FormStateInterface;
 class CdnProvider extends SettingBase {
 
   /**
+   * The current provider.
+   *
+   * @var \Drupal\bootstrap\Plugin\Provider\ProviderInterface
+   */
+  protected $provider;
+
+  /**
    * The current provider manager instance.
    *
    * @var \Drupal\bootstrap\Plugin\ProviderManager
@@ -47,16 +55,19 @@ class CdnProvider extends SettingBase {
   public function __construct(array $configuration, $plugin_id, $plugin_definition) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->providerManager = new ProviderManager($this->theme);
+    if (isset($plugin_definition['cdn_provider'])) {
+      $this->provider = $this->theme->getProvider($plugin_definition['cdn_provider']);
+    }
   }
 
   /**
    * {@inheritdoc}
    */
-  public function alter(array &$form, FormStateInterface $form_state, $form_id = NULL) {
+  public function alterForm(array &$form, FormStateInterface $form_state, $form_id = NULL) {
     // Retrieve the provider from form values or the setting.
     $default_provider = $form_state->getValue('cdn_provider', $this->theme->getSetting('cdn_provider'));
 
-    $group = $this->getGroupElement($form, $form_state);
+    $group = $this->getGroup($form, $form_state);
     $group->setProperty('description', '<div class="alert alert-info messages warning"><strong>' . t('NOTE') . ':</strong> ' . t('Using one of the "CDN Provider" options below is the preferred method for loading Bootstrap CSS and JS on simpler sites that do not use a site-wide CDN. Using a "CDN Provider" for loading Bootstrap, however, does mean that it depends on a third-party service. There is no obligation or commitment by these third-parties that guarantees any up-time or service quality. If you need to customize Bootstrap and have chosen to compile the source code locally (served from this site), you must disable the "CDN Provider" option below by choosing "- None -" and alternatively enable a site-wide CDN implementation. All local (served from this site) versions of Bootstrap will be superseded by any enabled "CDN Provider" below. <strong>Do not do both</strong>.') . '</div>');
     $group->setProperty('collapsed', !$default_provider);
 
@@ -72,7 +83,7 @@ class CdnProvider extends SettingBase {
     }
 
     // Override the options with the provider manager discovery.
-    $setting = $this->getSettingElement($form, $form_state);
+    $setting = $this->getElement($form, $form_state);
     $setting->setProperty('options', $options);
   }
 
@@ -84,7 +95,7 @@ class CdnProvider extends SettingBase {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    */
-  public static function ajaxCallback(array $form, FormStateInterface $form_state) {
+  protected static function ajaxCallback(array $form, FormStateInterface $form_state) {
     return $form['advanced']['cdn']['cdn_provider_' . $form_state->getValue('cdn_provider', Bootstrap::getTheme()->getSetting('cdn_provider'))];
   }
 
@@ -96,8 +107,8 @@ class CdnProvider extends SettingBase {
    * @param \Drupal\bootstrap\Plugin\Provider\ProviderInterface $provider
    *   The provider instance.
    */
-  public function createProviderGroup(Element $group, ProviderInterface $provider) {
-    $plugin_id = $provider->getPluginId();
+  private function createProviderGroup(Element $group, ProviderInterface $provider) {
+    $plugin_id = Html::cleanCssIdentifier($provider->getPluginId());
 
     // Create the provider container.
     $group->$plugin_id = [
@@ -113,7 +124,10 @@ class CdnProvider extends SettingBase {
 
     // Add in the provider description.
     if ($description = $provider->getDescription()) {
-      $group->$plugin_id->description = ['#markup' => '<div class="lead">' . $description . '</div>'];
+      $group->$plugin_id->description = [
+        '#markup' => '<div class="lead">' . $description . '</div>',
+        '#weight' => -99,
+      ];
     }
 
     // Indicate there was an error retrieving the provider's API data.
@@ -162,7 +176,7 @@ class CdnProvider extends SettingBase {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    */
-  public function importProviderData(FormStateInterface $form_state) {
+  private function importProviderData(FormStateInterface $form_state) {
     if ($form_state->getValue('clicked_button') === t('Save provider data')->render()) {
       $provider_path = ProviderManager::FILE_PATH;
       file_prepare_directory($provider_path, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);

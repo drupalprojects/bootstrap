@@ -32,8 +32,8 @@ class AnchorsFix extends SettingBase {
   /**
    * {@inheritdoc}
    */
-  public function alter(array &$form, FormStateInterface $form_state, $form_id = NULL) {
-    $group = $this->getGroupElement($form, $form_state);
+  public function alterForm(array &$form, FormStateInterface $form_state, $form_id = NULL) {
+    $group = $this->getGroup($form, $form_state);
     $group->setProperty('description', t('This plugin cannot be configured from the UI as it is severely broken. In an effort to balance not break backwards compatibility and to prevent new users from running into unforeseen issues, you must manually opt-in a sub-theme\'s setting configuration file. Please see the following issue for more details: <a href=":url" target="_blank">Replace custom JS with the bootstrap-anchor plugin</a>', [
       ':url' => 'https://www.drupal.org/node/2462645',
     ]));

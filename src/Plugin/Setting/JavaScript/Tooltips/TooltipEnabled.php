@@ -32,8 +32,8 @@ class TooltipEnabled extends SettingBase {
   /**
    * {@inheritdoc}
    */
-  public function alter(array &$form, FormStateInterface $form_state, $form_id = NULL) {
-    $group = $this->getGroupElement($form, $form_state);
+  public function alterForm(array &$form, FormStateInterface $form_state, $form_id = NULL) {
+    $group = $this->getGroup($form, $form_state);
     $group->setProperty('description', t('Inspired by the excellent jQuery.tipsy plugin written by Jason Frame; Tooltips are an updated version, which don\'t rely on images, use CSS3 for animations, and data-attributes for local title storage. See <a href=":url" target="_blank">Bootstrap tooltips</a> for more documentation.', [
       ':url' => 'http://getbootstrap.com/javascript/#tooltips',
     ]));

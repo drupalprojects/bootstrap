@@ -21,7 +21,7 @@ class SearchBlockForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function alter(array &$form, FormStateInterface $form_state, $form_id = NULL) {
+  public function alterForm(array &$form, FormStateInterface $form_state, $form_id = NULL) {
     $form['#attributes']['class'][] = 'form-search';
 
     $form['keys']['#title'] = '';

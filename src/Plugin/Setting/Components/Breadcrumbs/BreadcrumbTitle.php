@@ -31,8 +31,8 @@ class BreadcrumbTitle extends SettingBase {
   /**
    * {@inheritdoc}
    */
-  public function alter(array &$form, FormStateInterface $form_state, $form_id = NULL) {
-    $element = $this->getSettingElement($form, $form_state);
+  public function alterForm(array &$form, FormStateInterface $form_state, $form_id = NULL) {
+    $element = $this->getElement($form, $form_state);
     $element->setProperty('states', [
       'invisible' => [
         ':input[name="breadcrumb"]' => ['value' => 0],

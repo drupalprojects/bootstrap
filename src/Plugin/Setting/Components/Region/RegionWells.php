@@ -19,7 +19,15 @@ use Drupal\Core\Form\FormStateInterface;
  *   type = "container",
  *   description = @Translation("Enable the <code>.well</code>, <code>.well-sm</code> or <code>.well-lg</code> classes for specified regions."),
  *   defaultValue = {
+ *     "navigation" = "",
+ *     "navigation_collapsible" = "",
+ *     "header" = "",
+ *     "highlighted" = "",
+ *     "help" = "",
+ *     "content" = "",
+ *     "sidebar_first" = "",
  *     "sidebar_second" = "well",
+ *     "footer" = "",
  *   },
  *   groups = {
  *     "components" = @Translation("Components"),
@@ -35,9 +43,9 @@ class RegionWells extends SettingBase {
   /**
    * {@inheritdoc}
    */
-  public function alter(array &$form, FormStateInterface $form_state, $form_id = NULL) {
-    $group = $this->getGroupElement($form, $form_state);
-    $setting = $this->getSettingElement($form, $form_state);
+  public function alterForm(array &$form, FormStateInterface $form_state, $form_id = NULL) {
+    $group = $this->getGroup($form, $form_state);
+    $setting = $this->getElement($form, $form_state);
 
     // Move description.
     $group->setProperty('description', $setting->getProperty('description'));
@@ -54,6 +62,9 @@ class RegionWells extends SettingBase {
     // Create dynamic well settings for each region.
     $regions = system_region_list($this->theme->getName());
     foreach ($regions as $name => $title) {
+      if (in_array($name, ['page_top', 'page_bottom'])) {
+        continue;
+      }
       $setting->{'region_well-' . $name} = [
         '#title' => $title,
         '#type' => 'select',
@@ -69,7 +80,7 @@ class RegionWells extends SettingBase {
   /**
    * {@inheritdoc}
    */
-  public function submit(array $form, FormStateInterface $form_state, $form_id = NULL) {
+  public function submitForm(array &$form, FormStateInterface $form_state, $form_id = NULL) {
     $values = $form_state->getValues();
 
     // Extract the regions from individual dynamic settings.

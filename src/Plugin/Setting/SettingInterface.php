@@ -33,7 +33,7 @@ interface SettingInterface extends FormInterface {
    * @return \Drupal\bootstrap\Utility\Element
    *   The group element object.
    */
-  public function getGroupElement(array &$form, FormStateInterface $form_state);
+  public function getGroup(array &$form, FormStateInterface $form_state);
 
   /**
    * Retrieves the setting's groups.
@@ -44,7 +44,7 @@ interface SettingInterface extends FormInterface {
   public function getGroups();
 
   /**
-   * Provide additional form elements for the setting.
+   * Retrieves the form element for the setting.
    *
    * @param array $form
    *   Nested array of form elements that comprise the form.
@@ -54,7 +54,7 @@ interface SettingInterface extends FormInterface {
    * @return \Drupal\bootstrap\Utility\Element
    *   The setting element object.
    */
-  public function getSettingElement(array &$form, FormStateInterface $form_state);
+  public function getElement(array &$form, FormStateInterface $form_state);
 
   /**
    * Retrieves the setting's human-readable title.
