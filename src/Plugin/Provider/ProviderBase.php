@@ -8,10 +8,8 @@ namespace Drupal\bootstrap\Plugin\Provider;
 
 use Drupal\bootstrap\Annotation\BootstrapProvider;
 use Drupal\bootstrap\Plugin\ProviderManager;
-use Drupal\bootstrap\Utility\Element;
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\Component\Serialization\Json;
-use Drupal\Core\Form\FormStateInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
@@ -142,10 +140,5 @@ class ProviderBase extends PluginBase implements ProviderInterface {
    * {@inheritdoc}
    */
   public function processApi(array $json, array &$definition) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public function settingsForm(Element $settings, FormStateInterface $form_state) {}
 
 }

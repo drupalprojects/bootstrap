@@ -1,0 +1,185 @@
+<?php
+/**
+ * @file
+ * Contains \Drupal\bootstrap\Plugin\Setting\Advanced\Cdn\CdnProvider.
+ */
+
+namespace Drupal\bootstrap\Plugin\Setting\Advanced\Cdn;
+
+use Drupal\bootstrap\Annotation\BootstrapSetting;
+use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\Plugin\Provider\ProviderInterface;
+use Drupal\bootstrap\Plugin\ProviderManager;
+use Drupal\bootstrap\Plugin\Setting\SettingBase;
+use Drupal\bootstrap\Utility\Element;
+use Drupal\Core\Annotation\Translation;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * The "cdn_provider" theme setting.
+ *
+ * @BootstrapSetting(
+ *   id = "cdn_provider",
+ *   type = "select",
+ *   title = @Translation("CDN Provider"),
+ *   defaultValue = "jsdelivr",
+ *   empty_value = "",
+ *   weight = -1,
+ *   groups = {
+ *     "advanced" = @Translation("Advanced"),
+ *     "cdn" = @Translation("CDN (Content Delivery Network)"),
+ *   },
+ *   options = { },
+ * )
+ */
+class CdnProvider extends SettingBase {
+
+  /**
+   * The current provider manager instance.
+   *
+   * @var \Drupal\bootstrap\Plugin\ProviderManager
+   */
+  protected $providerManager;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->providerManager = new ProviderManager($this->theme);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function alter(array &$form, FormStateInterface $form_state, $form_id = NULL) {
+    // Retrieve the provider from form values or the setting.
+    $default_provider = $form_state->getValue('cdn_provider', $this->theme->getSetting('cdn_provider'));
+
+    $group = $this->getGroupElement($form, $form_state);
+    $group->setProperty('description', '<div class="alert alert-info messages warning"><strong>' . t('NOTE') . ':</strong> ' . t('Using one of the "CDN Provider" options below is the preferred method for loading Bootstrap CSS and JS on simpler sites that do not use a site-wide CDN. Using a "CDN Provider" for loading Bootstrap, however, does mean that it depends on a third-party service. There is no obligation or commitment by these third-parties that guarantees any up-time or service quality. If you need to customize Bootstrap and have chosen to compile the source code locally (served from this site), you must disable the "CDN Provider" option below by choosing "- None -" and alternatively enable a site-wide CDN implementation. All local (served from this site) versions of Bootstrap will be superseded by any enabled "CDN Provider" below. <strong>Do not do both</strong>.') . '</div>');
+    $group->setProperty('collapsed', !$default_provider);
+
+    // Intercept possible manual import of API data via AJAX callback.
+    $this->importProviderData($form_state);
+
+    $providers = $this->theme->getProviders();
+
+    $options = [];
+    foreach ($providers as $plugin_id => $provider) {
+      $options[$plugin_id] = $provider->getLabel();
+      $this->createProviderGroup($group, $provider);
+    }
+
+    // Override the options with the provider manager discovery.
+    $setting = $this->getSettingElement($form, $form_state);
+    $setting->setProperty('options', $options);
+  }
+
+  /**
+   * AJAX callback for reloading CDN provider elements.
+   *
+   * @param array $form
+   *   Nested array of form elements that comprise the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   */
+  public static function ajaxCallback(array $form, FormStateInterface $form_state) {
+    return $form['advanced']['cdn']['cdn_provider_' . $form_state->getValue('cdn_provider', Bootstrap::getTheme()->getSetting('cdn_provider'))];
+  }
+
+  /**
+   * Creates the necessary containers for each provider.
+   *
+   * @param \Drupal\bootstrap\Utility\Element $group
+   *   The group element instance.
+   * @param \Drupal\bootstrap\Plugin\Provider\ProviderInterface $provider
+   *   The provider instance.
+   */
+  public function createProviderGroup(Element $group, ProviderInterface $provider) {
+    $plugin_id = $provider->getPluginId();
+
+    // Create the provider container.
+    $group->$plugin_id = [
+      '#type' => 'container',
+      '#prefix' => '<div id="cdn-provider-' . $plugin_id . '">',
+      '#suffix' => '</div>',
+      '#states' => [
+        'visible' => [
+          ':input[name="cdn_provider"]' => ['value' => $plugin_id],
+        ],
+      ],
+    ];
+
+    // Add in the provider description.
+    if ($description = $provider->getDescription()) {
+      $group->$plugin_id->description = ['#markup' => '<div class="lead">' . $description . '</div>'];
+    }
+
+    // Indicate there was an error retrieving the provider's API data.
+    if ($provider->hasError() || $provider->isImported()) {
+      if ($provider->hasError()) {
+        $prefix = $group->$plugin_id->getProperty('prefix') ?: '';
+        $prefix .= '<div class="alert alert-danger messages error"><strong>' . t('ERROR') . ':</strong> ' . t('Unable to reach or parse the data provided by the @title API. Ensure the server this website is hosted on is able to initiate HTTP requests via <a href=":drupal_http_request" target="_blank">drupal_http_request()</a>. If the request consistently fails, it is likely that there are certain PHP functions that have been disabled by the hosting provider for security reasons. It is possible to manually copy and paste the contents of the following URL into the "Imported @title data" section below.<br /><br /><a href=":provider_api" target="_blank">:provider_api</a>.', [
+            '@title' => $provider['title'],
+            ':provider_api' => $provider['api'],
+            ':drupal_http_request' => 'https://api.drupal.org/api/drupal/includes%21common.inc/function/drupal_http_request/7',
+          ]) . '</div>';
+        $group->$plugin_id->setProperty('prefix', $prefix);
+      }
+
+      $group->$plugin_id->import = [
+        '#type' => 'fieldset',
+        '#title' => t('Imported @title data', ['@title' => $provider->getLabel()]),
+        '#description' => t('The provider will attempt to parse the data entered here each time it is saved. If no data has been entered, any saved files associated with this provider will be removed and the provider will again attempt to request the API data normally through the following URL: <a href=":provider_api" target="_blank">:provider_api</a>.', [
+          ':provider_api' => $provider->getPluginDefinition()['api'],
+        ]),
+        '#weight' => 10,
+        '#collapsible' => TRUE,
+        '#collapsed' => TRUE,
+      ];
+
+      $group->$plugin_id->import->cdn_provider_import_data = [
+        '#type' => 'textarea',
+        '#default_value' => file_exists(ProviderManager::FILE_PATH . '/' . $plugin_id . '.json') ? file_get_contents(ProviderManager::FILE_PATH . '/' . $plugin_id . '.json') : NULL,
+      ];
+
+      $group->$plugin_id->import->submit = [
+        '#type' => 'submit',
+        '#value' => t('Save provider data'),
+        '#executes_submit_callback' => FALSE,
+        '#ajax' => [
+          'callback' => [$this, 'ajaxCallback'],
+          'wrapper' => 'cdn-provider-' . $plugin_id,
+        ],
+      ];
+    }
+  }
+
+  /**
+   * Imports data for a provider that was manually uploaded in theme settings.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   */
+  public function importProviderData(FormStateInterface $form_state) {
+    if ($form_state->getValue('clicked_button') === t('Save provider data')->render()) {
+      $provider_path = ProviderManager::FILE_PATH;
+      file_prepare_directory($provider_path, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
+
+      $provider = $form_state->getValue('cdn_provider', $this->theme->getSetting('cdn_provider'));
+      $file = "$provider_path/$provider.json";
+
+      if ($import_data = $form_state->getValue('cdn_provider_import_data', FALSE)) {
+        file_unmanaged_save_data($import_data, $file, FILE_EXISTS_REPLACE);
+      }
+      elseif ($file && file_exists($file)) {
+        file_unmanaged_delete($file);
+      }
+
+      // Clear the cached definitions so they can get rebuilt.
+      $this->providerManager->clearCachedDefinitions();
+    }
+  }
+
+}

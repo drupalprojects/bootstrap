@@ -80,6 +80,17 @@ class PluginManager extends DefaultPluginManager {
   /**
    * {@inheritdoc}
    */
+  public function getDefinitions($sorted = TRUE) {
+    $definitions = parent::getDefinitions();
+    if ($sorted) {
+      uasort($definitions, ['\Drupal\Component\Utility\SortArray', 'sortByWeightElement']);
+    }
+    return $definitions;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   protected function providerExists($provider) {
     return $this->themeHandler->themeExists($provider);
   }

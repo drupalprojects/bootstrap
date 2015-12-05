@@ -6,10 +6,8 @@
 
 namespace Drupal\bootstrap\Plugin\Provider;
 
-use Drupal\bootstrap\Utility\Element;
 use Drupal\Component\Plugin\DerivativeInspectionInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
-use Drupal\Core\Form\FormStateInterface;
 
 /**
  * ProviderInterface.
@@ -81,15 +79,5 @@ interface ProviderInterface extends PluginInspectionInterface, DerivativeInspect
    *   The provider plugin definition.
    */
   public function processApi(array $json, array &$definition);
-
-  /**
-   * Provides settings for a Provider provider.
-   *
-   * @param \Drupal\bootstrap\Utility\Element $settings
-   *   The settings render array element designated for the provider.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The form state object.
-   */
-  public function settingsForm(Element $settings, FormStateInterface $form_state);
 
 }

@@ -115,7 +115,12 @@ class SettingBase extends PluginBase implements SettingInterface {
     $first = TRUE;
     foreach ($groups as $key => $title) {
       if (!isset($group->$key)) {
-        $group->$key = ['#type' => 'details', '#title' => $title];
+        if ($title) {
+          $group->$key = ['#type' => 'details', '#title' => $title];
+        }
+        else {
+          $group->$key = ['#type' => 'container'];
+        }
         $group = new Element($group->$key->getArray());
         if ($first) {
           $group->setProperty('group', 'bootstrap');
