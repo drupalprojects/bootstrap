@@ -8,9 +8,11 @@ namespace Drupal\bootstrap;
 
 use Drupal\bootstrap\Plugin\ProviderManager;
 use Drupal\bootstrap\Plugin\SettingManager;
+use Drupal\bootstrap\Plugin\UpdateManager;
 use Drupal\bootstrap\Utility\Crypt;
 use Drupal\bootstrap\Utility\Storage;
 use Drupal\bootstrap\Utility\StorageItem;
+use Drupal\Core\Config\StorageException;
 use Drupal\Core\Extension\Extension;
 use Drupal\Core\Extension\ThemeHandlerInterface;
 
@@ -62,6 +64,13 @@ class Theme {
   protected $info;
 
   /**
+   * The provider manager instance.
+   *
+   * @var \Drupal\bootstrap\Plugin\ProviderManager
+   */
+  protected $providerManager;
+
+  /**
    * The current theme Extension object.
    *
    * @var \Drupal\Core\Extension\Extension
@@ -83,6 +92,20 @@ class Theme {
   protected $themeHandler;
 
   /**
+   * The update manager instance.
+   *
+   * @var \Drupal\bootstrap\Plugin\SettingManager
+   */
+  protected $settingManager;
+
+  /**
+   * The update manager instance.
+   *
+   * @var \Drupal\bootstrap\Plugin\UpdateManager
+   */
+  protected $updateManager;
+
+  /**
    * Theme constructor.
    *
    * @param \Drupal\Core\Extension\Extension $theme
@@ -94,8 +117,16 @@ class Theme {
     $name = $theme->getName();
     $this->theme = $theme;
     $this->themeHandler = $theme_handler;
-    $this->themes = $theme_handler->listInfo();
+    $this->themes = $this->themeHandler->listInfo();
     $this->info = isset($this->themes[$name]->info) ? $this->themes[$name]->info : [];
+    $this->providerManager = new ProviderManager($this);
+    $this->settingManager = new SettingManager($this);
+    $this->updateManager = new UpdateManager($this);
+
+    // Only install the theme if there is no schema version currently set.
+    if (!$this->getSchemaVersion()) {
+      $this->install();
+    }
   }
 
   /**
@@ -117,9 +148,9 @@ class Theme {
    *
    * @param string $mask
    *   The preg_match() regular expression of the files to find.
-   * @param string|array $dir
-   *   The base directory or URI to scan, without trailing slash. If not set,
-   *   the current theme path will be used.
+   * @param string $subdir
+   *   Sub-directory in the theme to start the scan, without trailing slash. If
+   *   not set, the base path of the current theme will be used.
    * @param array $options
    *   Options to pass, see file_scan_directory() for addition options:
    *   - ignore_flags: (int|FALSE) A bitmask to indicate which directories (if
@@ -138,9 +169,12 @@ class Theme {
    *
    * @see file_scan_directory()
    */
-  public function fileScan($mask, $dir = NULL, array $options = []) {
-    if (!isset($dir)) {
-      $dir = $this->getPath();
+  public function fileScan($mask, $subdir = NULL, array $options = []) {
+    $path = $this->getPath();
+
+    // Append addition sub-directories to the path if they were provided.
+    if (isset($subdir)) {
+      $path .= '/' . $subdir;
     }
 
     // Default ignore flags.
@@ -180,10 +214,10 @@ class Theme {
 
     // Generate a unique hash for all parameters passed as a change in any of
     // them could potentially return different results.
-    $hash = Crypt::generateHash($mask, $dir, $options);
+    $hash = Crypt::generateHash($mask, $path, $options);
 
     if (!$files->has($hash)) {
-      $files->set($hash, file_scan_directory($dir, $mask, $options));
+      $files->set($hash, file_scan_directory($path, $mask, $options));
     }
     return $files->get($hash, []);
   }
@@ -272,8 +306,7 @@ class Theme {
    *   A provider instance.
    */
   public function getProvider($provider = NULL) {
-    $provider_manager = new ProviderManager($this);
-    return $provider_manager->createInstance($provider ?: $this->getSetting('cdn_provider'), ['theme' => $this]);
+    return $this->providerManager->createInstance($provider ?: $this->getSetting('cdn_provider'), ['theme' => $this]);
   }
 
   /**
@@ -284,14 +317,40 @@ class Theme {
    */
   public function getProviders() {
     $providers = [];
-    $provider_manager = new ProviderManager($this);
-    foreach (array_keys($provider_manager->getDefinitions()) as $provider) {
+    foreach (array_keys($this->providerManager->getDefinitions()) as $provider) {
       if ($provider === 'none') {
         continue;
       }
-      $providers[$provider] = $provider_manager->createInstance($provider, ['theme' => $this]);
+      $providers[$provider] = $this->providerManager->createInstance($provider, ['theme' => $this]);
     }
     return $providers;
+  }
+
+  /**
+   * Retrieves the installed schema version for the theme.
+   *
+   * @return int
+   *   The schema version, 0 if not yet installed.
+   */
+  public function getSchemaVersion() {
+    // Don't use $this->getSetting() here because we don't want to inherit
+    // the schema version from the theme's ancestry.
+    try {
+      return \Drupal::config($this->getName() . '.settings')->get('schema');
+    }
+    catch (StorageException $e) {
+    }
+    return 0;
+  }
+
+  /**
+   * Retrieves the update schema versions for the theme.
+   *
+   * @return array
+   *   An indexed array of schema versions.
+   */
+  protected function getSchemaVersions() {
+    return array_keys($this->getUpdates());
   }
 
   /**
@@ -340,10 +399,11 @@ class Theme {
    */
   public function getSettings() {
     static $themes = [];
-    if (!isset($themes[$this->getName()])) {
-      $themes[$this->getName()] = new ThemeSettings($this, $this->themeHandler);
+    $name = $this->getName();
+    if (!isset($themes[$name])) {
+      $themes[$name] = new ThemeSettings($this, $this->themeHandler);
     }
-    return $themes[$this->getName()];
+    return $themes[$name];
   }
 
   /**
@@ -354,9 +414,8 @@ class Theme {
    */
   public function getSettingInstances() {
     $settings = [];
-    $setting_manager = new SettingManager($this);
-    foreach (array_keys($setting_manager->getDefinitions()) as $setting) {
-      $settings[$setting] = $setting_manager->createInstance($setting);
+    foreach (array_keys($this->settingManager->getDefinitions()) as $setting) {
+      $settings[$setting] = $this->settingManager->createInstance($setting);
     }
     return $settings;
   }
@@ -374,6 +433,20 @@ class Theme {
       $cache[$theme] = new Storage($theme);
     }
     return $cache[$theme];
+  }
+
+  /**
+   * Retrieves update plugins for the theme.
+   *
+   * @return \Drupal\bootstrap\Plugin\Update\UpdateInterface[]
+   *   An associative array containing update objects, keyed by their version.
+   */
+  protected function getUpdates() {
+    $updates = [];
+    foreach (array_keys($this->updateManager->getDefinitions()) as $update) {
+      $updates[$update] = $this->updateManager->createInstance($update, ['theme' => $this]);
+    }
+    return $updates;
   }
 
   /**
@@ -408,23 +481,28 @@ class Theme {
    */
   public function includeOnce($file, $path = 'includes') {
     static $includes = [];
-    if (strpos($file, '/') !== 0) {
-      $file = "/$file";
-    }
-    if (is_string($path) && !empty($path) && strpos($path, '/') !== 0) {
-      $path = "/$path";
-    }
-    else {
-      $path = '';
-    }
+    $file = preg_replace('`^' . $this->getPath() . '`', '', $file);
+    $file = strpos($file, '/') !== 0 ? $file = "/$file" : $file;
+    $path = is_string($path) && !empty($path) && strpos($path, '/') !== 0 ? $path = "/$path" : '';
     $include = DRUPAL_ROOT . base_path() . $this->getPath() . $path . $file;
     if (!isset($includes[$include])) {
-      $includes[$include] = @include_once $include;
+      $includes[$include] = !!@include_once $include;
       if (!$includes[$include]) {
         drupal_set_message(t('Could not include file: @include', ['@include' => $include]), 'error');
       }
     }
     return $includes[$include];
+  }
+
+  /**
+   * Installs a Bootstrap based theme.
+   */
+  final protected function install() {
+    $version = \Drupal::CORE_MINIMUM_SCHEMA_VERSION;
+    if ($versions = $this->getSchemaVersions()) {
+      $version = max(max($versions), $version);
+    }
+    $this->setSetting('schema', $version);
   }
 
   /**

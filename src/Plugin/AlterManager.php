@@ -21,7 +21,7 @@ class AlterManager extends PluginManager {
    */
   public function __construct(Theme $theme) {
     parent::__construct($theme, 'Plugin/Alter', 'Drupal\bootstrap\Plugin\Alter\AlterInterface', 'Drupal\bootstrap\Annotation\BootstrapAlter');
-    $this->setCacheBackend(\Drupal::cache('discovery'), 'theme:' . $theme->getName() . ':alter', ['theme_registry']);
+    $this->setCacheBackend(\Drupal::cache('discovery'), 'theme:' . $theme->getName() . ':alter', $this->getCacheTags());
   }
 
 }

@@ -6,6 +6,7 @@
 
 namespace Drupal\bootstrap\Utility;
 
+use Drupal\bootstrap\Bootstrap;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\KeyValueStore\MemoryStorage;
 
@@ -73,7 +74,7 @@ class Storage extends MemoryStorage implements \Iterator {
   /**
    * {@inheritdoc}
    */
-  public function __construct($cid, $bin = 'default', $expire = Cache::PERMANENT, $tags = ['theme_registry']) {
+  public function __construct($cid, $bin = 'default', $expire = Cache::PERMANENT, $tags = [Bootstrap::CACHE_TAG]) {
     $this->cid = "theme_registry:storage:$cid";
     $this->bin = $bin;
     $this->changed = FALSE;

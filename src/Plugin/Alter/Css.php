@@ -24,7 +24,7 @@ class Css implements AlterInterface {
   public function alter(&$css, &$context1 = NULL, &$context2 = NULL) {
     $theme = Bootstrap::getTheme();
 
-    // Add CDN assets, if any.
+    // @todo Refactor to use libraries properly.
     $provider = $theme->getProvider();
     if ($assets = $provider->getAssets('css')) {
       $cdn_weight = -2.99;
@@ -52,18 +52,22 @@ class Css implements AlterInterface {
         $provider_theme = 'bootstrap';
       }
       $provider_theme = $provider_theme === 'bootstrap' || $provider_theme === 'bootstrap_theme' ? '' : "-$provider_theme";
-      $overrides = $theme->getPath() . "/css/$version/overrides$provider_theme.min.css";
-      if (file_exists($overrides)) {
-        $css[$overrides] = [
-          'data' => $overrides,
-          'type' => 'file',
-          'every_page' => TRUE,
-          'media' => 'all',
-          'preprocess' => TRUE,
-          'group' => CSS_AGGREGATE_THEME,
-          'browsers' => ['IE' => TRUE, '!IE' => TRUE],
-          'weight' => -1,
-        ];
+
+      foreach ($theme->getAncestry(TRUE) as $ancestor) {
+        $overrides = $ancestor->getPath() . "/css/$version/overrides$provider_theme.min.css";
+        if (file_exists($overrides)) {
+          $css[$overrides] = [
+            'data' => $overrides,
+            'type' => 'file',
+            'every_page' => TRUE,
+            'media' => 'all',
+            'preprocess' => TRUE,
+            'group' => CSS_AGGREGATE_THEME,
+            'browsers' => ['IE' => TRUE, '!IE' => TRUE],
+            'weight' => -1,
+          ];
+          break;
+        }
       }
     }
   }

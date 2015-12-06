@@ -23,6 +23,13 @@ use Drupal\Core\Template\Attribute;
 class Bootstrap {
 
   /**
+   * Tag used to invalidate caches.
+   *
+   * @var string
+   */
+  const CACHE_TAG = 'theme_registry';
+
+  /**
    * The current supported Bootstrap Framework version.
    */
   const FRAMEWORK_VERSION = '3.3.5';
@@ -785,6 +792,28 @@ class Bootstrap {
 
     // Return the latest version.
     return $versions[static::FRAMEWORK_VERSION];
+  }
+
+  /**
+   * Initializes the active theme.
+   */
+  final public static function initialize() {
+    static $initialized = FALSE;
+    if (!$initialized) {
+      // Initialize the active theme.
+      $active_theme = static::getTheme();
+
+      // Include any deprecated.inc file from each theme.
+      // @todo create a setting that makes this opt-in.
+      foreach ($active_theme->getAncestry() as $ancestor) {
+        $files = $ancestor->fileScan('/^deprecated\.(inc|inc\.php|php)$/');
+        if ($file = reset($files)) {
+          $ancestor->includeOnce($file->uri, FALSE);
+        }
+      }
+
+      $initialized = TRUE;
+    }
   }
 
   /**

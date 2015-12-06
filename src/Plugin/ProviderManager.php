@@ -30,7 +30,7 @@ class ProviderManager extends PluginManager implements FallbackPluginManagerInte
    */
   public function __construct(Theme $theme) {
     parent::__construct($theme, 'Plugin/Provider', 'Drupal\bootstrap\Plugin\Provider\ProviderInterface', 'Drupal\bootstrap\Annotation\BootstrapProvider');
-    $this->setCacheBackend(\Drupal::cache('discovery'), 'theme:' . $theme->getName() . ':provider', ['theme_registry']);
+    $this->setCacheBackend(\Drupal::cache('discovery'), 'theme:' . $theme->getName() . ':provider', $this->getCacheTags());
   }
 
   /**

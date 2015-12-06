@@ -22,7 +22,7 @@ class PrerenderManager extends PluginManager {
    */
   public function __construct(Theme $theme) {
     parent::__construct($theme, 'Plugin/Prerender', 'Drupal\bootstrap\Plugin\Prerender\PrerenderInterface', 'Drupal\bootstrap\Annotation\BootstrapPrerender');
-    $this->setCacheBackend(\Drupal::cache('discovery'), 'theme:' . $theme->getName() . ':prerender', ['theme_registry']);
+    $this->setCacheBackend(\Drupal::cache('discovery'), 'theme:' . $theme->getName() . ':prerender', $this->getCacheTags());
   }
 
   /**

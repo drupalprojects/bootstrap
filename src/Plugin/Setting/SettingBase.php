@@ -71,6 +71,14 @@ class SettingBase extends PluginBase implements SettingInterface {
     return $properties;
   }
 
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDefaultValue() {
+    return isset($this->pluginDefinition['defaultValue']) ? $this->pluginDefinition['defaultValue'] : NULL;
+  }
+
   /**
    * {@inheritdoc}
    */
@@ -117,13 +125,6 @@ class SettingBase extends PluginBase implements SettingInterface {
   /**
    * {@inheritdoc}
    */
-  public function getDefaultValue() {
-    return $this->pluginDefinition['defaultValue'];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getGroup(array &$form, FormStateInterface $form_state) {
     $groups = $this->getGroups();
     $group = new Element($form);
@@ -131,7 +132,7 @@ class SettingBase extends PluginBase implements SettingInterface {
     foreach ($groups as $key => $title) {
       if (!isset($group->$key)) {
         if ($title) {
-          $group->$key = ['#type' => 'details', '#title' => $title];
+          $group->$key = ['#type' => 'fieldset', '#title' => $title];
         }
         else {
           $group->$key = ['#type' => 'container'];
@@ -157,14 +158,14 @@ class SettingBase extends PluginBase implements SettingInterface {
    * {@inheritdoc}
    */
   public function getGroups() {
-    return $this->pluginDefinition['groups'];
+    return !empty($this->pluginDefinition['groups']) ? $this->pluginDefinition['groups'] : [];
   }
 
   /**
    * {@inheritdoc}
    */
   public function getTitle() {
-    return $this->pluginDefinition['title'];
+    return !empty($this->pluginDefinition['title']) ? $this->pluginDefinition['title'] : NULL;
   }
 
   /**

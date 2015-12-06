@@ -44,7 +44,8 @@ class FormElement implements PreprocessInterface {
       $variables['has_error'] = TRUE;
     }
 
-    if (!empty($element['#autocomplete_route_name']) && Drupal::PathValidator($element['#autocomplete_route_name'])) {
+    $path_validator = \Drupal::PathValidator();
+    if (!empty($element['#autocomplete_route_name']) && $path_validator->isValid($element['#autocomplete_route_name'])) {
       $variables['is_autocomplete'] = TRUE;
     }
 

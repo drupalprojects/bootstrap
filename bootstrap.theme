@@ -25,9 +25,9 @@
 use Drupal\bootstrap\Bootstrap;
 
 /**
- * Include deprecated base theme functions.
+ * Initialize the active theme.
  */
-Bootstrap::getTheme('bootstrap')->includeOnce('deprecated.inc', FALSE);
+Bootstrap::initialize();
 
 /**
  * {@inheritdoc}

@@ -22,7 +22,7 @@ class SettingManager extends PluginManager {
    */
   public function __construct(Theme $theme) {
     parent::__construct($theme, 'Plugin/Setting', 'Drupal\bootstrap\Plugin\Setting\SettingInterface', 'Drupal\bootstrap\Annotation\BootstrapSetting');
-    $this->setCacheBackend(\Drupal::cache('discovery'), 'theme:' . $theme->getName() . ':setting', ['theme_registry']);
+    $this->setCacheBackend(\Drupal::cache('discovery'), 'theme:' . $theme->getName() . ':setting', $this->getCacheTags());
   }
 
   /**
@@ -33,7 +33,7 @@ class SettingManager extends PluginManager {
     if ($sorted) {
       $groups = [];
       foreach ($definitions as $plugin_id => $definition) {
-        $key = implode(':', array_keys($definition['groups']));
+        $key = !empty($definition['groups']) ? implode(':', array_keys($definition['groups'])) : '_default';
         $groups[$key][$plugin_id] = $definition;
       }
       ksort($groups);

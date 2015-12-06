@@ -21,7 +21,7 @@ class PreprocessManager extends PluginManager {
    */
   public function __construct(Theme $theme) {
     parent::__construct($theme, 'Plugin/Preprocess', 'Drupal\bootstrap\Plugin\Preprocess\PreprocessInterface', 'Drupal\bootstrap\Annotation\BootstrapPreprocess');
-    $this->setCacheBackend(\Drupal::cache('discovery'), 'theme:' . $theme->getName() . ':preprocess', ['theme_registry']);
+    $this->setCacheBackend(\Drupal::cache('discovery'), 'theme:' . $theme->getName() . ':preprocess', $this->getCacheTags());
   }
 
 }

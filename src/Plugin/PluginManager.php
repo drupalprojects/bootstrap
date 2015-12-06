@@ -6,6 +6,7 @@
 
 namespace Drupal\bootstrap\Plugin;
 
+use Drupal\bootstrap\Bootstrap;
 use Drupal\bootstrap\Theme;
 use Drupal\Core\Plugin\DefaultPluginManager;
 
@@ -85,6 +86,16 @@ class PluginManager extends DefaultPluginManager {
       $configuration['theme'] = $this->theme;
     }
     return parent::createInstance($plugin_id, $configuration);
+  }
+
+  /**
+   * Retrieves the cache tags used to invalidate caches.
+   *
+   * @return array
+   *   An indexed array of cache tags.
+   */
+  public function getCacheTags() {
+    return [Bootstrap::CACHE_TAG];
   }
 
   /**

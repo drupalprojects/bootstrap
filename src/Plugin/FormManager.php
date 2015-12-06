@@ -21,7 +21,7 @@ class FormManager extends PluginManager {
    */
   public function __construct(Theme $theme) {
     parent::__construct($theme, 'Plugin/Form', 'Drupal\bootstrap\Plugin\Form\FormInterface', 'Drupal\bootstrap\Annotation\BootstrapForm');
-    $this->setCacheBackend(\Drupal::cache('discovery'), 'theme:' . $theme->getName() . ':form', ['theme_registry']);
+    $this->setCacheBackend(\Drupal::cache('discovery'), 'theme:' . $theme->getName() . ':form', $this->getCacheTags());
   }
 
 }

@@ -220,8 +220,7 @@ function _bootstrap_colorize_text($string, $default = '') {
  *
  *   // After.
  *   use Drupal\bootstrap\Bootstrap;
- *   $theme = Bootstrap::getTheme();
- *   $files = $theme->fileScan('/\.js$/', $theme->getPath(). '/js');
+ *   $files = Bootstrap::getTheme()->fileScan('/\.js$/', 'js');
  * @endcode
  *
  * @see \Drupal\bootstrap\Theme::fileScan()
@@ -229,7 +228,9 @@ function _bootstrap_colorize_text($string, $default = '') {
  */
 function _bootstrap_file_scan_directory($dir, $mask, array $options = []) {
   Bootstrap::deprecated();
-  return Bootstrap::getTheme()->fileScan($mask, $dir, $options);
+  $theme = Bootstrap::getTheme();
+  $dir = preg_replace('/^' . preg_quote($theme->getPath()) . '\//', '', $dir);
+  return $theme->fileScan($mask, $dir, $options);
 }
 
 /**

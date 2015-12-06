@@ -24,66 +24,56 @@ class Js implements AlterInterface {
    */
   public function alter(&$js, &$context1 = NULL, &$context2 = NULL) {
     $theme = Bootstrap::getTheme();
-    $config = \Drupal::config('bootstrap.settings');
 
-    // Exclude specified JavaScript files from theme.
-    // @todo add excludes.
-    $excludes = $config->get('bootstrap_excludes_js');
-
-    // Add or replace JavaScript files when matching paths are detected.
-    // Replacement files must begin with '_', like '_node.js'.
-    $files = $theme->fileScan('/\.js$/', $theme->getPath() . '/js', [
-      'ignore_flags' => Theme::IGNORE_CORE | Theme::IGNORE_DEV | Theme::IGNORE_DOCS,
-    ]);
-    foreach ($files as $file) {
-      if ($file->name == 'bootstrap' || $file->name == 'bootstrap.admin') {
-        continue;
-      }
-      $path = str_replace($theme->getPath() . '/js/', '', $file->uri);
-      // Detect if this is a replacement file.
-      $replace = FALSE;
-      if (preg_match('/^[_]/', $file->filename)) {
-        $replace = TRUE;
-        $path = dirname($path) . '/' . preg_replace('/^[_]/', '', $file->filename);
-      }
-      $matches = [];
-      if (preg_match('/^modules\/([^\/]*)/', $path, $matches)) {
-        if (!\Drupal::moduleHandler()->moduleExists($matches[1])) {
+    // @todo Refactor to use libraries properly.
+    foreach ($theme->getAncestry() as $ancestor) {
+      $files = $ancestor->fileScan('/\.js$/', 'js', ['ignore_flags' => Theme::IGNORE_CORE | Theme::IGNORE_DEV | Theme::IGNORE_DOCS]);
+      foreach ($files as $file) {
+        if ($file->name == 'bootstrap' || $file->name == 'bootstrap.admin') {
           continue;
         }
-        else {
-          $path = str_replace('modules/' . $matches[1], drupal_get_path('module', $matches[1]), $path);
-        }
-      }
-      // Path should always exist to either add or replace JavaScript file.
-      if (!empty($path) && array_key_exists($path, $js)) {
-        $bootstrap_js_defaults = [
-          'type' => 'file',
-          'group' => JS_DEFAULT,
-          'every_page' => FALSE,
-          'weight' => 0,
-          'scope' => 'footer',
-          'cache' => TRUE,
-          'preprocess' => TRUE,
-          'attributes' => [],
-          'version' => NULL,
-          'data' => $file->uri,
-          'browsers' => [],
-        ];
-        // Replace file.
-        if ($replace) {
-          $js[$file->uri] = $bootstrap_js_defaults;
-          unset($js[$path]);
-        }
-        // Add file.
-        else {
-          $js[$file->uri] = $bootstrap_js_defaults;
-        }
-      }
-    }
 
-    if (!empty($excludes)) {
-      $js = array_diff_key($js, array_combine($excludes, $excludes));
+        $path = str_replace($ancestor->getPath() . '/js/', '', $file->uri);
+
+        // Detect if this is a replacement file.
+        $replace = FALSE;
+        if (preg_match('/^[_]/', $file->filename)) {
+          $replace = TRUE;
+          $path = dirname($path) . '/' . preg_replace('/^[_]/', '', $file->filename);
+        }
+        $matches = [];
+        if (preg_match('/^modules\/([^\/]*)/', $path, $matches)) {
+          if (!\Drupal::moduleHandler()->moduleExists($matches[1])) {
+            continue;
+          }
+          else {
+            $path = str_replace('modules/' . $matches[1], drupal_get_path('module', $matches[1]), $path);
+          }
+        }
+        // Path should always exist to either add or replace JavaScript file.
+        if (!empty($path) && array_key_exists($path, $js)) {
+          // Replace file.
+          if ($replace) {
+            $js[$path]['data'] = $file->uri;
+          }
+          // Add file.
+          else {
+            $js[$file->uri] = [
+              'type' => 'file',
+              'group' => JS_DEFAULT,
+              'every_page' => FALSE,
+              'weight' => 0,
+              'scope' => 'footer',
+              'cache' => TRUE,
+              'preprocess' => TRUE,
+              'attributes' => [],
+              'version' => NULL,
+              'data' => $file->uri,
+              'browsers' => [],
+            ];
+          }
+        }
+      }
     }
 
     // Add CDN assets, if any.
