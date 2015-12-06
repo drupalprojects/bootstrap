@@ -9,7 +9,6 @@ namespace Drupal\bootstrap\Plugin\Setting\JavaScript\Forms;
 use Drupal\bootstrap\Annotation\BootstrapSetting;
 use Drupal\bootstrap\Plugin\Setting\SettingBase;
 use Drupal\Core\Annotation\Translation;
-use Drupal\Core\Form\FormStateInterface;
 
 /**
  * The "forms_has_error_value_toggle" theme setting.

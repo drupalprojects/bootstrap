@@ -8,8 +8,8 @@ namespace Drupal\bootstrap\Plugin\Preprocess;
 
 use Drupal\bootstrap\Annotation\BootstrapPreprocess;
 use Drupal\bootstrap\Bootstrap;
-use Drupal\Core\Template\Attribute;
 use Drupal\Core\Menu\MenuTreeParameters;
+use Drupal\Core\Template\Attribute;
 
 /**
  * Pre-processes variables for the "page" theme hook.

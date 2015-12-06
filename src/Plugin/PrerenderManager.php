@@ -6,8 +6,8 @@
 
 namespace Drupal\bootstrap\Plugin;
 
-use Drupal\bootstrap\Utility\Element;
 use Drupal\bootstrap\Theme;
+use Drupal\bootstrap\Utility\Element;
 
 /**
  * Manages discovery and instantiation of Bootstrap pre-render callbacks.

@@ -7,7 +7,6 @@
 namespace Drupal\bootstrap\Utility;
 
 use Drupal\bootstrap\Bootstrap;
-use Drupal\Component\Utility\Crypt;
 use Drupal\Component\Utility\Xss;
 
 /**

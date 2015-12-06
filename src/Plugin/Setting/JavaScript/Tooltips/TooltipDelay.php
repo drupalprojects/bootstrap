@@ -7,7 +7,7 @@
 namespace Drupal\bootstrap\Plugin\Setting\JavaScript\Tooltips;
 
 use Drupal\bootstrap\Annotation\BootstrapSetting;
-use Drupal\bootstrap\Plugin\Setting\SettingBase;
+us  Drupal\bootstrap\Plugin\Setting\SettingBase;
 use Drupal\Core\Annotation\Translation;
 
 /**

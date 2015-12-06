@@ -8,7 +8,6 @@ namespace Drupal\bootstrap\Utility;
 
 use Drupal\bootstrap\Bootstrap;
 use Drupal\Component\Utility\Xss;
-use Drupal\Core\Template\Attribute;
 
 /**
  * Provides helper methods for Drupal render elements.
