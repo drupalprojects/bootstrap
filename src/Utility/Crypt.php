@@ -29,7 +29,7 @@ class Crypt extends \Drupal\Component\Utility\Crypt {
     elseif (is_array($args[0])) {
       $hash = implode(':', $args[0]) . ':';
     }
-    $hash .= static::hashBase64(serialize($args));
+    $hash .= self::hashBase64(serialize($args));
     return $hash;
   }
 }

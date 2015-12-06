@@ -79,7 +79,7 @@ class Bootstrap {
   public static function alter($function, &$data, &$context1 = NULL, &$context2 = NULL) {
     static $theme;
     if (!isset($theme)) {
-      $theme = static::getTheme();
+      $theme = self::getTheme();
     }
 
     // Immediately return if the active theme is not Bootstrap based.
@@ -137,7 +137,7 @@ class Bootstrap {
    *   The complete URL to the documentation site.
    */
   public static function apiSearchUrl($query = '') {
-    return static::PROJECT_DOCUMENTATION . '/api/bootstrap/' . static::PROJECT_BRANCH . '/search/' . Html::escape($query);
+    return self::PROJECT_DOCUMENTATION . '/api/bootstrap/' . self::PROJECT_BRANCH . '/search/' . Html::escape($query);
   }
 
 
@@ -243,7 +243,7 @@ class Bootstrap {
     $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
     \Drupal::logger('bootstrap')->warning('<pre><code>' . print_r($backtrace, TRUE) . '</code></pre>');
 
-    if (!static::getTheme()->getSetting('suppress_deprecated_warnings')) {
+    if (!self::getTheme()->getSetting('suppress_deprecated_warnings')) {
       return;
     }
 
@@ -256,7 +256,7 @@ class Bootstrap {
     }
     drupal_set_message(t('The following function(s) or method(s) have been deprecated, please check the logs for a more detailed backtrace on where these are being invoked. Click on the function or method link to search the documentation site for a possible replacement or solution.'), 'warning');
     drupal_set_message(t('<a href=":url" target="_blank">@title</a>.', [
-      ':url' => static::apiSearchUrl($class . $caller['function']),
+      ':url' => self::apiSearchUrl($class . $caller['function']),
       '@title' => ($class ? $caller['class'] . $caller['type'] : '') . $caller['function'] . '()',
     ]), 'warning');
   }
@@ -327,42 +327,38 @@ class Bootstrap {
   /**
    * Retrieves a theme instance of \Drupal\bootstrap.
    *
-   * @param string|\Drupal\Core\Extension\Extension $theme
-   *   The machine name or \Drupal\Core\Extension\Extension object. If
-   *   omitted, the active theme will be used.
+   * @param string $name
+   *   The machine name of a theme. If omitted, the active theme will be used.
    * @param \Drupal\Core\Extension\ThemeHandlerInterface $theme_handler
    *   The theme handler object.
    *
    * @return \Drupal\bootstrap\Theme
    *   A theme object.
    */
-  public static function getTheme($theme = NULL, ThemeHandlerInterface $theme_handler = NULL) {
+  public static function getTheme($name = NULL, ThemeHandlerInterface $theme_handler = NULL) {
     // Immediately return if theme passed is already instantiated.
-    if ($theme instanceof Theme) {
-      return $theme;
+    if ($name instanceof Theme) {
+      return $name;
     }
 
     static $themes = [];
+    static $active_theme;
+    if (!isset($active_theme)) {
+      $active_theme = \Drupal::theme()->getActiveTheme()->getName();
+    }
+    if (!isset($name)) {
+      $name = $active_theme;
+    }
 
     if (!isset($theme_handler)) {
-      $theme_handler = static::getThemeHandler();
-    }
-    if (!isset($theme)) {
-      $theme = \Drupal::theme()->getActiveTheme()->getName();
-    }
-    if (is_string($theme)) {
-      $theme = $theme_handler->getTheme($theme);
+      $theme_handler = self::getThemeHandler();
     }
 
-    if (!($theme instanceof Extension)) {
-      throw new \InvalidArgumentException(sprintf('The $theme argument provided is not of the class \Drupal\Core\Extension\Extension: %s.', $theme));
+    if (!isset($themes[$name])) {
+      $themes[$name] = new Theme($theme_handler->getTheme($name), $theme_handler);
     }
 
-    if (!isset($themes[$theme->getName()])) {
-      $themes[$theme->getName()] = new Theme($theme, $theme_handler);
-    }
-
-    return $themes[$theme->getName()];
+    return $themes[$name];
   }
 
   /**
@@ -395,7 +391,7 @@ class Bootstrap {
     // Ensure the icon specified is a valid Bootstrap Glyphicon.
     // @todo Supply a specific version to _bootstrap_glyphicons() when Icon API
     // supports versioning.
-    if (static::getTheme()->hasGlyphicons() && in_array($name, static::glyphicons())) {
+    if (self::getTheme()->hasGlyphicons() && in_array($name, self::glyphicons())) {
       // Attempt to use the Icon API module, if enabled and it generates output.
       if (\Drupal::moduleHandler()->moduleExists('icon')) {
         return [
@@ -472,13 +468,13 @@ class Bootstrap {
         switch ($pattern) {
           case 'matches':
             if ((string) $string === $value) {
-              return static::glyphicon($icon, $default);
+              return self::glyphicon($icon, $default);
             }
             break;
 
           case 'contains':
             if (strpos(Unicode::strtolower((string) $string), Unicode::strtolower($value)) !== FALSE) {
-              return static::glyphicon($icon, $default);
+              return self::glyphicon($icon, $default);
             }
             break;
         }
@@ -791,7 +787,7 @@ class Bootstrap {
     }
 
     // Return the latest version.
-    return $versions[static::FRAMEWORK_VERSION];
+    return $versions[self::FRAMEWORK_VERSION];
   }
 
   /**
@@ -801,7 +797,7 @@ class Bootstrap {
     static $initialized = FALSE;
     if (!$initialized) {
       // Initialize the active theme.
-      $active_theme = static::getTheme();
+      $active_theme = self::getTheme();
 
       // Include any deprecated.inc file from each theme.
       // @todo create a setting that makes this opt-in.
@@ -827,11 +823,11 @@ class Bootstrap {
   public static function preprocess(array &$variables, $hook) {
     static $theme;
     if (!isset($theme)) {
-      $theme = static::getTheme();
+      $theme = self::getTheme();
     }
 
     // Add extra variables to all theme hooks.
-    foreach (static::extraVariables() as $key => $value) {
+    foreach (self::extraVariables() as $key => $value) {
       if (!isset($variables[$key])) {
         $variables[$key] = $value;
       }

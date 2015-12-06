@@ -33,7 +33,7 @@ class SystemThemeSettings extends FormBase implements FormInterface {
     $this->createGroups($form, $form_state);
 
     // Iterate over all setting plugins and add them to the form.
-    foreach ($theme->getSettingInstances() as $setting) {
+    foreach ($theme->getSettingPlugins() as $setting) {
       // Construct the setting element.
       $form = $setting->buildForm($form, $form_state);
 
@@ -128,15 +128,12 @@ class SystemThemeSettings extends FormBase implements FormInterface {
     $form_state->cleanValues();
 
     // Iterate over all setting plugins and allow them to participate.
-    foreach ($theme->getSettingInstances() as $name => $setting) {
+    foreach ($theme->getSettingPlugins() as $name => $setting) {
       $setting->submitForm($form, $form_state);
 
       // Remove values that didn't change so they don't get saved to config.
-      // @todo This should ultimately iterate through the theme ancestry and
-      // determine which settings are truly overridden from config.
-      $old = serialize($theme->getSetting($name, TRUE));
-      $new = serialize($form_state->getValue($name));
-      if ($old === $new) {
+      $settings = $theme->getSettings();
+      if (!$settings->overridesValue($name, $form_state->getValue($name))) {
         $form_state->unsetValue($name);
       }
     }
@@ -155,7 +152,7 @@ class SystemThemeSettings extends FormBase implements FormInterface {
     }
 
     // Iterate over all setting plugins and allow them to participate.
-    foreach ($theme->getSettingInstances() as $setting) {
+    foreach ($theme->getSettingPlugins() as $setting) {
       $setting->validateForm($form, $form_state);
     }
   }

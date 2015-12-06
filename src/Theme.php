@@ -12,7 +12,6 @@ use Drupal\bootstrap\Plugin\UpdateManager;
 use Drupal\bootstrap\Utility\Crypt;
 use Drupal\bootstrap\Utility\Storage;
 use Drupal\bootstrap\Utility\StorageItem;
-use Drupal\Core\Config\StorageException;
 use Drupal\Core\Extension\Extension;
 use Drupal\Core\Extension\ThemeHandlerInterface;
 
@@ -64,13 +63,6 @@ class Theme {
   protected $info;
 
   /**
-   * The provider manager instance.
-   *
-   * @var \Drupal\bootstrap\Plugin\ProviderManager
-   */
-  protected $providerManager;
-
-  /**
    * The current theme Extension object.
    *
    * @var \Drupal\Core\Extension\Extension
@@ -92,20 +84,6 @@ class Theme {
   protected $themeHandler;
 
   /**
-   * The update manager instance.
-   *
-   * @var \Drupal\bootstrap\Plugin\SettingManager
-   */
-  protected $settingManager;
-
-  /**
-   * The update manager instance.
-   *
-   * @var \Drupal\bootstrap\Plugin\UpdateManager
-   */
-  protected $updateManager;
-
-  /**
    * Theme constructor.
    *
    * @param \Drupal\Core\Extension\Extension $theme
@@ -119,12 +97,9 @@ class Theme {
     $this->themeHandler = $theme_handler;
     $this->themes = $this->themeHandler->listInfo();
     $this->info = isset($this->themes[$name]->info) ? $this->themes[$name]->info : [];
-    $this->providerManager = new ProviderManager($this);
-    $this->settingManager = new SettingManager($this);
-    $this->updateManager = new UpdateManager($this);
 
     // Only install the theme if there is no schema version currently set.
-    if (!$this->getSchemaVersion()) {
+    if (!$this->getSetting('schema')) {
       $this->install();
     }
   }
@@ -179,29 +154,29 @@ class Theme {
 
     // Default ignore flags.
     $options += [
-      'ignore_flags' => static::IGNORE_DEFAULT,
+      'ignore_flags' => self::IGNORE_DEFAULT,
     ];
     $flags = $options['ignore_flags'];
-    if ($flags === static::IGNORE_DEFAULT) {
-      $flags = static::IGNORE_CORE | static::IGNORE_ASSETS | static::IGNORE_DOCS | static::IGNORE_DEV;
+    if ($flags === self::IGNORE_DEFAULT) {
+      $flags = self::IGNORE_CORE | self::IGNORE_ASSETS | self::IGNORE_DOCS | self::IGNORE_DEV;
     }
 
     // Save effort by skipping directories that are flagged.
     if (!isset($options['nomask']) && $flags) {
       $ignore_directories = [];
-      if ($flags & static::IGNORE_ASSETS) {
+      if ($flags & self::IGNORE_ASSETS) {
         $ignore_directories += ['assets', 'css', 'images', 'js'];
       }
-      if ($flags & static::IGNORE_CORE) {
+      if ($flags & self::IGNORE_CORE) {
         $ignore_directories += ['config', 'lib', 'src'];
       }
-      if ($flags & static::IGNORE_DOCS) {
+      if ($flags & self::IGNORE_DOCS) {
         $ignore_directories += ['docs', 'documentation'];
       }
-      if ($flags & static::IGNORE_DEV) {
+      if ($flags & self::IGNORE_DEV) {
         $ignore_directories += ['bower_components', 'grunt', 'node_modules', 'starterkits'];
       }
-      if ($flags & static::IGNORE_TEMPLATES) {
+      if ($flags & self::IGNORE_TEMPLATES) {
         $ignore_directories += ['templates', 'theme'];
       }
       if (!empty($ignore_directories)) {
@@ -210,7 +185,7 @@ class Theme {
     }
 
     // Retrieve cache.
-    $files = static::getCache('files', []);
+    $files = self::getCache('files', []);
 
     // Generate a unique hash for all parameters passed as a change in any of
     // them could potentially return different results.
@@ -236,7 +211,7 @@ class Theme {
   public function getAncestry($reverse = FALSE) {
     $ancestry = $this->themeHandler->getBaseThemes($this->themes, $this->getName());
     foreach (array_keys($ancestry) as $name) {
-      $ancestry[$name] = new static($this->themeHandler->getTheme($name), $this->themeHandler);
+      $ancestry[$name] = Bootstrap::getTheme($name, $this->themeHandler);
     }
     $ancestry[$this->getName()] = $this;
     return $reverse ? array_reverse($ancestry) : $ancestry;
@@ -256,7 +231,7 @@ class Theme {
   public function getCache($name, $default = []) {
     static $cache = [];
     $theme = $this->getName();
-    $theme_cache = static::getStorage();
+    $theme_cache = self::getStorage();
     if (!isset($cache[$theme][$name])) {
       if (!$theme_cache->has($name)) {
         $theme_cache->set($name, is_array($default) ? new StorageItem($default, $theme_cache) : $default);
@@ -306,7 +281,8 @@ class Theme {
    *   A provider instance.
    */
   public function getProvider($provider = NULL) {
-    return $this->providerManager->createInstance($provider ?: $this->getSetting('cdn_provider'), ['theme' => $this]);
+    $provider_manager = new ProviderManager($this);
+    return $provider_manager->createInstance($provider ?: $this->getSetting('cdn_provider'), ['theme' => $this]);
   }
 
   /**
@@ -317,30 +293,14 @@ class Theme {
    */
   public function getProviders() {
     $providers = [];
-    foreach (array_keys($this->providerManager->getDefinitions()) as $provider) {
+    $provider_manager = new ProviderManager($this);
+    foreach (array_keys($provider_manager->getDefinitions()) as $provider) {
       if ($provider === 'none') {
         continue;
       }
-      $providers[$provider] = $this->providerManager->createInstance($provider, ['theme' => $this]);
+      $providers[$provider] = $provider_manager->createInstance($provider, ['theme' => $this]);
     }
     return $providers;
-  }
-
-  /**
-   * Retrieves the installed schema version for the theme.
-   *
-   * @return int
-   *   The schema version, 0 if not yet installed.
-   */
-  public function getSchemaVersion() {
-    // Don't use $this->getSetting() here because we don't want to inherit
-    // the schema version from the theme's ancestry.
-    try {
-      return \Drupal::config($this->getName() . '.settings')->get('schema');
-    }
-    catch (StorageException $e) {
-    }
-    return 0;
   }
 
   /**
@@ -358,37 +318,20 @@ class Theme {
    *
    * @param string $name
    *   The name of the setting to be retrieved.
-   * @param bool $get_default
-   *   Retrieve the default value from code, not from any potientially stored
-   *   config value.
+   * @param bool $original
+   *   Retrieve the original default value from code (or base theme config),
+   *   not from the active theme's stored config.
    *
    * @return mixed
    *   The value of the requested setting, NULL if the setting does not exist.
    *
    * @see theme_get_setting()
    */
-  public function getSetting($name, $get_default = FALSE) {
-    if ($get_default) {
-      $defaults = $this->getSettingDefaults();
-      if (isset($defaults[$name])) {
-        return $defaults[$name];
-      }
+  public function getSetting($name, $original = FALSE) {
+    if ($original) {
+      return $this->getSettings()->getOriginal($name);
     }
     return $this->getSettings()->get($name);
-  }
-
-  /**
-   * Retrieves the default values from theme setting discovery.
-   *
-   * @return array
-   *   A key/value associative array.
-   */
-  public function getSettingDefaults() {
-    $defaults = [];
-    foreach ($this->getSettingInstances() as $name => $setting) {
-      $defaults[$name] = $setting->getDefaultValue();
-    }
-    return $defaults;
   }
 
   /**
@@ -412,10 +355,11 @@ class Theme {
    * @return \Drupal\bootstrap\Plugin\Setting\SettingInterface[]
    *   An associative array of setting objects, keyed by their name.
    */
-  public function getSettingInstances() {
+  public function getSettingPlugins() {
     $settings = [];
-    foreach (array_keys($this->settingManager->getDefinitions()) as $setting) {
-      $settings[$setting] = $this->settingManager->createInstance($setting);
+    $setting_manager = new SettingManager($this);
+    foreach (array_keys($setting_manager->getDefinitions()) as $setting) {
+      $settings[$setting] = $setting_manager->createInstance($setting);
     }
     return $settings;
   }
@@ -443,8 +387,9 @@ class Theme {
    */
   protected function getUpdates() {
     $updates = [];
-    foreach (array_keys($this->updateManager->getDefinitions()) as $update) {
-      $updates[$update] = $this->updateManager->createInstance($update, ['theme' => $this]);
+    $update_manager = new UpdateManager($this);
+    foreach (array_keys($update_manager->getDefinitions()) as $update) {
+      $updates[$update] = $update_manager->createInstance($update, ['theme' => $this]);
     }
     return $updates;
   }
@@ -537,7 +482,7 @@ class Theme {
    *   TRUE or FALSE
    */
   public function subthemeOf($theme) {
-    return (string) $theme === $this->getName() || in_array($theme, array_keys(static::getAncestry()));
+    return (string) $theme === $this->getName() || in_array($theme, array_keys(self::getAncestry()));
   }
 
 }

@@ -34,7 +34,7 @@ class Table implements PreprocessInterface {
     }
 
     // Add the necessary classes to the table.
-    static::addClasses($variables['attributes']['class'], $variables);
+    self::addClasses($variables['attributes']['class'], $variables);
   }
 
   /**
