@@ -10,8 +10,6 @@ namespace Drupal\bootstrap\Plugin\Alter;
 use Drupal\bootstrap\Annotation\BootstrapAlter;
 use Drupal\bootstrap\Bootstrap;
 use Drupal\bootstrap\Plugin\PreprocessManager;
-use Drupal\bootstrap\Theme;
-use Drupal\Core\Theme\ActiveTheme;
 use Drupal\Core\Theme\Registry;
 
 /**

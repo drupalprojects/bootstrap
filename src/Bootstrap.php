@@ -11,7 +11,6 @@ use Drupal\bootstrap\Plugin\FormManager;
 use Drupal\bootstrap\Plugin\PreprocessManager;
 use Drupal\bootstrap\Utility\Unicode;
 use Drupal\Component\Utility\Html;
-use Drupal\Core\Extension\Extension;
 use Drupal\Core\Extension\ThemeHandlerInterface;
 use Drupal\Core\Template\Attribute;
 
