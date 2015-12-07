@@ -5,10 +5,8 @@
 - [Do you support X module?](#support)
 - [Do you support Internet Explorer?](#ie)
 - [Is Drupal Bootstrap a module or theme?](#module-or-theme)
-- [What does the JavaScript error `TypeError: $(...).on is not a function` mean?](#jquery)
 - [Where can I discuss an issue in real time?](#irc)
 - [Where should I make changes?](#changes)
-- [Why are my sub-theme's `.info` settings ignored?](#theme-settings-ignored)
 
 ---
 
@@ -84,21 +82,6 @@ functionality.
 
 ---
 
-### Q: What does the JavaScript error `TypeError: $(...).on is not a function` mean? {#jquery}
-Drupal 7 ships with the `1.4.4` version of jQuery out-of-the-box. The [$.on()](http://api.jquery.com/on/)
-method was introduced several versions after this in jQuery version `1.7`.
-
-You must upgrade your site or sub-theme's jQuery Version by installing (and
-properly configuring) the [jQuery Update] module to use a jQuery version
-compatible with the [Bootstrap Framework]. This is typically a version greater
-than or equal to `1.9`.
-
-Ensuring jQuery compatibilities between Drupal, the [Bootstrap Framework] and
-other plugins/modules does not fall within the scope of this base theme's
-documentation or support.
-
----
-
 ### Q: Where can I discuss an issue in real time? {#irc}
 **A: In IRC**
 
@@ -121,42 +104,7 @@ theme is updated. This makes keeping track of changes next to impossible.
 
 Instead, you should create a custom sub-theme that isn't hosted on Drupal.org.
 
-[Drupal Bootstrap]: https://www.drupal.org/project/bootstrap
-[Bootstrap Framework]: http://getbootstrap.com
 [Respond.js]: https://github.com/scottjehl/Respond
-
----
-
-### Q: Why are my sub-theme's `.info` settings ignored? {#theme-settings-ignored}
-**A: The database contains a copy of the theme settings and they take
-precedence over theme settings stored in the `.info` file.**
-
-This is actually quite a common issue whenever a theme's settings are saved
-from the UI. This action stores the settings in the {variables} table of the
-database. The workflow for theme_get_setting() merges the settings from the
-database on top of the settings found in the theme's `.info` file.
-
-You need to remove the variable `theme_[theme_name]_settings` from the database,
-where `[theme_name]` is your sub-theme's machine name (e.g. if your sub-theme
-machine name is `my_bootstrap_subtheme`, the variable name would be
-`theme_my_bootstrap_subtheme_settings`).
-
-The easiest way to do accomplish this task is to use the following [Drush]
-command: `theme_my_bootstrap_subtheme_settings`
-
-If you do not have or use [Drush], you will either have to manually delete this
-variable from the database or create an [update hook](https://api.drupal.org/api/drupal/modules%21system%21system.api.php/function/hook_update_N/7)
-in a custom module that deletes the variable for you:
-
-```php
-/**
-* Remove the 'theme_my_bootstrap_subtheme_settings' variable.
-*/
-function hook_update_N() {
-  variable_del('theme_my_bootstrap_subtheme_settings');
-}
-```
-
 [Drush]: http://www.drush.org
 [Drupal Bootstrap]: https://www.drupal.org/project/bootstrap
 [Bootstrap Framework]: http://getbootstrap.com

@@ -22,15 +22,12 @@ a base theme like this.
 
 #### @link subtheme Sub-Theming @endlink
 - @link subtheme_settings Theme Settings @endlink
-- @link subtheme_helper_functions Helper Functions @endlink
 - @link subtheme_cdn CDN Starterkit @endlink
 - @link subtheme_less LESS Starterkit @endlink
 
 #### @link registry Theme Registry @endlink
-- @link theme_preprocess Preprocess Functions (.vars.php) @endlink
-- @link theme_process Process Functions (.vars.php) @endlink
-- @link templates Templates (.tpl.php) @endlink
-- @link theme_functions Theme Functions (.func.php) @endlink
+- @link theme_preprocess Preprocess@endlink
+- @link templates Templates@endlink
 
 #### @link api APIs @endlink
 
@@ -59,7 +56,7 @@ displaying the text on this page is located at `./bootstrap/docs/README.md`.
 When referring to files inside a sub-theme, they will always start with
 `./subtheme/` and continue to specify the full path to the file or directory
 inside it. For example, the primary file Drupal uses to determine if a theme
-exists is: `./subtheme/subtheme.info`, where `subtheme` is the machine name of
-your sub-theme.
+exists is: `./subtheme/subtheme.info.yml`, where `subtheme` is the machine name
+of your sub-theme.
 
 [Drupal Bootstrap]: https://www.drupal.org/project/bootstrap
