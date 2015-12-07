@@ -23,7 +23,7 @@ class Region implements PreprocessInterface {
   /**
    * {@inheritdoc}
    */
-  public function preprocess(array &$variables) {
+  public function preprocess(array &$variables, $hook, array $info) {
     $region = $variables['elements']['#region'];
     $variables['region'] = $region;
     $variables['content'] = $variables['elements']['#children'];

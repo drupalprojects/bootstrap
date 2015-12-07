@@ -22,7 +22,7 @@ class ViewsViewTable implements PreprocessInterface {
   /**
    * {@inheritdoc}
    */
-  public function preprocess(array &$variables) {
+  public function preprocess(array &$variables, $hook, array $info) {
     Table::addClasses($variables['attributes']['class'], $variables);
   }
 

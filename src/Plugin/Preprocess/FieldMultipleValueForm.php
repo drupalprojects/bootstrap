@@ -23,7 +23,7 @@ class FieldMultipleValueForm implements PreprocessInterface {
   /**
    * {@inheritdoc}
    */
-  public function preprocess(array &$variables) {
+  public function preprocess(array &$variables, $hook, array $info) {
     $element = $variables['element'];
 
     // Wrap header columns in label element for Bootstrap.

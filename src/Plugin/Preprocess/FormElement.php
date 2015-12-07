@@ -24,7 +24,7 @@ class FormElement implements PreprocessInterface {
   /**
    * {@inheritdoc}
    */
-  public function preprocess(array &$variables) {
+  public function preprocess(array &$variables, $hook, array $info) {
     $element = &$variables['element'];
     $title_display = $element['#title_display'];
     $name = !empty($element['#name']) ? $element['#name'] : FALSE;

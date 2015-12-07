@@ -19,7 +19,7 @@ use Drupal\Core\Form\FormStateInterface;
  *   type = "checkbox",
  *   title = @Translation("Show current page title at end"),
  *   description = @Translation("If your site has a module dedicated to handling breadcrumbs already, ensure this setting is disabled."),
- *   defaultValue = 0,
+ *   defaultValue = 1,
  *   groups = {
  *     "components" = @Translation("Components"),
  *     "breadcrumbs" = @Translation("Breadcrumbs"),

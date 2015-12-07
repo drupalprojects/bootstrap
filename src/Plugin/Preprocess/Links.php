@@ -22,7 +22,7 @@ class Links implements PreprocessInterface {
   /**
    * {@inheritdoc}
    */
-  public function preprocess(array &$variables) {
+  public function preprocess(array &$variables, $hook, array $info) {
     if (isset($variables['attributes']) && isset($variables['attributes']['class'])) {
       $string = is_string($variables['attributes']['class']);
       if ($string) {

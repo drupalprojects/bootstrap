@@ -22,7 +22,7 @@ class FormElementLabel implements PreprocessInterface {
   /**
    * {@inheritdoc}
    */
-  public function preprocess(array &$variables) {
+  public function preprocess(array &$variables, $hook, array $info) {
     $element = $variables['element'];
     // If title and required marker are both empty, output no label.
     $variables['title'] = !empty($element['#title']) ? $element['#title'] : '';

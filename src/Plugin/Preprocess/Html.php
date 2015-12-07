@@ -23,7 +23,7 @@ class Html implements PreprocessInterface {
   /**
    * {@inheritdoc}
    */
-  public function preprocess(array &$variables) {
+  public function preprocess(array &$variables, $hook, array $info) {
     switch (Bootstrap::getTheme()->getSetting('navbar_position')) {
       case 'fixed-top':
         $variables['attributes']['class'][] = 'navbar-is-fixed-top';

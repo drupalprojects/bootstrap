@@ -22,7 +22,7 @@ class MenuLocalTask implements PreprocessInterface {
   /**
    * {@inheritdoc}
    */
-  public function preprocess(array &$variables) {
+  public function preprocess(array &$variables, $hook, array $info) {
     if (!empty($variables['element']['#active'])) {
       $variables['attributes']['class'][] = 'active';
     }

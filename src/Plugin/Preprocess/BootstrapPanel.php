@@ -26,7 +26,7 @@ class BootstrapPanel implements PreprocessInterface {
   /**
    * {@inheritdoc}
    */
-  public function preprocess(array &$variables) {
+  public function preprocess(array &$variables, $hook, array $info) {
     $element = $variables['element'];
     Element::setAttributes($element, ['id']);
     Element\RenderElement::setAttributes($element);

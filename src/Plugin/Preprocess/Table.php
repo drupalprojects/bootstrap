@@ -23,7 +23,7 @@ class Table implements PreprocessInterface {
   /**
    * {@inheritdoc}
    */
-  public function preprocess(array &$variables) {
+  public function preprocess(array &$variables, $hook, array $info) {
     // Prepare classes array if necessary.
     if (!isset($variables['attributes']['class'])) {
       $variables['attributes']['class'] = [];

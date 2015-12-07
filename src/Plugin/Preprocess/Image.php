@@ -24,7 +24,7 @@ class Image implements PreprocessInterface {
   /**
    * {@inheritdoc}
    */
-  public function preprocess(array &$variables) {
+  public function preprocess(array &$variables, $hook, array $info) {
     $theme = Bootstrap::getTheme();
     $attributes = new Attribute($variables['attributes']);
 

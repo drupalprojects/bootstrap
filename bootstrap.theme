@@ -113,10 +113,10 @@ function bootstrap_page_attachments_alter(&$data, &$context1 = NULL, &$context2 
 /**
  * {@inheritdoc}
  *
- * @see \Drupal\bootstrap\Theme::preprocess()
+ * @see \Drupal\bootstrap\Bootstrap::preprocess()
  */
-function bootstrap_preprocess(&$variables, $hook) {
-  Bootstrap::preprocess($variables, $hook);
+function bootstrap_preprocess(&$variables, $hook, $info) {
+  Bootstrap::preprocess($variables, $hook, $info);
 }
 
 /**

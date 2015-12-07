@@ -24,7 +24,7 @@ class MenuLocalAction implements PreprocessInterface {
   /**
    * {@inheritdoc}
    */
-  public function preprocess(array &$variables) {
+  public function preprocess(array &$variables, $hook, array $info) {
     $link = $variables['element']['#link'];
     $link += ['localized_options' => []];
     $link['localized_options']['set_active_class'] = TRUE;

@@ -22,7 +22,7 @@ class Block implements PreprocessInterface {
   /**
    * {@inheritdoc}
    */
-  public function preprocess(array &$variables) {
+  public function preprocess(array &$variables, $hook, array $info) {
     // Use a bare template for the page's main content.
     if ($variables['plugin_id'] == 'system_main') {
       $variables['theme_hook_suggestions'][] = 'block__no_wrapper';

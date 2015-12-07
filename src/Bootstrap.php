@@ -109,7 +109,7 @@ class Bootstrap {
       $form_manager = new FormManager($theme);
 
       /** @var \Drupal\bootstrap\Plugin\Form\FormInterface $form */
-      if ($form_manager->hasDefinition($form_id) && ($form = $form_manager->createInstance($form_id))) {
+      if ($form_manager->hasDefinition($form_id) && ($form = $form_manager->createInstance($form_id, ['theme' => $theme]))) {
         $data['#submit'][] = [get_class($form), 'submitForm'];
         $data['#validate'][] = [get_class($form), 'validateForm'];
         $form->alterForm($data, $context1, $context2);
@@ -121,7 +121,7 @@ class Bootstrap {
       $alter_manager = new AlterManager($theme);
 
       /** @var \Drupal\bootstrap\Plugin\Alter\AlterInterface $class */
-      if ($alter_manager->hasDefinition($hook) && ($class = $alter_manager->createInstance($hook))) {
+      if ($alter_manager->hasDefinition($hook) && ($class = $alter_manager->createInstance($hook, ['theme' => $theme]))) {
         $class->alter($data, $context1, $context2);
       }
     }
@@ -819,46 +819,32 @@ class Bootstrap {
    *   The variables array, passed by reference.
    * @param string $hook
    *   The name of the theme hook.
+   * @param array $info
+   *   The theme hook info.
    */
-  public static function preprocess(array &$variables, $hook) {
+  public static function preprocess(array &$variables, $hook, array $info) {
     static $theme;
     if (!isset($theme)) {
       $theme = self::getTheme();
     }
+    static $preprocess_manager;
+    if (!isset($preprocess_manager)) {
+      $preprocess_manager = new PreprocessManager($theme);
+    }
 
     // Add extra variables to all theme hooks.
-    foreach (self::extraVariables() as $key => $value) {
+    foreach (Bootstrap::extraVariables() as $key => $value) {
       if (!isset($variables[$key])) {
         $variables[$key] = $value;
       }
     }
 
-    // Retrieve a list of preprocess definitions.
-    $preprocess_manager = new PreprocessManager($theme);
-
-    // Extrapolate the theme hooks (with __ suggestions).
-    // @todo This is really ugly, hook_preprocess() currently has limitations.
-    $preprocess = [];
-    $hooks = array_unique([$hook, $variables['theme_hook_original']]);
-    foreach ($hooks as $hook) {
-      $suggestions = explode('__', $hook);
-      $hook = array_shift($suggestions);
-      if (!in_array($hook, $preprocess)) {
-        $preprocess[] = $hook;
-      }
-      foreach ($suggestions as $suggestion) {
-        $hook .= "__$suggestion";
-        if (!in_array($hook, $preprocess)) {
-          $preprocess[] = $hook;
-        }
-      }
-    }
-
-    // Invoke necessary preprocess plugins.
-    foreach ($preprocess as $hook) {
-      /** @var \Drupal\bootstrap\Plugin\Preprocess\PreprocessInterface $class */
-      if ($preprocess_manager->hasDefinition($hook) && ($class = $preprocess_manager->createInstance($hook))) {
-        $class->preprocess($variables);
+    // Invoke necessary preprocess plugin.
+    if (isset($info['bootstrap preprocess'])) {
+      if ($preprocess_manager->hasDefinition($info['bootstrap preprocess'])) {
+        $class = $preprocess_manager->createInstance($info['bootstrap preprocess'], ['theme' => $theme]);
+        /** @var \Drupal\bootstrap\Plugin\Preprocess\PreprocessInterface $class */
+        $class->preprocess($variables, $hook, $info);
       }
     }
   }

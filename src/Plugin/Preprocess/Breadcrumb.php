@@ -24,7 +24,7 @@ class Breadcrumb implements PreprocessInterface {
   /**
    * {@inheritdoc}
    */
-  public function preprocess(array &$variables) {
+  public function preprocess(array &$variables, $hook, array $info) {
     $theme = Bootstrap::getTheme();
     $breadcrumb = &$variables['breadcrumb'];
 

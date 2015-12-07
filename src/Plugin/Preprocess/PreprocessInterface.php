@@ -15,8 +15,12 @@ interface PreprocessInterface {
    * Preprocess theme hook variables.
    *
    * @param array $variables
-   *   The variables array, passed by reference.
+   *   The variables array, passed by reference (modify in place).
+   * @param string $hook
+   *   The name of the theme hook.
+   * @param array $info
+   *   The theme hook info array.
    */
-  public function preprocess(array &$variables);
+  public function preprocess(array &$variables, $hook, array $info);
 
 }
