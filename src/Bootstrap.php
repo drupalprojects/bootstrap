@@ -110,8 +110,8 @@ class Bootstrap {
 
       /** @var \Drupal\bootstrap\Plugin\Form\FormInterface $form */
       if ($form_manager->hasDefinition($form_id) && ($form = $form_manager->createInstance($form_id))) {
-        $data['#submit'][] = [$form, 'submitForm'];
-        $data['#validate'][] = [$form, 'validateForm'];
+        $data['#submit'][] = [get_class($form), 'submitForm'];
+        $data['#validate'][] = [get_class($form), 'validateForm'];
         $form->alterForm($data, $context1, $context2);
       }
     }

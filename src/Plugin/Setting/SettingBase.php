@@ -38,21 +38,8 @@ class SettingBase extends PluginBase implements SettingInterface {
   /**
    * {@inheritdoc}
    */
-  public function alterForm(array &$form, FormStateInterface $form_state, $form_id = NULL) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public function buildForm(array $form, FormStateInterface $form_state, $form_id = NULL) {
+  public function alterForm(array &$form, FormStateInterface $form_state, $form_id = NULL) {
     $this->getElement($form, $form_state);
-    return $form;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getFormId() {
-    return 'system_theme_settings';
   }
 
   /**
@@ -171,11 +158,11 @@ class SettingBase extends PluginBase implements SettingInterface {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state, $form_id = NULL) {}
+  public static function submitForm(array &$form, FormStateInterface $form_state, $form_id = NULL) {}
 
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state, $form_id = NULL) {}
+  public static function validateForm(array &$form, FormStateInterface $form_state, $form_id = NULL) {}
 
 }

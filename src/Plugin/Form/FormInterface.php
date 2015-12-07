@@ -11,7 +11,7 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Defines the interface for an object oriented form alter.
  */
-interface FormInterface extends \Drupal\Core\Form\FormInterface {
+interface FormInterface {
 
   /**
    * The alter method to store the code.
@@ -25,5 +25,25 @@ interface FormInterface extends \Drupal\Core\Form\FormInterface {
    *   name of the function that generated the form.
    */
   public function alterForm(array &$form, FormStateInterface $form_state, $form_id = NULL);
+
+  /**
+   * Form validation handler.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   */
+  public static function validateForm(array &$form, FormStateInterface $form_state);
+
+  /**
+   * Form submission handler.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   */
+  public static function submitForm(array &$form, FormStateInterface $form_state);
 
 }

@@ -95,8 +95,8 @@ class CdnProvider extends SettingBase {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    */
-  protected static function ajaxCallback(array $form, FormStateInterface $form_state) {
-    return $form['advanced']['cdn']['cdn_provider_' . $form_state->getValue('cdn_provider', Bootstrap::getTheme()->getSetting('cdn_provider'))];
+  public static function ajaxCallback(array $form, FormStateInterface $form_state) {
+    return $form['advanced']['cdn'][$form_state->getValue('cdn_provider', Bootstrap::getTheme()->getSetting('cdn_provider'))];
   }
 
   /**
@@ -163,7 +163,7 @@ class CdnProvider extends SettingBase {
         '#value' => t('Save provider data'),
         '#executes_submit_callback' => FALSE,
         '#ajax' => [
-          'callback' => [$this, 'ajaxCallback'],
+          'callback' => [get_class($this), 'ajaxCallback'],
           'wrapper' => 'cdn-provider-' . $plugin_id,
         ],
       ];

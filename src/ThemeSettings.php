@@ -219,7 +219,7 @@ class ThemeSettings extends Config {
    *   TRUE or FALSE
    */
   public function overridesValue($name, $value) {
-    return !!DiffArray::diffAssocRecursive([$name => $value], [$name => $this->getOriginal($name)]);
+    return !!DiffArray::diffAssocRecursive([$name => $value], [$name => $this->get($name)]);
   }
 
   /**

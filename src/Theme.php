@@ -244,10 +244,16 @@ class Theme {
   /**
    * Retrieves the theme info.
    *
+   * @param string $property
+   *   A specific property entry from the theme's info array to return.
+   *
    * @return array
-   *   The theme info.
+   *   The entire theme info or a specific item if $property was passed.
    */
-  public function getInfo() {
+  public function getInfo($property = NULL) {
+    if (isset($property)) {
+      return isset($this->info[$property]) ? $this->info[$property] : NULL;
+    }
     return $this->info;
   }
 
@@ -301,16 +307,6 @@ class Theme {
       $providers[$provider] = $provider_manager->createInstance($provider, ['theme' => $this]);
     }
     return $providers;
-  }
-
-  /**
-   * Retrieves the update schema versions for the theme.
-   *
-   * @return array
-   *   An indexed array of schema versions.
-   */
-  protected function getSchemaVersions() {
-    return array_keys($this->getUpdates());
   }
 
   /**
@@ -380,18 +376,13 @@ class Theme {
   }
 
   /**
-   * Retrieves update plugins for the theme.
+   * Retrieves the human-readable title of the theme.
    *
-   * @return \Drupal\bootstrap\Plugin\Update\UpdateInterface[]
-   *   An associative array containing update objects, keyed by their version.
+   * @return string
+   *   The theme title or machine name as a fallback.
    */
-  protected function getUpdates() {
-    $updates = [];
-    $update_manager = new UpdateManager($this);
-    foreach (array_keys($update_manager->getDefinitions()) as $update) {
-      $updates[$update] = $update_manager->createInstance($update, ['theme' => $this]);
-    }
-    return $updates;
+  public function getTitle() {
+    return $this->getInfo('name') ?: $this->getName();
   }
 
   /**
@@ -443,11 +434,8 @@ class Theme {
    * Installs a Bootstrap based theme.
    */
   final protected function install() {
-    $version = \Drupal::CORE_MINIMUM_SCHEMA_VERSION;
-    if ($versions = $this->getSchemaVersions()) {
-      $version = max(max($versions), $version);
-    }
-    $this->setSetting('schema', $version);
+    $update_manager = new UpdateManager($this);
+    $this->setSetting('schema', $update_manager->getLatestVersion());
   }
 
   /**

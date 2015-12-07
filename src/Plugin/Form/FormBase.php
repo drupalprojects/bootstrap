@@ -17,28 +17,16 @@ class FormBase extends PluginBase implements FormInterface {
   /**
    * {@inheritdoc}
    */
-  public function getFormId() {
-    return $this->getPluginId();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function alterForm(array &$form, FormStateInterface $form_state, $form_id = NULL) {}
 
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {}
+  public static function submitForm(array &$form, FormStateInterface $form_state) {}
 
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public function validateForm(array &$form, FormStateInterface $form_state) {}
+  public static function validateForm(array &$form, FormStateInterface $form_state) {}
 
 }

@@ -44,6 +44,8 @@ class RegionWells extends SettingBase {
    * {@inheritdoc}
    */
   public function alterForm(array &$form, FormStateInterface $form_state, $form_id = NULL) {
+    parent::alterForm($form, $form_state, $form_id);
+
     $group = $this->getGroup($form, $form_state);
     $setting = $this->getElement($form, $form_state);
 
@@ -80,7 +82,7 @@ class RegionWells extends SettingBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state, $form_id = NULL) {
+  public static function submitForm(array &$form, FormStateInterface $form_state, $form_id = NULL) {
     $values = $form_state->getValues();
 
     // Extract the regions from individual dynamic settings.

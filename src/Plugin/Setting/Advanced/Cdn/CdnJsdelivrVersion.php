@@ -8,6 +8,7 @@ namespace Drupal\bootstrap\Plugin\Setting\Advanced\Cdn;
 
 use Drupal\bootstrap\Annotation\BootstrapConstant;
 use Drupal\bootstrap\Annotation\BootstrapSetting;
+use Drupal\bootstrap\Bootstrap;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Annotation\Translation;
 use Drupal\Core\Form\FormStateInterface;
@@ -40,7 +41,7 @@ class CdnJsdelivrVersion extends CdnProvider {
 
     $setting->setProperty('options', $this->provider->getVersions());
     $setting->setProperty('ajax', [
-      'callback' => [$this, 'ajaxCallback'],
+      'callback' => [get_class($this), 'ajaxCallback'],
       'wrapper' => 'cdn-provider-' . $plugin_id,
     ]);
 
@@ -49,6 +50,18 @@ class CdnJsdelivrVersion extends CdnProvider {
         '@provider' => $this->provider->getLabel(),
       ]));
     }
+  }
+
+  /**
+   * AJAX callback for reloading CDN provider elements.
+   *
+   * @param array $form
+   *   Nested array of form elements that comprise the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   */
+  public static function ajaxCallback(array $form, FormStateInterface $form_state) {
+    return $form['advanced']['cdn'][$form_state->getValue('cdn_provider', Bootstrap::getTheme()->getSetting('cdn_provider'))];
   }
 
 }

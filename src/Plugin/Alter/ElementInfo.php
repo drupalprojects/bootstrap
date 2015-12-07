@@ -56,16 +56,19 @@ class ElementInfo implements AlterInterface {
         }
       }
 
-      // Add necessary #process callbacks.
-      $element['#process'][] = ['Drupal\bootstrap\Plugin\ProcessManager', 'process'];
-      if ($process = $process_manager->getDefinition($type, FALSE)) {
-        $element['#process'][] = [$process['class'], 'process'];
-      }
+      // Only continue if the type isn't "form" (as it messes up AJAX).
+      if ($type !== 'form') {
+        // Add necessary #process callbacks.
+        $element['#process'][] = [get_class($process_manager), 'process'];
+        if ($process = $process_manager->getDefinition($type, FALSE)) {
+          $element['#process'][] = [$process['class'], 'process'];
+        }
 
-      // Add necessary #pre_render callbacks.
-      $element['#pre_render'][] = ['Drupal\bootstrap\Plugin\PrerenderManager', 'preRender'];
-      if ($pre_render = $pre_render_manager->getDefinition($type, FALSE)) {
-        $element['#pre_render'][] = [$pre_render['class'], 'preRender'];
+        // Add necessary #pre_render callbacks.
+        $element['#pre_render'][] = [get_class($pre_render_manager), 'preRender'];
+        if ($pre_render = $pre_render_manager->getDefinition($type, FALSE)) {
+          $element['#pre_render'][] = [$pre_render['class'], 'preRender'];
+        }
       }
     }
   }

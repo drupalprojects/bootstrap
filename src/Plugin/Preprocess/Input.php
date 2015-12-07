@@ -34,7 +34,7 @@ class Input implements PreprocessInterface {
     if ($element->isButton()) {
       $element->addClass('btn');
       $element->colorize();
-      $element->setIcon();
+      $element->setIcon($element->getProperty('icon'));
       if ($size = Bootstrap::getTheme()->getSetting('button_size')) {
         $element->addClass($size);
       }

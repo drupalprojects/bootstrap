@@ -34,10 +34,6 @@ class SystemThemeSettings extends FormBase implements FormInterface {
 
     // Iterate over all setting plugins and add them to the form.
     foreach ($theme->getSettingPlugins() as $setting) {
-      // Construct the setting element.
-      $form = $setting->buildForm($form, $form_state);
-
-      // Allow settings to alter the form further if they need to.
       $setting->alterForm($form, $form_state);
     }
   }
@@ -103,7 +99,7 @@ class SystemThemeSettings extends FormBase implements FormInterface {
    * @return \Drupal\bootstrap\Theme|FALSE
    *   The currently selected theme object or FALSE if not a Bootstrap theme.
    */
-  protected function getTheme(array &$form, FormStateInterface $form_state) {
+  public static function getTheme(array &$form, FormStateInterface $form_state) {
     $build_info = $form_state->getBuildInfo();
     $theme = isset($build_info['args'][0]) ? Bootstrap::getTheme($build_info['args'][0]) : FALSE;
 
@@ -119,8 +115,8 @@ class SystemThemeSettings extends FormBase implements FormInterface {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
-    $theme = $this->getTheme($form, $form_state);
+  public static function submitForm(array &$form, FormStateInterface $form_state) {
+    $theme = self::getTheme($form, $form_state);
     if (!$theme) {
       return;
     }
@@ -145,8 +141,8 @@ class SystemThemeSettings extends FormBase implements FormInterface {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
-    $theme = $this->getTheme($form, $form_state);
+  public static function validateForm(array &$form, FormStateInterface $form_state) {
+    $theme = self::getTheme($form, $form_state);
     if (!$theme) {
       return;
     }

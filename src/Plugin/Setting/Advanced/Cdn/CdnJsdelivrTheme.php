@@ -50,7 +50,7 @@ class CdnJsdelivrTheme extends CdnProvider {
         $options[$theme] = $data['title'];
       }
     }
-    $setting->setProperty('options', $this->provider->getVersions());
+    $setting->setProperty('options', $options);
   }
 
 }
