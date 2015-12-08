@@ -1,15 +1,15 @@
-globalscripts:
-  version: VERSION
+base-theme:
+  css: {}
   js:
-    js/bootstrap.js: {}
+    js/base-theme.js: {}
   dependencies:
     - core/jquery
     - core/jquery.once
-    - core/drupal.ajax
     - core/drupal
     - core/drupalSettings
 
-adminscript:
-  version: VERSION
+theme-settings:
   js:
-    js/bootstrap.admin.js: {}
+    js/theme-settings.js: {}
+  dependencies:
+    - bootstrap/base-theme

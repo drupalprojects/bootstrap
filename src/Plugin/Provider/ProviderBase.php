@@ -56,11 +56,20 @@ class ProviderBase extends PluginBase implements ProviderInterface {
 
     // Iterate over each type.
     foreach ($types as $type) {
-      if (\Drupal::config("preprocess_$type") && !empty($this->assets['min'][$type])) {
-        $assets[$type] = $this->assets['min'][$type];
-      }
-      elseif (!empty($this->assets[$type])) {
-        $assets[$type] = $this->assets[$type];
+      $files = \Drupal::config("preprocess_$type") && isset($this->assets['min'][$type]) ? $this->assets['min'][$type] : (isset($this->assets[$type]) ? $this->assets[$type] : []);
+      foreach ($files as $asset) {
+        $data = [
+          'data' => $asset,
+          'type' => 'external',
+          'weight' => -19.999,
+        ];
+        // CSS library assets use "SMACSS" categorization, assign it to "base".
+        if ($type === 'css') {
+          $assets[$type]['base'][$asset] = $data;
+        }
+        else {
+          $assets[$type][$asset] = $data;
+        }
       }
     }
 

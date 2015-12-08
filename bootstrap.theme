@@ -32,15 +32,6 @@ Bootstrap::initialize();
 /**
  * {@inheritdoc}
  *
- * @see \Drupal\bootstrap\Plugin\Alter\Css::alter()
- */
-function bootstrap_css_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
-  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
-}
-
-/**
- * {@inheritdoc}
- *
  * @see \Drupal\bootstrap\Plugin\Alter\ElementInfo::alter()
  */
 function bootstrap_element_info_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
@@ -89,6 +80,15 @@ function bootstrap_js_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
  * @see \Drupal\bootstrap\Plugin\Alter\JsCallbackFilterXss::alter()
  */
 function bootstrap_js_callback_filter_xss_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
+  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
+}
+
+/**
+ * {@inheritdoc}
+ *
+ * @see \Drupal\bootstrap\Plugin\Alter\LibraryInfo::alter()
+ */
+function bootstrap_library_info_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
   Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
 }
 

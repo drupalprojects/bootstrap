@@ -73,19 +73,6 @@ class Js extends PluginBase implements AlterInterface {
         }
       }
     }
-
-    // Add CDN assets, if any.
-    if ($assets = $this->theme->getProvider()->getAssets('js')) {
-      $weight = -99.99;
-      foreach ($assets as $asset) {
-        $weight += .01;
-        $js[$asset] = drupal_js_defaults($asset);
-        $js[$asset]['type'] = 'external';
-        $js[$asset]['every_page'] = TRUE;
-        $js[$asset]['scope'] = 'footer';
-        $js[$asset]['weight'] = $weight;
-      }
-    }
   }
 
 }

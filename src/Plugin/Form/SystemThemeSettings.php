@@ -69,7 +69,7 @@ class SystemThemeSettings extends FormBase implements FormInterface {
     // Provide the necessary default groups.
     $form['bootstrap'] = [
       '#type' => 'vertical_tabs',
-      '#attached' => ['library' => ['bootstrap/adminscript']],
+      '#attached' => ['library' => ['bootstrap/theme-settings']],
       '#prefix' => '<h2><small>' . t('Bootstrap Settings') . '</small></h2>',
       '#weight' => -10,
     ];
