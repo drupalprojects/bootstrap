@@ -7,9 +7,9 @@
 namespace Drupal\bootstrap\Plugin;
 
 use Drupal\bootstrap\Theme;
+use Drupal\bootstrap\Utility\Element;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
 
 /**
  * Manages discovery and instantiation of Bootstrap form process callbacks.
@@ -71,24 +71,24 @@ class ProcessManager extends PluginManager {
 
       // If element is nested, return the referenced parent from the form.
       if (!empty($array_parents)) {
-        $parent = &NestedArray::getValue($form, $array_parents);
+        $parent = new Element(NestedArray::getValue($form, $array_parents));
       }
       // Otherwise return the complete form.
       else {
-        $parent = &$form;
+        $parent = new Element($complete_form);
       }
 
       // Ignore buttons before we find the element in the form.
-      $found_current_element = FALSE;
-      foreach (Element::children($parent) as $child) {
-        if ($parent[$child] === $element) {
-          $found_current_element = TRUE;
+      $current = FALSE;
+      foreach ($parent->children() as $child) {
+        if ($child->getArray() === $element) {
+          $current = $child;
           continue;
         }
 
-        if ($found_current_element && (_bootstrap_is_button($parent[$child]) || (is_array($parent[$child]) && _bootstrap_is_button(current($parent[$child]))))) {
-          _bootstrap_iconize_button($parent[$child]);
-          $element['#field_suffix'] = \Drupal::service('renderer')->render($parent[$child]);
+        if ($current && $child->isButton()) {
+          $child->setIcon();
+          $element['#field_suffix'] = $child->getArray();
           break;
         }
       }

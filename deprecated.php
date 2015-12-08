@@ -348,6 +348,7 @@ function _bootstrap_get_base_themes($theme_key = NULL, $include_theme_key = FALS
  * @see \Drupal\bootstrap\Utility\Element::getClasses()
  */
 function &_bootstrap_get_classes(array &$element, $property = 'attributes') {
+  Bootstrap::deprecated();
   $e = new Element($element);
   return $e->getClasses($property);
 }

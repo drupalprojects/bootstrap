@@ -798,12 +798,13 @@ class Bootstrap {
       // Initialize the active theme.
       $active_theme = self::getTheme();
 
-      // Include any deprecated.inc file from each theme.
-      // @todo create a setting that makes this opt-in.
+      // Include deprecated functions.
       foreach ($active_theme->getAncestry() as $ancestor) {
-        $files = $ancestor->fileScan('/^deprecated\.(inc|inc\.php|php)$/');
-        if ($file = reset($files)) {
-          $ancestor->includeOnce($file->uri, FALSE);
+        if ($ancestor->getSetting('include_deprecated')) {
+          $files = $ancestor->fileScan('/^deprecated\.php$/');
+          if ($file = reset($files)) {
+            $ancestor->includeOnce($file->uri, FALSE);
+          }
         }
       }
 
