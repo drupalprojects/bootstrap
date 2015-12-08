@@ -133,13 +133,13 @@ class CdnProvider extends SettingBase {
     // Indicate there was an error retrieving the provider's API data.
     if ($provider->hasError() || $provider->isImported()) {
       if ($provider->hasError()) {
-        $prefix = $group->$plugin_id->getProperty('prefix') ?: '';
-        $prefix .= '<div class="alert alert-danger messages error"><strong>' . t('ERROR') . ':</strong> ' . t('Unable to reach or parse the data provided by the @title API. Ensure the server this website is hosted on is able to initiate HTTP requests via <a href=":drupal_http_request" target="_blank">drupal_http_request()</a>. If the request consistently fails, it is likely that there are certain PHP functions that have been disabled by the hosting provider for security reasons. It is possible to manually copy and paste the contents of the following URL into the "Imported @title data" section below.<br /><br /><a href=":provider_api" target="_blank">:provider_api</a>.', [
-            '@title' => $provider['title'],
-            ':provider_api' => $provider['api'],
-            ':drupal_http_request' => 'https://api.drupal.org/api/drupal/includes%21common.inc/function/drupal_http_request/7',
-          ]) . '</div>';
-        $group->$plugin_id->setProperty('prefix', $prefix);
+        $group->$plugin_id->error = [
+          '#markup' => '<div class="alert alert-danger messages error"><strong>' . t('ERROR') . ':</strong> ' . t('Unable to reach or parse the data provided by the @title API. Ensure the server this website is hosted on is able to initiate HTTP requests. If the request consistently fails, it is likely that there are certain PHP functions that have been disabled by the hosting provider for security reasons. It is possible to manually copy and paste the contents of the following URL into the "Imported @title data" section below.<br /><br /><a href=":provider_api" target="_blank">:provider_api</a>.', [
+              '@title' => $provider->getLabel(),
+              ':provider_api' => $provider->getApi(),
+            ]) . '</div>',
+          '#weight' => -20,
+        ];
       }
 
       $group->$plugin_id->import = [

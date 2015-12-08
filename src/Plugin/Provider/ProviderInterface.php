@@ -15,6 +15,14 @@ use Drupal\Component\Plugin\PluginInspectionInterface;
 interface ProviderInterface extends PluginInspectionInterface, DerivativeInspectionInterface {
 
   /**
+   * Retrieves the API URL if set.
+   *
+   * @return string
+   *   The API URL.
+   */
+  public function getApi();
+
+  /**
    * Retrieves Provider assets for the active provider, if any.
    *
    * @param string|array $types

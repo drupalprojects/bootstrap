@@ -40,6 +40,13 @@ class ProviderBase extends PluginBase implements ProviderInterface {
   /**
    * {@inheritdoc}
    */
+  public function getApi() {
+    return $this->pluginDefinition['api'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getAssets($types = NULL) {
     $assets = [];
 
@@ -126,7 +133,7 @@ class ProviderBase extends PluginBase implements ProviderInterface {
     file_prepare_directory($provider_path, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
 
     // Process API data.
-    if (!empty($definition['api'])) {
+    if ($api = $this->getApi()) {
       // Use manually imported API data, if it exists.
       if (file_exists("$provider_path/$plugin_id.json") && ($imported_data = file_get_contents("$provider_path/$plugin_id.json"))) {
         $definition['imported'] = TRUE;
@@ -136,7 +143,7 @@ class ProviderBase extends PluginBase implements ProviderInterface {
       // an "api" URL to use.
       else {
         $client = \Drupal::httpClient();
-        $request = new Request('GET', $definition['api']);
+        $request = new Request('GET', $api);
         try {
           $response = $client->send($request);
         }
