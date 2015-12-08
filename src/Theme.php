@@ -115,6 +115,26 @@ class Theme {
   }
 
   /**
+   * Retrieves the theme's settings array appropriate for drupalSettings.
+   *
+   * @return array
+   *   The theme settings for drupalSettings.
+   */
+  public function drupalSettings() {
+    $cache = $this->getCache('settings');
+    $drupal_settings = $cache->get('drupalSettings');
+    if (!isset($drupal_settings)) {
+      foreach ($this->getSettingPlugins() as $name => $setting) {
+        if ($setting->drupalSettings()) {
+          $drupal_settings[$name] = TRUE;
+        }
+      }
+      $cache->set('drupalSettings', $drupal_settings);
+    }
+    return array_intersect_key($this->settings()->get(), $drupal_settings);
+  }
+
+  /**
    * Wrapper for the core file_scan_directory() function.
    *
    * Finds all files that match a given mask in the given directories and then

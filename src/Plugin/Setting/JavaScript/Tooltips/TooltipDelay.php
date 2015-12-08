@@ -26,4 +26,13 @@ use Drupal\Core\Annotation\Translation;
  *   },
  * )
  */
-class TooltipDelay extends SettingBase {}
+class TooltipDelay extends SettingBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function drupalSettings() {
+    return !!$this->theme->getSetting('tooltip_enabled');
+  }
+
+}

@@ -26,4 +26,13 @@ use Drupal\Core\Annotation\Translation;
  *   },
  * )
  */
-class PopoverTriggerAutoclose extends SettingBase {}
+class PopoverTriggerAutoclose extends SettingBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function drupalSettings() {
+    return !!$this->theme->getSetting('popover_enabled');
+  }
+
+}

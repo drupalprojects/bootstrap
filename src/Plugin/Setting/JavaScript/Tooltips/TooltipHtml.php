@@ -26,4 +26,13 @@ use Drupal\Core\Annotation\Translation;
  *   },
  * )
  */
-class TooltipHtml extends SettingBase {}
+class TooltipHtml extends SettingBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function drupalSettings() {
+    return !!$this->theme->getSetting('tooltip_enabled');
+  }
+
+}

@@ -56,9 +56,6 @@ class ThemeSettings extends Config {
     // Retrieve the theme setting plugin discovery defaults (code).
     $defaults = [];
     foreach ($theme->getSettingPlugins() as $name => $setting) {
-      if ($name === 'schema') {
-        continue;
-      }
       $defaults[$name] = $setting->getDefaultValue();
     }
 
@@ -105,20 +102,6 @@ class ThemeSettings extends Config {
       }
     }
     return $value;
-  }
-
-  /**
-   * Retrieves a settings array appropriate for drupalSettings.
-   *
-   * @todo this should really be regulated by the settings themselves.
-   *
-   * @return array
-   *   The settings for drupalSettings.
-   */
-  public function getDrupalSettings() {
-    $settings = $this->get();
-    unset($settings['favicon'], $settings['features'], $settings['logo'], $settings['schema']);
-    return $settings;
   }
 
   /**

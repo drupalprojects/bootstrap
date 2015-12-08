@@ -44,4 +44,11 @@ class PopoverAnimation extends SettingBase {
     ]);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function drupalSettings() {
+    return !!$this->theme->getSetting('popover_enabled');
+  }
+
 }

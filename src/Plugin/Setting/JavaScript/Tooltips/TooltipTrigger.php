@@ -37,4 +37,13 @@ use Drupal\Core\Annotation\Translation;
  *   },
  * )
  */
-class TooltipTrigger extends SettingBase {}
+class TooltipTrigger extends SettingBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function drupalSettings() {
+    return !!$this->theme->getSetting('tooltip_enabled');
+  }
+
+}

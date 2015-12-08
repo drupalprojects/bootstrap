@@ -25,4 +25,13 @@ use Drupal\Core\Annotation\Translation;
  *   },
  * )
  */
-class FormsHasErrorValueToggle extends SettingBase {}
+class FormsHasErrorValueToggle extends SettingBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function drupalSettings() {
+    return TRUE;
+  }
+
+}

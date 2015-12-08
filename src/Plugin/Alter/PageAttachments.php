@@ -28,7 +28,7 @@ class PageAttachments extends PluginBase implements AlterInterface {
     if ($this->theme->getSetting('tooltip_enabled')) {
       $attachments['#attached']['library'][] = 'bootstrap/tooltips';
     }
-    $attachments['#attached']['drupalSettings']['bootstrap'] = $this->theme->settings()->getDrupalSettings();
+    $attachments['#attached']['drupalSettings']['bootstrap'] = $this->theme->drupalSettings();
   }
 
 }

@@ -15,6 +15,19 @@ use Drupal\Core\Form\FormStateInterface;
 interface SettingInterface extends FormInterface {
 
   /**
+   * Determines whether a theme setting should added to drupalSettings.
+   *
+   * By default, this value will be FALSE unless the method is overridden. This
+   * is to ensure that no sensitive information can be potientially leaked.
+   *
+   * @see \Drupal\bootstrap\Plugin\Setting\SettingBase::drupalSettings()
+   *
+   * @return bool
+   *   TRUE or FALSE
+   */
+  public function drupalSettings();
+
+  /**
    * Retrieves the setting's default value.
    *
    * @return string

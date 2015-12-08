@@ -37,4 +37,13 @@ use Drupal\Core\Annotation\Translation;
  *   },
  * )
  */
-class PopoverTrigger extends SettingBase {}
+class PopoverTrigger extends SettingBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function drupalSettings() {
+    return !!$this->theme->getSetting('popover_enabled');
+  }
+
+}

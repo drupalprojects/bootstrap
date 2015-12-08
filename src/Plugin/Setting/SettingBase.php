@@ -24,6 +24,13 @@ class SettingBase extends PluginBase implements SettingInterface {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function drupalSettings() {
+    return FALSE;
+  }
+
+  /**
    * Retrieves all the form properties from the setting definition.
    *
    * @return array
