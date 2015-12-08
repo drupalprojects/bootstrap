@@ -32,15 +32,15 @@
       <ul{{ attributes.addClass('dropdown-menu') }}>
     {% endif %}
     {% for item in items %}
-      {% if item.attributes.hasClass('expanded') %}
-        <li{{ item.attributes.addClass('dropdown') }}>
+      {% if menu_level == 0 and item.is_expanded %}
+        <li{{ item.attributes.addClass('expanded', 'dropdown') }}>
         <a href="{{ item.url }}" class="dropdown-toggle" data-target="#" data-toggle="dropdown">{{ item.title }} <span class="caret"></span></a>
       {% else %}
         <li{{ item.attributes }}>
         {{ link(item.title, item.url) }}
       {% endif %}
       {% if item.below %}
-        {{ menus.menu_links(item.below, attributes, menu_level + 1) }}
+        {{ menus.menu_links(item.below, attributes.removeClass('nav'), menu_level + 1) }}
       {% endif %}
       </li>
     {% endfor %}
