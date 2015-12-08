@@ -44,24 +44,30 @@
  * @ingroup templates
  */
 #}
+{%
+  set body_classes = [
+    logged_in ? 'user-logged-in',
+    not root_path ? 'path-frontpage' : 'path-' ~ root_path|clean_class,
+    node_type ? 'page-node-type-' ~ node_type|clean_class,
+    db_offline ? 'db-offline',
+    theme.settings.navbar_position ? 'navbar-is-' ~ theme.settings.navbar_position,
+  ]
+%}
 <!DOCTYPE html>
 <html {{ html_attributes }}>
-<head profile="{{ grddl_profile }}">
-  <head-placeholder token="{{ placeholder_token|raw }}">
-  <title>{{ head_title|safe_join(' | ') }}</title>
-  <css-placeholder token="{{ placeholder_token|raw }}">
-  <js-placeholder token="{{ placeholder_token|raw }}">
-</head>
-{% set classes = [
-  theme.settings.navbar_position ? 'navbar-is-' ~ theme.settings.navbar_position,
-] %}
-<body{{ attributes.addClass(classes) }}>
-  <a href="#main-content" class="visually-hidden focusable skip-link">
-    {{ 'Skip to main content'|t }}
-  </a>
-  {{ page_top }}
-  {{ page }}
-  {{ page_bottom }}
-  <js-bottom-placeholder token="{{ placeholder_token|raw }}">
-</body>
+  <head>
+    <head-placeholder token="{{ placeholder_token|raw }}">
+    <title>{{ head_title|safe_join(' | ') }}</title>
+    <css-placeholder token="{{ placeholder_token|raw }}">
+    <js-placeholder token="{{ placeholder_token|raw }}">
+  </head>
+  <body{{ attributes.addClass(body_classes) }}>
+    <a href="#main-content" class="visually-hidden focusable skip-link">
+      {{ 'Skip to main content'|t }}
+    </a>
+    {{ page_top }}
+    {{ page }}
+    {{ page_bottom }}
+    <js-bottom-placeholder token="{{ placeholder_token|raw }}">
+  </body>
 </html>
