@@ -53,33 +53,6 @@ class Page extends PluginBase implements PreprocessInterface {
     else {
       $variables['navbar_attributes']['class'][] = 'navbar-default';
     }
-
-    // Primary nav.
-    $menu_tree = \Drupal::menuTree();
-    // Render the top-level administration menu links.
-    $parameters = new MenuTreeParameters();
-    $tree = $menu_tree->load('main', $parameters);
-    $manipulators = [
-      ['callable' => 'menu.default_tree_manipulators:checkAccess'],
-      ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
-    ];
-    $tree = $menu_tree->transform($tree, $manipulators);
-    $variables['primary_nav'] = $menu_tree->build($tree);
-    $variables['primary_nav']['#attributes']['class'][] = 'navbar-nav';
-
-    // Primary nav.
-    $menu_tree = \Drupal::menuTree();
-    // Render the top-level administration menu links.
-    $parameters = new MenuTreeParameters();
-    $tree = $menu_tree->load('account', $parameters);
-    $manipulators = [
-      ['callable' => 'menu.default_tree_manipulators:checkAccess'],
-      ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
-    ];
-    $tree = $menu_tree->transform($tree, $manipulators);
-    $variables['secondary_nav'] = $menu_tree->build($tree);
-    $variables['secondary_nav']['#attributes']['class'][] = 'navbar-nav';
-    $variables['secondary_nav']['#attributes']['class'][] = 'secondary';
   }
 
 }
