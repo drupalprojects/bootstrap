@@ -1,10 +1,9 @@
+# Placeholder for the "base-theme" library.
+# @see \Drupal\bootstrap\Plugin\Alter\LibraryInfo
 base-theme:
-  css: {}
-  js:
-    js/base-theme.js: {}
   dependencies:
+    - core/underscore
     - core/jquery
-    - core/jquery.once
     - core/drupal
     - core/drupalSettings
 
@@ -12,4 +11,69 @@ theme-settings:
   js:
     js/theme-settings.js: {}
   dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+    - core/drupalSettings
+
+popovers:
+  js:
+    js/popovers.js: {}
+  dependencies:
     - bootstrap/base-theme
+
+tooltips:
+  js:
+    js/tooltips.js: {}
+  dependencies:
+    - bootstrap/base-theme
+
+# libraries-extend
+drupal.ajax:
+  js:
+    js/misc/ajax.js: {}
+
+drupal.form:
+  js:
+    js/misc/form.js: {}
+  dependencies:
+    - bootstrap/base-theme
+
+drupal.progress:
+  js:
+    js/misc/progress.js: {}
+
+drupal.states:
+  js:
+    js/misc/states.js: {}
+
+drupal.tabledrag:
+  js:
+    js/misc/tabledrag.js: {}
+
+# libraries-override
+drupal.collapse:
+  js:
+    js/misc/collapse.js: {}
+  dependencies:
+    - bootstrap/base-theme
+    - core/modernizr
+    - core/drupal.form
+    - core/jquery.once
+
+drupal.dropbutton:
+  js:
+    js/misc/dropbutton/dropbutton.js: {}
+  dependencies:
+    - bootstrap/base-theme
+    - core/jquery.once
+
+drupal.vertical-tabs:
+  js:
+    # Load before core/drupal.collapse.
+    js/misc/vertical-tabs.js: { weight: -1 }
+  dependencies:
+    - bootstrap/base-theme
+    - core/jquery.once
+    - core/drupal.form
+    - core/matchmedia

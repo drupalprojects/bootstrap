@@ -325,24 +325,9 @@ class Theme {
    */
   public function getSetting($name, $original = FALSE) {
     if ($original) {
-      return $this->getSettings()->getOriginal($name);
+      return $this->settings()->getOriginal($name);
     }
-    return $this->getSettings()->get($name);
-  }
-
-  /**
-   * Retrieves the theme settings instance.
-   *
-   * @return \Drupal\bootstrap\ThemeSettings
-   *   All settings.
-   */
-  public function getSettings() {
-    static $themes = [];
-    $name = $this->getName();
-    if (!isset($themes[$name])) {
-      $themes[$name] = new ThemeSettings($this, $this->themeHandler);
-    }
-    return $themes[$name];
+    return $this->settings()->get($name);
   }
 
   /**
@@ -445,7 +430,7 @@ class Theme {
    *   Name of the theme setting to remove.
    */
   public function removeSetting($name) {
-    $this->getSettings()->clear($name)->save();
+    $this->settings()->clear($name)->save();
   }
 
   /**
@@ -457,7 +442,22 @@ class Theme {
    *   Value to associate with the theme setting.
    */
   public function setSetting($name, $value) {
-    $this->getSettings()->set($name, $value)->save();
+    $this->settings()->set($name, $value)->save();
+  }
+
+  /**
+   * Retrieves the theme settings instance.
+   *
+   * @return \Drupal\bootstrap\ThemeSettings
+   *   All settings.
+   */
+  public function settings() {
+    static $themes = [];
+    $name = $this->getName();
+    if (!isset($themes[$name])) {
+      $themes[$name] = new ThemeSettings($this, $this->themeHandler);
+    }
+    return $themes[$name];
   }
 
   /**

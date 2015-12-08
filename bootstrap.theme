@@ -68,15 +68,6 @@ function bootstrap_icon_bundle_list_alter(&$data, &$context1 = NULL, &$context2 
 /**
  * {@inheritdoc}
  *
- * @see \Drupal\bootstrap\Plugin\Alter\Js::alter()
- */
-function bootstrap_js_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
-  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
-}
-
-/**
- * {@inheritdoc}
- *
  * @see \Drupal\bootstrap\Plugin\Alter\JsCallbackFilterXss::alter()
  */
 function bootstrap_js_callback_filter_xss_alter(&$data, &$context1 = NULL, &$context2 = NULL) {

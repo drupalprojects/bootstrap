@@ -1,4 +1,9 @@
+/**
+ * @file
+ * Extends core/misc/states.js.
+ */
 (function($) {
+
   // Unbind core state.js from document first so we can then override below.
   $(document).unbind('state:disabled');
 
@@ -21,4 +26,5 @@
       // See https://bugs.webkit.org/show_bug.cgi?id=23789
     }
   });
+
 })(jQuery);

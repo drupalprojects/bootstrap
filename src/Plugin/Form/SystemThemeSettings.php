@@ -69,7 +69,11 @@ class SystemThemeSettings extends FormBase implements FormInterface {
     // Provide the necessary default groups.
     $form['bootstrap'] = [
       '#type' => 'vertical_tabs',
-      '#attached' => ['library' => ['bootstrap/theme-settings']],
+      '#attached' => [
+        'library' => [
+          'bootstrap/theme-settings',
+        ],
+      ],
       '#prefix' => '<h2><small>' . t('Bootstrap Settings') . '</small></h2>',
       '#weight' => -10,
     ];
@@ -128,7 +132,7 @@ class SystemThemeSettings extends FormBase implements FormInterface {
       $setting->submitForm($form, $form_state);
 
       // Remove values that didn't change so they don't get saved to config.
-      $settings = $theme->getSettings();
+      $settings = $theme->settings();
       if (!$settings->overridesValue($name, $form_state->getValue($name))) {
         $form_state->unsetValue($name);
       }

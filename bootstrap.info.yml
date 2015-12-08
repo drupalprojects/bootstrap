@@ -19,21 +19,23 @@ regions:
   page_top: 'Page top'
   page_bottom: 'Page bottom'
 
-stylesheets-remove:
-  - 'core/misc/dropbutton/dropbutton.css'
-  - 'core/misc/dropbutton/dropbutton.theme.css'
-  - 'core/misc/vertical-tabs.css'
-  - '@system/css/system.admin.css'
-  - '@system/css/components/action-links.theme.css'
-  - '@system/css/components/button.theme.css'
-  - '@system/css/components/details.theme.css'
-  - '@system/css/components/exposed-filters.theme.css'
-  - '@system/css/components/form.theme.css'
-  - '@system/css/components/inline-form.theme.css'
-  - '@system/css/components/menu.theme.css'
-  - '@system/css/components/messages.theme.css'
-  - '@system/css/components/pager.theme.css'
-  - '@system/css/components/tabs.theme.css'
-
 libraries:
   - 'bootstrap/base-theme'
+
+libraries-extend:
+  core/drupal.ajax:
+    - bootstrap/drupal.ajax
+  core/drupal.form:
+    - bootstrap/drupal.form
+  core/drupal.progress:
+    - bootstrap/drupal.progress
+  core/drupal.states:
+    - bootstrap/drupal.states
+  core/drupal.tabledrag:
+    - bootstrap/drupal.tabledrag
+
+libraries-override:
+  core/drupal.collapse: bootstrap/drupal.collapse
+  core/drupal.dropbutton: bootstrap/drupal.dropbutton
+  core/drupal.vertical-tabs: bootstrap/drupal.vertical-tabs
+  system/admin: false

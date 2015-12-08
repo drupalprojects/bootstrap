@@ -108,6 +108,20 @@ class ThemeSettings extends Config {
   }
 
   /**
+   * Retrieves a settings array appropriate for drupalSettings.
+   *
+   * @todo this should really be regulated by the settings themselves.
+   *
+   * @return array
+   *   The settings for drupalSettings.
+   */
+  public function getDrupalSettings() {
+    $settings = $this->get();
+    unset($settings['favicon'], $settings['features'], $settings['logo'], $settings['schema']);
+    return $settings;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function getOriginal($key = '', $apply_overrides = TRUE) {

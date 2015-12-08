@@ -1,10 +1,10 @@
 <?php
 /**
  * @file
- * Contains \Drupal\bootstrap\Plugin\Setting\JavaScript\Forms\FormsHasErrorValueToggle.
+ * Contains \Drupal\bootstrap\Plugin\Setting\General\Forms\FormsHasErrorValueToggle.
  */
 
-namespace Drupal\bootstrap\Plugin\Setting\JavaScript\Forms;
+namespace Drupal\bootstrap\Plugin\Setting\General\Forms;
 
 use Drupal\bootstrap\Annotation\BootstrapSetting;
 use Drupal\bootstrap\Plugin\Setting\SettingBase;
@@ -20,7 +20,7 @@ use Drupal\Core\Annotation\Translation;
  *   description = @Translation("If an element has a <code>.has-error</code> class attached to it, enabling this will automatically remove that class when a value is entered. This feature compliments the <code>General > Forms > Make required elements display as an error</code> feature."),
  *   defaultValue = 1,
  *   groups = {
- *     "javascript" = @Translation("JavaScript"),
+ *     "general" = @Translation("General"),
  *     "forms" = @Translation("Forms"),
  *   },
  * )

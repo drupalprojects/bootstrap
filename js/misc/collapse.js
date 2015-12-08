@@ -1,3 +1,7 @@
+/**
+ * @file
+ * Overrides core/misc/progress.js.
+ */
 (function ($, Modernizr, Drupal) {
 
   "use strict";

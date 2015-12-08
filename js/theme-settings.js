@@ -61,9 +61,6 @@
       // Javascript.
       $context.find('#edit-javascript').drupalSetSummary(function () {
         var summary = [];
-        if ($context.find('input[name="anchors_fix"]').is(':checked')) {
-          summary.push(Drupal.t('Anchors'));
-        }
         if ($context.find('input[name="popover_enabled"]').is(':checked')) {
           summary.push(Drupal.t('Popovers'));
         }

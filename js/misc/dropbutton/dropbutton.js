@@ -1,4 +1,9 @@
-(function ($, Drupal) {
+/**
+ * @file
+ * Overrides core/misc/dropbutton/dropbutton.js.
+ */
+
+(function ($, window, Drupal, drupalSettings) {
 
   "use strict";
 
@@ -119,4 +124,4 @@
   // Expose constructor in the public space.
   Drupal.DropButton = DropButton;
 
-})(jQuery, Drupal);
+})(jQuery, this, Drupal, drupalSettings);
