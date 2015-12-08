@@ -839,6 +839,16 @@ class Bootstrap {
       }
     }
 
+    // Add active theme context.
+    // @see https://www.drupal.org/node/2630870
+    if (!isset($variables['theme'])) {
+      $variables['theme'] = $theme->getInfo();
+      $variables['theme']['name'] = $theme->getName();
+      $variables['theme']['path'] = $theme->getPath();
+      $variables['theme']['title'] = $theme->getTitle();
+      $variables['theme']['settings'] = $theme->settings()->get();
+    }
+
     // Invoke necessary preprocess plugin.
     if (isset($info['bootstrap preprocess'])) {
       if ($preprocess_manager->hasDefinition($info['bootstrap preprocess'])) {
