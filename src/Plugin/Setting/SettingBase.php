@@ -6,34 +6,15 @@
 
 namespace Drupal\bootstrap\Plugin\Setting;
 
-use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\Plugin\PluginBase;
 use Drupal\bootstrap\Utility\Element;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Url;
 
 /**
  * Base class for a setting.
  */
 class SettingBase extends PluginBase implements SettingInterface {
-
-  /**
-   * The currently set theme object.
-   *
-   * @var \Drupal\bootstrap\Theme
-   */
-  protected $theme;
-
-  /**
-   * {@inheritdoc}
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition) {
-    if (!isset($configuration['theme'])) {
-      $configuration['theme'] = Bootstrap::getTheme();
-    }
-    $this->theme = $configuration['theme'];
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-  }
 
   /**
    * {@inheritdoc}

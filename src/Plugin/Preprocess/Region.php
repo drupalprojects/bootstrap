@@ -8,6 +8,7 @@ namespace Drupal\bootstrap\Plugin\Preprocess;
 
 use Drupal\bootstrap\Annotation\BootstrapPreprocess;
 use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\Plugin\PluginBase;
 
 /**
  * Pre-processes variables for the "region" theme hook.
@@ -18,7 +19,7 @@ use Drupal\bootstrap\Bootstrap;
  *   id = "region"
  * )
  */
-class Region implements PreprocessInterface {
+class Region extends PluginBase implements PreprocessInterface {
 
   /**
    * {@inheritdoc}
@@ -27,8 +28,6 @@ class Region implements PreprocessInterface {
     $region = $variables['elements']['#region'];
     $variables['region'] = $region;
     $variables['content'] = $variables['elements']['#children'];
-
-    $theme = Bootstrap::getTheme();
 
     // Content region.
     if ($region === 'content') {
@@ -51,7 +50,7 @@ class Region implements PreprocessInterface {
     // Support for "well" classes in regions.
     static $region_wells;
     if (!isset($wells)) {
-      $region_wells = $theme->getSetting('region_wells');
+      $region_wells = $this->theme->getSetting('region_wells');
     }
     if (!empty($region_wells[$region])) {
       $variables['attributes']['class'][] = $region_wells[$region];

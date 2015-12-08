@@ -7,6 +7,7 @@
 namespace Drupal\bootstrap\Plugin\Preprocess;
 
 use Drupal\bootstrap\Annotation\BootstrapPreprocess;
+use Drupal\bootstrap\Plugin\PluginBase;
 
 /**
  * Pre-processes variables for the "menu_local_task" theme hook.
@@ -17,7 +18,7 @@ use Drupal\bootstrap\Annotation\BootstrapPreprocess;
  *   id = "menu_local_task"
  * )
  */
-class MenuLocalTask implements PreprocessInterface {
+class MenuLocalTask extends PluginBase implements PreprocessInterface {
 
   /**
    * {@inheritdoc}

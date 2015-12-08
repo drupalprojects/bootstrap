@@ -7,7 +7,7 @@
 namespace Drupal\bootstrap\Plugin\Alter;
 
 use Drupal\bootstrap\Annotation\BootstrapAlter;
-use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\Plugin\PluginBase;
 use Drupal\bootstrap\Theme;
 
 /**
@@ -17,16 +17,14 @@ use Drupal\bootstrap\Theme;
  *   id = "js"
  * )
  */
-class Js implements AlterInterface {
+class Js extends PluginBase implements AlterInterface {
 
   /**
    * {@inheritdoc}
    */
   public function alter(&$js, &$context1 = NULL, &$context2 = NULL) {
-    $theme = Bootstrap::getTheme();
-
     // @todo Refactor to use libraries properly.
-    foreach ($theme->getAncestry() as $ancestor) {
+    foreach ($this->theme->getAncestry() as $ancestor) {
       $files = $ancestor->fileScan('/\.js$/', 'js', ['ignore_flags' => Theme::IGNORE_CORE | Theme::IGNORE_DEV | Theme::IGNORE_DOCS]);
       foreach ($files as $file) {
         if ($file->name == 'bootstrap' || $file->name == 'bootstrap.admin') {
@@ -77,7 +75,7 @@ class Js implements AlterInterface {
     }
 
     // Add CDN assets, if any.
-    if ($assets = $theme->getProvider()->getAssets('js')) {
+    if ($assets = $this->theme->getProvider()->getAssets('js')) {
       $weight = -99.99;
       foreach ($assets as $asset) {
         $weight += .01;

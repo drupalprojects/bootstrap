@@ -7,6 +7,7 @@
 namespace Drupal\bootstrap\Plugin\Preprocess;
 
 use Drupal\bootstrap\Annotation\BootstrapPreprocess;
+use Drupal\bootstrap\Plugin\PluginBase;
 use Drupal\bootstrap\Utility\Element;
 
 /**
@@ -18,7 +19,7 @@ use Drupal\bootstrap\Utility\Element;
  *   id = "input"
  * )
  */
-class Input implements PreprocessInterface {
+class Input extends PluginBase implements PreprocessInterface {
 
   /**
    * {@inheritdoc}

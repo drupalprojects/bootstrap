@@ -8,6 +8,7 @@ namespace Drupal\bootstrap\Plugin\Alter;
 
 use Drupal\bootstrap\Annotation\BootstrapAlter;
 use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\Plugin\PluginBase;
 use Drupal\bootstrap\Plugin\PrerenderManager;
 use Drupal\bootstrap\Plugin\ProcessManager;
 
@@ -18,15 +19,14 @@ use Drupal\bootstrap\Plugin\ProcessManager;
  *   id = "element_info"
  * )
  */
-class ElementInfo implements AlterInterface {
+class ElementInfo extends PluginBase implements AlterInterface {
 
   /**
    * {@inheritdoc}
    */
   public function alter(&$types, &$context1 = NULL, &$context2 = NULL) {
-    $theme = Bootstrap::getTheme();
-    $process_manager = new ProcessManager($theme);
-    $pre_render_manager = new PrerenderManager($theme);
+    $process_manager = new ProcessManager($this->theme);
+    $pre_render_manager = new PrerenderManager($this->theme);
 
     foreach (array_keys($types) as $type) {
       $element = &$types[$type];

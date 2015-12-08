@@ -60,15 +60,14 @@ class ThemeRegistry extends Registry implements AlterInterface {
    * {@inheritdoc}
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition) {
-    if (!isset($configuration['theme'])) {
-      $configuration['theme'] = Bootstrap::getTheme();
-    }
-    $this->currentTheme = $configuration['theme'];
-
     // This is technically a plugin constructor, but because we wish to use the
     // protected methods of the Registry class, we must extend from it. Thus,
     // to properly construct the extended Registry object, we must pass the
     // arguments it would normally get from the service container to "fake" it.
+    if (!isset($configuration['theme'])) {
+      $configuration['theme'] = Bootstrap::getTheme();
+    }
+    $this->currentTheme = $configuration['theme'];
     parent::__construct(
       \Drupal::service('app.root'),
       \Drupal::service('cache.default'),

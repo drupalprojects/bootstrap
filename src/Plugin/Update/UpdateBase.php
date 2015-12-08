@@ -6,32 +6,13 @@
 
 namespace Drupal\bootstrap\Plugin\Update;
 
-use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\Plugin\PluginBase;
 use Drupal\bootstrap\Theme;
-use Drupal\Core\Plugin\PluginBase;
 
 /**
  * Base class for an update.
  */
 class UpdateBase extends PluginBase implements UpdateInterface {
-
-  /**
-   * The currently set theme object.
-   *
-   * @var \Drupal\bootstrap\Theme
-   */
-  protected $theme;
-
-  /**
-   * {@inheritdoc}
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition) {
-    if (!isset($configuration['theme'])) {
-      $configuration['theme'] = Bootstrap::getTheme();
-    }
-    $this->theme = $configuration['theme'];
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-  }
 
   /**
    * {@inheritdoc}

@@ -9,6 +9,7 @@ namespace Drupal\bootstrap\Plugin\Preprocess;
 use Drupal\bootstrap\Annotation\BootstrapPreprocess;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\Xss;
+use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Template\Attribute;
 
@@ -21,7 +22,7 @@ use Drupal\Core\Template\Attribute;
  *   id = "bootstrap_panel"
  * )
  */
-class BootstrapPanel implements PreprocessInterface {
+class BootstrapPanel extends PluginBase implements PreprocessInterface {
 
   /**
    * {@inheritdoc}

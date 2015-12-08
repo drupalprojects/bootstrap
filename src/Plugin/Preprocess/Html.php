@@ -7,7 +7,7 @@
 namespace Drupal\bootstrap\Plugin\Preprocess;
 
 use Drupal\bootstrap\Annotation\BootstrapPreprocess;
-use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\Plugin\PluginBase;
 
 /**
  * Pre-processes variables for the "html" theme hook.
@@ -18,13 +18,13 @@ use Drupal\bootstrap\Bootstrap;
  *   id = "html"
  * )
  */
-class Html implements PreprocessInterface {
+class Html extends PluginBase implements PreprocessInterface {
 
   /**
    * {@inheritdoc}
    */
   public function preprocess(array &$variables, $hook, array $info) {
-    switch (Bootstrap::getTheme()->getSetting('navbar_position')) {
+    switch ($this->theme->getSetting('navbar_position')) {
       case 'fixed-top':
         $variables['attributes']['class'][] = 'navbar-is-fixed-top';
         break;

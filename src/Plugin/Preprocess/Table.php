@@ -7,7 +7,7 @@
 namespace Drupal\bootstrap\Plugin\Preprocess;
 
 use Drupal\bootstrap\Annotation\BootstrapPreprocess;
-use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\Plugin\PluginBase;
 
 /**
  * Pre-processes variables for the "table" theme hook.
@@ -18,7 +18,7 @@ use Drupal\bootstrap\Bootstrap;
  *   id = "table"
  * )
  */
-class Table implements PreprocessInterface {
+class Table extends PluginBase implements PreprocessInterface {
 
   /**
    * {@inheritdoc}
@@ -34,7 +34,7 @@ class Table implements PreprocessInterface {
     }
 
     // Add the necessary classes to the table.
-    self::addClasses($variables['attributes']['class'], $variables);
+    $this->addClasses($variables['attributes']['class'], $variables);
   }
 
   /**
@@ -45,35 +45,33 @@ class Table implements PreprocessInterface {
    * @param array $variables
    *   The variables of the theme hook, passed by reference.
    */
-  public static function addClasses(array &$classes, array &$variables) {
-    $theme = Bootstrap::getTheme();
-
+  protected function addClasses(array &$classes, array &$variables) {
     $context = $variables['context'];
 
     // Generic table class for all tables.
     $classes[] = 'table';
 
     // Bordered table.
-    if (!empty($context['bordered']) || $theme->getSetting('table_bordered')) {
+    if (!empty($context['bordered']) || $this->theme->getSetting('table_bordered')) {
       $classes[] = 'table-bordered';
     }
 
     // Condensed table.
-    if (!empty($context['condensed']) || $theme->getSetting('table_condensed')) {
+    if (!empty($context['condensed']) || $this->theme->getSetting('table_condensed')) {
       $classes[] = 'table-condensed';
     }
 
     // Hover rows.
-    if (!empty($context['hover']) || $theme->getSetting('table_hover')) {
+    if (!empty($context['hover']) || $this->theme->getSetting('table_hover')) {
       $classes[] = 'table-hover';
     }
 
     // Striped rows.
-    if (!empty($context['striped']) || $theme->getSetting('table_striped')) {
+    if (!empty($context['striped']) || $this->theme->getSetting('table_striped')) {
       $classes[] = 'table-striped';
     }
 
-    $variables['responsive'] = !empty($context['responsive']) ? $context['responsive'] : $theme->getSetting('table_responsive');
+    $variables['responsive'] = !empty($context['responsive']) ? $context['responsive'] : $this->theme->getSetting('table_responsive');
   }
 
 }

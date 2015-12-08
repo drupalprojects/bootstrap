@@ -8,6 +8,7 @@ namespace Drupal\bootstrap\Plugin\Preprocess;
 
 use Drupal\bootstrap\Annotation\BootstrapPreprocess;
 use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\Plugin\PluginBase;
 use Drupal\Component\Utility\SafeMarkup;
 
 /**
@@ -19,7 +20,7 @@ use Drupal\Component\Utility\SafeMarkup;
  *   id = "menu_local_action"
  * )
  */
-class MenuLocalAction implements PreprocessInterface {
+class MenuLocalAction extends PluginBase implements PreprocessInterface {
 
   /**
    * {@inheritdoc}

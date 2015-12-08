@@ -7,7 +7,7 @@
 namespace Drupal\bootstrap\Plugin\Preprocess;
 
 use Drupal\bootstrap\Annotation\BootstrapPreprocess;
-use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\Plugin\PluginBase;
 use Drupal\Core\Template\Attribute;
 
 /**
@@ -19,22 +19,21 @@ use Drupal\Core\Template\Attribute;
  *   id = "image"
  * )
  */
-class Image implements PreprocessInterface {
+class Image extends PluginBase implements PreprocessInterface {
 
   /**
    * {@inheritdoc}
    */
   public function preprocess(array &$variables, $hook, array $info) {
-    $theme = Bootstrap::getTheme();
     $attributes = new Attribute($variables['attributes']);
 
     // Add image shape, if necessary.
-    if ($shape = $theme->getSetting('image_shape')) {
+    if ($shape = $this->theme->getSetting('image_shape')) {
       $attributes->addClass($shape);
     }
 
     // Add responsiveness, if necessary.
-    if ($theme->getSetting('image_responsive')) {
+    if ($this->theme->getSetting('image_responsive')) {
       $attributes->addClass('img-responsive');
     }
 

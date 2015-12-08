@@ -17,13 +17,4 @@ use Drupal\bootstrap\Annotation\BootstrapPreprocess;
  *   id = "views_view_table"
  * )
  */
-class ViewsViewTable implements PreprocessInterface {
-
-  /**
-   * {@inheritdoc}
-   */
-  public function preprocess(array &$variables, $hook, array $info) {
-    Table::addClasses($variables['attributes']['class'], $variables);
-  }
-
-}
+class ViewsViewTable extends Table implements PreprocessInterface {}

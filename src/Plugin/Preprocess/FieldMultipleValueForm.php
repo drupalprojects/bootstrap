@@ -7,6 +7,7 @@
 namespace Drupal\bootstrap\Plugin\Preprocess;
 
 use Drupal\bootstrap\Annotation\BootstrapPreprocess;
+use Drupal\bootstrap\Plugin\PluginBase;
 use Drupal\Core\Template\Attribute;
 
 /**
@@ -18,7 +19,7 @@ use Drupal\Core\Template\Attribute;
  *   id = "field_multiple_value_form"
  * )
  */
-class FieldMultipleValueForm implements PreprocessInterface {
+class FieldMultipleValueForm extends PluginBase implements PreprocessInterface {
 
   /**
    * {@inheritdoc}

@@ -7,6 +7,7 @@
 namespace Drupal\bootstrap\Plugin\Alter;
 
 use Drupal\bootstrap\Annotation\BootstrapAlter;
+use Drupal\bootstrap\Plugin\PluginBase;
 
 /**
  * Implements hook_js_callback_filter_xss_alter().
@@ -15,7 +16,7 @@ use Drupal\bootstrap\Annotation\BootstrapAlter;
  *   id = "js_callback_filter_xss"
  * )
  */
-class JsCallbackFilterXss implements AlterInterface {
+class JsCallbackFilterXss extends PluginBase implements AlterInterface {
 
   /**
    * {@inheritdoc}

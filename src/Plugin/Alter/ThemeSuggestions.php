@@ -7,6 +7,7 @@
 namespace Drupal\bootstrap\Plugin\Alter;
 
 use Drupal\bootstrap\Annotation\BootstrapAlter;
+use Drupal\bootstrap\Plugin\PluginBase;
 
 /**
  * Implements hook_theme_suggestions_alter().
@@ -15,7 +16,7 @@ use Drupal\bootstrap\Annotation\BootstrapAlter;
  *   id = "theme_suggestions"
  * )
  */
-class ThemeSuggestions implements AlterInterface {
+class ThemeSuggestions extends PluginBase implements AlterInterface {
 
   /**
    * {@inheritdoc}

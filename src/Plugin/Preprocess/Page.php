@@ -7,7 +7,7 @@
 namespace Drupal\bootstrap\Plugin\Preprocess;
 
 use Drupal\bootstrap\Annotation\BootstrapPreprocess;
-use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\Plugin\PluginBase;
 use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Template\Attribute;
 
@@ -20,14 +20,12 @@ use Drupal\Core\Template\Attribute;
  *   id = "page"
  * )
  */
-class Page implements PreprocessInterface {
+class Page extends PluginBase implements PreprocessInterface {
 
   /**
    * {@inheritdoc}
    */
   public function preprocess(array &$variables, $hook, array $info) {
-    $theme = Bootstrap::getTheme();
-
     // Add information about the number of sidebars.
     $variables['content_column_attributes'] = new Attribute();
     $variables['content_column_attributes']['class'] = [];
@@ -43,13 +41,13 @@ class Page implements PreprocessInterface {
 
     $variables['navbar_attributes'] = new Attribute();
     $variables['navbar_attributes']['class'] = ['navbar'];
-    if ($theme->getSetting('navbar_position') !== '') {
-      $variables['navbar_attributes']['class'][] = 'navbar-' . $theme->getSetting('navbar_position');
+    if ($this->theme->getSetting('navbar_position') !== '') {
+      $variables['navbar_attributes']['class'][] = 'navbar-' . $this->theme->getSetting('navbar_position');
     }
     else {
       $variables['navbar_attributes']['class'][] = 'container';
     }
-    if ($theme->getSetting('navbar_inverse')) {
+    if ($this->theme->getSetting('navbar_inverse')) {
       $variables['navbar_attributes']['class'][] = 'navbar-inverse';
     }
     else {

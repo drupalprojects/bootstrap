@@ -7,6 +7,7 @@
 namespace Drupal\bootstrap\Plugin\Preprocess;
 
 use Drupal\bootstrap\Annotation\BootstrapPreprocess;
+use Drupal\bootstrap\Plugin\PluginBase;
 
 /**
  * Pre-processes variables for the "form_element_label" theme hook.
@@ -17,7 +18,7 @@ use Drupal\bootstrap\Annotation\BootstrapPreprocess;
  *   id = "form_element_label"
  * )
  */
-class FormElementLabel implements PreprocessInterface {
+class FormElementLabel extends PluginBase implements PreprocessInterface {
 
   /**
    * {@inheritdoc}

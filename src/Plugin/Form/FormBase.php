@@ -6,8 +6,8 @@
 
 namespace Drupal\bootstrap\Plugin\Form;
 
+use Drupal\bootstrap\Plugin\PluginBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Plugin\PluginBase;
 
 /**
  * Base form alter class.

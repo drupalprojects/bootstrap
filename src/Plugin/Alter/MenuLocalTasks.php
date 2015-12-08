@@ -7,6 +7,7 @@
 namespace Drupal\bootstrap\Plugin\Alter;
 
 use Drupal\bootstrap\Annotation\BootstrapAlter;
+use Drupal\bootstrap\Plugin\PluginBase;
 
 /**
  * Implements hook_menu_local_tasks_alter().
@@ -15,7 +16,7 @@ use Drupal\bootstrap\Annotation\BootstrapAlter;
  *   id = "menu_local_tasks"
  * )
  */
-class MenuLocalTasks implements AlterInterface {
+class MenuLocalTasks extends PluginBase implements AlterInterface {
 
   /**
    * {@inheritdoc}

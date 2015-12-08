@@ -7,7 +7,7 @@
 namespace Drupal\bootstrap\Plugin\Preprocess;
 
 use Drupal\bootstrap\Annotation\BootstrapPreprocess;
-use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\Plugin\PluginBase;
 use Drupal\Core\Form\FormState;
 
 /**
@@ -19,7 +19,7 @@ use Drupal\Core\Form\FormState;
  *   id = "form_element"
  * )
  */
-class FormElement implements PreprocessInterface {
+class FormElement extends PluginBase implements PreprocessInterface {
 
   /**
    * {@inheritdoc}
@@ -34,13 +34,13 @@ class FormElement implements PreprocessInterface {
     $has_tooltip = FALSE;
 
     // This function is invoked as theme wrapper, but the rendered form element
-    // may not necessarily have been processed by Drupal::formBuilder()->doBuildForm().
+    // may not necessarily have been processed by
+    // \Drupal::formBuilder()->doBuildForm().
     $element += ['#title_display' => 'before'];
 
     // Check for errors and set correct error class.
-    $formState = new FormState();
-    if ((isset($element['#parents']) && $formState->getError($element)) || (!empty($element['#required']) && Bootstrap::getTheme()
-          ->getSetting('forms_required_has_error'))) {
+    $form_state = new FormState();
+    if ((isset($element['#parents']) && $form_state->getError($element)) || (!empty($element['#required']) && $this->theme->getSetting('forms_required_has_error'))) {
       $variables['has_error'] = TRUE;
     }
 
@@ -52,7 +52,7 @@ class FormElement implements PreprocessInterface {
     // See http://getbootstrap.com/css/#forms-controls.
     if (isset($element['#type'])) {
       if ($radio) {
-        $variables['is_radio'] =  TRUE;
+        $variables['is_radio'] = TRUE;
       }
       elseif ($checkbox) {
         $variables['is_checkbox'] = TRUE;

@@ -7,6 +7,7 @@
 namespace Drupal\bootstrap\Plugin\Preprocess;
 
 use Drupal\bootstrap\Annotation\BootstrapPreprocess;
+use Drupal\bootstrap\Plugin\PluginBase;
 
 /**
  * Pre-processes variables for the "links" theme hook.
@@ -17,7 +18,7 @@ use Drupal\bootstrap\Annotation\BootstrapPreprocess;
  *   id = "links"
  * )
  */
-class Links implements PreprocessInterface {
+class Links extends PluginBase implements PreprocessInterface {
 
   /**
    * {@inheritdoc}

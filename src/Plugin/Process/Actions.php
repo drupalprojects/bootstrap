@@ -7,6 +7,7 @@
 namespace Drupal\bootstrap\Plugin\Process;
 
 use Drupal\bootstrap\Annotation\BootstrapProcess;
+use Drupal\bootstrap\Plugin\PluginBase;
 use Drupal\bootstrap\Utility\Element;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -17,7 +18,7 @@ use Drupal\Core\Form\FormStateInterface;
  *   id = "actions"
  * )
  */
-class Actions implements ProcessInterface {
+class Actions extends PluginBase implements ProcessInterface {
 
   /**
    * {@inheritdoc}

@@ -8,6 +8,7 @@ namespace Drupal\bootstrap\Plugin\Alter;
 
 use Drupal\bootstrap\Annotation\BootstrapAlter;
 use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\Plugin\PluginBase;
 
 /**
  * Implements hook_css_alter().
@@ -16,16 +17,14 @@ use Drupal\bootstrap\Bootstrap;
  *   id = "css"
  * )
  */
-class Css implements AlterInterface {
+class Css extends PluginBase implements AlterInterface {
 
   /**
    * {@inheritdoc}
    */
   public function alter(&$css, &$context1 = NULL, &$context2 = NULL) {
-    $theme = Bootstrap::getTheme();
-
     // @todo Refactor to use libraries properly.
-    $provider = $theme->getProvider();
+    $provider = $this->theme->getProvider();
     if ($assets = $provider->getAssets('css')) {
       $cdn_weight = -2.99;
       foreach ($assets as $asset) {
@@ -43,17 +42,17 @@ class Css implements AlterInterface {
       }
 
       // Add a specific version and theme CSS overrides file.
-      $version = $theme->getSetting('cdn_' . $provider->getPluginId() . '_version');
+      $version = $this->theme->getSetting('cdn_' . $provider->getPluginId() . '_version');
       if (!$version) {
         $version = Bootstrap::FRAMEWORK_VERSION;
       }
-      $provider_theme = $theme->getSetting('cdn_' . $provider->getPluginId() . '_theme');
+      $provider_theme = $this->theme->getSetting('cdn_' . $provider->getPluginId() . '_theme');
       if (!$provider_theme) {
         $provider_theme = 'bootstrap';
       }
       $provider_theme = $provider_theme === 'bootstrap' || $provider_theme === 'bootstrap_theme' ? '' : "-$provider_theme";
 
-      foreach ($theme->getAncestry(TRUE) as $ancestor) {
+      foreach ($this->theme->getAncestry(TRUE) as $ancestor) {
         $overrides = $ancestor->getPath() . "/css/$version/overrides$provider_theme.min.css";
         if (file_exists($overrides)) {
           $css[$overrides] = [

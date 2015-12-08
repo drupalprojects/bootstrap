@@ -7,8 +7,8 @@
 namespace Drupal\bootstrap\Plugin\Provider;
 
 use Drupal\bootstrap\Annotation\BootstrapProvider;
+use Drupal\bootstrap\Plugin\PluginBase;
 use Drupal\bootstrap\Plugin\ProviderManager;
-use Drupal\Component\Plugin\PluginBase;
 use Drupal\Component\Serialization\Json;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
@@ -31,27 +31,11 @@ class ProviderBase extends PluginBase implements ProviderInterface {
   protected $assets = [];
 
   /**
-   * The currently set theme.
-   *
-   * @var \Drupal\bootstrap\Theme
-   */
-  protected $theme;
-
-  /**
    * The versions supplied by the CDN provider.
    *
    * @var array
    */
   protected $versions;
-
-  /**
-   * {@inheritdoc}
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->theme = $configuration['theme'];
-  }
-
 
   /**
    * {@inheritdoc}

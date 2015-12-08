@@ -7,7 +7,6 @@
 namespace Drupal\bootstrap\Plugin\Preprocess;
 
 use Drupal\bootstrap\Annotation\BootstrapPreprocess;
-use Drupal\bootstrap\Bootstrap;
 use Drupal\bootstrap\Utility\Element;
 
 /**
@@ -29,7 +28,7 @@ class InputButton extends Input implements PreprocessInterface {
     $element->addClass('btn');
     $element->colorize();
     $element->setIcon($element->getProperty('icon'));
-    if ($size = Bootstrap::getTheme()->getSetting('button_size')) {
+    if ($size = $this->theme->getSetting('button_size')) {
       $element->addClass($size);
     }
     parent::preprocess($variables, $hook, $info);
