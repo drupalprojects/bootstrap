@@ -7,6 +7,7 @@
 namespace Drupal\bootstrap\Plugin\Preprocess;
 
 use Drupal\bootstrap\Annotation\BootstrapPreprocess;
+use Drupal\bootstrap\Bootstrap;
 use Drupal\bootstrap\Plugin\PluginBase;
 use Drupal\bootstrap\Utility\Element;
 
@@ -26,6 +27,9 @@ class FormElement extends PluginBase implements PreprocessInterface {
    */
   public function preprocess(array &$variables, $hook, array $info) {
     $element = new Element($variables['element']);
+
+    // Set errors flag.
+    $variables['errors'] = $element->hasProperty('has_error');
 
     if ($element->getProperty('autocomplete_route_name')) {
       $variables['is_autocomplete'] = TRUE;
@@ -52,34 +56,14 @@ class FormElement extends PluginBase implements PreprocessInterface {
       }
     }
 
-    // Create variables for #input_group and #input_group_button flags.
-    $prefix = [];
-    $suffix = [];
+    // Remove the #field_prefix and #field_suffix values set in
+    // template_preprocess_form_element(). These are handled on the input level.
+    // @see \Drupal\bootstrap\Plugin\Preprocess\Input::preprocess().
     if ($element->hasProperty('input_group') || $element->hasProperty('input_group_button')) {
-      $input_group_attributes = ['class' => ['input-group-' . ($element->hasProperty('input_group_button') ? 'btn' : 'addon')]];
-      if ($element->hasProperty('field_prefix')) {
-        $prefix[] = [
-          '#type' => 'html_tag',
-          '#tag' => 'span',
-          '#attributes' => $input_group_attributes,
-          '#value' => $element->getProperty('field_prefix'),
-          '#weight' => -1,
-        ];
-      }
-      if ($element->hasProperty('field_suffix')) {
-        $suffix[] = [
-          '#type' => 'html_tag',
-          '#tag' => 'span',
-          '#attributes' => $input_group_attributes,
-          '#value' => $element->getProperty('field_suffix'),
-          '#weight' => 1,
-        ];
-      }
+      $variables['prefix'] = FALSE;
+      $variables['suffix'] = FALSE;
     }
-    $variables['prefix'] = $prefix;
-    $variables['suffix'] = $suffix;
 
-    $variables['errors'] = $element->hasProperty('has_error');
   }
 
 }

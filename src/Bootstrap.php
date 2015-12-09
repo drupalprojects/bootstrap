@@ -9,9 +9,11 @@ namespace Drupal\bootstrap;
 use Drupal\bootstrap\Plugin\AlterManager;
 use Drupal\bootstrap\Plugin\FormManager;
 use Drupal\bootstrap\Plugin\PreprocessManager;
+use Drupal\bootstrap\Utility\Element;
 use Drupal\bootstrap\Utility\Unicode;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Extension\ThemeHandlerInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Template\Attribute;
 
 /**
@@ -156,6 +158,8 @@ class Bootstrap {
     $theme = Bootstrap::getTheme();
     $texts = $theme->getCache('cssClassFromString');
 
+    $string = (string) $string;
+
     if ($texts->isEmpty()) {
       $data = [
         // Text that match these specific strings are checked first.
@@ -216,13 +220,13 @@ class Bootstrap {
       foreach ($strings as $value => $class) {
         switch ($pattern) {
           case 'matches':
-            if ((string) $string === $value) {
+            if ($string === $value) {
               return $class;
             }
             break;
 
           case 'contains':
-            if (strpos(Unicode::strtolower((string) $string), Unicode::strtolower($value)) !== FALSE) {
+            if (strpos(Unicode::strtolower($string), Unicode::strtolower($value)) !== FALSE) {
               return $class;
             }
             break;
@@ -258,6 +262,21 @@ class Bootstrap {
       ':url' => self::apiSearchUrl($class . $caller['function']),
       '@title' => ($class ? $caller['class'] . $caller['type'] : '') . $caller['function'] . '()',
     ]), 'warning');
+  }
+
+  /**
+   * Constructs a new Element instance.
+   *
+   * @param array|string $element
+   *   A render array element or a string.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   *
+   * @return \Drupal\bootstrap\Utility\Element
+   *   The newly created render element instance.
+   */
+  public static function element(&$element, FormStateInterface $form_state = NULL) {
+    return new Element($element, $form_state);
   }
 
   /**
@@ -428,6 +447,8 @@ class Bootstrap {
     $theme = Bootstrap::getTheme();
     $texts = $theme->getCache('glyphiconFromString', []);
 
+    $string = (string) $string;
+
     if ($texts->isEmpty()) {
       $data = [
         // Text that match these specific strings are checked first.
@@ -449,6 +470,7 @@ class Bootstrap {
           t('Cancel')->render()     => 'remove',
           t('Delete')->render()     => 'trash',
           t('Remove')->render()     => 'trash',
+          t('Search')->render()     => 'search',
           t('Upload')->render()     => 'upload',
         ],
       ];
@@ -466,13 +488,13 @@ class Bootstrap {
       foreach ($strings as $value => $icon) {
         switch ($pattern) {
           case 'matches':
-            if ((string) $string === $value) {
+            if ($string === $value) {
               return self::glyphicon($icon, $default);
             }
             break;
 
           case 'contains':
-            if (strpos(Unicode::strtolower((string) $string), Unicode::strtolower($value)) !== FALSE) {
+            if (strpos(Unicode::strtolower($string), Unicode::strtolower($value)) !== FALSE) {
               return self::glyphicon($icon, $default);
             }
             break;
@@ -857,6 +879,27 @@ class Bootstrap {
         $class->preprocess($variables, $hook, $info);
       }
     }
+  }
+
+  /**
+   * Renders an element.
+   *
+   * @param array|string $element
+   *   A render array element or a string.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form, if any.
+   *
+   * @return \Drupal\bootstrap\Utility\Element
+   *   The newly created render element instance.
+   */
+  public static function render(&$element, FormStateInterface $form_state = NULL) {
+    /** @var \Drupal\Core\Render\Renderer $renderer */
+    static $renderer;
+    if (!isset($renderer)) {
+      $renderer = \Drupal::service('renderer');
+    }
+    $build = &self::element($element, $form_state)->getArray();
+    return $renderer->render($build);
   }
 
 }

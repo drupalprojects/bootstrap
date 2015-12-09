@@ -1,3 +1,4 @@
+{% extends "input--textfield.html.twig" %}
 {#
 /**
  * @file
@@ -8,9 +9,3 @@
  * @ingroup templates
  */
 #}
-<div class="input-group">
-  <input{{ attributes }} />{{ children }}
-  <span class="input-group-btn">
-    <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
-  </span>
-</div>

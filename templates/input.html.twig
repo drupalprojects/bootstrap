@@ -15,14 +15,19 @@
  * @ingroup templates
  */
 #}
-{% if autocomplete or input_group %}
+{%- if input_group -%}
   <div class="input-group">
-{% endif %}
-<input{{ attributes }} />{{ children }}
-{% if input_group %}
+{%- endif -%}
+{%- if prefix -%}
+  {{ prefix }}
+{%- endif -%}
+{%- block input -%}
+  <input{{ attributes }} />
+{%- endblock -%}
+{%- if suffix -%}
+  {{ suffix }}
+{%- endif -%}
+{%- if input_group -%}
   </div>
-{% elseif autocomplete %}
-    <span class="input-group-addon">{{ autocomplete_icon }}</span>
-  </div>
-  <input{{ autocomplete_attributes }}>
-{% endif %}
+{%- endif -%}
+{{ children }}

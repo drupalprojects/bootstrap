@@ -39,31 +39,10 @@ class PrerenderManager extends PluginManager {
       return $element;
     }
 
-    // Only add the "form-control" class for specific element input types.
-    // @todo, this really should be added to templates now.
-    $types = [
-      'date',
-      'email',
-      'number',
-      'range',
-      'password',
-      'password_confirm',
-      'search',
-      'select',
-      'tel',
-      'textarea',
-      'textfield',
-      'url',
-    ];
-
     $e = new Element($element);
 
-    // Add necessary classes for specific types.
-    if ($e->isType($types) || ($e->isType('file') && !$e->getProperty('managed_file'))) {
-      $element['#attributes']['class'][] = 'form-control';
-    }
-    elseif ($e->isType('machine_name')) {
-      $element['#wrapper_attributes']['class'][] = 'form-inline';
+    if ($e->isType('machine_name')) {
+      $e->addClass('form-inline', 'wrapper_attributes');
     }
 
     // Add smart descriptions to the element, if necessary.

@@ -9,6 +9,7 @@ namespace Drupal\bootstrap\Plugin;
 use Drupal\bootstrap\Bootstrap;
 use Drupal\bootstrap\Theme;
 use Drupal\bootstrap\Utility\Element;
+use Drupal\Component\Utility\DiffArray;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -77,25 +78,38 @@ class ProcessManager extends PluginManager {
 
       // If element is nested, return the referenced parent from the form.
       // Otherwise return the complete form.
-      $parent = new Element($array_parents ? NestedArray::getValue($form, $array_parents) : $complete_form);
+      $parent = new Element($array_parents ? NestedArray::getValue($complete_form, $array_parents) : $complete_form);
 
-      // Ignore buttons before we find the element in the form.
-      $current = FALSE;
-      foreach ($parent->children() as $child) {
-        if ($child->getArray() === $element) {
-          $current = $child;
-          continue;
-        }
-
-        if ($current && $child->isButton()) {
-          $child->setIcon();
-          $e->setProperty('field_suffix', $child->getArray());
-          break;
-        }
+      // Find the closest button.
+      if ($button = self::findButton($parent)) {
+        $e->setProperty('field_suffix', $button->setIcon()->getArray());
+        $button->setProperty('access', FALSE);
       }
     }
 
     return $element;
+  }
+
+  /**
+   * Traverses an element to find the closest button.
+   *
+   * @param \Drupal\bootstrap\Utility\Element $element
+   *   The element to iterate over.
+   *
+   * @return \Drupal\bootstrap\Utility\Element|FALSE
+   *   The first button element or FALSE if no button could be found.
+   */
+  protected static function &findButton(Element $element) {
+    $button = FALSE;
+    foreach ($element->children() as $child) {
+      if ($child->isButton()) {
+        $button = $child;
+      }
+      if ($result = &self::findButton($child)) {
+        $button = $result;
+      }
+    }
+    return $button;
   }
 
 }

@@ -73,9 +73,6 @@
   {% endif %}
 
   {% if prefix is not empty %}
-    {% if input_group %}
-      <div class="input-group">
-    {% endif %}
     {{ prefix }}
   {% endif %}
 
@@ -89,9 +86,6 @@
 
   {% if suffix is not empty %}
     {{ suffix }}
-    {% if input_group %}
-      </div>
-    {% endif %}
   {% endif %}
 
   {% if label_display == 'after' %}
