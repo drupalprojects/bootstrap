@@ -126,16 +126,14 @@ define('BOOTSTRAP_VERSION', Bootstrap::FRAMEWORK_VERSION);
  *
  *   // After.
  *   use Drupal\bootstrap\Utility\Element;
- *   $e = new Element($element);
- *   $e->addClass('my-class');
+ *   Element::create($element)->addClass('my-class');
  * @endcode
  *
  * @see \Drupal\bootstrap\Utility\Element::addClass()
  */
 function _bootstrap_add_class($class, array &$element, $property = 'attributes') {
   Bootstrap::deprecated();
-  $e = new Element($element);
-  $e->addClass($class, $property);
+  Element::create($element)->addClass($class, $property);
 }
 
 /**
@@ -152,16 +150,14 @@ function _bootstrap_add_class($class, array &$element, $property = 'attributes')
  *
  *   // After.
  *   use Drupal\bootstrap\Utility\Element;
- *   $e = new Element($element);
- *   $e->colorize();
+ *   Element::create($element)->colorize();
  * @endcode
  *
  * @see \Drupal\bootstrap\Utility\Element::colorize()
  * */
 function _bootstrap_colorize_button(array &$element) {
   Bootstrap::deprecated();
-  $e = new Element($element);
-  $e->colorize();
+  Element::create($element)->colorize();
 }
 
 /**
@@ -258,8 +254,7 @@ function _bootstrap_file_scan_directory($dir, $mask, array $options = []) {
  *
  *   // After.
  *   use Drupal\bootstrap\Utility\Element;
- *   $e = new Element($element);
- *   $attributes = &$e->getAttributes();
+ *   $attributes = &Element::create($element)->getAttributes();
  *   $attributes['class'][] = 'my-class';
  * @endcode
  *
@@ -267,8 +262,7 @@ function _bootstrap_file_scan_directory($dir, $mask, array $options = []) {
  */
 function &_bootstrap_get_attributes(array &$element, $property = 'attributes') {
   Bootstrap::deprecated();
-  $e = new Element($element);
-  return $e->getAttributes($property);
+  return Element::create($element)->getAttributes($property);
 }
 
 /**
@@ -340,8 +334,7 @@ function _bootstrap_get_base_themes($theme_key = NULL, $include_theme_key = FALS
  *
  *   // After.
  *   use Drupal\bootstrap\Utility\Element;
- *   $e = new Element($element);
- *   $classes = &$e->getClasses();
+ *   $classes = &Element::create($element)->getClasses();
  *   $classes[] = 'my-class';
  * @endcode
  *
@@ -349,8 +342,7 @@ function _bootstrap_get_base_themes($theme_key = NULL, $include_theme_key = FALS
  */
 function &_bootstrap_get_classes(array &$element, $property = 'attributes') {
   Bootstrap::deprecated();
-  $e = new Element($element);
-  return $e->getClasses($property);
+  return Element::create($element)->getClasses($property);
 }
 
 /**
@@ -448,16 +440,14 @@ function _bootstrap_icon($name, $default = NULL) {
  *
  *   // After.
  *   use Drupal\bootstrap\Utility\Element;
- *   $e = new Element($element);
- *   $e->setIcon();
+ *   Element::create($element)->setIcon();
  * @endcode
  *
  * @see \Drupal\bootstrap\Utility\Element::setIcon()
  */
 function _bootstrap_iconize_button(array &$element) {
   Bootstrap::deprecated();
-  $e = new Element($element);
-  $e->setIcon();
+  Element::create($element)->setIcon();
 }
 
 /**
@@ -507,16 +497,14 @@ function _bootstrap_iconize_text($string, $default = '') {
  *
  *   // After.
  *   use Drupal\bootstrap\Utility\Element;
- *   $e = new Element($element);
- *   $button = $e->isButton();
+ *   $button = Element::create($element)->isButton();
  * @endcode
  *
  * @see \Drupal\bootstrap\Utility\Element::isButton()
  */
 function _bootstrap_is_button(array $element) {
   Bootstrap::deprecated();
-  $e = new Element($element);
-  return $e->isButton();
+  return Element::create($element)->isButton();
 }
 
 /**
@@ -578,16 +566,14 @@ function _bootstrap_is_simple_string($string, $length = 250, $allowed_tags = NUL
  *
  *   // After.
  *   use Drupal\bootstrap\Utility\Element;
- *   $e = new Element($element);
- *   $e->removeClass('my-class');
+ *   Element::create($element)->removeClass('my-class');
  * @endcode
  *
  * @see \Drupal\bootstrap\Utility\Element::removeClass()
  */
 function _bootstrap_remove_class($class, array &$element, $property = 'attributes') {
   Bootstrap::deprecated();
-  $e = new Element($element);
-  $e->removeClass($class, $property);
+  Element::create($element)->removeClass($class, $property);
 }
 
 /**
@@ -668,16 +654,14 @@ function bootstrap_cdn_provider($provider = NULL, $reset = FALSE) {
  *
  *   // After.
  *   use Drupal\bootstrap\Utility\Element;
- *   $e = new Element($element);
- *   $e->smartDescription($target, $input_only, $length);
+ *   Element::create($element)->smartDescription($target, $input_only, $length);
  * @endcode
  *
  * @see \Drupal\bootstrap\Utility\Element::smartDescription()
  */
 function bootstrap_element_smart_description(array &$element, array &$target = NULL, $input_only = TRUE, $length = NULL) {
   Bootstrap::deprecated();
-  $e = new Element($element);
-  $e->smartDescription($target, $input_only, $length);
+  Element::create($element)->smartDescription($target, $input_only, $length);
 }
 
 /**

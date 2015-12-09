@@ -8,7 +8,6 @@ namespace Drupal\bootstrap\Plugin\Preprocess;
 
 use Drupal\bootstrap\Annotation\BootstrapPreprocess;
 use Drupal\bootstrap\Plugin\PluginBase;
-use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Template\Attribute;
 
 /**

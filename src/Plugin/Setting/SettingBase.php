@@ -102,7 +102,7 @@ class SettingBase extends PluginBase implements SettingInterface {
    */
   public function getGroup(array &$form, FormStateInterface $form_state) {
     $groups = $this->getGroups();
-    $group = new Element($form);
+    $group = Element::create($form);
     $first = TRUE;
     foreach ($groups as $key => $title) {
       if (!isset($group->$key)) {
@@ -112,7 +112,7 @@ class SettingBase extends PluginBase implements SettingInterface {
         else {
           $group->$key = ['#type' => 'container'];
         }
-        $group = new Element($group->$key->getArray());
+        $group = Element::create($group->$key->getArray());
         if ($first) {
           $group->setProperty('group', 'bootstrap');
         }
@@ -122,7 +122,7 @@ class SettingBase extends PluginBase implements SettingInterface {
         }
       }
       else {
-        $group = new Element($group->$key->getArray());
+        $group = Element::create($group->$key->getArray());
       }
       $first = FALSE;
     }

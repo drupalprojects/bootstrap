@@ -24,13 +24,11 @@ class InputButton extends Input implements PreprocessInterface {
    * {@inheritdoc}
    */
   public function preprocess(array &$variables, $hook, array $info) {
-    $element = new Element($variables['element']);
-    $element->addClass('btn');
+    $element = Element::create($variables['element']);
     $element->colorize();
     $element->setIcon($element->getProperty('icon'));
-    if ($size = $this->theme->getSetting('button_size')) {
-      $element->addClass($size);
-    }
+    $variables['icon_only'] = $element->getProperty('icon_only');
+    $variables['label'] = $element->getProperty('value');
     parent::preprocess($variables, $hook, $info);
   }
 

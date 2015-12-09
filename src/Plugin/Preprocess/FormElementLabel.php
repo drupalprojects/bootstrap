@@ -26,7 +26,7 @@ class FormElementLabel extends PluginBase implements PreprocessInterface {
    * {@inheritdoc}
    */
   public function preprocess(array &$variables, $hook, array $info) {
-    $element = new Element($variables['element']);
+    $element = Element::create($variables['element']);
     $variables['attributes'] = NestedArray::mergeDeepArray([$variables['attributes'], $element->getAttributes()], TRUE);
   }
 

@@ -47,7 +47,7 @@ class SystemThemeSettings extends FormBase implements FormInterface {
    *   The current state of the form.
    */
   protected function createGroups(array &$form, FormStateInterface $form_state) {
-    $f = new Element($form);
+    $f = Element::create($form, $form_state);
 
     // Vertical tabs for global settings provided by core or contrib modules.
     if (!isset($form['global'])) {

@@ -9,7 +9,6 @@ namespace Drupal\bootstrap\Plugin;
 use Drupal\bootstrap\Bootstrap;
 use Drupal\bootstrap\Theme;
 use Drupal\bootstrap\Utility\Element;
-use Drupal\Component\Utility\DiffArray;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -54,10 +53,18 @@ class ProcessManager extends PluginManager {
       $theme = Bootstrap::getTheme();
     }
 
-    $e = new Element($element, $form_state);
+    $e = Element::create($element, $form_state);
 
-    // Add necessary classes.
-    $e->replaceClass('container-inline', 'form-inline');
+    // Add "form-inline" class.
+    if ($e->hasClass('container-inline')) {
+      $e->replaceClass('container-inline', 'form-inline');
+    }
+    if ($e->isType(['color', 'date', 'number', 'password', 'password_confirm', 'range', 'tel', 'weight'])) {
+      $e->addClass('form-inline', 'wrapper_attributes');
+    }
+
+    // Add "form-group" class, don't replace "form-wrapper" as that is needed
+    // by some JavaScript for certain functionality to work.
     if ($e->hasClass('form-wrapper')) {
       $e->addClass('form-group');
     }
@@ -78,7 +85,7 @@ class ProcessManager extends PluginManager {
 
       // If element is nested, return the referenced parent from the form.
       // Otherwise return the complete form.
-      $parent = new Element($array_parents ? NestedArray::getValue($complete_form, $array_parents) : $complete_form);
+      $parent = Element::create($array_parents ? NestedArray::getValue($complete_form, $array_parents) : $complete_form, $form_state);
 
       // Find the closest button.
       if ($button = self::findButton($parent)) {

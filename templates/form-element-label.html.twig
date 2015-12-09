@@ -16,20 +16,22 @@
  * @ingroup templates
  */
 #}
-{% set classes = [
-  'control-label',
-  title_display == 'after' ? 'option',
-  title_display == 'invisible' ? 'visually-hidden',
-  required ? 'js-form-required',
-  required ? 'form-required',
-] %}
-{% if title is not empty or required -%}
+{%-
+  set classes = [
+    'control-label',
+    title_display == 'after' ? 'option',
+    title_display == 'invisible' ? 'visually-hidden',
+    required ? 'js-form-required',
+    required ? 'form-required',
+  ]
+-%}
+{%- if title is not empty or required -%}
   <label{{ attributes.addClass(classes) }}>{{ element }}{{ title }}
-    {% if description %}
+    {%- if description -%}
       <p class="help-block">{{ description }}</p>
-    {% endif %}
+    {%- endif -%}
   </label>
-  {% if required %}
+  {%- if required -%}
     <span class="form-required">*</span>
-  {% endif %}
-{%- endif %}
+  {%- endif -%}
+{%- endif -%}

@@ -1,21 +1,45 @@
+{% extends "input.html.twig" %}
 {#
 /**
  * @file
- * Default theme implementation for an 'button' #type (button) form element.
+ * Theme suggestion for "button" input form element.
  *
  * Available variables:
  * - attributes: A list of HTML attributes for the input element.
- * - icon: glyphicon icon.
- * - label: button label.
  * - children: Optional additional rendered elements.
+ * - icon: An icon.
+ * - icon_only: Flag to display only the icon and not the label.
+ * - icon_position: Where an icon should be displayed.
+ * - label: button label.
+ * - prefix: Markup to display before the input element.
+ * - suffix: Markup to display after the input element.
+ * - type: The type of input.
  *
+ * @see \Drupal\bootstrap\Plugin\Preprocess\InputButton
+ * @see \Drupal\bootstrap\Plugin\Preprocess\Input
  * @see template_preprocess_input()
  *
  * @ingroup templates
  */
 #}
-{% if icon_position == 'after' %}
-    <button{{ attributes }}>{{ label }}{{ icon }}</button>{{ children }}
-{% else %}
-    <button{{ attributes }}>{{ icon }}{{ label }}</button>{{ children }}
-{% endif %}
+{% spaceless %}
+  {%
+    set classes = [
+      'btn',
+      theme.settings.button_size ? theme.settings.button_size,
+      type == 'submit' ? 'js-form-submit',
+    ]
+  %}
+  {% block input %}
+    {% if icon_only %}
+    <button{{ attributes.addClass(classes) }}><span
+        class="sr-only">{{ label }}</span>{{ icon }}</button>{{ children }}
+    {% else %}
+      {% if icon_position == 'after' %}
+        <button{{ attributes.addClass(classes) }}>{{ label }}{{ icon }}</button>{{ children }}
+      {% else %}
+        <button{{ attributes.addClass(classes) }}>{{ icon }}{{ label }}</button>{{ children }}
+      {% endif %}
+    {% endif %}
+  {% endblock %}
+{% endspaceless %}

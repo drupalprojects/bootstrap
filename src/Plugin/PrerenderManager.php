@@ -39,7 +39,7 @@ class PrerenderManager extends PluginManager {
       return $element;
     }
 
-    $e = new Element($element);
+    $e = Element::create($element);
 
     if ($e->isType('machine_name')) {
       $e->addClass('form-inline', 'wrapper_attributes');

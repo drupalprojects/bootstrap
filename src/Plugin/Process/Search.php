@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Contains \Drupal\bootstrap\Plugin\Process\Actions.
+ * Contains \Drupal\bootstrap\Plugin\Process\Search.
  */
 
 namespace Drupal\bootstrap\Plugin\Process;
@@ -15,10 +15,10 @@ use Drupal\Core\Form\FormStateInterface;
  * Processes the "actions" element.
  *
  * @BootstrapProcess(
- *   id = "actions"
+ *   id = "search"
  * )
  */
-class Actions extends PluginBase implements ProcessInterface {
+class Search extends PluginBase implements ProcessInterface {
 
   /**
    * {@inheritdoc}
@@ -28,8 +28,11 @@ class Actions extends PluginBase implements ProcessInterface {
       return $element;
     }
 
-    foreach (Element::create($element)->children() as $child) {
-      $child->setIcon();
+    $e = Element::create($element);
+    $e->setProperty('title_display', 'invisible');
+    $e->setAttribute('placeholder', $e->getProperty('placeholder', $e->getProperty('title', t('Search'))));
+    if (!$e->hasProperty('description')) {
+      $e->setProperty('description', t('Enter the terms you wish to search for.'));
     }
 
     return $element;

@@ -49,9 +49,7 @@ class Element {
    */
   public function __construct(&$element, FormStateInterface $form_state = NULL) {
     if (!is_array($element)) {
-      $element = [
-        '#markup' => $element,
-      ];
+      $element = ['#markup' => $element];
     }
     $this->element = &$element;
     $this->formState = $form_state;
@@ -125,6 +123,8 @@ class Element {
    *   - "input_group_attributes"
    *   - "title_attributes"
    *   - "wrapper_attributes".
+   *
+   * @return $this
    */
   public function addClass($class, $property = 'attributes') {
     // Retrieve the element's classes.
@@ -132,6 +132,7 @@ class Element {
 
     // Add the class(es).
     $classes = array_unique(array_merge($classes, (array) $class));
+    return $this;
   }
 
   /**
@@ -173,13 +174,15 @@ class Element {
 
   /**
    * Adds a specific Bootstrap class to color a button based on its text value.
+   *
+   * @return $this
    */
   public function colorize() {
     $button = $this->isButton();
 
     // Do nothing if setting is disabled.
     if (!$button || !Bootstrap::getTheme()->getSetting('button_colorize')) {
-      return;
+      return $this;
     }
 
     // @todo refactor this more so it's not just "button" specific.
@@ -193,11 +196,28 @@ class Element {
 
     foreach ($button_classes as $class) {
       if ($this->hasClass($class)) {
-        return;
+        return $this;
       }
     }
 
     $this->addClass("$prefix-" . Bootstrap::cssClassFromString($this->element['#value'], 'default'));
+
+    return $this;
+  }
+
+  /**
+   * Creates a new \Drupal\bootstrap\Utility\Element instance.
+   *
+   * @param array|string $element
+   *   A render array element or a string.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   *
+   * @return \Drupal\bootstrap\Utility\Element
+   *   The newly created element instance.
+   */
+  public static function create(&$element, FormStateInterface $form_state = NULL) {
+    return new self($element, $form_state);
   }
 
   /**
@@ -464,6 +484,21 @@ class Element {
   }
 
   /**
+   * Renders the element.
+   *
+   * @return \Drupal\Component\Render\MarkupInterface
+   *   The rendered HTML.
+   */
+  public function render() {
+    /** @var \Drupal\Core\Render\Renderer $renderer */
+    static $renderer;
+    if (!isset($renderer)) {
+      $renderer = \Drupal::service('renderer');
+    }
+    return $renderer->render($this->element);
+  }
+
+  /**
    * Replaces a class in an element's attributes array.
    *
    * @param string $old
@@ -600,6 +635,8 @@ class Element {
    *   Toggle determining whether or not to only convert input elements.
    * @param int $length
    *   The length of characters to determine if description is "simple".
+   *
+   * @return $this
    */
   public function smartDescription(array &$target = NULL, $input_only = TRUE, $length = NULL) {
     static $theme;
@@ -615,11 +652,11 @@ class Element {
 
     // Immediately return if tooltip descriptions are not enabled.
     if (!$enabled) {
-      return;
+      return $this;
     }
 
     // Allow a different element to attach the tooltip.
-    $t = new Element(isset($target) ? $target : $this->element);
+    $t = new self(isset($target) ? $target : $this->element, $this->formState);
 
     // Retrieve the length limit for smart descriptions.
     if (!isset($length)) {
@@ -646,7 +683,7 @@ class Element {
       || $t->hasAttribute('data-toggle')
       || !Unicode::isSimple($this->getProperty('description'), $length, $allowed_tags, $html)
     ) {
-      return;
+      return $this;
     }
 
     // Default property (on the element itself).
@@ -673,6 +710,24 @@ class Element {
 
     // Remove the element description so it isn't (re-)rendered later.
     unset($this->element['#description']);
+
+    return $this;
+  }
+
+  /**
+   * Magic set method (for child elements only).
+   *
+   * @param string $name
+   *   The name of the property to unset.
+   *
+   * @return $this
+   */
+  public function unsetProperty($name) {
+    if (!\Drupal\Core\Render\Element::property($name)) {
+      $name = '#' . $name;
+    }
+    unset($this->element[$name]);
+    return $this;
   }
 
 }

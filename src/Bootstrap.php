@@ -9,12 +9,9 @@ namespace Drupal\bootstrap;
 use Drupal\bootstrap\Plugin\AlterManager;
 use Drupal\bootstrap\Plugin\FormManager;
 use Drupal\bootstrap\Plugin\PreprocessManager;
-use Drupal\bootstrap\Utility\Element;
 use Drupal\bootstrap\Utility\Unicode;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Extension\ThemeHandlerInterface;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Template\Attribute;
 
 /**
  * The primary class for the Drupal Bootstrap base theme.
@@ -265,21 +262,6 @@ class Bootstrap {
   }
 
   /**
-   * Constructs a new Element instance.
-   *
-   * @param array|string $element
-   *   A render array element or a string.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
-   *
-   * @return \Drupal\bootstrap\Utility\Element
-   *   The newly created render element instance.
-   */
-  public static function element(&$element, FormStateInterface $form_state = NULL) {
-    return new Element($element, $form_state);
-  }
-
-  /**
    * Provides additional variables to be used in elements and templates.
    *
    * @return array
@@ -293,6 +275,7 @@ class Bootstrap {
       // @see https://drupal.org/node/2219965
       'icon' => NULL,
       'icon_position' => 'before',
+      'icon_only' => FALSE,
     ];
   }
 
@@ -422,10 +405,10 @@ class Bootstrap {
         '#type' => 'html_tag',
         '#tag' => 'span',
         '#value' => '',
-        '#attributes' => new Attribute([
+        '#attributes' => [
           'class' => ['icon', 'glyphicon', 'glyphicon-' . $name],
           'aria-hidden' => 'true',
-        ]),
+        ],
       ];
     }
     return $default;
@@ -879,27 +862,6 @@ class Bootstrap {
         $class->preprocess($variables, $hook, $info);
       }
     }
-  }
-
-  /**
-   * Renders an element.
-   *
-   * @param array|string $element
-   *   A render array element or a string.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form, if any.
-   *
-   * @return \Drupal\bootstrap\Utility\Element
-   *   The newly created render element instance.
-   */
-  public static function render(&$element, FormStateInterface $form_state = NULL) {
-    /** @var \Drupal\Core\Render\Renderer $renderer */
-    static $renderer;
-    if (!isset($renderer)) {
-      $renderer = \Drupal::service('renderer');
-    }
-    $build = &self::element($element, $form_state)->getArray();
-    return $renderer->render($build);
   }
 
 }

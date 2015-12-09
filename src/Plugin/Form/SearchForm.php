@@ -7,7 +7,7 @@
 namespace Drupal\bootstrap\Plugin\Form;
 
 use Drupal\bootstrap\Annotation\BootstrapForm;
-use Drupal\bootstrap\Bootstrap;
+use Drupal\bootstrap\Utility\Element;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -23,9 +23,12 @@ class SearchForm extends FormBase {
    * {@inheritdoc}
    */
   public function alterForm(array &$form, FormStateInterface $form_state, $form_id = NULL) {
-    $container = Bootstrap::element($form['basic'], $form_state);
-    $container->removeClass('container-inline');
-    $container->keys->setProperty('input_group_button', TRUE);
+    $e = Element::create($form, $form_state);
+    $e->advanced->setProperty('collapsible', TRUE);
+    $e->advanced->setProperty('collapsed', TRUE);
+    $e->basic->removeClass('container-inline');
+    $e->basic->submit->setProperty('icon_only', TRUE);
+    $e->basic->keys->setProperty('input_group_button', TRUE);
   }
 
 }
