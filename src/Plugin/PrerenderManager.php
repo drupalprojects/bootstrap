@@ -40,33 +40,20 @@ class PrerenderManager extends PluginManager {
     }
 
     // Only add the "form-control" class for specific element input types.
+    // @todo, this really should be added to templates now.
     $types = [
-      // Core.
+      'date',
+      'email',
+      'number',
+      'range',
       'password',
       'password_confirm',
+      'search',
       'select',
+      'tel',
       'textarea',
       'textfield',
-
-      // Elements module (HTML5).
-      'date',
-      'datefield',
-      'email',
-      'emailfield',
-      'number',
-      'numberfield',
-      'range',
-      'rangefield',
-      'search',
-      'searchfield',
-      'tel',
-      'telfield',
       'url',
-      'urlfield',
-
-      // Webform module.
-      'webform_email',
-      'webform_number',
     ];
 
     $e = new Element($element);

@@ -88,7 +88,7 @@ class SettingBase extends PluginBase implements SettingInterface {
         $links[] = (string) $renderer->render($link);
       }
       if (!empty($links)) {
-        $description .= '<br><br>';
+        $description .= '<br>';
         $description .= t('See also:');
         $description .= ' ' . implode(', ', $links);
         $group->$plugin_id->setProperty('description', $description);

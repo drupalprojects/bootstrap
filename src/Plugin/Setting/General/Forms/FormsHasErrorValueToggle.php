@@ -17,7 +17,7 @@ use Drupal\Core\Annotation\Translation;
  *   id = "forms_has_error_value_toggle",
  *   type = "checkbox",
  *   title = @Translation("Automatically remove error classes when values have been entered"),
- *   description = @Translation("If an element has a <code>.has-error</code> class attached to it, enabling this will automatically remove that class when a value is entered. This feature compliments the <code>General > Forms > Make required elements display as an error</code> feature."),
+ *   description = @Translation("If an element has a <code>.has-error</code> class attached to it, enabling this will automatically remove that class when a value is entered."),
  *   defaultValue = 1,
  *   groups = {
  *     "general" = @Translation("General"),

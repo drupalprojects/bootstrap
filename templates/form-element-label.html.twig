@@ -16,14 +16,13 @@
  * @ingroup templates
  */
 #}
-{%
-set classes = [
-title_display == 'after' ? 'option',
-title_display == 'invisible' ? 'visually-hidden',
-required ? 'js-form-required',
-required ? 'form-required',
-]
-%}
+{% set classes = [
+  'control-label',
+  title_display == 'after' ? 'option',
+  title_display == 'invisible' ? 'visually-hidden',
+  required ? 'js-form-required',
+  required ? 'form-required',
+] %}
 {% if title is not empty or required -%}
   <label{{ attributes.addClass(classes) }}>{{ element }}{{ title }}
     {% if description %}

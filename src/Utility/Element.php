@@ -7,7 +7,9 @@
 namespace Drupal\bootstrap\Utility;
 
 use Drupal\bootstrap\Bootstrap;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Xss;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Provides helper methods for Drupal render elements.
@@ -24,6 +26,13 @@ class Element {
   protected $element;
 
   /**
+   * The current state of the form.
+   *
+   * @var \Drupal\Core\Form\FormStateInterface
+   */
+  protected $formState;
+
+  /**
    * The element type.
    *
    * @var string
@@ -33,11 +42,19 @@ class Element {
   /**
    * Element constructor.
    *
-   * @param array $element
+   * @param array|string $element
    *   A render array element.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
    */
-  public function __construct(array &$element) {
+  public function __construct(&$element, FormStateInterface $form_state = NULL) {
+    if (!is_array($element)) {
+      $element = [
+        '#markup' => $element,
+      ];
+    }
     $this->element = &$element;
+    $this->formState = $form_state;
     if (isset($element['#type'])) {
       $this->type = &$element['#type'];
     }
@@ -259,6 +276,26 @@ class Element {
   }
 
   /**
+   * Returns the error message filed against the given form element.
+   *
+   * Form errors higher up in the form structure override deeper errors as well
+   * as errors on the element itself.
+   *
+   * @return string|null
+   *   Either the error message for this element or NULL if there are no errors.
+   *
+   * @throws \BadMethodCallException
+   *   When the element instance was not constructed with a valid form state
+   *   object.
+   */
+  public function getError() {
+    if (!$this->formState) {
+      throw new \BadMethodCallException('The element instance must be constructed with a valid form state object to use this method.');
+    }
+    return $this->formState->getError($this->element);
+  }
+
+  /**
    * Retrieves the render array for the element.
    *
    * @param string $name
@@ -321,6 +358,18 @@ class Element {
    */
   public function hasClass($class, $property = 'attributes') {
     return array_search($class, $this->getClasses($property)) !== FALSE;
+  }
+
+  /**
+   * Determines if an element has an error set on it.
+   *
+   * @throws \BadMethodCallException
+   *   When the element instance was not constructed with a valid form state
+   *   object.
+   */
+  public function hasError() {
+    $error = $this->getError();
+    return isset($error);
   }
 
   /**
@@ -405,10 +454,13 @@ class Element {
    *   - "input_group_attributes"
    *   - "title_attributes"
    *   - "wrapper_attributes".
+   *
+   * @return $this
    */
   public function removeClass($class, $property = 'attributes') {
     $classes = &$this->getClasses($property);
     $classes = array_values(array_diff($classes, (array) $class));
+    return $this;
   }
 
   /**
@@ -425,6 +477,8 @@ class Element {
    *   - "input_group_attributes"
    *   - "title_attributes"
    *   - "wrapper_attributes".
+   *
+   * @return $this
    */
   public function replaceClass($old, $new, $property = 'attributes') {
     $classes = &$this->getClasses($property);
@@ -432,6 +486,7 @@ class Element {
     if ($key !== FALSE) {
       $classes[$key] = $new;
     }
+    return $this;
   }
 
   /**
@@ -448,10 +503,13 @@ class Element {
    *   - "input_group_attributes"
    *   - "title_attributes"
    *   - "wrapper_attributes".
+   *
+   * @return $this
    */
   public function setAttribute($name, $value, $property = 'attributes') {
     $attributes = &$this->getAttributes($property);
     $attributes[$name] = $value;
+    return $this;
   }
 
   /**
@@ -466,10 +524,33 @@ class Element {
    *   - "input_group_attributes"
    *   - "title_attributes"
    *   - "wrapper_attributes".
+   *
+   * @return $this
    */
   public function setAttributes(array $values, $property = 'attributes') {
     $attributes = &$this->getAttributes($property);
-    $attributes = $values + $attributes;
+    $attributes = NestedArray::mergeDeepArray([$attributes, $values], TRUE);
+    return $this;
+  }
+
+  /**
+   * Flags an element as having an error.
+   *
+   * @param string $message
+   *   (optional) The error message to present to the user.
+   *
+   * @return $this
+   *
+   * @throws \BadMethodCallException
+   *   When the element instance was not constructed with a valid form state
+   *   object.
+   */
+  public function setError($message = '') {
+    if (!$this->formState) {
+      throw new \BadMethodCallException('The element instance must be constructed with a valid form state object to use this method.');
+    }
+    $this->formState->setError($this->element, $message);
+    return $this;
   }
 
   /**
@@ -478,14 +559,17 @@ class Element {
    * @param array $icon
    *   An icon render array.
    *
+   * @return $this
+   *
    * @see \Drupal\bootstrap\Bootstrap::glyphicon()
    */
   public function setIcon(array $icon = NULL) {
     if ($this->isButton() && !Bootstrap::getTheme()->getSetting('button_iconize')) {
-      return;
+      return $this;
     }
     $icon = isset($icon) ? $icon : Bootstrap::glyphiconFromString($this->getProperty('value'));
     $this->setProperty('icon', $icon);
+    return $this;
   }
 
   /**
@@ -495,12 +579,15 @@ class Element {
    *   The name of the property to set.
    * @param mixed $value
    *   The value of $name to set.
+   *
+   * @return $this
    */
   public function setProperty($name, $value) {
     if (!\Drupal\Core\Render\Element::property($name)) {
       $name = '#' . $name;
     }
     $this->element[$name] = $value instanceof Element ? $value->getArray() : $value;
+    return $this;
   }
 
   /**
@@ -515,7 +602,10 @@ class Element {
    *   The length of characters to determine if description is "simple".
    */
   public function smartDescription(array &$target = NULL, $input_only = TRUE, $length = NULL) {
-    $theme = Bootstrap::getTheme();
+    static $theme;
+    if (!isset($theme)) {
+      $theme = Bootstrap::getTheme();
+    }
 
     // Determine if tooltips are enabled.
     static $enabled;
@@ -523,77 +613,66 @@ class Element {
       $enabled = $theme->getSetting('tooltip_enabled') && $theme->getSetting('forms_smart_descriptions');
     }
 
-    // Immediately return if "simple" tooltip descriptions are not enabled.
+    // Immediately return if tooltip descriptions are not enabled.
     if (!$enabled) {
       return;
     }
 
     // Allow a different element to attach the tooltip.
-    if (!isset($target)) {
-      $target = &$this->element;
-    }
-
-    $t = new Element($target);
+    $t = new Element(isset($target) ? $target : $this->element);
 
     // Retrieve the length limit for smart descriptions.
     if (!isset($length)) {
-      $length = (int) $theme->getSetting('forms_smart_descriptions_limit');
       // Disable length checking by setting it to FALSE if empty.
-      if (empty($length)) {
-        $length = FALSE;
-      }
+      $length = (int) $theme->getSetting('forms_smart_descriptions_limit') ?: FALSE;
     }
 
     // Retrieve the allowed tags for smart descriptions. This is primarily used
     // for display purposes only (i.e. non-UI/UX related elements that wouldn't
-    // require a user to "click", like a link).
-    $allowed_tags = array_filter(array_unique(array_map('trim', explode(',', $theme->getSetting('forms_smart_descriptions_allowed_tags') . ''))));
-
-    // Disable length checking by setting it to FALSE if empty.
-    if (empty($allowed_tags)) {
-      $allowed_tags = FALSE;
+    // require a user to "click", like a link). Disable length checking by
+    // setting it to FALSE if empty.
+    static $allowed_tags;
+    if (!isset($allowed_tags)) {
+      $allowed_tags = array_filter(array_unique(array_map('trim', explode(',', $theme->getSetting('forms_smart_descriptions_allowed_tags') . '')))) ?: FALSE;
     }
 
+    // Return if element or target shouldn't have "simple" tooltip descriptions.
     $html = FALSE;
-    $type = !empty($this->element['#type']) ? $this->element['#type'] : FALSE;
-    if (!$input_only || !empty($target['#input']) || !empty($this->element['#smart_description']) || !empty($target['#smart_description'])) {
-      if (!empty($this->element['#description']) && empty($target['#attributes']['title']) && empty($target['#attributes']['data-toggle'])) {
-        if (Unicode::isSimple($this->element['#description'], $length, $allowed_tags, $html)) {
-
-          // Default property (on the element itself).
-          $property = 'attributes';
-
-          // Add the tooltip to the #label_attributes property for 'checkbox'
-          // and 'radio' elements.
-          if ($type === 'checkbox' || $type === 'radio') {
-            $property = 'label_attributes';
-          }
-          // Add tooltip to the #wrapper_attributes property for 'checkboxes'
-          // and 'radios' elements.
-          elseif ($type === 'checkboxes' || $type === 'radios') {
-            $property = 'attributes';
-          }
-          // Add tooltip to the #input_group_attributes property for elements
-          // that have valid input groups set.
-          elseif ((!empty($this->element['#field_prefix']) || !empty($this->element['#field_suffix'])) && (!empty($this->element['#input_group']) || !empty($this->element['#input_group_button']))) {
-            $property = 'attributes';
-          }
-
-          // Retrieve the proper attributes array.
-          $attributes = &$t->getAttributes($property);
-
-          // Set the tooltip attributes.
-          $attributes['title'] = $allowed_tags !== FALSE ? Xss::filter((string) $this->element['#description'], $allowed_tags) : $this->element['#description'];
-          $attributes['data-toggle'] = 'tooltip';
-          if ($html || $allowed_tags === FALSE) {
-            $attributes['data-html'] = 'true';
-          }
-
-          // Remove the element description so it isn't (re-)rendered later.
-          unset($this->element['#description']);
-        }
-      }
+    if (($input_only && !$t->hasProperty('input'))
+      || !$this->getProperty('smart_description', TRUE)
+      || !$t->getProperty('smart_description', TRUE)
+      || !$this->hasProperty('description')
+      || $t->hasAttribute('title')
+      || $t->hasAttribute('data-toggle')
+      || !Unicode::isSimple($this->getProperty('description'), $length, $allowed_tags, $html)
+    ) {
+      return;
     }
+
+    // Default property (on the element itself).
+    $property = 'attributes';
+
+    // Use #label_attributes for 'checkbox' and 'radio' elements.
+    if ($this->isType(['checkbox', 'radio'])) {
+      $property = 'label_attributes';
+    }
+    // Use #wrapper_attributes for 'checkboxes' and 'radios' elements.
+    elseif ($this->isType(['checkboxes', 'radios'])) {
+      $property = 'wrapper_attributes';
+    }
+
+    // Retrieve the proper attributes array.
+    $attributes = &$t->getAttributes($property);
+
+    // Set the tooltip attributes.
+    $attributes['title'] = $allowed_tags !== FALSE ? Xss::filter((string) $this->element['#description'], $allowed_tags) : $this->element['#description'];
+    $attributes['data-toggle'] = 'tooltip';
+    if ($html || $allowed_tags === FALSE) {
+      $attributes['data-html'] = 'true';
+    }
+
+    // Remove the element description so it isn't (re-)rendered later.
+    unset($this->element['#description']);
   }
 
 }

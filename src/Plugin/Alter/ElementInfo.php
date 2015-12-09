@@ -25,6 +25,9 @@ class ElementInfo extends PluginBase implements AlterInterface {
    * {@inheritdoc}
    */
   public function alter(&$types, &$context1 = NULL, &$context2 = NULL) {
+    // Sort the types for easier debugging.
+    ksort($types, SORT_NATURAL);
+
     $process_manager = new ProcessManager($this->theme);
     $pre_render_manager = new PrerenderManager($this->theme);
 

@@ -46,57 +46,59 @@
  */
 #}
 {%
-set classes = [
-  'js-form-item',
-  'form-item',
-  'js-form-type-' ~ type|clean_class,
-  'form-item-' ~ name|clean_class,
-  'js-form-item-' ~ name|clean_class,
-  title_display not in ['after', 'before'] ? 'form-no-label',
-  disabled == 'disabled' ? 'form-disabled',
-  is_form_group ? 'form-group',
-  is_radio ? 'radio',
-  is_checkbox ? 'checkbox',
-  is_autocomplete ? 'form-autocomplete',
-  has_error ? 'error has-error'
-]
+  set classes = [
+    'js-form-item',
+    'form-item',
+    'js-form-type-' ~ type|clean_class,
+    'form-item-' ~ name|clean_class,
+    'js-form-item-' ~ name|clean_class,
+    title_display not in ['after', 'before'] ? 'form-no-label',
+    disabled == 'disabled' ? 'form-disabled',
+    is_form_group ? 'form-group',
+    is_radio ? 'radio',
+    is_checkbox ? 'checkbox',
+    is_autocomplete ? 'form-autocomplete',
+    errors ? 'error has-error'
+  ]
+%}{%
+  set description_classes = [
+    'description',
+    'help-block',
+    description_display == 'invisible' ? 'visually-hidden',
+  ]
 %}
-{%
-set description_classes = [
-  'description',
-  'help-block',
-  description_display == 'invisible' ? 'visually-hidden',
-]
-%}
-{%
-set input_group_class = input_group ? 'input-group-addon' : ''
-%}
-
 <div{{ attributes.addClass(classes) }}>
   {% if label_display in ['before', 'invisible'] %}
     {{ label }}
   {% endif %}
 
-
   {% if prefix is not empty %}
+    {% if input_group %}
+      <div class="input-group">
+    {% endif %}
     {{ prefix }}
   {% endif %}
 
-  {% if description_display == 'before' and description.content and has_tooltip is empty %}
+  {% if description_display == 'before' and description.content %}
     <div{{ description.attributes }}>
       {{ description.content }}
     </div>
   {% endif %}
+
   {{ children }}
+
   {% if suffix is not empty %}
     {{ suffix }}
+    {% if input_group %}
+      </div>
+    {% endif %}
   {% endif %}
-
 
   {% if label_display == 'after' %}
     {{ label }}
   {% endif %}
-  {% if description_display in ['after', 'invisible'] and description.content and has_tooltip is empty %}
+
+  {% if description_display in ['after', 'invisible'] and description.content %}
     <p{{ description.attributes.addClass(description_classes) }}>
       {{ description.content }}
     </p>

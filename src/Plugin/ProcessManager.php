@@ -6,6 +6,7 @@
 
 namespace Drupal\bootstrap\Plugin;
 
+use Drupal\bootstrap\Bootstrap;
 use Drupal\bootstrap\Theme;
 use Drupal\bootstrap\Utility\Element;
 use Drupal\Component\Utility\NestedArray;
@@ -47,36 +48,36 @@ class ProcessManager extends PluginManager {
       return $element;
     }
 
-    if (!empty($element['#attributes']['class']) && is_array($element['#attributes']['class'])) {
-      $key = array_search('container-inline', $element['#attributes']['class']);
-      if ($key !== FALSE) {
-        $element['#attributes']['class'][$key] = 'form-inline';
-      }
+    static $theme;
+    if (!isset($theme)) {
+      $theme = Bootstrap::getTheme();
+    }
 
-      if (in_array('form-wrapper', $element['#attributes']['class'])) {
-        $element['#attributes']['class'][] = 'form-group';
-      }
+    $e = new Element($element, $form_state);
+
+    // Add necessary classes.
+    $e->replaceClass('container-inline', 'form-inline');
+    if ($e->hasClass('form-wrapper')) {
+      $e->addClass('form-group');
+    }
+
+    // Check for errors and set the "has_error" property flag.
+    if ($e->hasError() || ($e->getProperty('required') && $theme->getSetting('forms_required_has_error'))) {
+      $e->setProperty('has_error', TRUE);
     }
 
     // Automatically inject the nearest button found after this element if
     // #input_group_button exists.
-    if (!empty($element['#input_group_button'])) {
+    if ($e->getProperty('input_group_button')) {
       // Obtain the parent array to limit search.
-      $array_parents = [];
-      if (!empty($element['#array_parents'])) {
-        $array_parents += $element['#array_parents'];
-        // Remove the current element from the array.
-        array_pop($array_parents);
-      }
+      $array_parents = $e->getProperty('array_parents', []);
+
+      // Remove the current element from the array.
+      array_pop($array_parents);
 
       // If element is nested, return the referenced parent from the form.
-      if (!empty($array_parents)) {
-        $parent = new Element(NestedArray::getValue($form, $array_parents));
-      }
       // Otherwise return the complete form.
-      else {
-        $parent = new Element($complete_form);
-      }
+      $parent = new Element($array_parents ? NestedArray::getValue($form, $array_parents) : $complete_form);
 
       // Ignore buttons before we find the element in the form.
       $current = FALSE;
@@ -88,7 +89,7 @@ class ProcessManager extends PluginManager {
 
         if ($current && $child->isButton()) {
           $child->setIcon();
-          $element['#field_suffix'] = $child->getArray();
+          $e->setProperty('field_suffix', $child->getArray());
           break;
         }
       }

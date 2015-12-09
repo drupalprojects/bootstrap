@@ -17,8 +17,8 @@ use Drupal\Core\Annotation\Translation;
  *   id = "forms_required_has_error",
  *   type = "checkbox",
  *   title = @Translation("Make required elements display as an error"),
- *   defaultValue = 1,
- *   description = @Translation("If an element in a form is required, enabling this will always display the element with a <code>.has-error</code> class. This turns the element red and helps in usability for determining which form elements are required to submit the form.  This feature compliments the <code>JavaScript > Forms > Automatically remove error classes when values have been entered</code> feature."),
+ *   defaultValue = 0,
+ *   description = @Translation("If an element in a form is required, enabling this will always display the element with a <code>.has-error</code> class. This turns the element red and helps in usability for determining which form elements are required to submit the form."),
  *   groups = {
  *     "general" = @Translation("General"),
  *     "forms" = @Translation("Forms"),
