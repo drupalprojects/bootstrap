@@ -38,13 +38,14 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
 
     // Ensure the jQuery version is >= 1.9.
     if (!$jquery_version || !version_compare($jquery_version, '1.9', '>=')) {
-      drupal_set_message(t('jQuery Update is not enabled, Bootstrap requires a minimum jQuery version of 1.9 or higher. Please enable the <a href="!jquery_update_project_url">jQuery Update</a> module. If you are seeing this message, then you must <a href="!jquery_update_configure">manually configuration</a> this setting or optionally <a href="!bootstrap_suppress_jquery_error">suppress this message</a> instead.', array(
-        '!jquery_update_project_url' => 'https://www.drupal.org/project/jquery_update',
-        '!jquery_update_configure' => url('admin/config/development/jquery_update'),
-        '!bootstrap_suppress_jquery_error' => url('admin/appearance/settings/' . $theme, array(
+      $message = t('jQuery Update is not enabled, Bootstrap requires a minimum jQuery version of 1.9 or higher. Please enable the <a href="!jquery_update_project_url">jQuery Update</a> module. If you are seeing this message, then you must <a href="!jquery_update_configure">manually configuration</a> this setting or optionally <a href="!bootstrap_suppress_jquery_error">suppress this message</a> instead.', array(
+        '!jquery_update_project_url' => check_plain('https://www.drupal.org/project/jquery_update'),
+        '!jquery_update_configure' => check_plain(url('admin/config/development/jquery_update')),
+        '!bootstrap_suppress_jquery_error' => check_plain(url('admin/appearance/settings/' . $theme, array(
           'fragment' => 'edit-bootstrap-toggle-jquery-error',
-        )),
-      )), 'error', FALSE);
+        ))),
+      ));
+      drupal_set_message($message, 'error', FALSE);
     }
   }
 

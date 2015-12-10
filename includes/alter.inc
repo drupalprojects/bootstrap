@@ -129,7 +129,7 @@ function bootstrap_element_info_alter(&$info) {
                 $element['#bootstrap_replace'][$property][$callback] = $function;
               }
               // Check for a "form_" prefix instead (for #pre_render).
-              else if (!empty($info[$type][$property]) && array_search('form_' . $callback, $info[$type][$property]) !== FALSE) {
+              elseif (!empty($info[$type][$property]) && array_search('form_' . $callback, $info[$type][$property]) !== FALSE) {
                 $element['#bootstrap_replace'][$property]['form_' . $callback] = $function;
               }
               // Otherwise, append the function.
@@ -179,7 +179,7 @@ function _bootstrap_element_info_array_merge($info, $cached) {
         }
       }
       // Create the property, if not already set.
-      else if (!isset($info[$type][$property])) {
+      elseif (!isset($info[$type][$property])) {
         $info[$type][$property] = $data;
       }
     }
