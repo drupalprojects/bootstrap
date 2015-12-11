@@ -1,0 +1,19 @@
+# Default settings are not located here. Theme settings in general are handled
+# strictly by this base theme via the @BootstrapSetting annotation discovery
+# process. This is to help sub-theme's inherit its settings properly and
+# determine when a setting should be saved to config as "overridden".
+#
+# @see \Drupal\bootstrap\Plugin\SettingBase
+# @see \Drupal\bootstrap\Plugin\SettingInterface
+# @see \Drupal\bootstrap\Plugin\SettingManager
+# @see \Drupal\bootstrap\Plugin\Form\SystemThemeSettings
+
+# Default features.
+features:
+  comment_user_picture: true
+  comment_user_verification: true
+  favicon: true
+  logo: true
+  name: true
+  node_user_picture: true
+  slogan: true
