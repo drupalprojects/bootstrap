@@ -27,8 +27,8 @@ class Input extends PluginBase implements PreprocessInterface {
    * {@inheritdoc}
    */
   public function preprocess(array &$variables, $hook, array $info) {
-    \Drupal\Core\Render\Element::setAttributes($variables['element'], ['id', 'name', 'value', 'type']);
     $element = Element::create($variables['element']);
+    $element->map(['id', 'name', 'value', 'type']);
 
     // Autocomplete.
     if ($route = $element->getProperty('autocomplete_route_name')) {

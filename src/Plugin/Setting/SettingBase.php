@@ -107,7 +107,7 @@ class SettingBase extends PluginBase implements SettingInterface {
     foreach ($groups as $key => $title) {
       if (!isset($group->$key)) {
         if ($title) {
-          $group->$key = ['#type' => 'fieldset', '#title' => $title];
+          $group->$key = ['#type' => 'details', '#title' => $title];
         }
         else {
           $group->$key = ['#type' => 'container'];
@@ -117,8 +117,7 @@ class SettingBase extends PluginBase implements SettingInterface {
           $group->setProperty('group', 'bootstrap');
         }
         else {
-          $group->setProperty('collapsible', TRUE);
-          $group->setProperty('collapsed', TRUE);
+          $group->setProperty('open', FALSE);
         }
       }
       else {

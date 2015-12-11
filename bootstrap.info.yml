@@ -35,7 +35,7 @@ libraries-extend:
     - bootstrap/drupal.tabledrag
 
 libraries-override:
-  core/drupal.collapse: bootstrap/drupal.collapse
+  core/drupal.collapse: false
   core/drupal.dropbutton: bootstrap/drupal.dropbutton
   core/drupal.vertical-tabs: bootstrap/drupal.vertical-tabs
   system/admin: false

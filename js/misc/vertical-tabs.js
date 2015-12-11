@@ -36,7 +36,7 @@
         var tab_focus;
 
         // Check if there are some details that can be converted to vertical-tabs
-        var $details = $this.find('> fieldset');
+        var $details = $this.find('> .panel');
         if ($details.length === 0) {
           return;
         }
@@ -49,7 +49,7 @@
         $details.each(function () {
           var $that = $(this);
           var vertical_tab = new Drupal.verticalTab({
-            title: $that.find('> legend').text(),
+            title: $that.find('> .panel-heading').text(),
             details: $that
           });
           tab_list.append(vertical_tab.item);
@@ -61,7 +61,7 @@
             .removeClass('collapsible collapsed panel panel-default')
             .addClass('tab-pane vertical-tabs-pane')
             .data('verticalTab', vertical_tab)
-            .find('> legend').remove();
+            .find('> .panel-heading').remove();
           if (this.id === focusID) {
             tab_focus = $that;
           }
@@ -169,7 +169,7 @@
      */
     focus: function () {
       this.details
-        .siblings('fieldset.vertical-tabs-pane')
+        .siblings('.vertical-tabs-pane')
         .each(function () {
           $(this).removeClass('active').find('> div').removeClass('in');
           var tab = $(this).data('verticalTab');

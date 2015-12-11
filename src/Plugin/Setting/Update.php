@@ -35,12 +35,9 @@ class Update extends SettingBase {
     $pending = $update_manager->getPendingUpdates();
     if ($pending) {
       $form['update'] = [
-        '#type' => 'fieldset',
+        '#type' => 'details',
         '#title' => \Drupal::translation()->formatPlural(count($pending), 'Pending Update', 'Pending Updates'),
-        // @todo Setting a class like this is unnecessary, create a suggestion.
-        '#attributes' => [
-          'class' => ['panel-primary'],
-        ],
+        '#state' => 'primary',
         '#weight' => -20,
       ];
       $rows = [];

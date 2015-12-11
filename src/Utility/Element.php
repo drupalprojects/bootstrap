@@ -7,7 +7,8 @@
 namespace Drupal\bootstrap\Utility;
 
 use Drupal\bootstrap\Bootstrap;
-use Drupal\Component\Utility\NestedArray;
+use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -16,14 +17,7 @@ use Drupal\Core\Form\FormStateInterface;
  *
  * @see \Drupal\Core\Render\Element
  */
-class Element {
-
-  /**
-   * The render array element.
-   *
-   * @var array
-   */
-  protected $element;
+class Element extends DrupalAttributes {
 
   /**
    * The current state of the form.
@@ -49,9 +43,9 @@ class Element {
    */
   public function __construct(&$element, FormStateInterface $form_state = NULL) {
     if (!is_array($element)) {
-      $element = ['#markup' => $element];
+      $element = ['#markup' => $element instanceof MarkupInterface ? $element : new FormattableMarkup($element, [])];
     }
-    $this->element = &$element;
+    $this->array = &$element;
     $this->formState = $form_state;
     if (isset($element['#type'])) {
       $this->type = &$element['#type'];
@@ -70,14 +64,15 @@ class Element {
    * @throws \InvalidArgumentException
    *   Throws this error when the name is a property (key starting with #).
    */
-  public function __get($name) {
+  public function &__get($name) {
     if (\Drupal\Core\Render\Element::property($name)) {
       throw new \InvalidArgumentException('Cannot dynamically retrieve element property. Please use \Drupal\bootstrap\Utility\Element::getProperty instead.');
     }
-    if (!isset($this->element[$name])) {
-      $this->element[$name] = [];
+    if (!isset($this->array[$name])) {
+      $this->array[$name] = [];
     }
-    return new static($this->element[$name]);
+    $instance = new self($this->array[$name]);
+    return $instance;
   }
 
   /**
@@ -95,7 +90,7 @@ class Element {
     if (\Drupal\Core\Render\Element::property($name)) {
       throw new \InvalidArgumentException('Cannot dynamically retrieve element property. Please use \Drupal\bootstrap\Utility\Element::setProperty instead.');
     }
-    $this->element[$name] = $value instanceof Element ? $value->getArray() : $value;
+    $this->array[$name] = $value instanceof Element ? $value->getArray() : $value;
   }
 
   /**
@@ -108,31 +103,7 @@ class Element {
    *   TRUE or FALSE
    */
   public function __isset($name) {
-    return isset($this->element[$name]);
-  }
-
-  /**
-   * Adds a class to the element's attributes array.
-   *
-   * @param string|array $class
-   *   An individual class or an array of classes to add.
-   * @param string $property
-   *   Determines which attributes array to retrieve. By default, this is the
-   *   element's normal "attributes", but it could also be one of the following:
-   *   - "content_attributes"
-   *   - "input_group_attributes"
-   *   - "title_attributes"
-   *   - "wrapper_attributes".
-   *
-   * @return $this
-   */
-  public function addClass($class, $property = 'attributes') {
-    // Retrieve the element's classes.
-    $classes = &$this->getClasses($property);
-
-    // Add the class(es).
-    $classes = array_unique(array_merge($classes, (array) $class));
-    return $this;
+    return isset($this->array[$name]);
   }
 
   /**
@@ -150,7 +121,7 @@ class Element {
   public function children($sort = FALSE) {
     $children = [];
     foreach ($this->childrenKeys($sort) as $child) {
-      $children[$child] = new static($this->element[$child]);
+      $children[$child] = new static($this->array[$child]);
     }
     return $children;
   }
@@ -168,7 +139,7 @@ class Element {
    *   The array keys of the element's children.
    */
   public function childrenKeys($sort = FALSE) {
-    return \Drupal\Core\Render\Element::children($this->element, $sort);
+    return \Drupal\Core\Render\Element::children($this->array, $sort);
   }
 
 
@@ -200,7 +171,7 @@ class Element {
       }
     }
 
-    $this->addClass("$prefix-" . Bootstrap::cssClassFromString($this->element['#value'], 'default'));
+    $this->addClass("$prefix-" . Bootstrap::cssClassFromString($this->array['#value'], 'default'));
 
     return $this;
   }
@@ -227,72 +198,20 @@ class Element {
    *   The element render array, passed by reference.
    */
   public function &getArray() {
-    return $this->element;
+    return $this->array;
   }
 
   /**
-   * Retrieves a specific attribute from an element's "attributes" array.
-   *
-   * @param string $name
-   *   The specific attribute to retrieve.
-   * @param mixed $default
-   *   The default value to set if the attribute does not exist.
-   * @param string $property
-   *   Determines which attributes array to retrieve. By default, this is the
-   *   element's normal "attributes", but it could also be one of the following:
-   *   - "content_attributes"
-   *   - "input_group_attributes"
-   *   - "title_attributes"
-   *   - "wrapper_attributes".
-   *
-   * @return array
-   *   An attributes array, passed by reference.
+   * {@inheritdoc}
    */
-  public function &getAttribute($name, $default = NULL, $property = 'attributes') {
-    $attributes = &$this->getAttributes($property);
-    if (!isset($attributes[$name])) {
-      $attributes[$name] = $default;
+  public function getAttributes($property = 'attributes', &$default = NULL) {
+    if (!isset($default)) {
+      $default = &$this->getProperty($property, []);
     }
-    return $attributes[$name];
-  }
-
-  /**
-   * Retrieves an element's entire "attributes" array.
-   *
-   * @param string $property
-   *   Determines which attributes array to retrieve. By default, this is the
-   *   element's normal "attributes", but it could also be one of the following:
-   *   - "content_attributes"
-   *   - "input_group_attributes"
-   *   - "title_attributes"
-   *   - "wrapper_attributes".
-   *
-   * @return array
-   *   An attributes array, passed by reference.
-   */
-  public function &getAttributes($property = 'attributes') {
-    $attributes = &$this->getProperty($property, []);
-    return $attributes;
-  }
-
-  /**
-   * Retrieves an element's "class" array.
-   *
-   * @param string $property
-   *   Determines which attributes array to retrieve. By default, this is the
-   *   element's normal "attributes", but it could also be one of the following:
-   *   - "content_attributes"
-   *   - "input_group_attributes"
-   *   - "title_attributes"
-   *   - "wrapper_attributes".
-   *
-   * @return array
-   *   The classes array, passed by reference.
-   */
-  public function &getClasses($property = 'attributes') {
-    $classes = &$this->getAttribute('class', [], $property);
-    $classes = array_unique($classes);
-    return $classes;
+    if (!isset($this->attributes[$property])) {
+      $this->attributes[$property] = new Attributes($default);
+    }
+    return $this->attributes[$property];
   }
 
   /**
@@ -312,14 +231,14 @@ class Element {
     if (!$this->formState) {
       throw new \BadMethodCallException('The element instance must be constructed with a valid form state object to use this method.');
     }
-    return $this->formState->getError($this->element);
+    return $this->formState->getError($this->array);
   }
 
   /**
    * Retrieves the render array for the element.
    *
    * @param string $name
-   *   The name of the child element to retrieve.
+   *   The name of the element property to retrieve, not including the # prefix.
    * @param mixed $default
    *   The default to set if property does not exist.
    *
@@ -327,13 +246,7 @@ class Element {
    *   The property value, NULL if not set.
    */
   public function &getProperty($name, $default = NULL) {
-    if (!\Drupal\Core\Render\Element::property($name)) {
-      $name = '#' . $name;
-    }
-    if (!isset($this->element[$name])) {
-      $this->element[$name] = $default;
-    }
-    return $this->element[$name];
+    return $this->offsetGet("#$name", $default);
   }
 
   /**
@@ -343,45 +256,11 @@ class Element {
    *   The array keys of the element's visible children.
    */
   public function getVisibleChildren() {
-    return \Drupal\Core\Render\Element::getVisibleChildren($this->element);
+    return \Drupal\Core\Render\Element::getVisibleChildren($this->array);
   }
 
   /**
-   * Determines if an element's attributes array has a specific attribute.
-   *
-   * @param string $name
-   *   The attribute to search for.
-   * @param string $property
-   *   Determines which attributes array to retrieve. By default, this is the
-   *   element's normal "attributes", but it could also be one of the following:
-   *   - "content_attributes"
-   *   - "input_group_attributes"
-   *   - "title_attributes"
-   *   - "wrapper_attributes".
-   */
-  public function hasAttribute($name, $property = 'attributes') {
-    return array_search($name, $this->getAttributes($property)) !== FALSE;
-  }
-
-  /**
-   * Determines if an element's attributes array has a specific class.
-   *
-   * @param string $class
-   *   The class to search for.
-   * @param string $property
-   *   Determines which attributes array to retrieve. By default, this is the
-   *   element's normal "attributes", but it could also be one of the following:
-   *   - "content_attributes"
-   *   - "input_group_attributes"
-   *   - "title_attributes"
-   *   - "wrapper_attributes".
-   */
-  public function hasClass($class, $property = 'attributes') {
-    return array_search($class, $this->getClasses($property)) !== FALSE;
-  }
-
-  /**
-   * Determines if an element has an error set on it.
+   * Indicates whether the element has an error set.
    *
    * @throws \BadMethodCallException
    *   When the element instance was not constructed with a valid form state
@@ -393,26 +272,23 @@ class Element {
   }
 
   /**
-   * Determines if an element has a specific property.
+   * Indicates whether the element has a specific property.
    *
    * @param string $name
    *   The property to check.
    */
   public function hasProperty($name) {
-    if (!\Drupal\Core\Render\Element::property($name)) {
-      $name = '#' . $name;
-    }
-    return isset($this->element[$name]);
+    return $this->offsetExists("#$name");
   }
 
   /**
-   * Determines if the element is a button.
+   * Indicates whether the element is a button.
    *
    * @return bool
    *   TRUE or FALSE.
    */
   public function isButton() {
-    return !empty($this->element['#is_button']) || $this->isType(['button', 'submit', 'reset', 'image_button']);
+    return !empty($this->array['#is_button']) || $this->isType(['button', 'submit', 'reset', 'image_button']);
   }
 
   /**
@@ -425,7 +301,20 @@ class Element {
    *   Whether the given element is empty.
    */
   public function isEmpty() {
-    return \Drupal\Core\Render\Element::isEmpty($this->element);
+    return \Drupal\Core\Render\Element::isEmpty($this->array);
+  }
+
+  /**
+   * Indicates whether a property on the element is empty.
+   *
+   * @param string $name
+   *   The property to check.
+   *
+   * @return bool
+   *   Whether the given property on the element is empty.
+   */
+  public function isPropertyEmpty($name) {
+    return $this->hasProperty($name) && !empty($this->getProperty($name));
   }
 
   /**
@@ -448,8 +337,25 @@ class Element {
    * @return bool
    *   TRUE if the element is visible, otherwise FALSE.
    */
-  public function isVisibleElement() {
-    return \Drupal\Core\Render\Element::isVisibleElement($this->element);
+  public function isVisible() {
+    return \Drupal\Core\Render\Element::isVisibleElement($this->array);
+  }
+
+  /**
+   * Maps an element's properties to its attributes array.
+   *
+   * @param array $map
+   *   An associative array whose keys are element property names and whose
+   *   values are the HTML attribute names to set on the corresponding
+   *   property; e.g., array('#propertyname' => 'attributename'). If both names
+   *   are identical except for the leading '#', then an attribute name value is
+   *   sufficient and no property name needs to be specified.
+   *
+   * @return $this
+   */
+  public function map(array $map) {
+    \Drupal\Core\Render\Element::setAttributes($this->array, $map);
+    return $this;
   }
 
   /**
@@ -459,28 +365,7 @@ class Element {
    *   An array of property keys for the element.
    */
   public function properties() {
-    return \Drupal\Core\Render\Element::properties($this->element);
-  }
-
-  /**
-   * Removes a class from an element's attributes array.
-   *
-   * @param string|array $class
-   *   An individual class or an array of classes to remove.
-   * @param string $property
-   *   Determines which attributes array to retrieve. By default, this is the
-   *   element's normal "attributes", but it could also be one of the following:
-   *   - "content_attributes"
-   *   - "input_group_attributes"
-   *   - "title_attributes"
-   *   - "wrapper_attributes".
-   *
-   * @return $this
-   */
-  public function removeClass($class, $property = 'attributes') {
-    $classes = &$this->getClasses($property);
-    $classes = array_values(array_diff($classes, (array) $class));
-    return $this;
+    return \Drupal\Core\Render\Element::properties($this->array);
   }
 
   /**
@@ -495,77 +380,7 @@ class Element {
     if (!isset($renderer)) {
       $renderer = \Drupal::service('renderer');
     }
-    return $renderer->render($this->element);
-  }
-
-  /**
-   * Replaces a class in an element's attributes array.
-   *
-   * @param string $old
-   *   The old class to remove.
-   * @param string $new
-   *   The new class. It will not be added if the $old class does not exist.
-   * @param string $property
-   *   Determines which attributes array to retrieve. By default, this is the
-   *   element's normal "attributes", but it could also be one of the following:
-   *   - "content_attributes"
-   *   - "input_group_attributes"
-   *   - "title_attributes"
-   *   - "wrapper_attributes".
-   *
-   * @return $this
-   */
-  public function replaceClass($old, $new, $property = 'attributes') {
-    $classes = &$this->getClasses($property);
-    $key = array_search($old, $classes);
-    if ($key !== FALSE) {
-      $classes[$key] = $new;
-    }
-    return $this;
-  }
-
-  /**
-   * Sets an element's "attributes" array.
-   *
-   * @param string $name
-   *   The name of the attribute to set.
-   * @param mixed $value
-   *   The value of the attribute to set.
-   * @param string $property
-   *   Determines which attributes array to retrieve. By default, this is the
-   *   element's normal "attributes", but it could also be one of the following:
-   *   - "content_attributes"
-   *   - "input_group_attributes"
-   *   - "title_attributes"
-   *   - "wrapper_attributes".
-   *
-   * @return $this
-   */
-  public function setAttribute($name, $value, $property = 'attributes') {
-    $attributes = &$this->getAttributes($property);
-    $attributes[$name] = $value;
-    return $this;
-  }
-
-  /**
-   * Sets an element's "attributes" array.
-   *
-   * @param array $values
-   *   An associative key/value array of attributes to set.
-   * @param string $property
-   *   Determines which attributes array to retrieve. By default, this is the
-   *   element's normal "attributes", but it could also be one of the following:
-   *   - "content_attributes"
-   *   - "input_group_attributes"
-   *   - "title_attributes"
-   *   - "wrapper_attributes".
-   *
-   * @return $this
-   */
-  public function setAttributes(array $values, $property = 'attributes') {
-    $attributes = &$this->getAttributes($property);
-    $attributes = NestedArray::mergeDeepArray([$attributes, $values], TRUE);
-    return $this;
+    return $renderer->render($this->array);
   }
 
   /**
@@ -584,7 +399,7 @@ class Element {
     if (!$this->formState) {
       throw new \BadMethodCallException('The element instance must be constructed with a valid form state object to use this method.');
     }
-    $this->formState->setError($this->element, $message);
+    $this->formState->setError($this->array, $message);
     return $this;
   }
 
@@ -608,20 +423,17 @@ class Element {
   }
 
   /**
-   * Magic set method (for child elements only).
+   * Sets the value for a property.
    *
    * @param string $name
    *   The name of the property to set.
    * @param mixed $value
-   *   The value of $name to set.
+   *   The value of the property to set.
    *
    * @return $this
    */
   public function setProperty($name, $value) {
-    if (!\Drupal\Core\Render\Element::property($name)) {
-      $name = '#' . $name;
-    }
-    $this->element[$name] = $value instanceof Element ? $value->getArray() : $value;
+    $this->array["#$name"] = $value instanceof Element ? $value->getArray() : $value;
     return $this;
   }
 
@@ -656,7 +468,7 @@ class Element {
     }
 
     // Allow a different element to attach the tooltip.
-    $t = new self(isset($target) ? $target : $this->element, $this->formState);
+    $t = new self(isset($target) ? $target : $this->array, $this->formState);
 
     // Retrieve the length limit for smart descriptions.
     if (!isset($length)) {
@@ -679,7 +491,7 @@ class Element {
       || !$this->getProperty('smart_description', TRUE)
       || !$t->getProperty('smart_description', TRUE)
       || !$this->hasProperty('description')
-      || $t->hasAttribute('title')
+      || (string) $t->getAttribute('title') !== (string) $t->getProperty('description')
       || $t->hasAttribute('data-toggle')
       || !Unicode::isSimple($this->getProperty('description'), $length, $allowed_tags, $html)
     ) {
@@ -699,17 +511,17 @@ class Element {
     }
 
     // Retrieve the proper attributes array.
-    $attributes = &$t->getAttributes($property);
+    $attributes = $t->getAttributes($property);
 
     // Set the tooltip attributes.
-    $attributes['title'] = $allowed_tags !== FALSE ? Xss::filter((string) $this->element['#description'], $allowed_tags) : $this->element['#description'];
+    $attributes['title'] = $allowed_tags !== FALSE ? Xss::filter((string) $this->getProperty('description'), $allowed_tags) : $this->getProperty('description');
     $attributes['data-toggle'] = 'tooltip';
     if ($html || $allowed_tags === FALSE) {
       $attributes['data-html'] = 'true';
     }
 
     // Remove the element description so it isn't (re-)rendered later.
-    unset($this->element['#description']);
+    $this->unsetProperty('description');
 
     return $this;
   }
@@ -723,10 +535,7 @@ class Element {
    * @return $this
    */
   public function unsetProperty($name) {
-    if (!\Drupal\Core\Render\Element::property($name)) {
-      $name = '#' . $name;
-    }
-    unset($this->element[$name]);
+    unset($this->array["#$name"]);
     return $this;
   }
 

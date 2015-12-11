@@ -320,7 +320,20 @@ class Bootstrap {
     ];
 
     $hooks['bootstrap_panel'] = [
-      'render element' => 'element',
+      'variables' => [
+        'attributes' => [],
+        'body' => [],
+        'body_attributes' => [],
+        'collapsible' => FALSE,
+        'collapsed' => FALSE,
+        'description' => NULL,
+        'description_display' => 'before',
+        'footer' => NULL,
+        'footer_attributes' => [],
+        'heading' => NULL,
+        'heading_attributes' => [],
+        'state' => 'default',
+      ],
     ];
     return $hooks;
   }
@@ -835,6 +848,13 @@ class Bootstrap {
     static $preprocess_manager;
     if (!isset($preprocess_manager)) {
       $preprocess_manager = new PreprocessManager($theme);
+    }
+
+    // Ensure that any default theme hook variables exist. Due to how theme
+    // hook suggestion alters work, the variables provided are from the
+    // original theme hook, not the suggestion.
+    if (isset($info['variables'])) {
+      $variables += $info['variables'];
     }
 
     // Add extra variables to all theme hooks.

@@ -39,17 +39,16 @@ class ElementInfo extends PluginBase implements AlterInterface {
         $element['#input'] = $types[$element['#base_type']]['#input'];
       }
 
-      // Replace detail and fieldset theme implementations with bootstrap_panel.
-      if (!empty($element['#theme']) && ($element['#theme'] === 'details' || $element['#theme'] === 'fieldset')) {
-        $element['#theme'] = 'bootstrap_panel';
-      }
-      if (!empty($element['#theme_wrappers']) && is_array($element['#theme_wrappers'])) {
-        if (($key = array_search('details', $element['#theme_wrappers'])) !== FALSE) {
-          $element['#theme_wrappers'][$key] = 'bootstrap_panel';
-        }
-        if (($key = array_search('fieldset', $element['#theme_wrappers'])) !== FALSE) {
-          $element['#theme_wrappers'][$key] = 'bootstrap_panel';
-        }
+      // Core does not actually use the "description_display" property on the
+      // "details" or "fieldset" element types because the positioning of the
+      // description is never used in core templates. However, the form builder
+      // automatically applies the value of "after", thus making it impossible
+      // to detect a valid value later in the rendering process. It looks better
+      // for the "details" and "fieldset" element types to display as "before".
+      // @see \Drupal\Core\Form\FormBuilder::doBuildForm()
+      if ($type === 'details' || $type === 'fieldset') {
+        $element['#description_display'] = 'before';
+        $element['#state'] = 'default';
       }
 
       // Add extra variables to all elements.

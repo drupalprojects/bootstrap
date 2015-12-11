@@ -69,7 +69,7 @@ class CdnProvider extends SettingBase {
 
     $group = $this->getGroup($form, $form_state);
     $group->setProperty('description', '<div class="alert alert-info messages warning"><strong>' . t('NOTE') . ':</strong> ' . t('Using one of the "CDN Provider" options below is the preferred method for loading Bootstrap CSS and JS on simpler sites that do not use a site-wide CDN. Using a "CDN Provider" for loading Bootstrap, however, does mean that it depends on a third-party service. There is no obligation or commitment by these third-parties that guarantees any up-time or service quality. If you need to customize Bootstrap and have chosen to compile the source code locally (served from this site), you must disable the "CDN Provider" option below by choosing "- None -" and alternatively enable a site-wide CDN implementation. All local (served from this site) versions of Bootstrap will be superseded by any enabled "CDN Provider" below. <strong>Do not do both</strong>.') . '</div>');
-    $group->setProperty('collapsed', !$default_provider);
+    $group->setProperty('open', !!$default_provider);
 
     // Intercept possible manual import of API data via AJAX callback.
     $this->importProviderData($form_state);
@@ -143,14 +143,13 @@ class CdnProvider extends SettingBase {
       }
 
       $group->$plugin_id->import = [
-        '#type' => 'fieldset',
+        '#type' => 'details',
         '#title' => t('Imported @title data', ['@title' => $provider->getLabel()]),
         '#description' => t('The provider will attempt to parse the data entered here each time it is saved. If no data has been entered, any saved files associated with this provider will be removed and the provider will again attempt to request the API data normally through the following URL: <a href=":provider_api" target="_blank">:provider_api</a>.', [
           ':provider_api' => $provider->getPluginDefinition()['api'],
         ]),
         '#weight' => 10,
-        '#collapsible' => TRUE,
-        '#collapsed' => TRUE,
+        '#open' => FALSE,
       ];
 
       $group->$plugin_id->import->cdn_provider_import_data = [

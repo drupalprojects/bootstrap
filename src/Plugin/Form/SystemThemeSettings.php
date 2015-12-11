@@ -61,7 +61,7 @@ class SystemThemeSettings extends FormBase implements FormInterface {
     // Iterate over existing children and move appropriate ones to global group.
     foreach ($f->children() as $child) {
       if ($child->isType(['details', 'fieldset']) && !$child->hasProperty('group')) {
-        $child->setProperty('type', 'fieldset');
+        $child->setProperty('type', 'details');
         $child->setProperty('group', 'global');
       }
     }
@@ -69,11 +69,7 @@ class SystemThemeSettings extends FormBase implements FormInterface {
     // Provide the necessary default groups.
     $form['bootstrap'] = [
       '#type' => 'vertical_tabs',
-      '#attached' => [
-        'library' => [
-          'bootstrap/theme-settings',
-        ],
-      ],
+      '#attached' => ['library' => ['bootstrap/theme-settings']],
       '#prefix' => '<h2><small>' . t('Bootstrap Settings') . '</small></h2>',
       '#weight' => -10,
     ];
@@ -85,7 +81,7 @@ class SystemThemeSettings extends FormBase implements FormInterface {
     ];
     foreach ($groups as $group => $title) {
       $form[$group] = [
-        '#type' => 'fieldset',
+        '#type' => 'details',
         '#title' => $title,
         '#group' => 'bootstrap',
       ];
