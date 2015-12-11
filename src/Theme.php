@@ -425,7 +425,7 @@ class Theme {
     $file = preg_replace('`^/?' . $this->getPath() . '/?`', '', $file);
     $file = strpos($file, '/') !== 0 ? $file = "/$file" : $file;
     $path = is_string($path) && !empty($path) && strpos($path, '/') !== 0 ? $path = "/$path" : '';
-    $include = DRUPAL_ROOT . base_path() . $this->getPath() . $path . $file;
+    $include = DRUPAL_ROOT . '/' . $this->getPath() . $path . $file;
     if (!isset($includes[$include])) {
       $includes[$include] = !!@include_once $include;
       if (!$includes[$include]) {
