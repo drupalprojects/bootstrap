@@ -25,40 +25,43 @@
  * @ingroup templates
  */
 #}
+{%
+  set status_heading = {
+    'status': 'Status message'|t,
+    'error': 'Error message'|t,
+    'warning': 'Warning message'|t,
+    'info': 'Informative message'|t,
+  }
+%}
+{%
+  set status_classes = {
+    'status': 'success',
+    'error': 'danger',
+    'warning': 'warning',
+    'info': 'info',
+  }
+%}
 {% for type, messages in message_list %}
-  {% if type == 'status' %}
-    {% set type = 'info' %}
-  {% elseif type == 'error' %}
-    {% set type = 'danger' %}
+{%
+  set classes = [
+    'alert',
+    'alert-' ~ status_classes[type],
+    'alert-dismissible',
+  ]
+%}
+<div{{ attributes.addClass(classes) }} role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  {% if status_headings[type] %}
+    <h4 class="sr-only">{{ status_headings[type] }}</h4>
   {% endif %}
-
-    {%
-    set classes = [
-      'alert',
-      'alert-' ~ type,
-    ]
-  %}
-
-  <div class="{{ attributes.addClass(classes).class }}" role="contentinfo" aria-label="{{ status_headings[type] }}">
-    {% if type == 'error' %}
-      <div role="alert">
-    {% endif %}
-      {% if status_headings[type] %}
-        <h2 class="visually-hidden">{{ status_headings[type] }}</h2>
-      {% endif %}
-      {% if messages|length > 1 %}
-        <ul class="messages__list">
-          {% for message in messages %}
-            <li class="messages__item">{{ message }}</li>
-          {% endfor %}
-        </ul>
-      {% else %}
-        {{ messages|first }}
-      {% endif %}
-    {% if type == 'error' %}
-      </div>
-    {% endif %}
-  </div>
-  {# Remove type specific classes. #}
-  {{ attributes.removeClass(classes) }}
+  {% if messages|length > 1 %}
+    <ul class="item-list item-list--messages">
+      {% for message in messages %}
+        <li class="item item--message">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    {{ messages|first }}
+  {% endif %}
+</div>
 {% endfor %}
