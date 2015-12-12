@@ -332,7 +332,7 @@ class Bootstrap {
         'footer_attributes' => [],
         'heading' => NULL,
         'heading_attributes' => [],
-        'state' => 'default',
+        'panel_type' => 'default',
       ],
     ];
     return $hooks;

@@ -70,7 +70,9 @@ class ProcessManager extends PluginManager {
     }
 
     // Check for errors and set the "has_error" property flag.
-    if ($e->hasError() || ($e->getProperty('required') && $theme->getSetting('forms_required_has_error'))) {
+    $errors = $e->getError();
+    $e->setProperty('errors', $errors);
+    if (isset($errors) || ($e->getProperty('required') && $theme->getSetting('forms_required_has_error'))) {
       $e->setProperty('has_error', TRUE);
     }
 

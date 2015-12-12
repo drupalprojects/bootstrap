@@ -12,9 +12,7 @@ use Drupal\bootstrap\Plugin\PluginBase;
 /**
  * Implements hook_page_attachments_alter().
  *
- * @BootstrapAlter(
- *   id = "page_attachments"
- * )
+ * @BootstrapAlter("page_attachments")
  */
 class PageAttachments extends PluginBase implements AlterInterface {
 

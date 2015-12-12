@@ -37,7 +37,7 @@ class Update extends SettingBase {
       $form['update'] = [
         '#type' => 'details',
         '#title' => \Drupal::translation()->formatPlural(count($pending), 'Pending Update', 'Pending Updates'),
-        '#state' => 'primary',
+        '#panel_type' => 'primary',
         '#weight' => -20,
       ];
       $rows = [];

@@ -41,9 +41,7 @@ use Drupal\Core\Theme\Registry;
  *
  * @see https://www.drupal.org/node/474684
  *
- * @BootstrapAlter(
- *   id = "theme_registry"
- * )
+ * @BootstrapAlter("theme_registry")
  */
 class ThemeRegistry extends Registry implements AlterInterface {
 

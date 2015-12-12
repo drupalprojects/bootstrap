@@ -6,8 +6,8 @@
 
 namespace Drupal\bootstrap\Plugin\Preprocess;
 
+use Drupal\bootstrap\Plugin\PluginBase;
 use Drupal\bootstrap\Utility\Variables;
-use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Template\Attribute;
 
 /**
@@ -21,17 +21,15 @@ class PreprocessBase extends PluginBase implements PreprocessInterface {
    * {@inheritdoc}
    */
   public function preprocess(array &$variables, $hook, array $info) {
-    $vars = new Variables($variables);
-
-    // Preprocess variables.
-    $this->preProcessVariables($vars, $hook, $info);
-
-    // Post-process variables.
-    $this->postProcessVariables($vars, $hook, $info);
+    $vars = Variables::create($variables);
+    if ($vars->element) {
+      $this->preprocessElement($vars, $hook, $info);
+    }
+    $this->preprocessVariables($vars, $hook, $info);
   }
 
   /**
-   * Preprocess the variables array.
+   * Ensures all attributes have been converted to an Attribute object.
    *
    * @param \Drupal\bootstrap\Utility\Variables $variables
    *   A variables object.
@@ -40,10 +38,16 @@ class PreprocessBase extends PluginBase implements PreprocessInterface {
    * @param array $info
    *   The theme hook info array.
    */
-  protected function preProcessVariables(Variables $variables, $hook, array $info) {}
+  protected function preprocessAttributes(Variables $variables, $hook, array $info) {
+    foreach ($variables as $name => $value) {
+      if (strpos($name, 'attributes') !== FALSE && is_array($value)) {
+        $variables[$name] = new Attribute($value);
+      }
+    }
+  }
 
   /**
-   * Post-process the variables array.
+   * Converts any set description variable into a traversable array.
    *
    * @param \Drupal\bootstrap\Utility\Variables $variables
    *   A variables object.
@@ -51,10 +55,10 @@ class PreprocessBase extends PluginBase implements PreprocessInterface {
    *   The name of the theme hook.
    * @param array $info
    *   The theme hook info array.
+   *
+   * @see https://www.drupal.org/node/2324025
    */
-  protected function postProcessVariables(Variables $variables, $hook, array $info) {
-    // Convert descriptions into a traversable array.
-    // @see https://www.drupal.org/node/2324025
+  protected function preprocessDescription(Variables $variables, $hook, array $info) {
     if ($variables->offsetGet('description')) {
       // Retrieve the description attributes.
       $description_attributes = $variables->offsetGet('description_attributes', []);
@@ -75,13 +79,30 @@ class PreprocessBase extends PluginBase implements PreprocessInterface {
         'position' => $variables->offsetGet('description_display', 'after'),
       ]);
     }
-
-    // Ensure all attributes have been converted to an Attribute object.
-    foreach ($variables as $name => $value) {
-      if (strpos($name, 'attributes') !== FALSE && is_array($value)) {
-        $variables[$name] = new Attribute($value);
-      }
-    }
   }
+
+  /**
+   * Preprocess the variables array if an element is present.
+   *
+   * @param \Drupal\bootstrap\Utility\Variables $variables
+   *   A variables object.
+   * @param string $hook
+   *   The name of the theme hook.
+   * @param array $info
+   *   The theme hook info array.
+   */
+  protected function preprocessElement(Variables $variables, $hook, array $info) {}
+
+  /**
+   * Preprocess the variables array.
+   *
+   * @param \Drupal\bootstrap\Utility\Variables $variables
+   *   A variables object.
+   * @param string $hook
+   *   The name of the theme hook.
+   * @param array $info
+   *   The theme hook info array.
+   */
+  protected function preprocessVariables(Variables $variables, $hook, array $info) {}
 
 }

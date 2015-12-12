@@ -34,6 +34,11 @@ class Element extends DrupalAttributes {
   protected $type = FALSE;
 
   /**
+   * {@inheritdoc}
+   */
+  protected $attributePrefix = '#';
+
+  /**
    * Element constructor.
    *
    * @param array|string $element
@@ -53,9 +58,11 @@ class Element extends DrupalAttributes {
   }
 
   /**
-   * Magic get method (for child elements only).
+   * Magic get method.
    *
-   * @param string $name
+   * This is only for child elements, not properties.
+   *
+   * @param string $key
    *   The name of the child element to retrieve.
    *
    * @return \Drupal\bootstrap\Utility\Element
@@ -64,21 +71,20 @@ class Element extends DrupalAttributes {
    * @throws \InvalidArgumentException
    *   Throws this error when the name is a property (key starting with #).
    */
-  public function &__get($name) {
-    if (\Drupal\Core\Render\Element::property($name)) {
+  public function &__get($key) {
+    if (\Drupal\Core\Render\Element::property($key)) {
       throw new \InvalidArgumentException('Cannot dynamically retrieve element property. Please use \Drupal\bootstrap\Utility\Element::getProperty instead.');
     }
-    if (!isset($this->array[$name])) {
-      $this->array[$name] = [];
-    }
-    $instance = new self($this->array[$name]);
+    $instance = new self($this->offsetGet($key, []));
     return $instance;
   }
 
   /**
-   * Magic set method (for child elements only).
+   * Magic set method.
    *
-   * @param string $name
+   * This is only for child elements, not properties.
+   *
+   * @param string $key
    *   The name of the child element to set.
    * @param mixed $value
    *   The value of $name to set.
@@ -86,24 +92,66 @@ class Element extends DrupalAttributes {
    * @throws \InvalidArgumentException
    *   Throws this error when the name is a property (key starting with #).
    */
-  public function __set($name, $value) {
-    if (\Drupal\Core\Render\Element::property($name)) {
-      throw new \InvalidArgumentException('Cannot dynamically retrieve element property. Please use \Drupal\bootstrap\Utility\Element::setProperty instead.');
+  public function __set($key, $value) {
+    if (\Drupal\Core\Render\Element::property($key)) {
+      throw new \InvalidArgumentException('Cannot dynamically retrieve element property. Use \Drupal\bootstrap\Utility\Element::setProperty instead.');
     }
-    $this->array[$name] = $value instanceof Element ? $value->getArray() : $value;
+    $this->offsetSet($key, ($value instanceof Element ? $value->getArray() : $value));
   }
 
   /**
-   * Determines if a child element is set.
+   * Magic isset method.
+   *
+   * This is only for child elements, not properties.
    *
    * @param string $name
    *   The name of the child element to check.
    *
    * @return bool
    *   TRUE or FALSE
+   *
+   * @throws \InvalidArgumentException
+   *   Throws this error when the name is a property (key starting with #).
    */
   public function __isset($name) {
-    return isset($this->array[$name]);
+    if (\Drupal\Core\Render\Element::property($name)) {
+      throw new \InvalidArgumentException('Cannot dynamically check if an element has a property. Use \Drupal\bootstrap\Utility\Element::unsetProperty instead.');
+    }
+    return parent::__isset($name);
+  }
+
+  /**
+   * Magic unset method.
+   *
+   * This is only for child elements, not properties.
+   *
+   * @param mixed $name
+   *   The name of the child element to unset.
+   *
+   * @throws \InvalidArgumentException
+   *   Throws this error when the name is a property (key starting with #).
+   */
+  public function __unset($name) {
+    if (\Drupal\Core\Render\Element::property($name)) {
+      throw new \InvalidArgumentException('Cannot dynamically unset an element property. Use \Drupal\bootstrap\Utility\Element::hasProperty instead.');
+    }
+    parent::__unset($name);
+  }
+
+  /**
+   * Identifies the children of an element array, optionally sorted by weight.
+   *
+   * The children of a element array are those key/value pairs whose key does
+   * not start with a '#'. See drupal_render() for details.
+   *
+   * @param bool $sort
+   *   Boolean to indicate whether the children should be sorted by weight.
+   *
+   * @return array
+   *   The array keys of the element's children.
+   */
+  public function childKeys($sort = FALSE) {
+    return \Drupal\Core\Render\Element::children($this->array, $sort);
   }
 
   /**
@@ -120,28 +168,11 @@ class Element extends DrupalAttributes {
    */
   public function children($sort = FALSE) {
     $children = [];
-    foreach ($this->childrenKeys($sort) as $child) {
-      $children[$child] = new static($this->array[$child]);
+    foreach ($this->childKeys($sort) as $child) {
+      $children[$child] = new self($this->array[$child]);
     }
     return $children;
   }
-
-  /**
-   * Identifies the children of an element array, optionally sorted by weight.
-   *
-   * The children of a element array are those key/value pairs whose key does
-   * not start with a '#'. See drupal_render() for details.
-   *
-   * @param bool $sort
-   *   Boolean to indicate whether the children should be sorted by weight.
-   *
-   * @return array
-   *   The array keys of the element's children.
-   */
-  public function childrenKeys($sort = FALSE) {
-    return \Drupal\Core\Render\Element::children($this->array, $sort);
-  }
-
 
   /**
    * Adds a specific Bootstrap class to color a button based on its text value.
@@ -199,19 +230,6 @@ class Element extends DrupalAttributes {
    */
   public function &getArray() {
     return $this->array;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getAttributes($property = 'attributes', &$default = NULL) {
-    if (!isset($default)) {
-      $default = &$this->getProperty($property, []);
-    }
-    if (!isset($this->attributes[$property])) {
-      $this->attributes[$property] = new Attributes($default);
-    }
-    return $this->attributes[$property];
   }
 
   /**
@@ -371,7 +389,7 @@ class Element extends DrupalAttributes {
   /**
    * Renders the element.
    *
-   * @return \Drupal\Component\Render\MarkupInterface
+   * @return \Drupal\Component\Render\MarkupInterface|string
    *   The rendered HTML.
    */
   public function render() {
@@ -440,9 +458,10 @@ class Element extends DrupalAttributes {
   /**
    * Converts an element description into a tooltip based on certain criteria.
    *
-   * @param array $target
+   * @param array|\Drupal\bootstrap\Utility\Element|NULL $target_element
    *   The target element render array the tooltip is to be attached to, passed
-   *   by reference. If not set, it will default to the $element passed.
+   *   by reference or an existing Element object. If not set, it will default
+   *   this Element instance.
    * @param bool $input_only
    *   Toggle determining whether or not to only convert input elements.
    * @param int $length
@@ -450,7 +469,7 @@ class Element extends DrupalAttributes {
    *
    * @return $this
    */
-  public function smartDescription(array &$target = NULL, $input_only = TRUE, $length = NULL) {
+  public function smartDescription(&$target_element = NULL, $input_only = TRUE, $length = NULL) {
     static $theme;
     if (!isset($theme)) {
       $theme = Bootstrap::getTheme();
@@ -468,7 +487,16 @@ class Element extends DrupalAttributes {
     }
 
     // Allow a different element to attach the tooltip.
-    $t = new self(isset($target) ? $target : $this->array, $this->formState);
+    /** @var Element $target */
+    if (is_object($target_element) && $target_element instanceof self) {
+      $target = $target_element;
+    }
+    elseif (isset($target_element) && is_array($target_element)) {
+      $target = new self($target_element, $this->formState);
+    }
+    else {
+      $target = $this;
+    }
 
     // Retrieve the length limit for smart descriptions.
     if (!isset($length)) {
@@ -487,31 +515,30 @@ class Element extends DrupalAttributes {
 
     // Return if element or target shouldn't have "simple" tooltip descriptions.
     $html = FALSE;
-    if (($input_only && !$t->hasProperty('input'))
+    if (($input_only && !$target->hasProperty('input'))
       || !$this->getProperty('smart_description', TRUE)
-      || !$t->getProperty('smart_description', TRUE)
+      || !$target->getProperty('smart_description', TRUE)
       || !$this->hasProperty('description')
-      || (string) $t->getAttribute('title') !== (string) $t->getProperty('description')
-      || $t->hasAttribute('data-toggle')
+      || $target->hasAttribute('data-toggle')
       || !Unicode::isSimple($this->getProperty('description'), $length, $allowed_tags, $html)
     ) {
       return $this;
     }
 
-    // Default property (on the element itself).
-    $property = 'attributes';
+    // Default attributes type.
+    $type = DrupalAttributes::ATTRIBUTES;
 
     // Use #label_attributes for 'checkbox' and 'radio' elements.
     if ($this->isType(['checkbox', 'radio'])) {
-      $property = 'label_attributes';
+      $type = DrupalAttributes::LABEL;
     }
     // Use #wrapper_attributes for 'checkboxes' and 'radios' elements.
     elseif ($this->isType(['checkboxes', 'radios'])) {
-      $property = 'wrapper_attributes';
+      $type = DrupalAttributes::WRAPPER;
     }
 
     // Retrieve the proper attributes array.
-    $attributes = $t->getAttributes($property);
+    $attributes = $target->getAttributes($type);
 
     // Set the tooltip attributes.
     $attributes['title'] = $allowed_tags !== FALSE ? Xss::filter((string) $this->getProperty('description'), $allowed_tags) : $this->getProperty('description');
@@ -527,7 +554,7 @@ class Element extends DrupalAttributes {
   }
 
   /**
-   * Magic set method (for child elements only).
+   * Removes a property from the element.
    *
    * @param string $name
    *   The name of the property to unset.

@@ -7,11 +7,90 @@
 namespace Drupal\bootstrap\Utility;
 
 /**
- * Custom ArrayObject implementation.
+ * Class for managing multiple types of attributes commonly found in Drupal.
  *
- * The native ArrayObject is unnecessarily complicated.
+ * @see \Drupal\bootstrap\Utility\Attributes
+ * @see \Drupal\bootstrap\Utility\Element
+ * @see \Drupal\bootstrap\Utility\Variables
  */
 class DrupalAttributes extends ArrayObject {
+
+  /**
+   * Defines the "attributes" storage type constant.
+   *
+   * @var string
+   */
+  const ATTRIBUTES = 'attributes';
+
+  /**
+   * Defines the "body_attributes" storage type constant.
+   *
+   * @var string
+   */
+  const BODY = 'body_attributes';
+
+  /**
+   * Defines the "content_attributes" storage type constant.
+   *
+   * @var string
+   */
+  const CONTENT = 'content_attributes';
+
+  /**
+   * Defines the "description_attributes" storage type constant.
+   *
+   * @var string
+   */
+  const DESCRIPTION = 'description_attributes';
+
+  /**
+   * Defines the "footer_attributes" storage type constant.
+   *
+   * @var string
+   */
+  const FOOTER = 'footer_attributes';
+
+  /**
+   * Defines the "header_attributes" storage type constant.
+   *
+   * @var string
+   */
+  const HEADER = 'header_attributes';
+
+  /**
+   * Defines the "heading_attributes" storage type constant.
+   *
+   * @var string
+   */
+  const HEADING = 'heading_attributes';
+
+  /**
+   * Defines the "input_group_attributes" storage type constant.
+   *
+   * @var string
+   */
+  const INPUT_GROUP = 'input_group_attributes';
+
+  /**
+   * Defines the "input_group_attributes" storage type constant.
+   *
+   * @var string
+   */
+  const LABEL = 'label_attributes';
+
+  /**
+   * Defines the "title_attributes" storage type constant.
+   *
+   * @var string
+   */
+  const TITLE = 'title_attributes';
+
+  /**
+   * Defines the "wrapper_attributes" storage type constant.
+   *
+   * @var string
+   */
+  const WRAPPER = 'wrapper_attributes';
 
   /**
    * Stored attribute instances.
@@ -21,228 +100,229 @@ class DrupalAttributes extends ArrayObject {
   protected $attributes = [];
 
   /**
-   * Adds a class to the element's attributes array.
+   * A prefix to use for retrieving attribute keys from the array.
+   *
+   * @var string
+   */
+  protected $attributePrefix = '';
+
+  /**
+   * Add class(es) to an attributes object.
+   *
+   * This is a wrapper method to retrieve the correct attributes storage object
+   * and then add the class(es) to it.
    *
    * @param string|array $class
    *   An individual class or an array of classes to add.
-   * @param string $property
-   *   Determines which attributes array to retrieve. By default, this is the
-   *   element's normal "attributes", but it could also be one of the following:
-   *   - "content_attributes"
-   *   - "input_group_attributes"
-   *   - "title_attributes"
-   *   - "wrapper_attributes".
+   * @param string $type
+   *   (optional) The type of attributes to use for this method.
    *
    * @return $this
+   *
+   * @see \Drupal\bootstrap\Utility\Attributes::addClass()
    */
-  public function addClass($class, $property = 'attributes') {
-    $this->getAttributes($property)->addClass($class);
+  public function addClass($class, $type = DrupalAttributes::ATTRIBUTES) {
+    $this->getAttributes($type)->addClass($class);
     return $this;
   }
 
   /**
-   * Retrieves a specific attribute from an element's "attributes" array.
+   * Retrieve a specific attribute from an attributes object.
+   *
+   * This is a wrapper method to retrieve the correct attributes storage object
+   * and then retrieve the attribute from it.
    *
    * @param string $name
    *   The specific attribute to retrieve.
    * @param mixed $default
-   *   The default value to set if the attribute does not exist.
-   * @param string $property
-   *   Determines which attributes array to retrieve. By default, this is the
-   *   element's normal "attributes", but it could also be one of the following:
-   *   - "content_attributes"
-   *   - "input_group_attributes"
-   *   - "title_attributes"
-   *   - "wrapper_attributes".
+   *   (optional) The default value to set if the attribute does not exist.
+   * @param string $type
+   *   (optional) The type of attributes to use for this method.
    *
-   * @return array
-   *   An attributes array, passed by reference.
+   * @return mixed
+   *   A specific attribute value, passed by reference.
+   *
+   * @see \Drupal\bootstrap\Utility\Attributes::getAttribute()
    */
-  public function &getAttribute($name, $default = NULL, $property = 'attributes') {
-    $attributes = $this->getAttributes($property);
-    return $attributes->offsetGet($name, $default);
+  public function &getAttribute($name, $default = NULL, $type = DrupalAttributes::ATTRIBUTES) {
+    return $this->getAttributes($type)->getAttribute($name, $default);
   }
 
   /**
-   * Retrieves an element's entire "attributes" array.
+   * Retrieves a specific attributes object.
    *
-   * @param string $property
-   *   Determines which attributes array to retrieve. By default, this is the
-   *   element's normal "attributes", but it could also be one of the following:
-   *   - "content_attributes"
-   *   - "input_group_attributes"
-   *   - "title_attributes"
-   *   - "wrapper_attributes".
-   * @param mixed $default
-   *   The default attributes to provide, passed by reference.
+   * @param string $type
+   *   (optional) The type of attributes to use for this method.
    *
    * @return \Drupal\bootstrap\Utility\Attributes
-   *   An attributes object.
+   *   An attributes object for $type.
    */
-  public function getAttributes($property = 'attributes', &$default = NULL) {
-    if (!isset($default)) {
-      $default = &$this->offsetGet($property, []);
+  public function getAttributes($type = DrupalAttributes::ATTRIBUTES) {
+    if (!isset($this->attributes[$type])) {
+      $this->attributes[$type] = new Attributes($this->offsetGet($this->attributePrefix . $type, []));
     }
-    if (!isset($this->attributes[$property])) {
-      $this->attributes[$property] = new Attributes($default);
-    }
-    return $this->attributes[$property];
+    return $this->attributes[$type];
   }
 
   /**
-   * Retrieves an element's "class" array.
+   * Retrieves classes from an attributes object.
    *
-   * @param string $property
-   *   Determines which attributes array to retrieve. By default, this is the
-   *   element's normal "attributes", but it could also be one of the following:
-   *   - "content_attributes"
-   *   - "input_group_attributes"
-   *   - "title_attributes"
-   *   - "wrapper_attributes".
+   * This is a wrapper method to retrieve the correct attributes storage object
+   * and then retrieve the set classes from it.
+   *
+   * @param string $type
+   *   (optional) The type of attributes to use for this method.
    *
    * @return array
    *   The classes array, passed by reference.
+   *
+   * @see \Drupal\bootstrap\Utility\Attributes::getClasses()
    */
-  public function &getClasses($property = 'attributes') {
-    $classes = $this->getAttributes($property)->getClasses();
-    return $classes;
+  public function &getClasses($type = DrupalAttributes::ATTRIBUTES) {
+    return $this->getAttributes($type)->getClasses();
   }
 
   /**
-   * Indicates whether the element has a specific attribute.
+   * Indicates whether an attributes object has a specific attribute set.
+   *
+   * This is a wrapper method to retrieve the correct attributes storage object
+   * and then check there if the attribute exists.
    *
    * @param string $name
    *   The attribute to search for.
-   * @param string $property
-   *   Determines which attributes array to retrieve. By default, this is the
-   *   element's normal "attributes", but it could also be one of the following:
-   *   - "content_attributes"
-   *   - "input_group_attributes"
-   *   - "title_attributes"
-   *   - "wrapper_attributes".
+   * @param string $type
+   *   (optional) The type of attributes to use for this method.
+   *
+   * @return bool
+   *   TRUE or FALSE
+   *
+   * @see \Drupal\bootstrap\Utility\Attributes::hasAttribute()
    */
-  public function hasAttribute($name, $property = 'attributes') {
-    return $this->getAttributes($property)->offsetExists($name);
+  public function hasAttribute($name, $type = DrupalAttributes::ATTRIBUTES) {
+    return $this->getAttributes($type)->hasAttribute($name);
   }
 
   /**
-   * Indicates whether the element has a specific class.
+   * Indicates whether an attributes object has a specific class.
+   *
+   * This is a wrapper method to retrieve the correct attributes storage object
+   * and then check there if a class exists in the attributes object.
    *
    * @param string $class
    *   The class to search for.
-   * @param string $property
-   *   Determines which attributes array to retrieve. By default, this is the
-   *   element's normal "attributes", but it could also be one of the following:
-   *   - "content_attributes"
-   *   - "input_group_attributes"
-   *   - "title_attributes"
-   *   - "wrapper_attributes".
+   * @param string $type
+   *   (optional) The type of attributes to use for this method.
+   *
+   * @return bool
+   *   TRUE or FALSE
+   *
+   * @see \Drupal\bootstrap\Utility\Attributes::hasClass()
    */
-  public function hasClass($class, $property = 'attributes') {
-    return $this->getAttributes($property)->hasClass($class);
+  public function hasClass($class, $type = DrupalAttributes::ATTRIBUTES) {
+    return $this->getAttributes($type)->hasClass($class);
   }
 
   /**
-   * Removes a class from an element's attributes array.
+   * Removes an attribute from an attributes object.
+   *
+   * This is a wrapper method to retrieve the correct attributes storage object
+   * and then remove an attribute from it.
    *
    * @param string|array $name
    *   The name of the attribute to remove.
-   * @param string $property
-   *   Determines which attributes array to retrieve. By default, this is the
-   *   element's normal "attributes", but it could also be one of the following:
-   *   - "content_attributes"
-   *   - "input_group_attributes"
-   *   - "title_attributes"
-   *   - "wrapper_attributes".
+   * @param string $type
+   *   (optional) The type of attributes to use for this method.
    *
    * @return $this
+   *
+   * @see \Drupal\bootstrap\Utility\Attributes::removeAttribute()
    */
-  public function removeAttribute($name, $property = 'attributes') {
-    $this->getAttributes($property)->offsetUnset($name);
+  public function removeAttribute($name, $type = DrupalAttributes::ATTRIBUTES) {
+    $this->getAttributes($type)->removeAttribute($name);
     return $this;
   }
 
   /**
-   * Removes a class from an element's attributes array.
+   * Removes a class from an attributes object.
+   *
+   * This is a wrapper method to retrieve the correct attributes storage object
+   * and then remove the class(es) from it.
    *
    * @param string|array $class
    *   An individual class or an array of classes to remove.
-   * @param string $property
-   *   Determines which attributes array to retrieve. By default, this is the
-   *   element's normal "attributes", but it could also be one of the following:
-   *   - "content_attributes"
-   *   - "input_group_attributes"
-   *   - "title_attributes"
-   *   - "wrapper_attributes".
+   * @param string $type
+   *   (optional) The type of attributes to use for this method.
    *
    * @return $this
+   *
+   * @see \Drupal\bootstrap\Utility\Attributes::removeClass()
    */
-  public function removeClass($class, $property = 'attributes') {
-    $this->getAttributes($property)->removeClass($class);
+  public function removeClass($class, $type = DrupalAttributes::ATTRIBUTES) {
+    $this->getAttributes($type)->removeClass($class);
     return $this;
   }
 
   /**
-   * Replaces a class in an element's attributes array.
+   * Replaces a class in an attributes object.
+   *
+   * This is a wrapper method to retrieve the correct attributes storage object
+   * and then replace the class(es) in it.
    *
    * @param string $old
    *   The old class to remove.
    * @param string $new
    *   The new class. It will not be added if the $old class does not exist.
-   * @param string $property
-   *   Determines which attributes array to retrieve. By default, this is the
-   *   element's normal "attributes", but it could also be one of the following:
-   *   - "content_attributes"
-   *   - "input_group_attributes"
-   *   - "title_attributes"
-   *   - "wrapper_attributes".
+   * @param string $type
+   *   (optional) The type of attributes to use for this method.
    *
    * @return $this
+   *
+   * @see \Drupal\bootstrap\Utility\Attributes::replaceClass()
    */
-  public function replaceClass($old, $new, $property = 'attributes') {
-    $this->getAttributes($property)->replaceClass($old, $new);
+  public function replaceClass($old, $new, $type = DrupalAttributes::ATTRIBUTES) {
+    $this->getAttributes($type)->replaceClass($old, $new);
     return $this;
   }
 
   /**
-   * Sets an element's "attributes" array.
+   * Sets an attribute on an attributes object.
+   *
+   * This is a wrapper method to retrieve the correct attributes storage object
+   * and then set an attribute on it.
    *
    * @param string $name
    *   The name of the attribute to set.
    * @param mixed $value
    *   The value of the attribute to set.
-   * @param string $property
-   *   Determines which attributes array to retrieve. By default, this is the
-   *   element's normal "attributes", but it could also be one of the following:
-   *   - "content_attributes"
-   *   - "input_group_attributes"
-   *   - "title_attributes"
-   *   - "wrapper_attributes".
+   * @param string $type
+   *   (optional) The type of attributes to use for this method.
    *
    * @return $this
+   *
+   * @see \Drupal\bootstrap\Utility\Attributes::setAttribute()
    */
-  public function setAttribute($name, $value, $property = 'attributes') {
-    $this->getAttributes($property)->offsetSet($name, $value);
+  public function setAttribute($name, $value, $type = DrupalAttributes::ATTRIBUTES) {
+    $this->getAttributes($type)->setAttribute($name, $value);
     return $this;
   }
 
   /**
-   * Sets an element's "attributes" array.
+   * Sets multiple attributes on an attributes object.
+   *
+   * This is a wrapper method to retrieve the correct attributes storage object
+   * and then merge multiple attributes into it.
    *
    * @param array $values
    *   An associative key/value array of attributes to set.
-   * @param string $property
-   *   Determines which attributes array to retrieve. By default, this is the
-   *   element's normal "attributes", but it could also be one of the following:
-   *   - "content_attributes"
-   *   - "input_group_attributes"
-   *   - "title_attributes"
-   *   - "wrapper_attributes".
+   * @param string $type
+   *   (optional) The type of attributes to use for this method.
    *
    * @return $this
+   *
+   * @see \Drupal\bootstrap\Utility\Attributes::setAttributes()
    */
-  public function setAttributes(array $values, $property = 'attributes') {
-    $this->getAttributes($property, $default)->merge($values);
+  public function setAttributes(array $values, $type = DrupalAttributes::ATTRIBUTES) {
+    $this->getAttributes($type)->setAttributes($values);
     return $this;
   }
 

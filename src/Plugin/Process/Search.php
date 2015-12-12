@@ -7,35 +7,25 @@
 namespace Drupal\bootstrap\Plugin\Process;
 
 use Drupal\bootstrap\Annotation\BootstrapProcess;
-use Drupal\bootstrap\Plugin\PluginBase;
 use Drupal\bootstrap\Utility\Element;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Processes the "actions" element.
+ * Processes the "search" element.
  *
- * @BootstrapProcess(
- *   id = "search"
- * )
+ * @BootstrapProcess("search")
  */
-class Search extends PluginBase implements ProcessInterface {
+class Search extends ProcessBase implements ProcessInterface {
 
   /**
    * {@inheritdoc}
    */
-  public static function process(array $element, FormStateInterface $form_state, array &$complete_form) {
-    if (!empty($element['#bootstrap_ignore_process'])) {
-      return $element;
+  public static function processElement(Element $element, FormStateInterface $form_state, array &$complete_form) {
+    $element->setProperty('title_display', 'invisible');
+    $element->setAttribute('placeholder', $element->getProperty('placeholder', $element->getProperty('title', t('Search'))));
+    if (!$element->hasProperty('description')) {
+      $element->setProperty('description', t('Enter the terms you wish to search for.'));
     }
-
-    $e = Element::create($element);
-    $e->setProperty('title_display', 'invisible');
-    $e->setAttribute('placeholder', $e->getProperty('placeholder', $e->getProperty('title', t('Search'))));
-    if (!$e->hasProperty('description')) {
-      $e->setProperty('description', t('Enter the terms you wish to search for.'));
-    }
-
-    return $element;
   }
 
 }

@@ -30,6 +30,19 @@ class Variables extends DrupalAttributes {
   }
 
   /**
+   * Creates a new \Drupal\bootstrap\Utility\Variables instance.
+   *
+   * @param array $variables
+   *   A theme hook variables array.
+   *
+   * @return \Drupal\bootstrap\Utility\Variables
+   *   The newly created variables instance.
+   */
+  public static function create(array &$variables) {
+    return new self($variables);
+  }
+
+  /**
    * Maps an element's properties to the variables attributes array.
    *
    * @param array $map
@@ -62,7 +75,7 @@ class Variables extends DrupalAttributes {
         $this->setAttributes($this->element->getAttributes($property)->getArrayCopy(), $variable);
       }
       // Set normal variable.
-      elseif ($overwrite || !isset($variables[$variable])) {
+      elseif ($overwrite || !$this->offsetExists($variable)) {
         $this->offsetSet($variable, $this->element->getProperty($property));
       }
     }

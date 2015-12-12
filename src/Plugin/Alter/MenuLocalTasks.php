@@ -12,9 +12,7 @@ use Drupal\bootstrap\Plugin\PluginBase;
 /**
  * Implements hook_menu_local_tasks_alter().
  *
- * @BootstrapAlter(
- *   id = "menu_local_tasks"
- * )
+ * @BootstrapAlter("menu_local_tasks")
  */
 class MenuLocalTasks extends PluginBase implements AlterInterface {
 

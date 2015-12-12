@@ -8,30 +8,26 @@ namespace Drupal\bootstrap\Plugin\Preprocess;
 
 use Drupal\bootstrap\Annotation\BootstrapPreprocess;
 use Drupal\bootstrap\Bootstrap;
-use Drupal\bootstrap\Plugin\PluginBase;
 use Drupal\bootstrap\Utility\Element;
-use Drupal\Core\Template\Attribute;
+use Drupal\bootstrap\Utility\Variables;
 
 /**
  * Pre-processes variables for the "input" theme hook.
  *
  * @ingroup theme_preprocess
  *
- * @BootstrapPreprocess(
- *   id = "input"
- * )
+ * @BootstrapPreprocess("input")
  */
-class Input extends PluginBase implements PreprocessInterface {
+class Input extends PreprocessBase implements PreprocessInterface {
 
   /**
    * {@inheritdoc}
    */
-  public function preprocess(array &$variables, $hook, array $info) {
-    $element = Element::create($variables['element']);
-    $element->map(['id', 'name', 'value', 'type']);
+  public function preprocessElement(Variables $variables, $hook, array $info) {
+    $variables->element->map(['id', 'name', 'value', 'type']);
 
     // Autocomplete.
-    if ($route = $element->getProperty('autocomplete_route_name')) {
+    if ($route = $variables->element->getProperty('autocomplete_route_name')) {
       $variables['autocomplete'] = TRUE;
 
       // Use an icon for autocomplete "throbber".
@@ -48,40 +44,45 @@ class Input extends PluginBase implements PreprocessInterface {
         ],
       ]);
 
-      $element->setProperty('input_group', TRUE);
-      $element->setProperty('field_suffix', $icon);
+      $variables->element->setProperty('input_group', TRUE);
+      $variables->element->setProperty('field_suffix', $icon);
     }
-
-    $variables['attributes'] = new Attribute($element->getAttributes());
-    $variables['icon'] = $element->getProperty('icon');
-    $variables['input_group'] = $element->hasProperty('input_group') || $element->hasProperty('input_group_button');
-    $variables['type'] = $element->getProperty('type');
 
     // Create variables for #input_group and #input_group_button flags.
+    $variables['input_group'] = $variables->element->getProperty('input_group') || $variables->element->getProperty('input_group_button');
     if ($variables['input_group']) {
-      $input_group_attributes = ['class' => ['input-group-' . ($element->hasProperty('input_group_button') ? 'btn' : 'addon')]];
-      if ($element->hasProperty('field_prefix')) {
-        $variables['prefix'] = [
+      $input_group_attributes = ['class' => ['input-group-' . ($variables->element->getProperty('input_group_button') ? 'btn' : 'addon')]];
+      if ($prefix = $variables->element->getProperty('field_prefix')) {
+        $variables->element->setProperty('field_prefix', [
           '#type' => 'html_tag',
           '#tag' => 'span',
           '#attributes' => $input_group_attributes,
-          '#value' => Element::create($element->getProperty('field_prefix'))->render(),
+          '#value' => Element::create($prefix)->render(),
           '#weight' => -1,
-        ];
-        $element->setProperty('field_prefix', NULL);
+        ]);
       }
-      if ($element->hasProperty('field_suffix')) {
-        $variables['suffix'] = [
+      if ($suffix = $variables->element->getProperty('field_suffix')) {
+        $variables->element->setProperty('field_suffix', [
           '#type' => 'html_tag',
           '#tag' => 'span',
           '#attributes' => $input_group_attributes,
-          '#value' => Element::create($element->getProperty('field_suffix'))->render(),
+          '#value' => Element::create($suffix)->render(),
           '#weight' => 1,
-        ];
-        $element->setProperty('field_suffix', NULL);
+        ]);
       }
     }
 
+    // Map the element properties.
+    $variables->map([
+      'attributes' => 'attributes',
+      'icon' => 'icon',
+      'field_prefix' => 'prefix',
+      'field_suffix' => 'suffix',
+      'type' => 'type',
+    ]);
+
+    // Ensure attributes are proper objects.
+    $this->preprocessAttributes($variables, $hook, $info);
   }
 
 }

@@ -7,7 +7,6 @@
 namespace Drupal\bootstrap\Plugin\Preprocess;
 
 use Drupal\bootstrap\Annotation\BootstrapPreprocess;
-use Drupal\bootstrap\Plugin\PluginBase;
 use Drupal\Core\Template\Attribute;
 
 /**
@@ -15,11 +14,9 @@ use Drupal\Core\Template\Attribute;
  *
  * @ingroup theme_preprocess
  *
- * @BootstrapPreprocess(
- *   id = "breadcrumb"
- * )
+ * @BootstrapPreprocess("breadcrumb")
  */
-class Breadcrumb extends PluginBase implements PreprocessInterface {
+class Breadcrumb extends PreprocessBase implements PreprocessInterface {
 
   /**
    * {@inheritdoc}

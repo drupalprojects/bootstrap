@@ -54,15 +54,6 @@ drupal.tabledrag:
     js/misc/tabledrag.js: {}
 
 # libraries-override
-drupal.collapse:
-  js:
-    js/misc/collapse.js: {}
-  dependencies:
-    - bootstrap/base-theme
-    - core/modernizr
-    - core/drupal.form
-    - core/jquery.once
-
 drupal.dropbutton:
   js:
     js/misc/dropbutton/dropbutton.js: {}

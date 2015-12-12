@@ -7,36 +7,28 @@
 namespace Drupal\bootstrap\Plugin\Preprocess;
 
 use Drupal\bootstrap\Annotation\BootstrapPreprocess;
-use Drupal\bootstrap\Plugin\PluginBase;
-use Drupal\Core\Template\Attribute;
+use Drupal\bootstrap\Utility\Variables;
 
 /**
  * Pre-processes variables for the "field_multiple_value_form" theme hook.
  *
  * @ingroup theme_preprocess
  *
- * @BootstrapPreprocess(
- *   id = "field_multiple_value_form"
- * )
+ * @BootstrapPreprocess("field_multiple_value_form")
  */
-class FieldMultipleValueForm extends PluginBase implements PreprocessInterface {
+class FieldMultipleValueForm extends PreprocessBase implements PreprocessInterface {
 
   /**
    * {@inheritdoc}
    */
-  public function preprocess(array &$variables, $hook, array $info) {
-    $element = $variables['element'];
-
+  public function preprocessElement(Variables $variables, $hook, array $info) {
     // Wrap header columns in label element for Bootstrap.
     if ($variables['multiple']) {
-      $header_attributes = new Attribute([
-        'class' => ['label'],
-      ]);
       $header = [
         [
           'data' => [
-            '#prefix' => '<label' . $header_attributes . '>',
-            'title' => ['#markup' => $element['#title']],
+            '#prefix' => '<label class="label">',
+            'title' => ['#markup' => $variables->element->getProperty('title')],
             '#suffix' => '</label>',
           ],
           'colspan' => 2,

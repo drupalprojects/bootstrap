@@ -15,9 +15,7 @@ use Drupal\bootstrap\Plugin\ProcessManager;
 /**
  * Implements hook_element_info_alter().
  *
- * @BootstrapAlter(
- *   id = "element_info"
- * )
+ * @BootstrapAlter("element_info")
  */
 class ElementInfo extends PluginBase implements AlterInterface {
 
@@ -48,7 +46,7 @@ class ElementInfo extends PluginBase implements AlterInterface {
       // @see \Drupal\Core\Form\FormBuilder::doBuildForm()
       if ($type === 'details' || $type === 'fieldset') {
         $element['#description_display'] = 'before';
-        $element['#state'] = 'default';
+        $element['#panel_type'] = 'default';
       }
 
       // Add extra variables to all elements.

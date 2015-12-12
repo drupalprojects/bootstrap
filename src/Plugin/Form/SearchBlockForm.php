@@ -13,9 +13,7 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Implements hook_form_FORM_ID_alter().
  *
- * @BootstrapForm(
- *   id = "search_block_form",
- * )
+ * @BootstrapForm("search_block_form")
  */
 class SearchBlockForm extends FormBase {
 

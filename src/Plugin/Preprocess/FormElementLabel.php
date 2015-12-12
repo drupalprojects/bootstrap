@@ -7,27 +7,23 @@
 namespace Drupal\bootstrap\Plugin\Preprocess;
 
 use Drupal\bootstrap\Annotation\BootstrapPreprocess;
-use Drupal\bootstrap\Plugin\PluginBase;
-use Drupal\bootstrap\Utility\Element;
-use Drupal\Component\Utility\NestedArray;
+use Drupal\bootstrap\Utility\Variables;
 
 /**
  * Pre-processes variables for the "form_element_label" theme hook.
  *
  * @ingroup theme_preprocess
  *
- * @BootstrapPreprocess(
- *   id = "form_element_label"
- * )
+ * @BootstrapPreprocess("form_element_label")
  */
-class FormElementLabel extends PluginBase implements PreprocessInterface {
+class FormElementLabel extends PreprocessBase implements PreprocessInterface {
 
   /**
    * {@inheritdoc}
    */
-  public function preprocess(array &$variables, $hook, array $info) {
-    $element = Element::create($variables['element']);
-    $variables['attributes'] = NestedArray::mergeDeepArray([$variables['attributes'], $element->getAttributes()], TRUE);
+  public function preprocessElement(Variables $variables, $hook, array $info) {
+    $variables->map(['attributes']);
+    $this->preprocessAttributes($variables, $hook, $info);
   }
 
 }

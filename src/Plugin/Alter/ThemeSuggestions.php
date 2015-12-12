@@ -13,9 +13,7 @@ use Drupal\bootstrap\Utility\Element;
 /**
  * Implements hook_theme_suggestions_alter().
  *
- * @BootstrapAlter(
- *   id = "theme_suggestions"
- * )
+ * @BootstrapAlter("theme_suggestions")
  */
 class ThemeSuggestions extends PluginBase implements AlterInterface {
 

@@ -14,9 +14,7 @@ use Drupal\Component\Utility\NestedArray;
 /**
  * Implements hook_css_alter().
  *
- * @BootstrapAlter(
- *   id = "library_info"
- * )
+ * @BootstrapAlter("library_info")
  */
 class LibraryInfo extends PluginBase implements AlterInterface {
 

@@ -6,7 +6,7 @@
 
 namespace Drupal\bootstrap\Annotation;
 
-use Drupal\Component\Annotation\Plugin;
+use Drupal\Component\Annotation\PluginID;
 
 /**
  * Defines a BootstrapForm annotation object.
@@ -19,4 +19,4 @@ use Drupal\Component\Annotation\Plugin;
  *
  * @Annotation
  */
-class BootstrapForm extends Plugin {}
+class BootstrapForm extends PluginID {}

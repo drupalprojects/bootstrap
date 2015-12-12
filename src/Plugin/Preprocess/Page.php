@@ -7,51 +7,41 @@
 namespace Drupal\bootstrap\Plugin\Preprocess;
 
 use Drupal\bootstrap\Annotation\BootstrapPreprocess;
-use Drupal\bootstrap\Plugin\PluginBase;
-use Drupal\Core\Template\Attribute;
+use Drupal\bootstrap\Utility\Variables;
 
 /**
  * Pre-processes variables for the "page" theme hook.
  *
  * @ingroup theme_preprocess
  *
- * @BootstrapPreprocess(
- *   id = "page"
- * )
+ * @BootstrapPreprocess("page")
  */
-class Page extends PluginBase implements PreprocessInterface {
+class Page extends PreprocessBase implements PreprocessInterface {
 
   /**
    * {@inheritdoc}
+   *
+   * @todo Move all of this into the "page.html.twig" template.
    */
-  public function preprocess(array &$variables, $hook, array $info) {
-    // Add information about the number of sidebars.
-    $variables['content_column_attributes'] = new Attribute();
-    $variables['content_column_attributes']['class'] = [];
+  public function preprocessVariables(Variables $variables, $hook, array $info) {
+    // Columns.
     if (!empty($variables['page']['sidebar_first']) && !empty($variables['page']['sidebar_second'])) {
-      $variables['content_column_attributes']['class'][] = 'col-sm-6';
+      $variables->addClass('col-sm-6', 'content_column_attributes');
     }
     elseif (!empty($variables['page']['sidebar_first']) || !empty($variables['page']['sidebar_second'])) {
-      $variables['content_column_attributes']['class'][] = 'col-sm-9';
+      $variables->addClass('col-sm-9', 'content_column_attributes');
     }
     else {
-      $variables['content_column_attributes']['class'][] = 'col-sm-12';
+      $variables->addClass('col-sm-12', 'content_column_attributes');
     }
 
-    $variables['navbar_attributes'] = new Attribute();
-    $variables['navbar_attributes']['class'] = ['navbar'];
-    if ($this->theme->getSetting('navbar_position') !== '') {
-      $variables['navbar_attributes']['class'][] = 'navbar-' . $this->theme->getSetting('navbar_position');
-    }
-    else {
-      $variables['navbar_attributes']['class'][] = 'container';
-    }
-    if ($this->theme->getSetting('navbar_inverse')) {
-      $variables['navbar_attributes']['class'][] = 'navbar-inverse';
-    }
-    else {
-      $variables['navbar_attributes']['class'][] = 'navbar-default';
-    }
+    // Navbar.
+    $position = $this->theme->getSetting('navbar_position');
+    $variables->addClass(($position ? "navbar-$position" : 'container'), 'navbar_attributes');
+    $variables->addClass(($this->theme->getSetting('navbar_inverse') ? 'navbar-inverse' : 'navbar-default'), 'navbar_attributes');
+
+    // Ensure attributes are proper objects.
+    $this->preprocessAttributes($variables, $hook, $info);
   }
 
 }

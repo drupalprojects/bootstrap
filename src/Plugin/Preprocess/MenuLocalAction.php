@@ -8,7 +8,7 @@ namespace Drupal\bootstrap\Plugin\Preprocess;
 
 use Drupal\bootstrap\Annotation\BootstrapPreprocess;
 use Drupal\bootstrap\Bootstrap;
-use Drupal\bootstrap\Plugin\PluginBase;
+use Drupal\bootstrap\Utility\Variables;
 use Drupal\Component\Utility\SafeMarkup;
 
 /**
@@ -16,17 +16,15 @@ use Drupal\Component\Utility\SafeMarkup;
  *
  * @ingroup theme_preprocess
  *
- * @BootstrapPreprocess(
- *   id = "menu_local_action"
- * )
+ * @BootstrapPreprocess("menu_local_action")
  */
-class MenuLocalAction extends PluginBase implements PreprocessInterface {
+class MenuLocalAction extends PreprocessBase implements PreprocessInterface {
 
   /**
    * {@inheritdoc}
    */
-  public function preprocess(array &$variables, $hook, array $info) {
-    $link = $variables['element']['#link'];
+  public function preprocessElement(Variables $variables, $hook, array $info) {
+    $link = $variables->element->getProperty('link');
     $link += ['localized_options' => []];
     $link['localized_options']['set_active_class'] = TRUE;
 
