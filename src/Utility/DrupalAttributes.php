@@ -72,11 +72,18 @@ class DrupalAttributes extends ArrayObject {
   const INPUT_GROUP = 'input_group_attributes';
 
   /**
-   * Defines the "input_group_attributes" storage type constant.
+   * Defines the "label_attributes" storage type constant.
    *
    * @var string
    */
   const LABEL = 'label_attributes';
+
+  /**
+   * Defines the "navbar_attributes" storage type constant.
+   *
+   * @var string
+   */
+  const NAVBAR = 'navbar_attributes';
 
   /**
    * Defines the "title_attributes" storage type constant.

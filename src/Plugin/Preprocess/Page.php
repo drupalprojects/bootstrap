@@ -7,6 +7,7 @@
 namespace Drupal\bootstrap\Plugin\Preprocess;
 
 use Drupal\bootstrap\Annotation\BootstrapPreprocess;
+use Drupal\bootstrap\Utility\DrupalAttributes;
 use Drupal\bootstrap\Utility\Variables;
 
 /**
@@ -20,27 +21,13 @@ class Page extends PreprocessBase implements PreprocessInterface {
 
   /**
    * {@inheritdoc}
-   *
-   * @todo Move all of this into the "page.html.twig" template.
    */
   public function preprocessVariables(Variables $variables, $hook, array $info) {
-    // Columns.
-    if (!empty($variables['page']['sidebar_first']) && !empty($variables['page']['sidebar_second'])) {
-      $variables->addClass('col-sm-6', 'content_column_attributes');
-    }
-    elseif (!empty($variables['page']['sidebar_first']) || !empty($variables['page']['sidebar_second'])) {
-      $variables->addClass('col-sm-9', 'content_column_attributes');
-    }
-    else {
-      $variables->addClass('col-sm-12', 'content_column_attributes');
-    }
-
-    // Navbar.
-    $position = $this->theme->getSetting('navbar_position');
-    $variables->addClass(($position ? "navbar-$position" : 'container'), 'navbar_attributes');
-    $variables->addClass(($this->theme->getSetting('navbar_inverse') ? 'navbar-inverse' : 'navbar-default'), 'navbar_attributes');
-
-    // Ensure attributes are proper objects.
+    // Setup default attributes.
+    $variables->getAttributes(DrupalAttributes::NAVBAR);
+    $variables->getAttributes(DrupalAttributes::HEADER);
+    $variables->getAttributes(DrupalAttributes::CONTENT);
+    $variables->getAttributes(DrupalAttributes::FOOTER);
     $this->preprocessAttributes($variables, $hook, $info);
   }
 
