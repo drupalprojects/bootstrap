@@ -87,7 +87,7 @@ class ProcessManager extends PluginManager {
 
       // If element is nested, return the referenced parent from the form.
       // Otherwise return the complete form.
-      $parent = Element::create($array_parents ? NestedArray::getValue($complete_form, $array_parents) : $complete_form, $form_state);
+      $parent = Element::create(NestedArray::getValue($complete_form, $array_parents), $form_state);
 
       // Find the closest button.
       if ($button = self::findButton($parent)) {
