@@ -1,6 +1,8 @@
 # Placeholder for the "base-theme" library.
 # @see \Drupal\bootstrap\Plugin\Alter\LibraryInfo
 base-theme:
+  css: {}
+  js: {}
   dependencies:
     - core/underscore
     - core/jquery
