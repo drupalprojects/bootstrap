@@ -121,15 +121,15 @@ class Theme {
    *   The theme settings for drupalSettings.
    */
   public function drupalSettings() {
-    $cache = $this->getCache('settings');
-    $drupal_settings = $cache->get('drupalSettings');
-    if (!isset($drupal_settings)) {
+    $cache = $this->getCache('drupalSettings');
+    $drupal_settings = $cache->getAll();
+    if (!$drupal_settings) {
       foreach ($this->getSettingPlugins() as $name => $setting) {
         if ($setting->drupalSettings()) {
           $drupal_settings[$name] = TRUE;
         }
       }
-      $cache->set('drupalSettings', $drupal_settings);
+      $cache->setMultiple($drupal_settings);
     }
     return array_intersect_key($this->settings()->get(), $drupal_settings);
   }
@@ -205,7 +205,7 @@ class Theme {
     }
 
     // Retrieve cache.
-    $files = self::getCache('files', []);
+    $files = $this->getCache('files');
 
     // Generate a unique hash for all parameters passed as a change in any of
     // them could potentially return different results.
@@ -253,10 +253,12 @@ class Theme {
     $theme = $this->getName();
     $theme_cache = self::getStorage();
     if (!isset($cache[$theme][$name])) {
-      if (!$theme_cache->has($name)) {
-        $theme_cache->set($name, is_array($default) ? new StorageItem($default, $theme_cache) : $default);
+      $value = $theme_cache->get($name);
+      if (!isset($value)) {
+        $value  = is_array($default) ? new StorageItem($default, $theme_cache) : $default;
+        $theme_cache->set($name, $value);
       }
-      $cache[$theme][$name] = $theme_cache->get($name);
+      $cache[$theme][$name] = $value;
     }
     return $cache[$theme][$name];
   }
@@ -394,7 +396,7 @@ class Theme {
    * Determines whether or not if the theme has Bootstrap Framework Glyphicons.
    */
   public function hasGlyphicons() {
-    $glyphicons = $this->getCache('glyphicons', []);
+    $glyphicons = $this->getCache('glyphicons');
     if (!$glyphicons->has($this->getName())) {
       $exists = FALSE;
       foreach ($this->getAncestry(TRUE) as $ancestor) {

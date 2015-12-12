@@ -44,9 +44,9 @@ class ThemeSettings extends Config {
     $cache = $theme->getCache('settings');
 
     // Use cached settings.
-    if (!$cache->isEmpty()) {
-      $this->defaults = $cache->get('defaults');
-      $this->initWithData($cache->get('data'));
+    if ($defaults = $cache->get('defaults')) {
+      $this->defaults = $defaults;
+      $this->initWithData($cache->get('data', []));
       return;
     }
 

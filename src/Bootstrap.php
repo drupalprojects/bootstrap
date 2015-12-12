@@ -441,7 +441,7 @@ class Bootstrap {
    */
   public static function glyphiconFromString($string, $default = []) {
     $theme = Bootstrap::getTheme();
-    $texts = $theme->getCache('glyphiconFromString', []);
+    $texts = $theme->getCache('glyphiconFromString');
 
     $string = (string) $string;
 
