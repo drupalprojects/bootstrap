@@ -369,7 +369,7 @@ function _bootstrap_process_theme_registry_suggestions(&$registry, $themes) {
         $prefix = $theme . '_' . $phase;
 
         // Grep only the functions which are within the prefix group.
-        list($first_prefix, $unused) = explode('_', $prefix, 2);
+        list($first_prefix,) = explode('_', $prefix, 2);
         if (isset($grouped_functions[$first_prefix]) && ($matches = preg_grep('/^' . $prefix . '_' . $pattern . '/', $grouped_functions[$first_prefix]))) {
           foreach ($matches as $match) {
             // Determine the current theme implementation.
@@ -468,7 +468,7 @@ if (!function_exists('drupal_group_functions_by_prefix')) {
 
     // Splitting user defined functions into groups by the first prefix.
     foreach ($functions['user'] as $function) {
-      list($first_prefix, $unused) = explode('_', $function, 2);
+      list($first_prefix,) = explode('_', $function, 2);
       $grouped_functions[$first_prefix][] = $function;
     }
 
