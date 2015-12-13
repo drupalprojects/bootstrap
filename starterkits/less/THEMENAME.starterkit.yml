@@ -7,6 +7,17 @@ name: 'Bootstrap Sub-Theme (LESS)'
 description: 'Uses the Bootstrap framework LESS source files and must be compiled (not for beginners).'
 package: 'Bootstrap'
 
+# Explicit features must be provided to allow users to upload a custom logo.
+# @see https://www.drupal.org/node/2634252
+features:
+  - comment_user_picture
+  - comment_user_verification
+  - favicon
+  - logo
+  - name
+  - node_user_picture
+  - slogan
+
 regions:
   navigation: 'Navigation'
   navigation_collapsible: 'Navigation (Collapsible)'

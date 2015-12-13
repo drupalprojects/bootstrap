@@ -6,7 +6,8 @@ name: 'Bootstrap'
 description: 'Built to use Bootstrap, a sleek, intuitive, and powerful front-end framework for faster and easier web development.'
 package: 'Bootstrap'
 
-# _system_default_theme_features() does not have a complete list.
+# Explicit features must be provided to allow users to upload a custom logo.
+# @see https://www.drupal.org/node/2634252
 features:
   - comment_user_picture
   - comment_user_verification

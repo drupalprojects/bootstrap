@@ -51,16 +51,12 @@ class ThemeSettings extends Config {
     }
 
     // Retrieve the global settings from configuration.
-    $global = \Drupal::config('system.theme.global')->get();
+    $this->defaults = \Drupal::config('system.theme.global')->get();
 
     // Retrieve the theme setting plugin discovery defaults (code).
-    $defaults = [];
     foreach ($theme->getSettingPlugins() as $name => $setting) {
-      $defaults[$name] = $setting->getDefaultValue();
+      $this->defaults[$name] = $setting->getDefaultValue();
     }
-
-    // Set the defaults.
-    $this->defaults = NestedArray::mergeDeepArray([$global, $defaults], TRUE);
 
     // Retrieve the theme ancestry.
     $ancestry = $theme->getAncestry();
@@ -173,34 +169,50 @@ class ThemeSettings extends Config {
     }
 
     // Generate the path to the logo image.
-    if ($config->get('logo.use_default')) {
-      $config->set('logo.url', file_create_url($theme->getPath() . '/logo.svg'));
-    }
-    elseif ($logo_path = $config->get('logo.path')) {
-      $config->set('logo.url', file_create_url($logo_path));
+    if ($config->get('features.logo')) {
+      $logo_url = FALSE;
+      foreach (['svg', 'png', 'jpg'] as $type) {
+        if (file_exists($theme->getPath() . "/logo.$type")) {
+          $logo_url = file_create_url($theme->getPath() . "/logo.$type");
+          break;
+        }
+      }
+      if ($config->get('logo.use_default') && $logo_url) {
+        $config->set('logo.url', $logo_url);
+      }
+      elseif (($logo_path = $config->get('logo.path')) && file_exists($logo_path)) {
+        $config->set('logo.url', file_create_url($logo_path));
+      }
     }
 
     // Generate the path to the favicon.
     if ($config->get('features.favicon')) {
-      $favicon_path = $config->get('favicon.path');
-      if ($config->get('favicon.use_default')) {
-        if (file_exists($favicon = $theme->getPath() . '/favicon.ico')) {
-          $config->set('favicon.url', file_create_url($favicon));
-        }
-        else {
-          $config->set('favicon.url', file_create_url('core/misc/favicon.ico'));
-        }
+      $favicon_url = $theme->getPath() . '/favicon.ico';
+      if ($config->get('favicon.use_default') && file_exists($favicon_url)) {
+        $config->set('favicon.url', file_create_url($favicon_url));
       }
-      elseif ($favicon_path) {
+      elseif ($favicon_path = $config->get('favicon.path')) {
         $config->set('favicon.url', file_create_url($favicon_path));
-      }
-      else {
-        $config->set('features.favicon', FALSE);
       }
     }
 
-    // Return a diff of the overrides from set defaults.
-    return DiffArray::diffAssocRecursive($config->get(), $this->defaults);
+    // Retrieve the config data.
+    $data = $config->get();
+
+    // Retrieve a diff of settings that override the defaults.
+    $diff = DiffArray::diffAssocRecursive($data, $this->defaults);
+
+    // Ensure core features are always present in the diff. The theme settings
+    // form will not work properly otherwise.
+    // @todo Just rebuild the features section of the form?
+    foreach (['favicon', 'features', 'logo'] as $key) {
+      $arrays = [];
+      $arrays[] = isset($this->defaults[$key]) ? $this->defaults[$key] : [];
+      $arrays[] = isset($data[$key]) ? $data[$key] : [];
+      $diff[$key] = NestedArray::mergeDeepArray($arrays, TRUE);
+    }
+
+    return $diff;
   }
 
   /**
