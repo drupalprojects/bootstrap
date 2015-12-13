@@ -61,6 +61,7 @@
  * @ingroup templates
  */
 #}
+{% set container = theme.settings.fluid_container ? 'container-fluid' : 'container' %}
 {# Navbar #}
 {% if page.navigation %}
   {% block navbar %}
@@ -68,7 +69,7 @@
       set navbar_classes = [
         'navbar',
         theme.settings.navbar_inverse ? 'navbar-inverse' : 'navbar-default',
-        theme.settings.navbar_position ? 'navbar-' ~ theme.settings.navbar_position|clean_class : 'container',
+        theme.settings.navbar_position ? 'navbar-' ~ theme.settings.navbar_position|clean_class : container,
       ]
     %}
     <header{{ navbar_attributes.addClass(navbar_classes) }} id="navbar" role="banner">
@@ -95,7 +96,7 @@
 
 {# Main #}
 {% block main %}
-  <div role="main" class="main-container container js-quickedit-main-content">
+  <div role="main" class="main-container {{ container }} js-quickedit-main-content">
     <div class="row">
 
       {# Header #}
@@ -175,7 +176,7 @@
 
 {% if page.footer %}
   {% block footer %}
-    <footer class="footer container" role="contentinfo">
+    <footer class="footer {{ container }}" role="contentinfo">
       {{ page.footer }}
     </footer>
   {% endblock %}

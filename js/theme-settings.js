@@ -132,6 +132,27 @@
       });
     }
   };
+
+  /**
+   * Provide Bootstrap navbar preview.
+   */
+  Drupal.behaviors.bootstrapContainerPreview = {
+    attach: function (context) {
+      var $context = $(context);
+      var $container = $context.find('#edit-container');
+      $container.once('container-preview').each(function () {
+        $container.find('[name="fluid_container"]').on('change.bootstrap', function () {
+          if ($(this).is(':checked')) {
+            $context.find('.container').removeClass('container').addClass('container-fluid');
+          }
+          else {
+            $context.find('.container-fluid').removeClass('container-fluid').addClass('container');
+          }
+        });
+      });
+    }
+  };
+
   /**
    * Provide Bootstrap navbar preview.
    */

@@ -18,7 +18,7 @@ use Drupal\Core\Annotation\Translation;
  *   type = "checkbox",
  *   title = @Translation("Fluid container"),
  *   defaultValue = 0,
- *   description = @Translation("Uses the <code>.container-fluid</code> class where ever possible."),
+ *   description = @Translation("Uses the <code>.container-fluid</code> class instead of <code>.container</code>."),
  *   groups = {
  *     "general" = @Translation("General"),
  *     "container" = @Translation("Container"),
