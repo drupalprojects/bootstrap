@@ -11,7 +11,7 @@
 # @see \Drupal\bootstrap\Plugin\Form\SystemThemeSettings
 # @see \Drupal\bootstrap\ThemeSettings
 
-# Default features provided by core. These must always remain here for their
+# Default features provided by core. These must remain here for their
 # functionality to work properly.
 features:
   comment_user_picture: true

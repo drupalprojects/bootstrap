@@ -200,8 +200,7 @@ class ThemeSettings extends Config {
     }
 
     // Return a diff of the overrides from set defaults.
-    $diff = DiffArray::diffAssocRecursive($config->get(), $this->defaults);
-    return $diff;
+    return DiffArray::diffAssocRecursive($config->get(), $this->defaults);
   }
 
   /**

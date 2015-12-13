@@ -6,6 +6,16 @@ name: 'Bootstrap'
 description: 'Built to use Bootstrap, a sleek, intuitive, and powerful front-end framework for faster and easier web development.'
 package: 'Bootstrap'
 
+# _system_default_theme_features() does not have a complete list.
+features:
+  - comment_user_picture
+  - comment_user_verification
+  - favicon
+  - logo
+  - name
+  - node_user_picture
+  - slogan
+
 regions:
   navigation: 'Navigation'
   navigation_collapsible: 'Navigation (Collapsible)'
