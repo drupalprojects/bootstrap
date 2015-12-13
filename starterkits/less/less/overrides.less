@@ -73,22 +73,22 @@ body {
   &.navbar-is-fixed-bottom {
     padding-bottom: 64px !important;
   }
-  &.toolbar {
-    padding-top: 30px !important;
+  &.toolbar-fixed {
+    padding-top: 38px !important;
     .navbar-fixed-top {
-      top: 30px;
+      top: 38px;
     }
     &.navbar-is-fixed-top {
       padding-top: 94px !important;
     }
   }
-  &.toolbar-drawer {
-    padding-top: 64px !important;
+  &.toolbar-tray-open.toolbar-horizontal {
+    padding-top: 79px !important;
     .navbar-fixed-top {
-      top: 64px;
+      top: 79px;
     }
     &.navbar-is-fixed-top {
-      padding-top: 128px !important;
+      padding-top: 130px !important;
     }
   }
   // Admin_menu toolbar.
@@ -104,7 +104,7 @@ body {
     z-index: 1600;
   }
   // Override box-shadow styles on all "admin" menus.
-  #toolbar, #admin-menu, #admin-toolbar {
+  #toolbar-bar, #admin-menu, #admin-toolbar {
     .box-shadow(none);
   }
   // Override #admin-menu style.
@@ -150,8 +150,8 @@ body {
 .overlay-element {
   z-index: 1500;
 }
-#toolbar {
-  z-index: 1600;
+#toolbar-bar {
+  z-index: 1250;
 }
 // Adjust z-index of bootstrap modals
 .modal {
