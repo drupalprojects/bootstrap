@@ -58,16 +58,19 @@ class ElementInfo extends PluginBase implements AlterInterface {
 
       // Only continue if the type isn't "form" (as it messes up AJAX).
       if ($type !== 'form') {
+        $regex = "/^$type/";
+
         // Add necessary #process callbacks.
         $element['#process'][] = [get_class($process_manager), 'process'];
-        if ($process = $process_manager->getDefinition($type, FALSE)) {
-          $element['#process'][] = [$process['class'], 'process'];
+        $definitions = $process_manager->getDefinitionsLike($regex);
+        foreach ($definitions as $definition) {
+          Bootstrap::addCallback($element['#process'], [$definition['class'], 'process'], $definition['replace'], $definition['action']);
         }
 
         // Add necessary #pre_render callbacks.
         $element['#pre_render'][] = [get_class($pre_render_manager), 'preRender'];
-        if ($pre_render = $pre_render_manager->getDefinition($type, FALSE)) {
-          $element['#pre_render'][] = [$pre_render['class'], 'preRender'];
+        foreach ($pre_render_manager->getDefinitionsLike($regex) as $definition) {
+          Bootstrap::addCallback($element['#pre_render'], [$definition['class'], 'preRender'], $definition['replace'], $definition['action']);
         }
       }
     }

@@ -28,34 +28,125 @@ class Bootstrap {
   const CACHE_TAG = 'theme_registry';
 
   /**
+   * Append a callback.
+   *
+   * @var int
+   */
+  const CALLBACK_APPEND = 1;
+
+  /**
+   * Prepend a callback.
+   *
+   * @var int
+   */
+  const CALLBACK_PREPEND = 2;
+
+  /**
+   * Replace a callback or append it if not found.
+   *
+   * @var int
+   */
+  const CALLBACK_REPLACE_APPEND = 3;
+
+  /**
+   * Replace a callback or prepend it if not found.
+   *
+   * @var int
+   */
+  const CALLBACK_REPLACE_PREPEND = 4;
+
+  /**
    * The current supported Bootstrap Framework version.
+   *
+   * @var string
    */
   const FRAMEWORK_VERSION = '3.3.5';
 
   /**
    * The Bootstrap Framework documentation site.
+   *
+   * @var string
    */
   const FRAMEWORK_HOMEPAGE = 'http://getbootstrap.com';
 
   /**
    * The Bootstrap Framework repository.
+   *
+   * @var string
    */
   const FRAMEWORK_REPOSITORY = 'https://github.com/twbs/bootstrap';
 
   /**
    * The project branch.
+   *
+   * @var string
    */
   const PROJECT_BRANCH = '8.x-3.x';
 
   /**
    * The Drupal Bootstrap documentation site.
+   *
+   * @var string
    */
   const PROJECT_DOCUMENTATION = 'http://drupal-bootstrap.org';
 
   /**
    * The Drupal Bootstrap project page.
+   *
+   * @var string
    */
   const PROJECT_PAGE = 'https://www.drupal.org/project/bootstrap';
+
+  /**
+   * Adds a callback to an array.
+   *
+   * @param array $callbacks
+   *   An array of callbacks to add the callback to, passed by reference.
+   * @param array|string $callback
+   *   The callback to add.
+   * @param array|string $replace
+   *   If specified, the callback will instead replace the specified value
+   *   instead of being appended to the $callbacks array.
+   * @param int $action
+   *   Flag that determines how to add the callback to the array.
+   *
+   * @return bool
+   *   TRUE if the callback was added, FALSE if $replace was specified but its
+   *   callback could be found in the list of callbacks.
+   */
+  public static function addCallback(array &$callbacks, $callback, $replace = NULL, $action = Bootstrap::CALLBACK_APPEND) {
+    // Replace a callback.
+    if ($replace) {
+      // Iterate through the callbacks.
+      foreach ($callbacks as $key => $value) {
+        // Convert each callback and match the string values.
+        if (Unicode::convertCallback($value) === Unicode::convertCallback($replace)) {
+          $callbacks[$key] = Unicode::convertCallback($callback, TRUE);
+          return TRUE;
+        }
+      }
+      // No match found and action shouldn't append or prepend.
+      if ($action !== self::CALLBACK_REPLACE_APPEND || $action !== self::CALLBACK_REPLACE_PREPEND) {
+        return FALSE;
+      }
+    }
+
+    // Append or prepend the callback.
+    switch ($action) {
+      case self::CALLBACK_APPEND:
+      case self::CALLBACK_REPLACE_APPEND:
+        $callbacks[] = $callback;
+        return TRUE;
+
+      case self::CALLBACK_PREPEND:
+      case self::CALLBACK_REPLACE_PREPEND:
+        array_unshift($callbacks, $callback);
+        return TRUE;
+
+      default:
+        return FALSE;
+    }
+  }
 
   /**
    * Manages theme alter hooks as classes and allows sub-themes to sub-class.
@@ -137,7 +228,6 @@ class Bootstrap {
   public static function apiSearchUrl($query = '') {
     return self::PROJECT_DOCUMENTATION . '/api/bootstrap/' . self::PROJECT_BRANCH . '/search/' . Html::escape($query);
   }
-
 
   /**
    * Matches a Bootstrap class based on a string value.

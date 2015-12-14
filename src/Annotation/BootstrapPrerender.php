@@ -6,8 +6,6 @@
 
 namespace Drupal\bootstrap\Annotation;
 
-use Drupal\Component\Annotation\PluginID;
-
 /**
  * Defines a BootstrapPrerender annotation object.
  *
@@ -19,4 +17,4 @@ use Drupal\Component\Annotation\PluginID;
  *
  * @Annotation
  */
-class BootstrapPrerender extends PluginID {}
+class BootstrapPrerender extends PluginCallback {}

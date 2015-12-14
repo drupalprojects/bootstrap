@@ -35,6 +35,35 @@ class Unicode extends \Drupal\Component\Utility\Unicode {
   }
 
   /**
+   * Converts a callback to a string representation.
+   *
+   * @param array|string $callback
+   *   The callback to convert.
+   * @param bool $array
+   *   Flag determining whether or not to convert the callback to an array.
+   *
+   * @return string
+   *   The converted callback as a string or an array if $array is specified.
+   *
+   * @see \Drupal\bootstrap\Bootstrap::addCallback()
+   */
+  public static function convertCallback($callback, $array = FALSE) {
+    if (is_array($callback)) {
+      if (is_object($callback[0])) {
+        $callback[0] = get_class($callback[0]);
+      }
+      $callback = implode('::', $callback);
+    }
+    if ($callback[0] === '\\') {
+      $callback = self::substr($callback, 1);
+    }
+    if ($array && self::strpos($callback, '::') !== FALSE) {
+      $callback = explode('::', $callback);
+    }
+    return $callback;
+  }
+
+  /**
    * Determines if a string of text is considered "simple".
    *
    * @param string $string

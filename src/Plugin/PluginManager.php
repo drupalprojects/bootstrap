@@ -110,6 +110,27 @@ class PluginManager extends DefaultPluginManager {
   }
 
   /**
+   * Retrieves all definitions where the plugin ID matches a certain criteria.
+   *
+   * @param string $regex
+   *   The regex pattern to match.
+   *
+   * @return array[]
+   *   An array of plugin definitions (empty array if no definitions were
+   *   found). Keys are plugin IDs.
+   */
+  public function getDefinitionsLike($regex) {
+    $definitions = [];
+    foreach ($this->getDefinitions() as $plugin_id => $definition) {
+      if (preg_match($regex, $plugin_id)) {
+        $definitions[$plugin_id] = $definition;
+      }
+    }
+    ksort($definitions, SORT_NATURAL);
+    return $definitions;
+  }
+
+  /**
    * {@inheritdoc}
    */
   protected function providerExists($provider) {
