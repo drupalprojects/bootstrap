@@ -86,6 +86,7 @@ module.exports = function (grunt) {
                 var lessPaths = [path.join(librariesPath)];
                 var latestVersion = [].concat(versions).pop();
                 var latestVariables = path.join(latestVersion, 'bootstrap', 'less', 'variables.less');
+                var latestMixins = path.join(latestVersion, 'bootstrap', 'less', 'mixins.less');
                 var themeVariables = path.join(version, library, (library === 'bootstrap' ? 'less' : theme), 'variables.less');
                 var backupVariables = path.join(version, 'bootstrap', 'less', 'variables.less');
                 var fileName = (library === 'bootstrap' ? 'overrides.min.css' : 'overrides-' + theme + '.min.css');
@@ -107,6 +108,8 @@ module.exports = function (grunt) {
                   '@import "' + latestVariables + '"',
                   // Then, override variables with theme.
                   '@import "' + themeVariables + '"',
+                  // Then, import latest bootstrap mixins.
+                  '@import "' + latestMixins + '"',
                   // Finally, import the base-theme overrides.
                   '@import "' + path.join('starterkits', 'less', 'less', 'overrides.less') + '"'
                 ];

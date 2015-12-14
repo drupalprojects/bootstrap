@@ -3,12 +3,9 @@
 @normal:  ~"screen and (min-width: @{screen-md-min})";
 @wide:    ~"screen and (min-width: @{screen-lg-min})";
 
-// Drop shadows.
-.box-shadow(@shadow) {
-  -webkit-box-shadow: @shadow;
-     -moz-box-shadow: @shadow;
-          box-shadow: @shadow;
-}
+// @todo these should be their own CSS files and only included when
+// specific Drupal libraries are used.
+@import "toolbar.less";
 
 html {
   &.overlay-open .navbar-fixed-top {
@@ -58,65 +55,24 @@ html {
     top: 0;
   }
 }
+
 body {
+  margin-top: (@grid-gutter-width / 2);
+
+  // Navbar positions.
+  &.navbar-is-static-top {
+    margin-top: 0;
+  }
+  &.navbar-is-fixed-top {
+    margin-top: (@navbar-height + (@grid-gutter-width / 2));
+  }
+  &.navbar-is-fixed-bottom {
+    padding-bottom: (@navbar-height + (@grid-gutter-width / 2));
+  }
+
   // Fix horizontal scrolling on iOS devices.
   // http://drupal.org/node/1870076
   position: relative;
-  &.admin-expanded.admin-vertical.admin-nw .navbar,
-  &.admin-expanded.admin-vertical.admin-sw .navbar {
-    margin-left: 260px;
-  }
-  // Add padding to body if various toolbar or navbars are fixed on top.
-  &.navbar-is-fixed-top {
-    padding-top: 64px !important;
-  }
-  &.navbar-is-fixed-bottom {
-    padding-bottom: 64px !important;
-  }
-  &.toolbar-fixed {
-    padding-top: 38px !important;
-    .navbar-fixed-top {
-      top: 38px;
-    }
-    &.navbar-is-fixed-top {
-      padding-top: 94px !important;
-    }
-  }
-  &.toolbar-tray-open.toolbar-horizontal {
-    padding-top: 79px !important;
-    .navbar-fixed-top {
-      top: 79px;
-    }
-    &.navbar-is-fixed-top {
-      padding-top: 130px !important;
-    }
-  }
-  // Admin_menu toolbar.
-  &.admin-menu {
-    .navbar-fixed-top {
-      top: 29px;
-    }
-    &.navbar-is-fixed-top {
-      padding-top: 93px !important;
-    }
-  }
-  div#admin-toolbar {
-    z-index: 1600;
-  }
-  // Override box-shadow styles on all "admin" menus.
-  #toolbar-bar, #admin-menu, #admin-toolbar {
-    .box-shadow(none);
-  }
-  // Override #admin-menu style.
-  #admin-menu {
-    margin: 0;
-    padding: 0;
-    position: fixed;
-    z-index: 1600;
-    .dropdown li {
-      line-height: normal;
-    }
-  }
 }
 
 // Default navbar.
@@ -132,10 +88,6 @@ body {
       max-width: ((@container-lg - @grid-gutter-width));
     }
   }
-  &.container,
-  &.container-fluid {
-    margin-top: 20px;
-  }
   &.container > .container,
   &.container-fluid > .container-fluid {
     margin: 0;
@@ -149,9 +101,6 @@ body {
 .overlay-modal-background,
 .overlay-element {
   z-index: 1500;
-}
-#toolbar-bar {
-  z-index: 1250;
 }
 // Adjust z-index of bootstrap modals
 .modal {
@@ -448,12 +397,10 @@ ul li.leaf {
   }
   .progress {
     background: transparent;
-    -moz-border-radius: 0 0 5px 5px;
-    -webkit-border-radius: 0 0 5px 5px;
     border-radius: 0 0 5px 5px;
-    .box-shadow(none);
+    box-shadow: none;
     height: 4px;
-    margin: -5px 0px 0;
+    margin: -5px 0 0;
   }
   .form-control-feedback {
     right: 15px;
@@ -621,8 +568,8 @@ a .glyphicon-spin {
   }
   > .tab-content {
     border-radius: 0 @border-radius-base @border-radius-base @border-radius-base;
-    .box-shadow(0 1px 1px rgba(0,0,0,.05));
     border: 1px solid @nav-tabs-border-color;
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
     overflow: hidden;
     padding: 10px 15px;
   }
@@ -644,7 +591,7 @@ a .glyphicon-spin {
     > .active > a:hover,
     > .active > a:focus {
       border-color: @nav-tabs-border-color transparent @nav-tabs-border-color @nav-tabs-border-color;
-      .box-shadow(-1px 1px 1px rgba(0,0,0,.05));
+      box-shadow: -1px 1px 1px rgba(0,0,0,.05);
     }
   }
 }
@@ -659,7 +606,7 @@ a .glyphicon-spin {
       &:hover,
       &:focus {
         border-color: @nav-tabs-link-hover-border-color @nav-tabs-link-hover-border-color @nav-tabs-link-hover-border-color @nav-tabs-border-color;
-        .box-shadow(1px 1px 1px rgba(0,0,0,.05));
+        box-shadow: 1px 1px 1px rgba(0,0,0,.05);
       }
     }
     > .active > a,
@@ -762,8 +709,8 @@ td.module,
     font-weight: bold;
   }
   .dropdown-menu {
-    .box-shadow(none);
     border: 0;
+    box-shadow: none;
     display: block;
     font-size: @font-size-small;
     margin: 0;
