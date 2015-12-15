@@ -60,6 +60,15 @@ drupal.tabledrag:
     js/misc/tabledrag.js: {}
 
 # libraries-override
+drupal.text:
+  version: VERSION
+  js:
+    js/text/text.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+
 drupal.vertical-tabs:
   js:
     # Load before core/drupal.collapse.

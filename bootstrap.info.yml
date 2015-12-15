@@ -39,3 +39,4 @@ libraries-override:
   core/drupal.dropbutton: bootstrap/dropdown
   core/drupal.vertical-tabs: bootstrap/drupal.vertical-tabs
   system/admin: false
+  text/drupal.text: bootstrap/drupal.text
