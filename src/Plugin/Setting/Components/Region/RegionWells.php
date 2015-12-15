@@ -53,7 +53,7 @@ class RegionWells extends SettingBase {
     $group->setProperty('description', $setting->getProperty('description'));
 
     // Retrieve the current default values.
-    $default_values = $group->getProperty('default_value', $this->getDefaultValue());
+    $default_values = $setting->getProperty('default_value', $this->getDefaultValue());
 
     $wells = [
       '' => t('None'),
