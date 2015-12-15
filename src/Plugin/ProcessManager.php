@@ -63,12 +63,6 @@ class ProcessManager extends PluginManager {
       $e->addClass('form-inline', 'wrapper_attributes');
     }
 
-    // Add "form-group" class, don't replace "form-wrapper" as that is needed
-    // by some JavaScript for certain functionality to work.
-    if ($e->hasClass('form-wrapper')) {
-      $e->addClass('form-group');
-    }
-
     // Check for errors and set the "has_error" property flag.
     $errors = $e->getError();
     $e->setProperty('errors', $errors);
