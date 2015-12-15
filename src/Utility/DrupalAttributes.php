@@ -86,6 +86,13 @@ class DrupalAttributes extends ArrayObject {
   const NAVBAR = 'navbar_attributes';
 
   /**
+   * Defines the "split_button_attributes" storage type constant.
+   *
+   * @var string
+   */
+  const SPLIT_BUTTON = 'split_button_attributes';
+
+  /**
    * Defines the "title_attributes" storage type constant.
    *
    * @var string

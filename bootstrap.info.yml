@@ -36,6 +36,6 @@ libraries-extend:
 
 libraries-override:
   core/drupal.collapse: false
-  core/drupal.dropbutton: bootstrap/drupal.dropbutton
+  core/drupal.dropbutton: bootstrap/dropdown
   core/drupal.vertical-tabs: bootstrap/drupal.vertical-tabs
   system/admin: false

@@ -18,6 +18,12 @@ theme-settings:
     - core/drupal
     - core/drupalSettings
 
+dropdown:
+  js:
+    js/dropdown.js: {}
+  dependencies:
+    - bootstrap/base-theme
+
 popovers:
   js:
     js/popovers.js: {}
@@ -54,13 +60,6 @@ drupal.tabledrag:
     js/misc/tabledrag.js: {}
 
 # libraries-override
-drupal.dropbutton:
-  js:
-    js/misc/dropbutton/dropbutton.js: {}
-  dependencies:
-    - bootstrap/base-theme
-    - core/jquery.once
-
 drupal.vertical-tabs:
   js:
     # Load before core/drupal.collapse.

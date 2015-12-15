@@ -46,7 +46,7 @@ class Element extends DrupalAttributes {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    */
-  public function __construct(&$element, FormStateInterface $form_state = NULL) {
+  public function __construct(&$element = [], FormStateInterface $form_state = NULL) {
     if (!is_array($element)) {
       $element = ['#markup' => $element instanceof MarkupInterface ? $element : new FormattableMarkup($element, [])];
     }
@@ -187,22 +187,34 @@ class Element extends DrupalAttributes {
       return $this;
     }
 
+    // Add the button type.
+    if ($button && ($button_type = $this->getProperty('button_type'))) {
+      $this->addClass("btn-$button_type");
+    }
+
     // @todo refactor this more so it's not just "button" specific.
     $prefix = $button ? 'btn' : 'has';
 
     // Don't add a class if one is already present in the array.
-    $button_classes = [
+    $classes = [
       "$prefix-default", "$prefix-primary", "$prefix-success", "$prefix-info",
       "$prefix-warning", "$prefix-danger", "$prefix-link",
     ];
 
-    foreach ($button_classes as $class) {
+    foreach ($classes as $class) {
       if ($this->hasClass($class)) {
+        if ($button && $this->getProperty('split')) {
+          $this->addClass($class, $this::SPLIT_BUTTON);
+        }
         return $this;
       }
     }
 
-    $this->addClass("$prefix-" . Bootstrap::cssClassFromString($this->array['#value'], 'default'));
+    $class = "$prefix-" . Bootstrap::cssClassFromString($this->array['#value'], 'default');
+    $this->addClass($class);
+    if ($button && $this->getProperty('split')) {
+      $this->addClass($class, $this::SPLIT_BUTTON);
+    }
 
     return $this;
   }
@@ -218,7 +230,7 @@ class Element extends DrupalAttributes {
    * @return \Drupal\bootstrap\Utility\Element
    *   The newly created element instance.
    */
-  public static function create(&$element, FormStateInterface $form_state = NULL) {
+  public static function create(&$element = [], FormStateInterface $form_state = NULL) {
     return new self($element, $form_state);
   }
 

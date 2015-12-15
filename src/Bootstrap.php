@@ -11,6 +11,7 @@ use Drupal\bootstrap\Plugin\FormManager;
 use Drupal\bootstrap\Plugin\PreprocessManager;
 use Drupal\bootstrap\Utility\Unicode;
 use Drupal\Component\Utility\Html;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Extension\ThemeHandlerInterface;
 
 /**
@@ -380,6 +381,7 @@ class Bootstrap {
    * @see hook_theme()
    */
   public static function getInfo() {
+    // @todo Fix.
     $hooks['bootstrap_carousel'] = [
       'variables' => [
         'attributes' => [],
@@ -394,9 +396,16 @@ class Bootstrap {
     ];
 
     $hooks['bootstrap_dropdown'] = [
-      'render element' => 'element',
+      'variables' => [
+        'alignment' => NULL,
+        'attributes' => [],
+        'items' => ['#theme' => 'item_list__dropdown'],
+        'split' => FALSE,
+        'toggle' => NULL,
+      ],
     ];
 
+    // @todo Fix.
     $hooks['bootstrap_modal'] = [
       'variables' => [
         'heading' => '',
@@ -425,6 +434,7 @@ class Bootstrap {
         'panel_type' => 'default',
       ],
     ];
+
     return $hooks;
   }
 
@@ -944,7 +954,7 @@ class Bootstrap {
     // hook suggestion alters work, the variables provided are from the
     // original theme hook, not the suggestion.
     if (isset($info['variables'])) {
-      $variables += $info['variables'];
+      $variables = NestedArray::mergeDeepArray([$info['variables'], $variables], TRUE);
     }
 
     // Add extra variables to all theme hooks.

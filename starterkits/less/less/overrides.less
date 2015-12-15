@@ -6,18 +6,10 @@
 // @todo these should be their own CSS files and only included when
 // specific Drupal libraries are used.
 @import "toolbar.less";
+@import "vertical-tabs.less";
 
 html {
-  &.overlay-open .navbar-fixed-top {
-    z-index: 400;
-  }
   &.js {
-    // Collapsible fieldsets.
-    fieldset.collapsed {
-      border-left-width: 1px;
-      border-right-width: 1px;
-      height: auto;
-    }
     // Throbbers.
     input.form-autocomplete {
       background-image: none;
@@ -41,18 +33,6 @@ html {
     .autocomplete-throbber.throbbing {
       background-position: 100% -18px;
     }
-  }
-  // Dropbuttons
-  .dropbutton-wrapper {
-    display: inline-block;
-  }
-  .dropbutton-widget {
-    padding-right: 20px;
-  }
-  .btn-group > .btn.dropdown-toggle {
-    position: absolute;
-    right: 0;
-    top: 0;
   }
 }
 
@@ -123,32 +103,6 @@ body {
   border-top: 1px solid #E5E5E5;
 }
 
-// Element invisible fix
-.element-invisible {
-  margin: 0;
-  padding: 0;
-  width: 1px;
-}
-
-// Branding.
-.navbar .logo {
-  margin-right: -15px;
-  padding-left: 15px;
-  padding-right: 15px;
-  @media @tablet {
-    margin-right: 0;
-    padding-left: 0;
-  }
-}
-
-// Navigation.
-ul.secondary {
-  float: left;
-  @media @tablet {
-    float: right;
-  }
-}
-
 // Page header.
 .page-header {
   margin-top: 0;
@@ -181,20 +135,6 @@ p:last-child {
 // Search form.
 form#search-block-form {
   margin: 0;
-}
-.navbar #block-search-form {
-  float: none;
-  margin: 5px 0 5px 5px;
-  @media @normal {
-    float: right;
-  }
-
-  .input-group-btn {
-    width: auto;
-  }
-}
-.navbar-search .control-group {
-  margin-bottom:0px;
 }
 
 // Action Links
@@ -496,127 +436,6 @@ a .glyphicon-spin {
   transform-origin: 50% 45%;
 }
 
-/**
- * Missing Bootstrap 2 tab styling.
- * @see http://stackoverflow.com/questions/18432577/stacked-tabs-in-bootstrap-3
- * @see http://bootply.com/74926
- */
-.tabbable {
-  margin-bottom: 20px;
-}
-.tabs-below, .tabs-left, .tabs-right {
-  > .nav-tabs {
-    border-bottom: 0;
-    .summary {
-      color: @nav-disabled-link-color;
-      font-size: @font-size-small;
-    }
-  }
-}
-.tab-pane > .panel-heading {
-  display: none;
-}
-.tab-content > .active {
-  display: block;
-}
-
-// Below.
-.tabs-below {
-  > .nav-tabs {
-    border-top: 1px solid @nav-tabs-border-color;
-    > li {
-      margin-top: -1px;
-      margin-bottom: 0;
-      > a {
-        border-radius: 0 0 @border-radius-base @border-radius-base;
-        &:hover,
-        &:focus {
-          border-top-color: @nav-tabs-border-color;
-          border-bottom-color: transparent;
-        }
-      }
-    }
-    > .active {
-      > a,
-      > a:hover,
-      > a:focus {
-        border-color: transparent @nav-tabs-border-color @nav-tabs-border-color @nav-tabs-border-color;
-      }
-    }
-  }
-}
-
-// Left and right tabs.
-.tabs-left,
-.tabs-right {
-  > .nav-tabs {
-    padding-bottom: 20px;
-    width: 220px;
-    > li {
-      float: none;
-      &:focus {
-        outline: 0;
-      }
-      > a {
-        margin-right: 0;
-        margin-bottom: 3px;
-        &:focus {
-          outline: 0;
-        }
-      }
-    }
-  }
-  > .tab-content {
-    border-radius: 0 @border-radius-base @border-radius-base @border-radius-base;
-    border: 1px solid @nav-tabs-border-color;
-    box-shadow: 0 1px 1px rgba(0,0,0,.05);
-    overflow: hidden;
-    padding: 10px 15px;
-  }
-}
-
-// Left tabs.
-.tabs-left {
-  > .nav-tabs {
-    float: left;
-    margin-right: -1px;
-    > li > a {
-      border-radius: @border-radius-base 0 0 @border-radius-base;
-      &:hover,
-      &:focus {
-        border-color: @nav-tabs-link-hover-border-color @nav-tabs-border-color @nav-tabs-link-hover-border-color @nav-tabs-link-hover-border-color;
-      }
-    }
-    > .active > a,
-    > .active > a:hover,
-    > .active > a:focus {
-      border-color: @nav-tabs-border-color transparent @nav-tabs-border-color @nav-tabs-border-color;
-      box-shadow: -1px 1px 1px rgba(0,0,0,.05);
-    }
-  }
-}
-
-// Right tabs.
-.tabs-right {
-  > .nav-tabs {
-    float: right;
-    margin-left: -1px;
-    > li > a {
-      border-radius: 0 @border-radius-base @border-radius-base 0;
-      &:hover,
-      &:focus {
-        border-color: @nav-tabs-link-hover-border-color @nav-tabs-link-hover-border-color @nav-tabs-link-hover-border-color @nav-tabs-border-color;
-        box-shadow: 1px 1px 1px rgba(0,0,0,.05);
-      }
-    }
-    > .active > a,
-    > .active > a:hover,
-    > .active > a:focus {
-      border-color: @nav-tabs-border-color @nav-tabs-border-color @nav-tabs-border-color transparent;
-    }
-  }
-}
-
 // Checkbox cell fix.
 th.checkbox,
 td.checkbox,
@@ -765,78 +584,4 @@ div.features-export-list {
       margin-top: 0;
     }
   }
-}
-
-/**
- * Prevent text wrapping.
- */
-.nowrap {
-  white-space: nowrap;
-}
-
-/**
- * For anything you want to hide on page load when JS is enabled, so
- * that you can use the JS to control visibility and avoid flicker.
- */
-.js .js-hide {
-  display: none;
-}
-
-/**
- * For anything you want to show on page load only when JS is enabled.
- */
-.js-show {
-  display: none;
-}
-.js .js-show {
-  display: block;
-}
-
-/**
- * Hide elements from all users.
- *
- * Used for elements which should not be immediately displayed to any user. An
- * example would be collapsible details that will be expanded with a click
- * from a user. The effect of this class can be toggled with the jQuery show()
- * and hide() functions.
- */
-.hidden {
-  display: none;
-}
-
-/**
- * Hide elements visually, but keep them available for screen readers.
- *
- * Used for information required for screen reader users to understand and use
- * the site where visual display is undesirable. Information provided in this
- * manner should be kept concise, to avoid unnecessary burden on the user.
- * "!important" is used to prevent unintentional overrides.
- */
-.visually-hidden {
-  position: absolute !important;
-  clip: rect(1px, 1px, 1px, 1px);
-  overflow: hidden;
-  height: 1px;
-  width: 1px;
-  word-wrap: normal;
-}
-
-/**
- * The .focusable class extends the .visually-hidden class to allow
- * the element to be focusable when navigated to via the keyboard.
- */
-.visually-hidden.focusable:active,
-.visually-hidden.focusable:focus {
-  position: static !important;
-  clip: auto;
-  overflow: visible;
-  height: auto;
-  width: auto;
-}
-
-/**
- * Hide visually and from screen readers, but maintain layout.
- */
-.invisible {
-  visibility: hidden;
 }
