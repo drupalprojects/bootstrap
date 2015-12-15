@@ -258,6 +258,8 @@ class Bootstrap {
           // Success class.
           t('Add effect')->render()         => 'success',
           t('Add and configure')->render()  => 'success',
+          t('Save configuration')->render() => 'success',
+          t('Install and set as default')->render() => 'success',
 
           // Info class.
           t('Save and add')->render()       => 'info',
@@ -272,10 +274,17 @@ class Bootstrap {
           t('Filter')->render()             => 'primary',
           t('Submit')->render()             => 'primary',
           t('Search')->render()             => 'primary',
+          t('Settings')->render()           => 'primary',
+
+          // Danger class.
+          t('Delete')->render()             => 'danger',
+          t('Remove')->render()             => 'danger',
+          t('Uninstall')->render()          => 'danger',
 
           // Success class.
           t('Add')->render()                => 'success',
           t('Create')->render()             => 'success',
+          t('Install')->render()            => 'success',
           t('Save')->render()               => 'success',
           t('Write')->render()              => 'success',
 
@@ -288,10 +297,6 @@ class Bootstrap {
           // Info class.
           t('Apply')->render()              => 'info',
           t('Update')->render()             => 'info',
-
-          // Danger class.
-          t('Delete')->render()             => 'danger',
-          t('Remove')->render()             => 'danger',
         ],
       ];
 
@@ -554,6 +559,7 @@ class Bootstrap {
         'contains' => [
           t('Manage')->render()     => 'cog',
           t('Configure')->render()  => 'cog',
+          t('Settings')->render()   => 'cog',
           t('Download')->render()   => 'download',
           t('Export')->render()     => 'export',
           t('Filter')->render()     => 'filter',
@@ -561,7 +567,8 @@ class Bootstrap {
           t('Save')->render()       => 'ok',
           t('Update')->render()     => 'ok',
           t('Edit')->render()       => 'pencil',
-          t('Add')->render()        => 'plus',
+          t('Uninstall')->render()  => 'trash',
+          t('Install')->render()    => 'plus',
           t('Write')->render()      => 'plus',
           t('Cancel')->render()     => 'remove',
           t('Delete')->render()     => 'trash',

@@ -182,16 +182,6 @@ class Element extends DrupalAttributes {
   public function colorize() {
     $button = $this->isButton();
 
-    // Do nothing if setting is disabled.
-    if (!$button || !Bootstrap::getTheme()->getSetting('button_colorize')) {
-      return $this;
-    }
-
-    // Add the button type.
-    if ($button && ($button_type = $this->getProperty('button_type'))) {
-      $this->addClass("btn-$button_type");
-    }
-
     // @todo refactor this more so it's not just "button" specific.
     $prefix = $button ? 'btn' : 'has';
 
@@ -210,10 +200,18 @@ class Element extends DrupalAttributes {
       }
     }
 
-    $class = "$prefix-" . Bootstrap::cssClassFromString($this->array['#value'], 'default');
-    $this->addClass($class);
-    if ($button && $this->getProperty('split')) {
-      $this->addClass($class, $this::SPLIT_BUTTON);
+    // Do nothing if setting is disabled.
+    if ($button && !Bootstrap::getTheme()->getSetting('button_colorize')) {
+      $this->addClass('btn-default');
+      return $this;
+    }
+
+    if ($value = $this->getProperty('value', $this->getProperty('title'))) {
+      $class = "$prefix-" . Bootstrap::cssClassFromString($value, $this->getProperty('button_type', 'default'));
+      $this->addClass($class);
+      if ($button && $this->getProperty('split')) {
+        $this->addClass($class, $this::SPLIT_BUTTON);
+      }
     }
 
     return $this;
@@ -318,7 +316,7 @@ class Element extends DrupalAttributes {
    *   TRUE or FALSE.
    */
   public function isButton() {
-    return !empty($this->array['#is_button']) || $this->isType(['button', 'submit', 'reset', 'image_button']);
+    return !empty($this->array['#is_button']) || $this->isType(['button', 'submit', 'reset', 'image_button']) || $this->hasClass('btn');
   }
 
   /**
@@ -447,8 +445,10 @@ class Element extends DrupalAttributes {
     if ($this->isButton() && !Bootstrap::getTheme()->getSetting('button_iconize')) {
       return $this;
     }
-    $icon = isset($icon) ? $icon : Bootstrap::glyphiconFromString($this->getProperty('value'));
-    $this->setProperty('icon', $icon);
+    if ($value = $this->getProperty('value', $this->getProperty('title'))) {
+      $icon = isset($icon) ? $icon : Bootstrap::glyphiconFromString($value);
+      $this->setProperty('icon', $icon);
+    }
     return $this;
   }
 

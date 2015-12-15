@@ -28,12 +28,15 @@
       'btn',
       theme.settings.button_size ? theme.settings.button_size,
       type == 'submit' ? 'js-form-submit',
+      icon and icon_position and not icon_only ? 'icon-' ~ icon_position,
     ]
   %}
   {% block input %}
     {% if icon_only %}
-    <button{{ attributes.addClass(classes) }}><span
-        class="sr-only">{{ label }}</span>{{ icon }}</button>{{ children }}
+      <button{{ attributes.addClass(classes, 'icon-only') }}>
+        <span class="sr-only">{{ label }}</span>
+        {{ icon }}
+      </button>
     {% else %}
       {% if icon_position == 'after' %}
         <button{{ attributes.addClass(classes) }}>{{ label }}{{ icon }}</button>{{ children }}
@@ -41,5 +44,6 @@
         <button{{ attributes.addClass(classes) }}>{{ icon }}{{ label }}</button>{{ children }}
       {% endif %}
     {% endif %}
+    {{ children }}
   {% endblock %}
 {% endspaceless %}
