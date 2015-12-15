@@ -28,6 +28,16 @@ interface SettingInterface extends FormInterface {
   public function drupalSettings();
 
   /**
+   * The cache tags associated with this object.
+   *
+   * When this object is modified, these cache tags will be invalidated.
+   *
+   * @return string[]
+   *   A set of cache tags.
+   */
+  public function getCacheTags();
+
+  /**
    * Retrieves the setting's default value.
    *
    * @return string

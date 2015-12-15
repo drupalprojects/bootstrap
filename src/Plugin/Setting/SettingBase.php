@@ -31,6 +31,13 @@ class SettingBase extends PluginBase implements SettingInterface {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    return ['rendered'];
+  }
+
+  /**
    * Retrieves all the form properties from the setting definition.
    *
    * @return array

@@ -119,21 +119,47 @@ class SystemThemeSettings extends FormBase implements FormInterface {
       return;
     }
 
-    $form_state->cleanValues();
+    $cache_tags = [];
+    $save = FALSE;
+    $settings = $theme->settings();
 
-    // Iterate over all setting plugins and allow them to participate.
+    // Iterate over all setting plugins and manually save them since core's
+    // process is severely limiting and somewhat broken.
     foreach ($theme->getSettingPlugins() as $name => $setting) {
+      // Allow the setting itself to participate in the submission process.
       $setting->submitForm($form, $form_state);
 
-      // Remove values that didn't change so they don't get saved to config.
-      $settings = $theme->settings();
-      if (!$settings->overridesValue($name, $form_state->getValue($name))) {
-        $form_state->unsetValue($name);
+      // Retrieve the submitted value.
+      $value = $form_state->getValue($name);
+
+      // Determine if the setting has a new value that overrides the original.
+      if ($settings->overridesValue($name, $value)) {
+        // Set the new value.
+        $settings->set($name, $value);
+
+        // Retrieve the cache tags for the setting.
+        $cache_tags = array_unique(array_merge($setting->getCacheTags()));
+
+        // Flag the save.
+        $save = TRUE;
       }
+
+      // Remove value from the form state object so core doesn't re-save it.
+      $form_state->unsetValue($name);
     }
 
-    // Clear out cache so it can get rebuilt.
-    $theme->getCache('settings')->deleteAll();
+    // Save the settings, if needed.
+    if ($save) {
+      $settings->save();
+
+      // Invalidate necessary cache tags.
+      if ($cache_tags) {
+        \Drupal::service('cache_tags.invalidator')->invalidateTags($cache_tags);
+      }
+
+      // Clear our internal theme cache so it can be rebuilt properly.
+      $theme->getCache('settings')->deleteAll();
+    }
   }
 
   /**

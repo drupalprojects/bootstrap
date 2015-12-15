@@ -28,4 +28,13 @@ use Drupal\Core\Annotation\Translation;
  *   },
  * )
  */
-class CdnCustomCss extends SettingBase {}
+class CdnCustomCss extends SettingBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    return ['library_info'];
+  }
+
+}

@@ -170,6 +170,13 @@ class CdnProvider extends SettingBase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function getCacheTags() {
+    return ['library_info'];
+  }
+
+  /**
    * Imports data for a provider that was manually uploaded in theme settings.
    *
    * @param \Drupal\Core\Form\FormStateInterface $form_state
