@@ -9,17 +9,17 @@
  *   - id: A valid HTML ID and guaranteed to be unique.
  * - controls: Flag indicating whether or not to show the carousel controls.
  * - indicators: Flag indicating whether or not to show the carousel indicators.
- * - interval: The amount of time to delay between automatically cycling an
- *   item. If false, carousel will not automatically cycle.
- * - items: A list of carousel slide items containing:
+ * - interval: The amount of time to delay between automatically cycling a
+ *   slide item. If false, carousel will not automatically cycle.
+ * - pause: (optional) Pauses the cycling of the carousel on mouseenter and
+ *   resumes the cycling of the carousel on mouseleave.
+ * - slides: A list of carousel slide items containing:
  *    - image: (required) The image to display in the slide item.
  *    - attributes: (optional) An array of HTML attributes intended to be added
  *      to the slide item.
  *    - title: (optional) A title to display for the slide item.
  *    - description: (optional) Additional helpful text to display for a slide
  *      item.
- * - pause: (optional) Pauses the cycling of the carousel on mouseenter and
- *   resumes the cycling of the carousel on mouseleave.
  * - start_index: (optional) Alters the slide position relative to its current
  *   position.
  * - wrap: (optional) Whether the carousel should cycle continuously or have
@@ -34,17 +34,17 @@
     {{ indicators }}
   {% endif %}
   <div class="carousel-inner" role="listbox">
-  {% for item in items %}
-    {% set item_classes = ['item', start_index == loop.index0 ? 'active'] %}
-    <div{{ item.attributes.addClass(item_classes) }}>
-      {{ item.image }}
-      {% if item.title or item.description %}
+  {% for slide in slides %}
+    {% set slide_classes = ['item', start_index == loop.index0 ? 'active'] %}
+    <div{{ slide.attributes.addClass(slide_classes) }}>
+      {{ slide.image }}
+      {% if slide.title or slide.description %}
         <div class="carousel-caption">
-          {% if item.title %}
-            <h3>{{ item.title }}</h3>
+          {% if slide.title %}
+            <h3>{{ slide.title }}</h3>
           {% endif %}
-          {% if item.description %}
-            <p>{{ item.description }}</p>
+          {% if slide.description %}
+            <p>{{ slide.description }}</p>
           {% endif %}
         </div>
       {% endif %}

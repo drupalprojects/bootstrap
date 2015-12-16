@@ -32,12 +32,12 @@ class BootstrapCarousel extends PreprocessBase implements PreprocessInterface {
     $id = $variables->getAttribute('id', Html::getUniqueId($variables->offsetGet('id', 'bootstrap-carousel')));
     unset($variables['id']);
 
-    // Build items.
-    foreach ($variables->items as $key => &$item) {
-      if (!isset($item['attributes'])) {
-        $item['attributes'] = [];
+    // Build slides.
+    foreach ($variables->slides as $key => &$slide) {
+      if (!isset($slide['attributes'])) {
+        $slide['attributes'] = [];
       }
-      $item['attributes'] = new Attribute($item['attributes']);
+      $slide['attributes'] = new Attribute($slide['attributes']);
     }
 
     // Build controls.
@@ -74,7 +74,7 @@ class BootstrapCarousel extends PreprocessBase implements PreprocessInterface {
       $variables->indicators = [
         '#theme' => 'item_list__bootstrap_carousel_indicators',
         '#list_type' => 'ol',
-        '#items' => array_keys($variables->items),
+        '#items' => array_keys($variables->slides),
         '#target' => "#$id",
         '#start_index' => $variables->start_index,
       ];
