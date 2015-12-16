@@ -386,16 +386,16 @@ class Bootstrap {
    * @see hook_theme()
    */
   public static function getInfo() {
-    // @todo Fix.
     $hooks['bootstrap_carousel'] = [
       'variables' => [
         'attributes' => [],
-        'items' => [],
-        'start_index' => 0,
         'controls' => TRUE,
+        'id' => NULL,
         'indicators' => TRUE,
         'interval' => 5000,
+        'items' => [],
         'pause' => 'hover',
+        'start_index' => 0,
         'wrap' => TRUE,
       ],
     ];
@@ -420,6 +420,7 @@ class Bootstrap {
         'attributes' => [],
         'size' => '',
         'html_heading' => FALSE,
+        'id' => NULL,
       ],
     ];
 
@@ -436,6 +437,7 @@ class Bootstrap {
         'footer_attributes' => [],
         'heading' => NULL,
         'heading_attributes' => [],
+        'id' => NULL,
         'panel_type' => 'default',
       ],
     ];

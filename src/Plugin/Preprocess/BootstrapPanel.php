@@ -94,11 +94,12 @@ class BootstrapPanel extends PreprocessBase implements PreprocessInterface {
    * {@inheritdoc}
    */
   protected function preprocessVariables(Variables $variables, $hook, array $info) {
+    // Retrieve the ID, generating one if needed.
+    $id = $variables->getAttribute('id', Html::getUniqueId($variables->offsetGet('id', 'bootstrap-panel')));
+    unset($variables['id']);
+
     // Handle collapsible state.
     if ($variables['heading'] && $variables['collapsible']) {
-      // Retrieve the panel ID, generating one if needed.
-      $id = $variables->getAttribute('id', Html::getUniqueId('bootstrap-panel'));
-
       // Retrieve the body ID attribute.
       if ($body_id = $variables->getAttribute('id', "$id--content", 'body_attributes')) {
         // Ensure the target is set.
@@ -112,7 +113,6 @@ class BootstrapPanel extends PreprocessBase implements PreprocessInterface {
             'role' => 'button',
           ], 'heading_attributes');
         }
-
       }
     }
 
