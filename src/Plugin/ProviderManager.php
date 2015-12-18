@@ -8,12 +8,11 @@ namespace Drupal\bootstrap\Plugin;
 
 use Drupal\bootstrap\Plugin\Provider\ProviderInterface;
 use Drupal\bootstrap\Theme;
-use Drupal\Component\Plugin\FallbackPluginManagerInterface;
 
 /**
  * Manages discovery and instantiation of Bootstrap CDN providers.
  */
-class ProviderManager extends PluginManager implements FallbackPluginManagerInterface {
+class ProviderManager extends PluginManager {
   /**
    * The base file system path for CDN providers.
    *
@@ -30,13 +29,6 @@ class ProviderManager extends PluginManager implements FallbackPluginManagerInte
   public function __construct(Theme $theme) {
     parent::__construct($theme, 'Plugin/Provider', 'Drupal\bootstrap\Plugin\Provider\ProviderInterface', 'Drupal\bootstrap\Annotation\BootstrapProvider');
     $this->setCacheBackend(\Drupal::cache('discovery'), 'theme:' . $theme->getName() . ':provider', $this->getCacheTags());
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getFallbackPluginId($plugin_id, array $configuration = array()) {
-    return 'none';
   }
 
   /**

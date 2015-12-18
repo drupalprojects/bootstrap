@@ -691,8 +691,10 @@ function bootstrap_element_smart_description(array &$element, array &$target = N
  *   // After.
  *   use Drupal\bootstrap\Bootstrap;
  *   $theme = Bootstrap::getTheme($theme);
- *   $provider = $theme->getProvider($provider);
- *   $assets = $provider->getAssets($type);
+ *   $assets = [];
+ *   if ($provider = $theme->getProvider($provider)) {
+ *     $assets = $provider->getAssets($type);
+ *   }
  * @endcode
  *
  * @see \Drupal\bootstrap\Plugin\Provider\Custom::getAssets()
@@ -704,7 +706,11 @@ function bootstrap_element_smart_description(array &$element, array &$target = N
  */
 function bootstrap_get_cdn_assets($type = NULL, $provider = NULL, $theme = NULL) {
   Bootstrap::deprecated();
-  return Bootstrap::getTheme($theme)->getProvider($provider)->getAssets($type);
+  $assets = [];
+  if ($provider = Bootstrap::getTheme($theme)->getProvider($provider)) {
+    $assets = $provider->getAssets($type);
+  }
+  return $assets;
 }
 
 /**

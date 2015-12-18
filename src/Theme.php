@@ -305,12 +305,16 @@ class Theme {
    * @param string $provider
    *   A CDN provider name. Defaults to the provider set in the theme settings.
    *
-   * @return \Drupal\bootstrap\Plugin\Provider\ProviderInterface
-   *   A provider instance.
+   * @return \Drupal\bootstrap\Plugin\Provider\ProviderInterface|FALSE
+   *   A provider instance or FALSE if there is no provider.
    */
   public function getProvider($provider = NULL) {
+    $provider = $provider ?: $this->getSetting('cdn_provider');
     $provider_manager = new ProviderManager($this);
-    return $provider_manager->createInstance($provider ?: $this->getSetting('cdn_provider'), ['theme' => $this]);
+    if ($provider_manager->hasDefinition($provider)) {
+      return $provider_manager->createInstance($provider, ['theme' => $this]);
+    }
+    return FALSE;
   }
 
   /**
