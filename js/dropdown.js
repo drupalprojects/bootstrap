@@ -14,4 +14,15 @@
     $(this).parent().find('button').trigger('click');
   });
 
+  // Handle buttons that used to be dropbutton links.
+  // @see \Drupal\bootstrap\Plugin\Preprocess\BootstrapDropdown::preprocessLinks
+  $(document).on('click', '.btn-group button[data-url], .dropdown button[data-url]', function (e) {
+    var url = $(this).data('url');
+    if (url) {
+      e.preventDefault();
+      e.stopPropagation();
+      window.location = url;
+    }
+  });
+
 })(jQuery);
