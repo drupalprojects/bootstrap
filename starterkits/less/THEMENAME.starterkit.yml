@@ -1,6 +1,5 @@
 core: 8.x
 type: theme
-version: VERSION
 base theme: bootstrap
 
 name: 'Bootstrap Sub-Theme (LESS)'
