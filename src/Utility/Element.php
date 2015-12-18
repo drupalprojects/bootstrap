@@ -52,9 +52,6 @@ class Element extends DrupalAttributes {
     }
     $this->array = &$element;
     $this->formState = $form_state;
-    if (isset($element['#type'])) {
-      $this->type = &$element['#type'];
-    }
   }
 
   /**
@@ -233,6 +230,14 @@ class Element extends DrupalAttributes {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function exchangeArray($data) {
+    $old = parent::exchangeArray($data);
+    return $old;
+  }
+
+  /**
    * Retrieves the render array for the element.
    *
    * @return array
@@ -355,8 +360,8 @@ class Element extends DrupalAttributes {
    *   TRUE if element is or one of $type.
    */
   public function isType($type) {
-    $types = is_array($type) ? $type : [$type];
-    return $this->type && in_array($this->type, $types);
+    $property = $this->getProperty('type');
+    return $property && in_array($property, (is_array($type) ? $type : [$type]));
   }
 
   /**
@@ -409,6 +414,43 @@ class Element extends DrupalAttributes {
       $renderer = \Drupal::service('renderer');
     }
     return $renderer->render($this->array);
+  }
+
+  /**
+   * Adds Bootstrap button size class to the element.
+   *
+   * @param string $size
+   *   The full button size class to add. If none is provided, it will default
+   *   to any set theme setting.
+   *
+   * @return $this
+   */
+  public function setButtonSize($size = NULL) {
+    // Immediately return if element is not a button.
+    if (!$this->isButton()) {
+      return $this;
+    }
+
+    // Don't add a class if one is already present in the array.
+    foreach (['btn-xs', 'btn-sm', 'btn-lg', 'btn-block'] as $class) {
+      if ($this->hasClass($class)) {
+        // Add the found class to any split buttons.
+        if ($this->getProperty('split')) {
+          $this->addClass($class, $this::SPLIT_BUTTON);
+        }
+        return $this;
+      }
+    }
+
+    // Add any a button size.
+    if ($size = $size ?: Bootstrap::getTheme()->getSetting('button_size')) {
+      $this->addClass($size);
+      if ($this->getProperty('split')) {
+        $this->addClass($size, $this::SPLIT_BUTTON);
+      }
+    }
+
+    return $this;
   }
 
   /**
