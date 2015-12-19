@@ -61,9 +61,13 @@ class ProviderBase extends PluginBase implements ProviderInterface {
       $assets[$type] = [];
     }
 
+    // Retrieve the system performance config.
+    $config = \Drupal::config('system.performance');
+
     // Iterate over each type.
     foreach ($types as $type) {
-      $files = \Drupal::config("preprocess_$type") && isset($this->assets['min'][$type]) ? $this->assets['min'][$type] : (isset($this->assets[$type]) ? $this->assets[$type] : []);
+      $min = $config->get("$type.preprocess");
+      $files = $min && isset($this->assets['min'][$type]) ? $this->assets['min'][$type] : (isset($this->assets[$type]) ? $this->assets[$type] : []);
       foreach ($files as $asset) {
         $data = [
           'data' => $asset,

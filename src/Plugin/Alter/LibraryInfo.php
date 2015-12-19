@@ -12,7 +12,7 @@ use Drupal\bootstrap\Plugin\PluginBase;
 use Drupal\Component\Utility\NestedArray;
 
 /**
- * Implements hook_css_alter().
+ * Implements hook_library_info_alter().
  *
  * @BootstrapAlter("library_info")
  */
@@ -51,6 +51,14 @@ class LibraryInfo extends PluginBase implements AlterInterface {
           $libraries['base-theme']['css']['theme']["/$overrides"] = [];
           break;
         }
+      }
+    }
+    // Core replacements.
+    elseif ($extension === 'core') {
+      // Replace core dialog/jQuery UI implementations with Bootstrap Modals.
+      if ($this->theme->getSetting('modal_enabled')) {
+        $libraries['drupal.dialog']['override'] = 'bootstrap/drupal.dialog';
+        $libraries['drupal.dialog.ajax']['override'] = 'bootstrap/drupal.dialog.ajax';
       }
     }
   }

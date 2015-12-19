@@ -23,6 +23,12 @@ class BootstrapModal extends PreprocessBase implements PreprocessInterface {
    * {@inheritdoc}
    */
   protected function preprocessVariables(Variables $variables, $hook, array $info) {
+    // Immediately log an error and return if Bootstrap modals are not enabled.
+    if (!$this->theme->getSetting('modal_enabled')) {
+      \Drupal::logger('bootstrap')->error(t('Bootstrap modals are not enabled.'));
+      return;
+    }
+
     // Retrieve the ID, generating one if needed.
     $id = $variables->getAttribute('id', Html::getUniqueId($variables->offsetGet('id', 'bootstrap-modal')));
     $variables->setAttribute('id', $id);

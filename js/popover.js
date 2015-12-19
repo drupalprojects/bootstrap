@@ -5,29 +5,39 @@
 
 var Drupal = Drupal || {};
 
-(function ($, Drupal, drupalSettings) {
+(function ($, Drupal, Bootstrap) {
   "use strict";
 
   /**
+   * Extend the Bootstrap Popover plugin constructor class.
+   */
+  Bootstrap.extendPlugin('popover', function (settings) {
+    return {
+      DEFAULTS: {
+        animation: !!settings.popover_animation,
+        html: !!settings.popover_html,
+        placement: settings.popover_placement,
+        selector: settings.popover_selector,
+        trigger: _.filter(_.values(settings.popover_trigger)).join(' '),
+        triggerAutoclose: !!settings.popover_trigger_autoclose,
+        title: settings.popover_title,
+        content: settings.popover_content,
+        delay: parseInt(settings.popover_delay, 10),
+        container: settings.popover_container
+      }
+    };
+  });
+
+  /**
    * Bootstrap Popovers.
+   *
+   * @todo This should really be properly delegated if selector option is set.
    */
   Drupal.behaviors.bootstrapPopovers = {
     attach: function (context) {
       var $currentPopover = $();
-      var defaultOptions = {
-        animation: !!drupalSettings.bootstrap.popover_animation,
-        html: !!drupalSettings.bootstrap.popover_html,
-        placement: drupalSettings.bootstrappopover_placement,
-        selector: drupalSettings.bootstrap.popover_selector,
-        trigger: _.filter(_.values(drupalSettings.bootstrap.popover_trigger)).join(' '),
-        triggerAutoclose: !!drupalSettings.bootstrap.popover_trigger_autoclose,
-        title: drupalSettings.bootstrap.popover_title,
-        content: drupalSettings.bootstrap.popover_content,
-        delay: parseInt(drupalSettings.bootstrap.popover_delay, 10),
-        container: drupalSettings.bootstrap.popover_container
-      };
 
-      if (defaultOptions.triggerAutoclose) {
+      if ($.fn.popover.Constructor.DEFAULTS.triggerAutoclose) {
         $(document).on('click', function (e) {
           if ($currentPopover.length && !$(e.target).is('[data-toggle=popover]') && $(e.target).parents('.popover.in').length === 0) {
             $currentPopover.popover('hide');
@@ -38,7 +48,7 @@ var Drupal = Drupal || {};
       var elements = $(context).find('[data-toggle=popover]').toArray();
       for (var i = 0; i < elements.length; i++) {
         var $element = $(elements[i]);
-        var options = $.extend({}, defaultOptions, $element.data());
+        var options = $.extend({}, $.fn.popover.Constructor.DEFAULTS, $element.data());
         if (!options.content) {
           options.content = function () {
             var target = $(this).data('target');
@@ -60,4 +70,4 @@ var Drupal = Drupal || {};
     }
   };
 
-})(jQuery, Drupal, drupalSettings);
+})(jQuery, Drupal, Drupal.Bootstrap);

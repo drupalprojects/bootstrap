@@ -40,3 +40,11 @@ libraries-override:
   core/drupal.vertical-tabs: bootstrap/drupal.vertical-tabs
   system/admin: false
   text/drupal.text: bootstrap/drupal.text
+
+# The following are dynamic library overrides based on certain critera,
+# usually a theme setting.
+#
+# @see \Drupal\bootstrap\Plugin\Alter\LibraryInfo::alter()
+#
+#  core/drupal.dialog: bootstrap/drupal.dialog
+#  core/drupal.dialog.ajax: bootstrap/drupal.dialog.ajax

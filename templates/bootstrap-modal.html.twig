@@ -31,62 +31,65 @@
  * @ingroup templates
  */
 #}
-{%
-  set classes = [
-    'modal',
-    theme.settings.modal_animation ? 'fade',
-  ]
-%}
-<div{{ attributes.addClass(classes) }} tabindex="-1" role="dialog">
+{% if theme.settings.modal_enabled %}
+  {{ attach_library('bootstrap/modal') }}
   {%
-    set dialog_classes = [
-      'modal-dialog',
-      size ? size|clean_class,
+    set classes = [
+      'modal',
+      theme.settings.modal_animation ? 'fade',
     ]
-  -%}
-  <div{{ dialog_attributes.addClass(dialog_classes) }} role="document">
-    {% set content_classes = ['modal-content'] -%}
-    <div{{ content_attributes.addClass(content_classes) }}>
-      {% if title -%}
-        {% block title -%}
-          {% set header_classes = ['modal-header'] -%}
-          {% set title_classes = ['modal-title'] -%}
-          <div{{ header_attributes.addClass(header_classes) }}>
-            {% if close_button -%}
-              <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'Close'|t }}"><span aria-hidden="true">&times;</span></button>
-            {% endif -%}
-            <h4{{ title_attributes.addClass(title_classes) }}>{{ title }}</h4>
+  %}
+  <div{{ attributes.addClass(classes) }} tabindex="-1" role="dialog">
+    {%
+      set dialog_classes = [
+        'modal-dialog',
+        size ? size|clean_class,
+      ]
+    -%}
+    <div{{ dialog_attributes.addClass(dialog_classes) }} role="document">
+      {% set content_classes = ['modal-content'] -%}
+      <div{{ content_attributes.addClass(content_classes) }}>
+        {% if title -%}
+          {% block title -%}
+            {% set header_classes = ['modal-header'] -%}
+            {% set title_classes = ['modal-title'] -%}
+            <div{{ header_attributes.addClass(header_classes) }}>
+              {% if close_button -%}
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'Close'|t }}"><span aria-hidden="true">&times;</span></button>
+              {% endif -%}
+              <h4{{ title_attributes.addClass(title_classes) }}>{{ title }}</h4>
+            </div>
+          {% endblock -%}
+        {% endif -%}
+
+        {% block body -%}
+          {% set body_classes = ['modal-body'] -%}
+          {%
+            set description_classes = [
+              'help-block',
+              description and description.position == 'invisible' ? 'sr-only',
+            ]
+          %}
+          <div{{ body_attributes.addClass(body_classes) }}>
+            {% if description and description.position == 'before' %}
+              <p{{ description.attributes.addClass(description_classes) }}>{{ description.content }}</p>
+            {% endif %}
+            {{ body }}
+            {% if description and description.position == 'after' or description.position == 'invisible' %}
+              <p{{ description.attributes.addClass(description_classes) }}>{{ description.content }}</p>
+            {% endif %}
           </div>
         {% endblock -%}
-      {% endif -%}
 
-      {% block body -%}
-        {% set body_classes = ['modal-body'] -%}
-        {%
-          set description_classes = [
-            'help-block',
-            description and description.position == 'invisible' ? 'sr-only',
-          ]
-        %}
-        <div{{ body_attributes.addClass(body_classes) }}>
-          {% if description and description.position == 'before' %}
-            <p{{ description.attributes.addClass(description_classes) }}>{{ description.content }}</p>
-          {% endif %}
-          {{ body }}
-          {% if description and description.position == 'after' or description.position == 'invisible' %}
-            <p{{ description.attributes.addClass(description_classes) }}>{{ description.content }}</p>
-          {% endif %}
-        </div>
-      {% endblock -%}
-
-      {% if footer is not empty -%}
-        {% block footer -%}
-          {% set footer_classes = ['modal-footer'] -%}
-          <div{{ footer_attributes.addClass(footer_classes) }}>
-            {{ footer }}
-          </div>
-        {% endblock -%}
-      {% endif -%}
+        {% if footer is not empty -%}
+          {% block footer -%}
+            {% set footer_classes = ['modal-footer'] -%}
+            <div{{ footer_attributes.addClass(footer_classes) }}>
+              {{ footer }}
+            </div>
+          {% endblock -%}
+        {% endif -%}
+      </div>
     </div>
   </div>
-</div>
+{% endif %}

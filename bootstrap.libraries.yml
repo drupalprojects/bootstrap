@@ -2,7 +2,8 @@
 # @see \Drupal\bootstrap\Plugin\Alter\LibraryInfo
 base-theme:
   css: {}
-  js: {}
+  js:
+    js/drupal.bootstrap.js: {}
   dependencies:
     - core/underscore
     - core/jquery
@@ -24,15 +25,21 @@ dropdown:
   dependencies:
     - bootstrap/base-theme
 
-popovers:
+modal:
   js:
-    js/popovers.js: {}
+    js/modal.js: {}
   dependencies:
     - bootstrap/base-theme
 
-tooltips:
+popover:
   js:
-    js/tooltips.js: {}
+    js/popover.js: {}
+  dependencies:
+    - bootstrap/base-theme
+
+tooltip:
+  js:
+    js/tooltip.js: {}
   dependencies:
     - bootstrap/base-theme
 
@@ -60,8 +67,20 @@ drupal.tabledrag:
     js/misc/tabledrag.js: {}
 
 # libraries-override
+drupal.dialog:
+  js:
+    js/misc/dialog.js: {}
+  dependencies:
+    - bootstrap/modal
+
+drupal.dialog.ajax:
+  js:
+    js/misc/dialog.ajax.js: {}
+  dependencies:
+    - core/drupal.ajax
+    - bootstrap/drupal.dialog
+
 drupal.text:
-  version: VERSION
   js:
     js/text/text.js: {}
   dependencies:
@@ -71,8 +90,7 @@ drupal.text:
 
 drupal.vertical-tabs:
   js:
-    # Load before core/drupal.collapse.
-    js/misc/vertical-tabs.js: { weight: -1 }
+    js/misc/vertical-tabs.js: {}
   dependencies:
     - bootstrap/base-theme
     - core/jquery.once
