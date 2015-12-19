@@ -17,7 +17,7 @@ use Drupal\Core\Form\FormStateInterface;
  * @BootstrapSetting(
  *   id = "tooltip_enabled",
  *   type = "checkbox",
- *   title = @Translation("Enable tooltips"),
+ *   title = @Translation("Enable Bootstrap Tooltips"),
  *   description = @Translation("Elements that have the <code>data-toggle=&quote;tooltip&quote;</code> attribute set will automatically initialize the tooltip upon page load. <strong class='error text-error'>WARNING: This feature can sometimes impact performance. Disable if pages appear to &quote;hang&quote; after initial load.</strong>"),
  *   defaultValue = 1,
  *   weight = -1,

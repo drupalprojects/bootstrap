@@ -17,7 +17,7 @@ use Drupal\Core\Form\FormStateInterface;
  * @BootstrapSetting(
  *   id = "popover_enabled",
  *   type = "checkbox",
- *   title = @Translation("Enable popovers"),
+ *   title = @Translation("Enable Bootstrap Popovers"),
  *   description = @Translation("Elements that have the <code>data-toggle=&quot;popover&quot;</code> attribute set will automatically initialize the popover upon page load. <strong class='error text-error'>WARNING: This feature can sometimes impact performance. Disable if pages appear to hang after initial load.</strong>"),
  *   defaultValue = 1,
  *   weight = -1,

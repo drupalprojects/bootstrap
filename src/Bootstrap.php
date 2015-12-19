@@ -404,23 +404,29 @@ class Bootstrap {
       'variables' => [
         'alignment' => NULL,
         'attributes' => [],
-        'items' => ['#theme' => 'item_list__dropdown'],
+        'items' => [],
         'split' => FALSE,
         'toggle' => NULL,
       ],
     ];
 
-    // @todo Fix.
     $hooks['bootstrap_modal'] = [
       'variables' => [
-        'heading' => '',
-        'body' => '',
-        'footer' => '',
-        'dialog_attributes' => [],
         'attributes' => [],
-        'size' => '',
-        'html_heading' => FALSE,
+        'body' => '',
+        'body_attributes' => [],
+        'close_button' => TRUE,
+        'content_attributes' => [],
+        'description' => NULL,
+        'description_display' => 'before',
+        'dialog_attributes' => [],
+        'footer' => '',
+        'footer_attributes' => [],
+        'header_attributes' => [],
         'id' => NULL,
+        'size' => NULL,
+        'title' => '',
+        'title_attributes' => [],
       ],
     ];
 
