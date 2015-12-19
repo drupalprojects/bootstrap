@@ -114,8 +114,9 @@
         $preview.append('<a id="bootstrap-theme-preview-bootstrap_theme" class="bootswatch-preview element-invisible" href="http://getbootstrap.com/examples/theme/" target="_blank"><img class="img-responsive" src="http://getbootstrap.com/examples/screenshots/theme.jpg" alt="' + Drupal.t('Preview of the Bootstrap theme') + '" /></a>');
 
         // Retrieve the Bootswatch theme preview images.
+        // @todo This should be moved into PHP.
         $.ajax({
-          url: '//api.bootswatch.com/3/',
+          url: 'https://bootswatch.com/api/3.json',
           dataType: 'json',
           success: function (json) {
             var themes = json.themes;
