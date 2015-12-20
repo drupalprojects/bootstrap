@@ -38,8 +38,7 @@ function bootstrap_form_element_label(&$variables) {
   // Extract variables.
   $output = '';
   $title = isset($element['#title']) ? filter_xss_admin($element['#title']) . ' ' : '';
-  $required = !empty($element['#required']) ? theme('form_required_marker', array('element' => $element)) : '';
-  if ($required) {
+  if ($title && ($required = !empty($element['#required']) ? theme('form_required_marker', array('element' => $element)) : '')) {
     $title .= $required;
   }
   $display = isset($element['#title_display']) ? $element['#title_display'] : 'before';
@@ -49,7 +48,7 @@ function bootstrap_form_element_label(&$variables) {
 
   // Immediately return if the element is not a checkbox or radio and there is
   // no label to be rendered.
-  if (!$checkbox && !$radio && ($display === 'none' || (!$title && !$required))) {
+  if (!$checkbox && !$radio && ($display === 'none' || !$title)) {
     return '';
   }
 
