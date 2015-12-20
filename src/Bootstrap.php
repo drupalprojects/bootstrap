@@ -987,6 +987,7 @@ class Bootstrap {
       $variables['theme']['path'] = $theme->getPath();
       $variables['theme']['title'] = $theme->getTitle();
       $variables['theme']['settings'] = $theme->settings()->get();
+      $variables['theme']['has_glyphicons'] = $theme->hasGlyphicons();
     }
 
     // Invoke necessary preprocess plugin.
