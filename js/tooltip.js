@@ -18,9 +18,9 @@ var Drupal = Drupal || {};
         html: !!settings.tooltip_html,
         placement: settings.tooltip_placement,
         selector: settings.tooltip_selector,
-        trigger: _.filter(_.values(settings.tooltip_trigger)).join(' '),
+        trigger: settings.tooltip_trigger,
         delay: parseInt(settings.tooltip_delay, 10),
-        container: settings.tooltip_container,
+        container: settings.tooltip_container
       }
     };
   });
@@ -38,6 +38,10 @@ var Drupal = Drupal || {};
         var options = $.extend({}, $.fn.tooltip.Constructor.DEFAULTS, $element.data());
         $element.tooltip(options);
       }
+    },
+    detach: function (context) {
+      // Destroy all tooltips.
+      $(context).find('[data-toggle="tooltip"]').tooltip('destroy');
     }
   };
 

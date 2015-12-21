@@ -2,9 +2,9 @@
 // specific Drupal libraries are used.
 @import "component/alert";
 @import "component/ajax";
-@import "component/button";
 @import "component/field";
 @import "component/form";
+@import "component/icon";
 @import "component/navbar";
 @import "component/panel";
 @import "component/toolbar";
@@ -12,6 +12,13 @@
 
 // jQuery UI style overrides.
 @import "jquery-ui/autocomplete";
+
+ol, ul {
+  padding-left: 1.5em;
+  .popover &:last-child {
+    margin-bottom: 0;
+  }
+}
 
 // Page header.
 .page-header {
@@ -59,4 +66,7 @@ p:last-child,
   font-size: 12px;
   margin: 5px 0 10px;
   padding: 0;
+  &:first-child {
+    margin-top: 0;
+  }
 }
