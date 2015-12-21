@@ -97,8 +97,18 @@ class ThemeRegistry extends Registry implements AlterInterface {
       if (!isset($cache[$plugin_id])) {
         $cache[$plugin_id] = [];
       }
-      array_walk($cache, function (&$info, $hook) use ($plugin_id) {
+      array_walk($cache, function (&$info, $hook) use ($plugin_id, $definition) {
         if ($hook === $plugin_id || strpos($hook, $plugin_id . '__') === 0) {
+          if (!isset($info['preprocess functions'])) {
+            $info['preprocess functions'] = [];
+          }
+          // Due to a limitation in \Drupal\Core\Theme\ThemeManager::render,
+          // callbacks must be functions and not classes. We always specify
+          // "bootstrap_preprocess" here and then assign the plugin ID to a
+          // separate property that we can later intercept and properly invoke.
+          // @todo Revisit if/when preprocess callbacks can be any callable.
+          Bootstrap::addCallback($info['preprocess functions'], 'bootstrap_preprocess', $definition['replace'], $definition['action']);
+          $info['preprocess functions'] = array_unique($info['preprocess functions']);
           $info['bootstrap preprocess'] = $plugin_id;
         }
       });

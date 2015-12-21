@@ -122,7 +122,7 @@ class Bootstrap {
       foreach ($callbacks as $key => $value) {
         // Convert each callback and match the string values.
         if (Unicode::convertCallback($value) === Unicode::convertCallback($replace)) {
-          $callbacks[$key] = Unicode::convertCallback($callback, TRUE);
+          $callbacks[$key] = $callback;
           return TRUE;
         }
       }
