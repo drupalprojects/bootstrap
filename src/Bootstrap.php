@@ -515,29 +515,34 @@ class Bootstrap {
    *   icon does not exist or returns NULL if no icon could be rendered.
    */
   public static function glyphicon($name, $default = []) {
+    $icon = [];
+
     // Ensure the icon specified is a valid Bootstrap Glyphicon.
     // @todo Supply a specific version to _bootstrap_glyphicons() when Icon API
     // supports versioning.
     if (self::getTheme()->hasGlyphicons() && in_array($name, self::glyphicons())) {
       // Attempt to use the Icon API module, if enabled and it generates output.
       if (\Drupal::moduleHandler()->moduleExists('icon')) {
-        return [
+        $icon = [
           '#type' => 'icon',
           '#bundle' => 'bootstrap',
           '#icon' => 'glyphicon-' . $name,
         ];
       }
-      return [
-        '#type' => 'html_tag',
-        '#tag' => 'span',
-        '#value' => '',
-        '#attributes' => [
-          'class' => ['icon', 'glyphicon', 'glyphicon-' . $name],
-          'aria-hidden' => 'true',
-        ],
-      ];
+      else {
+        $icon = [
+          '#type' => 'html_tag',
+          '#tag' => 'span',
+          '#value' => '',
+          '#attributes' => [
+            'class' => ['icon', 'glyphicon', 'glyphicon-' . $name],
+            'aria-hidden' => 'true',
+          ],
+        ];
+      }
     }
-    return $default;
+
+    return $icon ?: $default;
   }
 
   /**

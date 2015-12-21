@@ -48,6 +48,10 @@ drupal.ajax:
   js:
     js/misc/ajax.js: {}
 
+drupal.autocomplete:
+  js:
+    js/misc/autocomplete.js: {}
+
 drupal.form:
   js:
     js/misc/form.js: {}

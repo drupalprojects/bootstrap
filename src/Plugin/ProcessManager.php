@@ -99,21 +99,9 @@ class ProcessManager extends PluginManager {
     // Show throbber AJAX requests in an input button group.
     if (!isset($ajax['progress']['type']) || $ajax['progress']['type'] === 'throbber') {
       // Use an icon for autocomplete "throbber".
-      $icon = Bootstrap::glyphicon('refresh', [
-        '#type' => 'html_tag',
-        '#tag' => 'span',
-        '#attributes' => [
-          'class' => ['ajax-progress', 'ajax-progress-throbber', 'invisible'],
-        ],
-        'throbber' => [
-          '#type' => 'html_tag',
-          '#tag' => 'span',
-          '#attributes' => ['class' => ['throbber']],
-        ],
-      ]);
-
+      $icon = Bootstrap::glyphicon('refresh');
+      $element->appendProperty('field_suffix', Element::create($icon)->addClass(['ajax-progress', 'ajax-progress-throbber']));
       $element->setProperty('input_group', TRUE);
-      $element->setProperty('field_suffix', $icon);
     }
   }
 
@@ -142,7 +130,7 @@ class ProcessManager extends PluginManager {
 
       // Find the closest button.
       if ($button = self::findButton($parent)) {
-        $element->setProperty('field_suffix', $button->setIcon()->getArray());
+        $element->appendProperty('field_suffix', $button->setIcon());
         $button->setProperty('access', FALSE);
       }
     }

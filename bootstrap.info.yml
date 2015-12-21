@@ -25,6 +25,8 @@ libraries:
 libraries-extend:
   core/drupal.ajax:
     - bootstrap/drupal.ajax
+  core/drupal.autocomplete:
+    - bootstrap/drupal.autocomplete
   core/drupal.form:
     - bootstrap/drupal.form
   core/drupal.progress:
@@ -40,6 +42,14 @@ libraries-override:
   core/drupal.vertical-tabs: bootstrap/drupal.vertical-tabs
   system/admin: false
   text/drupal.text: bootstrap/drupal.text
+
+# Remove individual stylesheets. Idealy, this entire library should be removed.
+  system/base:
+    css:
+      component:
+        css/components/ajax-progress.module.css: false
+        css/components/autocomplete-loading.module.css: false
+
 
 # The following are dynamic library overrides based on certain critera,
 # usually a theme setting.
