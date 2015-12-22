@@ -98,7 +98,7 @@ function bootstrap_preprocess(&$variables, $hook, $info) {
  * @see \Drupal\bootstrap\Bootstrap::getInfo()
  */
 function bootstrap_theme() {
-  return Bootstrap::getInfo();
+  return Bootstrap::getThemeHooks();
 }
 
 /**

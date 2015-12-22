@@ -86,6 +86,28 @@ class ThemeRegistry extends Registry implements AlterInterface {
     // Sort the registry alphabetically (for easier debugging).
     ksort($cache);
 
+    // Ensure paths to templates are set properly. This allows templates to
+    // be moved around in a theme without having to constantly ensuring that
+    // the theme's hook_theme() definitions have the correct static "path" set.
+    foreach ($this->currentTheme->getAncestry() as $ancestor) {
+      $current_theme = $ancestor->getName() === $this->currentTheme->getName();
+      $theme_path = $ancestor->getPath();
+      foreach ($ancestor->fileScan('/\.html\.twig$/') as $file) {
+        $hook = str_replace('-', '_', str_replace('.html.twig', '', $file->filename));
+        $path = dirname($file->uri);
+        $incomplete = !isset($cache[$hook]) || strrpos($hook, '__');
+        if (!isset($cache[$hook])) {
+          $cache[$hook] = [];
+        }
+        $cache[$hook]['path'] = $path;
+        $cache[$hook]['type'] = $current_theme ? 'theme' : 'base_theme';
+        $cache[$hook]['theme path'] = $theme_path;
+        if ($incomplete) {
+          $cache[$hook]['incomplete preprocess functions'] = TRUE;
+        }
+      }
+    }
+
     // Discover all the theme's preprocess plugins.
     $preprocess_manager = new PreprocessManager($this->currentTheme);
     $plugins = $preprocess_manager->getDefinitions();

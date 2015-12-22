@@ -376,16 +376,68 @@ class Bootstrap {
   }
 
   /**
+   * Retrieves a theme instance of \Drupal\bootstrap.
+   *
+   * @param string $name
+   *   The machine name of a theme. If omitted, the active theme will be used.
+   * @param \Drupal\Core\Extension\ThemeHandlerInterface $theme_handler
+   *   The theme handler object.
+   *
+   * @return \Drupal\bootstrap\Theme
+   *   A theme object.
+   */
+  public static function getTheme($name = NULL, ThemeHandlerInterface $theme_handler = NULL) {
+    // Immediately return if theme passed is already instantiated.
+    if ($name instanceof Theme) {
+      return $name;
+    }
+
+    static $themes = [];
+    static $active_theme;
+    if (!isset($active_theme)) {
+      $active_theme = \Drupal::theme()->getActiveTheme()->getName();
+    }
+    if (!isset($name)) {
+      $name = $active_theme;
+    }
+
+    if (!isset($theme_handler)) {
+      $theme_handler = self::getThemeHandler();
+    }
+
+    if (!isset($themes[$name])) {
+      $themes[$name] = new Theme($theme_handler->getTheme($name), $theme_handler);
+    }
+
+    return $themes[$name];
+  }
+
+  /**
+   * Retrieves the theme handler instance.
+   *
+   * @return \Drupal\Core\Extension\ThemeHandlerInterface
+   *   The theme handler instance.
+   */
+  public static function getThemeHandler() {
+    static $theme_handler;
+    if (!isset($theme_handler)) {
+      $theme_handler = \Drupal::service('theme_handler');
+    }
+    return $theme_handler;
+  }
+
+  /**
    * Returns the theme hook definition information.
    *
    * This base-theme's custom theme hook implementations. Never define "path"
-   * or "template" as these are detected and automatically added.
+   * as this is automatically detected and added.
    *
+   * @see \Drupal\bootstrap\Plugin\Alter\ThemeRegistry::alter()
    * @see bootstrap_theme_registry_alter()
-   * @see \Drupal\bootstrap\Registry
+   * @see bootstrap_theme()
    * @see hook_theme()
    */
-  public static function getInfo() {
+  public static function getThemeHooks() {
     $hooks['bootstrap_carousel'] = [
       'variables' => [
         'attributes' => [],
@@ -449,57 +501,6 @@ class Bootstrap {
     ];
 
     return $hooks;
-  }
-
-  /**
-   * Retrieves a theme instance of \Drupal\bootstrap.
-   *
-   * @param string $name
-   *   The machine name of a theme. If omitted, the active theme will be used.
-   * @param \Drupal\Core\Extension\ThemeHandlerInterface $theme_handler
-   *   The theme handler object.
-   *
-   * @return \Drupal\bootstrap\Theme
-   *   A theme object.
-   */
-  public static function getTheme($name = NULL, ThemeHandlerInterface $theme_handler = NULL) {
-    // Immediately return if theme passed is already instantiated.
-    if ($name instanceof Theme) {
-      return $name;
-    }
-
-    static $themes = [];
-    static $active_theme;
-    if (!isset($active_theme)) {
-      $active_theme = \Drupal::theme()->getActiveTheme()->getName();
-    }
-    if (!isset($name)) {
-      $name = $active_theme;
-    }
-
-    if (!isset($theme_handler)) {
-      $theme_handler = self::getThemeHandler();
-    }
-
-    if (!isset($themes[$name])) {
-      $themes[$name] = new Theme($theme_handler->getTheme($name), $theme_handler);
-    }
-
-    return $themes[$name];
-  }
-
-  /**
-   * Retrieves the theme handler instance.
-   *
-   * @return \Drupal\Core\Extension\ThemeHandlerInterface
-   *   The theme handler instance.
-   */
-  public static function getThemeHandler() {
-    static $theme_handler;
-    if (!isset($theme_handler)) {
-      $theme_handler = \Drupal::service('theme_handler');
-    }
-    return $theme_handler;
   }
 
   /**
