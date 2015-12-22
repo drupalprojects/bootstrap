@@ -94,6 +94,15 @@ drupal.dialog.ajax:
     - core/drupal.ajax
     - bootstrap/drupal.dialog
 
+drupal.filter:
+  version: VERSION
+  js:
+    js/modules/filter/filter.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/jquery.once
+
 drupal.text:
   js:
     js/text/text.js: {}

@@ -40,6 +40,7 @@ libraries-override:
   core/drupal.collapse: false
   core/drupal.dropbutton: bootstrap/dropdown
   core/drupal.vertical-tabs: bootstrap/drupal.vertical-tabs
+  filter/drupal.filter: bootstrap/drupal.filter
   system/admin: false
   text/drupal.text: bootstrap/drupal.text
 
@@ -50,6 +51,11 @@ libraries-override:
         css/components/ajax-progress.module.css: false
         css/components/autocomplete-loading.module.css: false
         css/components/tabledrag.module.css: false
+
+  filter/drupal.filter.admin:
+    css:
+      theme:
+        css/filter.admin.css: false
 
 # The following are dynamic library overrides based on certain critera,
 # usually a theme setting.

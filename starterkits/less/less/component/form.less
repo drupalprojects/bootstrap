@@ -9,6 +9,9 @@
   display: inline-block;
   position: relative;
   width: 100%;
+  .form-inline & {
+    width: auto;
+  }
   .input-group & {
     display: table-cell;
     // Reset rounded corners
@@ -21,6 +24,7 @@
   }
   select {
     appearance: none;
+    line-height: 1;
     padding-right: 2em;
   }
   &:after {
