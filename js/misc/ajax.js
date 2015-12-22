@@ -93,7 +93,7 @@
 
     // Otherwise, add a glyphicon throbber after the element.
     if (!this.progress.element) {
-      this.progress.element = $('<span class="ajax-throbber icon glyphicon glyphicon-refresh glyphicon-spin"></span>');
+      this.progress.element = $(Drupal.theme('ajaxThrobber'));
     }
     if (this.progress.message) {
       this.progress.element.after('<div class="message">' + this.progress.message + '</div>');

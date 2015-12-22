@@ -110,4 +110,4 @@ var Drupal = Drupal || {};
     }
   };
 
-})(jQuery, Drupal, Drupal.Bootstrap);
+})(window.jQuery, window.Drupal, window.Drupal.bootstrap);

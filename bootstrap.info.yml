@@ -20,7 +20,7 @@ regions:
   page_bottom: 'Page bottom'
 
 libraries:
-  - 'bootstrap/base-theme'
+  - 'bootstrap/theme'
 
 libraries-extend:
   core/drupal.ajax:
@@ -49,7 +49,7 @@ libraries-override:
       component:
         css/components/ajax-progress.module.css: false
         css/components/autocomplete-loading.module.css: false
-
+        css/components/tabledrag.module.css: false
 
 # The following are dynamic library overrides based on certain critera,
 # usually a theme setting.

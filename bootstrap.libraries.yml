@@ -1,14 +1,24 @@
-# Placeholder for the "base-theme" library.
-# @see \Drupal\bootstrap\Plugin\Alter\LibraryInfo
-base-theme:
-  css: {}
+attributes:
+  js:
+    js/attributes.js: {}
+  dependencies:
+    - core/jquery
+    - core/underscore
+
+drupal.bootstrap:
   js:
     js/drupal.bootstrap.js: {}
   dependencies:
-    - core/underscore
     - core/jquery
     - core/drupal
     - core/drupalSettings
+
+theme:
+  js:
+    js/theme.js: {}
+  dependencies:
+    - bootstrap/drupal.bootstrap
+    - bootstrap/attributes
 
 theme-settings:
   js:
@@ -23,25 +33,25 @@ dropdown:
   js:
     js/dropdown.js: {}
   dependencies:
-    - bootstrap/base-theme
+    - bootstrap/theme
 
 modal:
   js:
     js/modal.js: {}
   dependencies:
-    - bootstrap/base-theme
+    - bootstrap/theme
 
 popover:
   js:
     js/popover.js: {}
   dependencies:
-    - bootstrap/base-theme
+    - bootstrap/theme
 
 tooltip:
   js:
     js/tooltip.js: {}
   dependencies:
-    - bootstrap/base-theme
+    - bootstrap/theme
 
 # libraries-extend
 drupal.ajax:
@@ -56,7 +66,7 @@ drupal.form:
   js:
     js/misc/form.js: {}
   dependencies:
-    - bootstrap/base-theme
+    - bootstrap/theme
 
 drupal.progress:
   js:
@@ -96,7 +106,7 @@ drupal.vertical-tabs:
   js:
     js/misc/vertical-tabs.js: {}
   dependencies:
-    - bootstrap/base-theme
+    - bootstrap/theme
     - core/jquery.once
     - core/drupal.form
     - core/matchmedia

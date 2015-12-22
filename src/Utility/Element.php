@@ -464,20 +464,16 @@ class Element extends DrupalAttributes {
   /**
    * Renders the element.
    *
-   * @param bool $trim
-   *   (optional) Trims whitespace around the rendered content.
-   *
    * @return \Drupal\Component\Render\MarkupInterface|string
    *   The rendered HTML.
    */
-  public function render($trim = TRUE) {
+  public function render() {
     /** @var \Drupal\Core\Render\Renderer $renderer */
     static $renderer;
     if (!isset($renderer)) {
       $renderer = \Drupal::service('renderer');
     }
-    $output = $renderer->render($this->array);
-    return $trim ? trim($output) : $output;
+    return $renderer->render($this->array);
   }
 
   /**

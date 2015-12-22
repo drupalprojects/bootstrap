@@ -82,7 +82,7 @@ class FileUploadHelp extends PreprocessBase implements PreprocessInterface {
       $icon = Bootstrap::glyphicon('question-sign');
       $build['toggle'] = [
         '#type' => 'link',
-        '#title' => new FormattableMarkup(Element::create($icon)->render() . '@title', [
+        '#title' => new FormattableMarkup(trim(Element::create($icon)->render()) . '@title', [
           '@title' => t('Upload requirements'),
         ]),
         '#url' => Url::fromUserInput("#$id"),
