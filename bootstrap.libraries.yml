@@ -81,6 +81,15 @@ drupal.tabledrag:
     js/misc/tabledrag.js: {}
 
 # libraries-override
+drupal.batch:
+  js:
+    js/misc/batch.js: { cache: false }
+  dependencies:
+    - bootstrap/theme
+    - core/drupal.ajax
+    - core/drupal.progress
+    - core/jquery.once
+
 drupal.dialog:
   js:
     js/misc/dialog.js: {}
