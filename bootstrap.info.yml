@@ -45,13 +45,18 @@ libraries-override:
   system/admin: false
   text/drupal.text: bootstrap/drupal.text
 
-# Remove individual stylesheets. Idealy, this entire library should be removed.
+# Remove individual stylesheets.
   system/base:
     css:
       component:
         css/components/ajax-progress.module.css: false
         css/components/autocomplete-loading.module.css: false
         css/components/tabledrag.module.css: false
+
+  file/drupal.file:
+    css:
+      theme:
+        css/file.admin.css: false
 
   filter/drupal.filter.admin:
     css:
