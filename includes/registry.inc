@@ -403,6 +403,11 @@ function _bootstrap_process_theme_registry_suggestions(&$registry, $themes) {
               // registry, one must be created if base hook information was
               // found, otherwise it will be ignored.
               if (!isset($registry[$hook])) {
+                $registry[$base_hook] += array(
+                  'type' => 'theme',
+                  'preprocess functions' => array(),
+                  'process functions' => array(),
+                );
                 $hook_type = isset($registry[$base_hook]['function']) ? 'function' : 'template';
                 $arg_name = isset($registry[$base_hook]['variables']) ? 'variables' : 'render element';
                 $registry[$hook] = array(
