@@ -63,7 +63,7 @@
 #}
 {% set container = theme.settings.fluid_container ? 'container-fluid' : 'container' %}
 {# Navbar #}
-{% if page.navigation %}
+{% if page.navigation or page.navigation_collapsible %}
   {% block navbar %}
     {%
       set navbar_classes = [
