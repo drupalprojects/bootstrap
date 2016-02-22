@@ -2,19 +2,51 @@
 <!-- @defgroup -->
 # Sub-Theming
 
-You should never modify any theme or sub-theme that is packaged and released from Drupal.org, such as Drupal Bootstrap. If you do, all changes you have made will be lost once that theme is updated. Instead, you should create a subtheme from one of the provided starterkits (this is considered a best practice). Once you've done that, you can override CSS, templates, and theme processing. 
+If you haven't already installed the Drupal Bootstrap theme, read 
+the @link getting_started Getting Started @endlink topic. Below 
+are instructions on how to create a [Drupal Bootstrap] based sub-theme.
+There are several different variations on how to accomplish this task, but this
+topic will focus on the two primarily and most common ways.
 
-## Which starterkit should I use? 
+{.atert.alert-warning} **By the way** You should never modify any theme or sub-theme that 
+is packaged and released from Drupal.org, such as Drupal Bootstrap. If you 
+do, all changes you have made will be lost once that theme is updated. Instead, 
+you should create a subtheme from one of the provided starterkits (this is 
+considered a best practice). Once you've done that, you can override CSS, 
+templates, and theme processing.
 
-* If you're new to Drupal theming the CDN starterkit is a simple way to create a subtheme. The CDN starterkit uses a Content Delivery Network to provide the Bootstrap framework for your site. You can then add and override CSS and templates.
-* For more advance users who prefer to use a CSS preprocessor, the LESS starterkit may be a better choice. 
+#### Choose a Starterkit {#starterkit}
 
-The basic steps for creating a subtheme from one of the starterkits follows. For this example, let's assume you'll name your subtheme `mybootstrap`:
+- @link subtheme_cdn CDN Starterkit @endlink - uses the "out-of-the-box"
+  CSS and JavaScript files served by the [jsDelivr CDN].
+- @link subtheme_less LESS Starterkit @endlink - uses the [Bootstrap Framework]
+  [LESS] source files and a local [LESS] preprocessor.
 
-1. Copy one of the starterkits from the `./starterkits` directory to the themes directory and rename the directory to `mybootstrap`
-2. Rename the following files: `THEMENAME.theme` to `mybootstrap.theme`, `THEMENAME.libraries.yml` to `mybootstrap.libraries.yml`, and `THEMENAME.starterkit.yml` to `mybootstrap.info.yml`
-3. Edit `mybootstrap.info.yml` file and change '- THEMENAME/globalstyling' to '- mybootstrap/globalstyling'. You can also change the theme name and description.
+Once you've selected one of the above starterkits, here's how to install it:
 
-You can now enable your new subtheme under Admin/Appearances. 
+1. Copy over one of the starterkits you have chosen from the
+   `./bootstrap/starterkits` directory into the `themes` directory.
+2. Rename the folder to a unique machine readable name. This will be your
+   sub-theme's "name". For this example and future examples we'll use `subtheme`.
+3. Rename `./subtheme/THEMENAME.starterkit.yml` to match the folder name and append
+   `.info.yml` (e.g. `./subtheme/subtheme.info.yml`).
+4. Open `./subtheme/subtheme.info.yml` and change the name, description and any
+   other properties to suite your needs. Be sure to also change `- THEMENAME/globalstyling` to `- subtheme/globalstyling`.
 
-For more information on customizing your newly create subtheme, refer to the @link subtheme_cdn CDN Starterkit @endlink or @link subtheme_less LESS Starterkit @endlink documentation.
+{.alert.alert-warning} **WARNING:** Ensure that the `.starterkit` suffix is
+not present on your sub-theme's `.info.yml` filename. This suffix is simply a stop
+gap measure to ensure that the bundled starter kit sub-theme cannot be enabled
+or used directly. This helps people unfamiliar with Drupal avoid modifying the
+starter kit sub-theme directly and instead forces them to create a new sub-theme
+to modify.
+
+#### Enable Your New Sub-theme {#enable}
+In your Drupal site, navigate to `admin/appearance` and click the `Enable and
+set default` link next to your newly created sub-theme. Now that you've enabled
+your starterkit, please refer to the starterkit's documentation page to customize.
+
+
+[Drupal Bootstrap]: https://www.drupal.org/project/bootstrap
+[Bootstrap Framework]: http://getbootstrap.com
+[jsDelivr CDN]: http://www.jsdelivr.com
+[LESS]: http://lesscss.org
