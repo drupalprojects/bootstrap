@@ -8,7 +8,7 @@ are instructions on how to create a [Drupal Bootstrap] based sub-theme.
 There are several different variations on how to accomplish this task, but this
 topic will focus on the two primarily and most common ways.
 
-{.atert.alert-warning} **By the way** You should never modify any theme or sub-theme that 
+{.alert.alert-warning} **Warning** You should never modify any theme or sub-theme that 
 is packaged and released from Drupal.org, such as Drupal Bootstrap. If you 
 do, all changes you have made will be lost once that theme is updated. Instead, 
 you should create a subtheme from one of the provided starterkits (this is 
