@@ -80,6 +80,10 @@ drupal.tabledrag:
   js:
     js/misc/tabledrag.js: {}
 
+views.ajax:
+  js:
+    js/modules/views/ajax_view.js: {}
+
 # libraries-override
 drupal.batch:
   js:

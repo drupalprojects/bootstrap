@@ -35,6 +35,8 @@ libraries-extend:
     - bootstrap/drupal.states
   core/drupal.tabledrag:
     - bootstrap/drupal.tabledrag
+  views/views.ajax:
+    - bootstrap/views.ajax
 
 libraries-override:
   core/drupal.batch: bootstrap/drupal.batch
