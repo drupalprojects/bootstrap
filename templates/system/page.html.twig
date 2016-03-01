@@ -123,7 +123,8 @@
       {%
         set content_classes = [
           page.sidebar_first and page.sidebar_second ? 'col-sm-6',
-          page.sidebar_first or page.sidebar_second ? 'col-sm-9',
+          page.sidebar_first and page.sidebar_second is empty ? 'col-sm-9',
+          page.sidebar_second and page.sidebar_first is empty ? 'col-sm-9',
           page.sidebar_first is empty and page.sidebar_second is empty ? 'col-sm-12'
         ]
       %}
