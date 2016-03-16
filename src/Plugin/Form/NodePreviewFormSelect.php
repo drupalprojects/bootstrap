@@ -26,8 +26,10 @@ class NodePreviewFormSelect extends FormBase {
     $e->addClass(['form-inline', 'bg-info', 'text-center', 'clearfix']);
 
     // Backlink.
-    $e->backlink->addClass($e->backlink->getProperty('options')['class']);
-    $e->backlink->unsetProperty('options');
+    if ($options = $e->backlink->getProperty('options')) {
+      $e->backlink->addClass(isset($options['attributes']['class']) ? $options['attributes']['class'] : []);
+      $e->backlink->unsetProperty('options');
+    }
     $e->backlink->addClass(['btn', 'btn-info', 'pull-left']);
     $e->backlink->setButtonSize();
     $e->backlink->setIcon(Bootstrap::glyphicon('chevron-left'));
