@@ -25,7 +25,7 @@
     required ? 'form-required',
   ]
 -%}
-{%- if title is not empty or required -%}
+{%- if title is not empty -%}
   <label{{ attributes.addClass(classes) }}>{{ element }}{{ title }}
     {%- if description -%}
       <p class="help-block">{{ description }}</p>
