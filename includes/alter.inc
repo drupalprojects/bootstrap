@@ -91,11 +91,6 @@ function bootstrap_element_info_alter(&$info) {
       foreach (array_keys($info) as $type) {
         $element = array();
 
-        // Ensure elements that have a base type with the #input set match.
-        if (isset($info[$type]['#base_type']) && isset($info[$type][$info[$type]['#base_type']]['#input'])) {
-          $element['#input'] = $info[$info[$type]['#base_type']]['#input'];
-        }
-
         // Replace fieldset theme implementations with bootstrap_panel.
         if (!empty($info[$type]['#theme']) && $info[$type]['#theme'] === 'fieldset') {
           $element['#bootstrap_replace']['#theme'] = 'bootstrap_panel';
