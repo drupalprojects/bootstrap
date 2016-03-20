@@ -589,6 +589,7 @@ class Bootstrap {
           t('Remove')->render()     => 'trash',
           t('Search')->render()     => 'search',
           t('Upload')->render()     => 'upload',
+          t('Preview')->render()    => 'eye-open',
         ],
       ];
 
