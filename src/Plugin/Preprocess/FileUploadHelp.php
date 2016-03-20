@@ -76,7 +76,7 @@ class FileUploadHelp extends PreprocessBase implements PreprocessInterface {
 
     $variables['descriptions'] = $descriptions;
 
-    if ($descriptions) {
+    if ($descriptions && $this->theme->getSetting('popover_enabled')) {
       $build = array();
       $id = Html::getUniqueId('upload-instructions');
       $build['toggle'] = [
