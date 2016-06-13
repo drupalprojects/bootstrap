@@ -40,6 +40,8 @@ class Breadcrumb extends PreprocessBase implements PreprocessInterface {
           'text' => $page_title,
           'attributes' => new Attribute(['class' => ['active']]),
         ];
+        // Add cache context based on url.
+        $variables['#cache']['contexts'][] = 'url';
       }
     }
   }
