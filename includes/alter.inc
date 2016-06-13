@@ -68,6 +68,7 @@ function bootstrap_css_alter(&$css) {
     }
   }
   if (!empty($excludes)) {
+    $excludes = array_merge($excludes, str_replace('.css', '-rtl.css', $excludes));
     $css = array_diff_key($css, drupal_map_assoc($excludes));
   }
 }
