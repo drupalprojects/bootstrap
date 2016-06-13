@@ -18,6 +18,7 @@ use Drupal\Core\Form\FormStateInterface;
  *   id = "cdn_jsdelivr_theme",
  *   type = "select",
  *   title = @Translation("Theme"),
+ *   description = @Translation("Choose the example Bootstrap Theme provided by Bootstrap or one of the Bootswatch themes."),
  *   defaultValue = "bootstrap",
  *   empty_option = @Translation("Bootstrap (default)"),
  *   empty_value = "bootstrap",

@@ -18,6 +18,7 @@ use Drupal\Core\Annotation\Translation;
  *   type = "select",
  *   title = @Translation("Default button size"),
  *   defaultValue = "",
+ *   description = @Translation("Defines the Bootstrap Buttons specific size"),
  *   empty_option = @Translation("Normal"),
  *   groups = {
  *     "general" = @Translation("General"),

@@ -23,6 +23,7 @@ use Drupal\Core\Form\FormStateInterface;
  *   id = "cdn_provider",
  *   type = "select",
  *   title = @Translation("CDN Provider"),
+ *   description = @Translation("Choose between jsdelivr or a custom cdn source."),
  *   defaultValue = "jsdelivr",
  *   empty_value = "",
  *   weight = -1,

@@ -18,6 +18,7 @@ use Drupal\Core\Annotation\Translation;
  *   type = "select",
  *   title = @Translation("Default modal size"),
  *   defaultValue = "",
+ *   description = @Translation("Defines the modal size between the default, <code>modal-sm</code> and <code>modal-lg</code>."),
  *   empty_option = @Translation("Normal"),
  *   groups = {
  *     "javascript" = @Translation("JavaScript"),

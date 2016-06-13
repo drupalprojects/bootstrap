@@ -17,6 +17,7 @@ use Drupal\Core\Annotation\Translation;
  *   id = "breadcrumb",
  *   type = "select",
  *   title = @Translation("Breadcrumb visibility"),
+ *   description = @Translation("Show or hide the Breadcrumbs"),
  *   defaultValue = "1",
  *   groups = {
  *     "components" = @Translation("Components"),
