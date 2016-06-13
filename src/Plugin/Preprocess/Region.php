@@ -38,7 +38,7 @@ class Region extends PreprocessBase implements PreprocessInterface {
 
     // Support for "well" classes in regions.
     static $region_wells;
-    if (!isset($wells)) {
+    if (!isset($region_wells)) {
       $region_wells = $this->theme->getSetting('region_wells');
     }
     if (!empty($region_wells[$region])) {
