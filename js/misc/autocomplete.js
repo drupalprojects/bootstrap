@@ -137,11 +137,18 @@ var oldPrototype = Drupal.jsAC.prototype;
 /**
  * Override the autocomplete constructor.
  */
-Drupal.jsAC = function ($input, db, $context) {
+Drupal.jsAC = function ($input, db, context) {
   var ac = this;
-  this.$context = $context;
+
+  // Context is normally passed by Drupal.behaviors.autocomplete above. However,
+  // if a module has manually invoked this method they will likely not know
+  // about this feature and a global fallback context to document must be used.
+  // @see https://www.drupal.org/node/2594243
+  // @see https://www.drupal.org/node/2315295
+  this.$context = context && $(context) || $(document);
+
   this.input = $input[0];
-  this.ariaLive = $context.find('#' + this.input.id + '-autocomplete-aria-live');
+  this.ariaLive = this.$context.find('#' + this.input.id + '-autocomplete-aria-live');
   this.db = db;
   $input
     .keydown(function (event) { return ac.onkeydown(this, event); })
