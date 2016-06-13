@@ -31,7 +31,14 @@ Once you've selected one of the above starterkits, here's how to install it:
 3. Rename `./subtheme/THEMENAME.starterkit.yml` to match the folder name and append
    `.info.yml` (e.g. `./subtheme/subtheme.info.yml`).
 4. Open `./subtheme/subtheme.info.yml` and change the name, description and any
-   other properties to suite your needs. Be sure to also change `- THEMENAME/globalstyling` to `- subtheme/globalstyling`.
+   other properties to suite your needs. Make sure to change the library name:
+   `- THEMENAME/globalstyling` to `- subtheme/globalstyling` as well.
+5. Rename the sub-theme configuration files, located at: `./config/install/THEMENAME.settings.yml`
+   and `./config/schema/THEMENAME.schema.yml` to match the `subtheme` name (e.g.
+   `subtheme.settings.yml` and `subtheme.schema.yml`).
+6. Open `./config/schema/subtheme.schema.yml` and change `- THEMENAME.settings:`
+   to `- subtheme.settings:` and label: `'THEMETITLE settings'` to
+   `'Subtheme settings'`
 
 {.alert.alert-warning} **WARNING:** Ensure that the `.starterkit` suffix is
 not present on your sub-theme's `.info.yml` filename. This suffix is simply a stop
