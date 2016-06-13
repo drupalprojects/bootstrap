@@ -24,6 +24,13 @@ class Breadcrumb extends PreprocessBase implements PreprocessInterface {
   public function preprocess(array &$variables, $hook, array $info) {
     $breadcrumb = &$variables['breadcrumb'];
 
+    // Determine if breadcrumbs should be displayed.
+    $breadcrumb_visibility = $this->theme->getSetting('breadcrumb');
+    if (($breadcrumb_visibility == 0 || ($breadcrumb_visibility == 2 && \Drupal::service('router.admin_context')->isAdminRoute())) || empty($breadcrumb)) {
+      $breadcrumb = [];
+      return;
+    }
+
     // Optionally get rid of the homepage link.
     $show_breadcrumb_home = $this->theme->getSetting('breadcrumb_home');
     if (!$show_breadcrumb_home) {
