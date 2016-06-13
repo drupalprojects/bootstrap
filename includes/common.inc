@@ -1175,7 +1175,8 @@ function _bootstrap_preprocess_theme_suggestion(&$variables) {
 
     // Iterate over the preprocess functions.
     foreach ($registry[$hook]['preprocess functions'] as $function) {
-      if (function_exists($function)) {
+      // Ensure that the function is not this one (recursive) and exists.
+      if ($function !== __FUNCTION__ && function_exists($function)) {
         // Invoke theme hook suggestion preprocess function.
         $function($variables, $hook);
 
