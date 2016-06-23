@@ -1005,6 +1005,7 @@ class Bootstrap {
       $variables['theme']['title'] = $theme->getTitle();
       $variables['theme']['settings'] = $theme->settings()->get();
       $variables['theme']['has_glyphicons'] = $theme->hasGlyphicons();
+      $variables['theme']['query_string'] = \Drupal::getContainer()->get('state')->get('system.css_js_query_string') ?: '0';
     }
 
     // Invoke necessary preprocess plugin.
