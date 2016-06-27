@@ -11,7 +11,6 @@ use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\BubbleableMetadata;
 
 /**
  * Provides helper methods for Drupal render elements.
@@ -26,13 +25,6 @@ class Element extends DrupalAttributes {
    * @var \Drupal\Core\Form\FormStateInterface
    */
   protected $formState;
-
-  /**
-   * The variables BubbleableMetadata object.
-   *
-   * @var \Drupal\Core\Render\BubbleableMetadata
-   */
-  public $metadata;
 
   /**
    * The element type.
@@ -60,12 +52,6 @@ class Element extends DrupalAttributes {
     }
     $this->array = &$element;
     $this->formState = $form_state;
-
-    // Need to create a separate variable so the static object reference
-    // doesn't mess up IDEs when attempting to autocomplete objects.
-    /** @type \Drupal\Core\Render\BubbleableMetadata $metadata */
-    $metadata = BubbleableMetadata::createFromRenderArray($this->array);
-    $this->metadata = $metadata;
   }
 
   /**
@@ -176,35 +162,6 @@ class Element extends DrupalAttributes {
       $property .= (string) $value;
     }
 
-    return $this;
-  }
-
-  /**
-   * Merges an object's cacheable metadata into the element.
-   *
-   * @param \Drupal\Core\Cache\CacheableDependencyInterface|mixed $object
-   *   The object whose cacheability metadata to retrieve. If it implements
-   *   CacheableDependencyInterface, its cacheability metadata will be used,
-   *   otherwise, the passed in object must be assumed to be uncacheable, so
-   *   max-age 0 is set.
-   *
-   * @return $this
-   */
-  public function bubbleObject($object) {
-    $this->metadata->merge(BubbleableMetadata::createFromObject($object))->applyTo($this->array);
-    return $this;
-  }
-
-  /**
-   * Merges a render array's cacheable metadata into the element.
-   *
-   * @param array $build
-   *   A render array.
-   *
-   * @return $this
-   */
-  public function bubbleRenderArray(array $build) {
-    $this->metadata->merge(BubbleableMetadata::createFromRenderArray($build))->applyTo($this->array);
     return $this;
   }
 

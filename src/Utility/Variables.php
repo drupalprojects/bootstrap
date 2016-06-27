@@ -6,8 +6,6 @@
 
 namespace Drupal\bootstrap\Utility;
 
-use Drupal\Core\Render\BubbleableMetadata;
-
 /**
  * Class to help modify template variables.
  */
@@ -21,13 +19,6 @@ class Variables extends DrupalAttributes {
   public $element;
 
   /**
-   * The variables BubbleableMetadata object.
-   *
-   * @var \Drupal\Core\Render\BubbleableMetadata
-   */
-  public $metadata;
-
-  /**
    * Element constructor.
    *
    * @param array $variables
@@ -36,12 +27,6 @@ class Variables extends DrupalAttributes {
   public function __construct(array &$variables) {
     $this->array = &$variables;
     $this->element = isset($variables['element']) ? Element::create($variables['element']) : FALSE;
-
-    // Need to create a separate variable so the static object reference
-    // doesn't mess up IDEs when attempting to autocomplete objects.
-    /** @type \Drupal\Core\Render\BubbleableMetadata $metadata */
-    $metadata = BubbleableMetadata::createFromRenderArray($this->array);
-    $this->metadata = $metadata;
   }
 
   /**
@@ -55,35 +40,6 @@ class Variables extends DrupalAttributes {
    */
   public static function create(array &$variables) {
     return new self($variables);
-  }
-
-  /**
-   * Merges an object's cacheable metadata into the variables array.
-   *
-   * @param \Drupal\Core\Cache\CacheableDependencyInterface|mixed $object
-   *   The object whose cacheability metadata to retrieve. If it implements
-   *   CacheableDependencyInterface, its cacheability metadata will be used,
-   *   otherwise, the passed in object must be assumed to be uncacheable, so
-   *   max-age 0 is set.
-   *
-   * @return $this
-   */
-  public function bubbleObject($object) {
-    $this->metadata->merge(BubbleableMetadata::createFromObject($object))->applyTo($this->array);
-    return $this;
-  }
-
-  /**
-   * Merges a render array's cacheable metadata into the variables array.
-   *
-   * @param array $build
-   *   A render array.
-   *
-   * @return $this
-   */
-  public function bubbleRenderArray(array $build) {
-    $this->metadata->merge(BubbleableMetadata::createFromRenderArray($build))->applyTo($this->array);
-    return $this;
   }
 
   /**
