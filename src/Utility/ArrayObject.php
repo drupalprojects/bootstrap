@@ -84,13 +84,19 @@ class ArrayObject implements \IteratorAggregate, \ArrayAccess, \Serializable, \C
     return $ret;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function addAttachments(array $attachments) {
+    BubbleableMetadata::createFromRenderArray($this->array)->addAttachments($attachments)->applyTo($this->array);
+    return $this;
+  }
 
   /**
    * {@inheritdoc}
    */
   public function addCacheContexts(array $cache_contexts) {
-    $current = BubbleableMetadata::createFromRenderArray($this->array);
-    $current->addCacheContexts($cache_contexts);
+    BubbleableMetadata::createFromRenderArray($this->array)->addCacheContexts($cache_contexts)->applyTo($this->array);
     return $this;
   }
 
@@ -98,8 +104,7 @@ class ArrayObject implements \IteratorAggregate, \ArrayAccess, \Serializable, \C
    * {@inheritdoc}
    */
   public function addCacheTags(array $cache_tags) {
-    $current = BubbleableMetadata::createFromRenderArray($this->array);
-    $current->addCacheTags($cache_tags);
+    BubbleableMetadata::createFromRenderArray($this->array)->addCacheTags($cache_tags)->applyTo($this->array);
     return $this;
   }
 
@@ -107,17 +112,7 @@ class ArrayObject implements \IteratorAggregate, \ArrayAccess, \Serializable, \C
    * {@inheritdoc}
    */
   public function addCacheableDependency($other_object) {
-    $current = BubbleableMetadata::createFromRenderArray($this->array);
-    $current->addCacheableDependency($other_object);
-    return $this;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function addAttachments(array $attachments) {
-    $current = BubbleableMetadata::createFromRenderArray($this->array);
-    $current->addAttachments($attachments);
+    BubbleableMetadata::createFromRenderArray($this->array)->addCacheableDependency($other_object)->applyTo($this->array);
     return $this;
   }
 
@@ -150,9 +145,7 @@ class ArrayObject implements \IteratorAggregate, \ArrayAccess, \Serializable, \C
    * @return $this
    */
   public function bubbleObject($object) {
-    $current = BubbleableMetadata::createFromRenderArray($this->array);
-    $new = $current->merge(BubbleableMetadata::createFromObject($object));
-    $new->applyTo($this->array);
+    BubbleableMetadata::createFromRenderArray($this->array)->merge(BubbleableMetadata::createFromObject($object))->applyTo($this->array);
     return $this;
   }
 
@@ -165,9 +158,7 @@ class ArrayObject implements \IteratorAggregate, \ArrayAccess, \Serializable, \C
    * @return $this
    */
   public function bubbleRenderArray(array $build) {
-    $current = BubbleableMetadata::createFromRenderArray($this->array);
-    $new = $current->merge(BubbleableMetadata::createFromRenderArray($build));
-    $new->applyTo($this->array);
+    BubbleableMetadata::createFromRenderArray($this->array)->merge(BubbleableMetadata::createFromRenderArray($build))->applyTo($this->array);
     return $this;
   }
 
@@ -281,8 +272,7 @@ class ArrayObject implements \IteratorAggregate, \ArrayAccess, \Serializable, \C
    * {@inheritdoc}
    */
   public function mergeCacheMaxAge($max_age) {
-    $current = BubbleableMetadata::createFromRenderArray($this->array);
-    $current->mergeCacheMaxAge($max_age);
+    BubbleableMetadata::createFromRenderArray($this->array)->mergeCacheMaxAge($max_age)->applyTo($this->array);
     return $this;
   }
 
@@ -370,8 +360,7 @@ class ArrayObject implements \IteratorAggregate, \ArrayAccess, \Serializable, \C
    * {@inheritdoc}
    */
   public function setAttachments(array $attachments) {
-    $current = BubbleableMetadata::createFromRenderArray($this->array);
-    $current->setAttachments($attachments);
+    BubbleableMetadata::createFromRenderArray($this->array)->setAttachments($attachments)->applyTo($this->array);
     return $this;
   }
 
