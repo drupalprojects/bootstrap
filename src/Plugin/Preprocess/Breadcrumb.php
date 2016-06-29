@@ -7,6 +7,7 @@
 namespace Drupal\bootstrap\Plugin\Preprocess;
 
 use Drupal\bootstrap\Annotation\BootstrapPreprocess;
+use Drupal\bootstrap\Utility\Variables;
 use Drupal\Core\Template\Attribute;
 
 /**
@@ -21,7 +22,7 @@ class Breadcrumb extends PreprocessBase implements PreprocessInterface {
   /**
    * {@inheritdoc}
    */
-  public function preprocess(array &$variables, $hook, array $info) {
+  public function preprocessVariables(Variables $variables) {
     $breadcrumb = &$variables['breadcrumb'];
 
     // Determine if breadcrumbs should be displayed.
@@ -48,7 +49,7 @@ class Breadcrumb extends PreprocessBase implements PreprocessInterface {
           'attributes' => new Attribute(['class' => ['active']]),
         ];
         // Add cache context based on url.
-        $variables['#cache']['contexts'][] = 'url';
+        $variables->addCacheContexts(['url']);
       }
     }
   }

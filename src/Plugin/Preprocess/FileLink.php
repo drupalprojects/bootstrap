@@ -28,7 +28,7 @@ class FileLink extends PreprocessBase {
   /**
    * {@inheritdoc}
    */
-  public function preprocessVariables(Variables $variables, $hook, array $info) {
+  public function preprocessVariables(Variables $variables) {
     $options = [];
 
     $file = ($variables['file'] instanceof File) ? $variables['file'] : File::load($variables['file']->fid);
@@ -114,7 +114,7 @@ class FileLink extends PreprocessBase {
     $variables->file_size = format_size($file_size);
 
     // Preprocess attributes.
-    $this->preprocessAttributes($variables, $hook, $info);
+    $this->preprocessAttributes();
   }
 
 }

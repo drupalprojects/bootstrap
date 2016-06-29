@@ -7,6 +7,7 @@
 namespace Drupal\bootstrap\Plugin\Preprocess;
 
 use Drupal\bootstrap\Annotation\BootstrapPreprocess;
+use Drupal\bootstrap\Utility\Element;
 use Drupal\bootstrap\Utility\Variables;
 
 /**
@@ -21,14 +22,14 @@ class FieldMultipleValueForm extends PreprocessBase implements PreprocessInterfa
   /**
    * {@inheritdoc}
    */
-  public function preprocessElement(Variables $variables, $hook, array $info) {
+  public function preprocessElement(Element $element, Variables $variables) {
     // Wrap header columns in label element for Bootstrap.
     if ($variables['multiple']) {
       $header = [
         [
           'data' => [
             '#prefix' => '<label class="label">',
-            'title' => ['#markup' => $variables->element->getProperty('title')],
+            'title' => ['#markup' => $element->getProperty('title')],
             '#suffix' => '</label>',
           ],
           'colspan' => 2,

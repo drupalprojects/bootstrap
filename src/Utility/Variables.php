@@ -14,9 +14,9 @@ class Variables extends DrupalAttributes {
   /**
    * An element object.
    *
-   * @var \Drupal\bootstrap\Utility\Element
+   * @var \Drupal\bootstrap\Utility\Element|FALSE
    */
-  public $element;
+  public $element = FALSE;
 
   /**
    * Element constructor.
@@ -26,7 +26,12 @@ class Variables extends DrupalAttributes {
    */
   public function __construct(array &$variables) {
     $this->array = &$variables;
-    $this->element = isset($variables['element']) ? Element::create($variables['element']) : FALSE;
+    if (isset($variables['element'])) {
+      $this->element = Element::create($variables['element']);
+    }
+    elseif (isset($variables['elements'])) {
+      $this->element = Element::create($variables['elements']);
+    }
   }
 
   /**

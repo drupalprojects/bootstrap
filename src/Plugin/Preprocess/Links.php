@@ -22,7 +22,7 @@ class Links extends PreprocessBase implements PreprocessInterface {
   /**
    * {@inheritdoc}
    */
-  public function preprocessVariables(Variables $variables, $hook, array $info) {
+  public function preprocessVariables(Variables $variables) {
     if ($variables->theme_hook_original === 'links' && $variables->hasClass('operations')) {
       $variables->addClass('list-inline');
       foreach ($variables->links as &$data) {
@@ -36,7 +36,7 @@ class Links extends PreprocessBase implements PreprocessInterface {
         }
       }
     }
-    $this->preprocessAttributes($variables, $hook, $info);
+    $this->preprocessAttributes();
   }
 
 }

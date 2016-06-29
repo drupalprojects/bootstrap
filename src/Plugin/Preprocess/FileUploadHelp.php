@@ -29,7 +29,7 @@ class FileUploadHelp extends PreprocessBase implements PreprocessInterface {
   /**
    * {@inheritdoc}
    */
-  public function preprocessVariables(Variables $variables, $hook, array $info) {
+  public function preprocessVariables(Variables $variables) {
     if (!empty($variables['description'])) {
       $variables['description'] = FieldFilteredMarkup::create($variables['description']);
     }
