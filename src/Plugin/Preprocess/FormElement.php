@@ -56,13 +56,10 @@ class FormElement extends PreprocessBase implements PreprocessInterface {
     }
 
     // Remove the #field_prefix and #field_suffix values set in
-    // template_preprocess_form_element(). These are handled on the input level.
+    // template_preprocess_form_element(). These are handled at the input level.
     // @see \Drupal\bootstrap\Plugin\Preprocess\Input::preprocess().
-    if ($element->hasProperty('input_group') || $element->hasProperty('input_group_button')) {
-      $variables['prefix'] = FALSE;
-      $variables['suffix'] = FALSE;
-    }
-
+    unset($variables['prefix']);
+    unset($variables['suffix']);
   }
 
 }
