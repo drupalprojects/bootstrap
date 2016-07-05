@@ -4,7 +4,7 @@
 
 ## Installation
 - Install the Bootstrap base theme in `themes` or a similar `sites/*/themes`
-  folder.
+  directory.
 - Enable the [Drupal Bootstrap] base theme.
 
 ## Bootstrap Framework Fundamentals

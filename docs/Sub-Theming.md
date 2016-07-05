@@ -26,10 +26,10 @@ Once you've selected one of the above starterkits, here's how to install it:
 
 1. Copy over one of the starterkits you have chosen from the
    `./bootstrap/starterkits` directory into the `themes` directory.
-2. Rename the folder to a unique machine readable name. This will be your
+2. Rename the directory to a unique machine readable name. This will be your
    sub-theme's "name". For this example and future examples we'll use `subtheme`.
-3. Rename `./subtheme/THEMENAME.starterkit.yml` to match the folder name and append
-   `.info.yml` (e.g. `./subtheme/subtheme.info.yml`).
+3. Rename `./subtheme/THEMENAME.starterkit.yml` to match the directory name and
+   append `.info.yml` (e.g. `./subtheme/subtheme.info.yml`).
 4. Open `./subtheme/subtheme.info.yml` and change the name, description and any
    other properties to suite your needs. Make sure to change the library name:
    `- THEMENAME/globalstyling` to `- subtheme/globalstyling` as well.

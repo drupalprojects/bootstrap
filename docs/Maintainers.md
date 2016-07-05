@@ -22,7 +22,7 @@ Suffice it to say: you will not have to manually update this project again.
 
 After you have installed the prerequisite CLI tools, run `npm install` in this
 directory. This will install the necessary NodeJS modules inside the
-`node_modules` folder.
+`node_modules` directory.
 
 After NodeJS has finished installing its own modules, it will automatically
 invoke `grunt install` for you. This is a grunt task that is specifically
@@ -64,7 +64,7 @@ next time they pull down the repository.
 ### `grunt sync`
 This is a sub-task used by `grunt install`. It will automatically
 download and install the various 3.x.x versions of the Bootstrap and Bootswatch
-libraries for local development purposes in the `./lib` folder. This process
+libraries for local development purposes in the `./lib` directory. This process
 utilizes Bower and can initially take a while for it to fully complete.
 
 Once you have the various versions of libraries have been installed, this task

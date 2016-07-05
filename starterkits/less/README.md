@@ -21,13 +21,13 @@ preprocessor.
 
 ## Additional Setup {#setup}
 Download and extract the **latest** 3.x.x version of
-[Bootstrap Framework Source Files] into the root your new sub-theme. After it
-has been extracted, the folder should be renamed (if needed) so it reads
+[Bootstrap Framework Source Files] into the root of your new sub-theme. After
+it has been extracted, the directory should be renamed (if needed) so it reads
 `./subtheme/bootstrap`.
 
-If for whatever reason you have an additional `bootstrap` folder wrapping the
-first `bootstrap` folder (e.g. `./subtheme/bootstrap/bootstrap`), remove the
-wrapping `bootstrap` folder. You will only ever need to touch these files if
+If for whatever reason you have an additional `bootstrap` directory wrapping the
+first `bootstrap` directory (e.g. `./subtheme/bootstrap/bootstrap`), remove the
+wrapping `bootstrap` directory. You will only ever need to touch these files if
 or when you upgrade your version of the [Bootstrap Framework].
 
 {.alert.alert-warning} **WARNING:** Do not modify the files inside of

@@ -23,7 +23,7 @@ use Drupal\Core\Extension\ThemeHandlerInterface;
 class Theme {
 
   /**
-   * Ignores the following folders during file scans of a theme.
+   * Ignores the following directories during file scans of a theme.
    *
    * @see \Drupal\bootstrap\Theme::IGNORE_ASSETS
    * @see \Drupal\bootstrap\Theme::IGNORE_CORE
@@ -33,17 +33,17 @@ class Theme {
   const IGNORE_DEFAULT = -1;
 
   /**
-   * Ignores the folders "assets", "css", "images" and "js".
+   * Ignores the directories "assets", "css", "images" and "js".
    */
   const IGNORE_ASSETS = 0x1;
 
   /**
-   * Ignores the folders "config", "lib" and "src".
+   * Ignores the directories "config", "lib" and "src".
    */
   const IGNORE_CORE = 0x2;
 
   /**
-   * Ignores the folders "docs" and "documentation".
+   * Ignores the directories "docs" and "documentation".
    */
   const IGNORE_DOCS = 0x4;
 
@@ -53,7 +53,7 @@ class Theme {
   const IGNORE_DEV = 0x8;
 
   /**
-   * Ignores the folders "templates" and "theme".
+   * Ignores the directories "templates" and "theme".
    */
   const IGNORE_TEMPLATES = 0x16;
 
