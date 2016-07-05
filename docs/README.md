@@ -62,9 +62,9 @@ the file or directory inside it. For example, the file that is responsible for
 displaying the text on this page is located at `./bootstrap/docs/README.md`.
 
 When referring to files inside a sub-theme, they will always start with
-`./subtheme/` and continue to specify the full path to the file or directory
-inside it. For example, the primary file Drupal uses to determine if a theme
-exists is: `./subtheme/subtheme.info.yml`, where `subtheme` is the machine name
-of your sub-theme.
+`./THEMENAME/`, where `THEMENAME` is the machine name of your sub-theme. They
+will continue to specify the full path to the file or directory inside it. For
+example, the primary file Drupal uses to determine if a theme
+exists is: `./THEMENAME/THEMENAME.info.yml`.
 
 [Drupal Bootstrap]: https://www.drupal.org/project/bootstrap

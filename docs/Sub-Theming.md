@@ -26,19 +26,22 @@ Once you've selected one of the above starterkits, here's how to install it:
 
 1. Copy over one of the starterkits you have chosen from the
    `./bootstrap/starterkits` directory into the `themes` directory.
-2. Rename the directory to a unique machine readable name. This will be your
-   sub-theme's "name". For this example and future examples we'll use `subtheme`.
-3. Rename `./subtheme/THEMENAME.starterkit.yml` to match the directory name and
-   append `.info.yml` (e.g. `./subtheme/subtheme.info.yml`).
-4. Open `./subtheme/subtheme.info.yml` and change the name, description and any
-   other properties to suite your needs. Make sure to change the library name:
-   `- THEMENAME/globalstyling` to `- subtheme/globalstyling` as well.
-5. Rename the sub-theme configuration files, located at: `./config/install/THEMENAME.settings.yml`
-   and `./config/schema/THEMENAME.schema.yml` to match the `subtheme` name (e.g.
-   `subtheme.settings.yml` and `subtheme.schema.yml`).
-6. Open `./config/schema/subtheme.schema.yml` and change `- THEMENAME.settings:`
-   to `- subtheme.settings:` and label: `'THEMETITLE settings'` to
-   `'Subtheme settings'`
+2. Rename the directory to a unique machine readable name. This is your sub-theme's
+   "machine name". When referring to files inside a sub-theme, they will always
+   start with `./THEMENAME/`, where `THEMENAME` is the machine name of your
+   sub-theme. They will continue to specify the full path to the file or
+   directory inside it. For example, the primary file Drupal uses to determine
+   if a theme exists is: `./THEMENAME/THEMENAME.info.yml`.
+3. Rename `./THEMENAME/THEMENAME.starterkit.yml` to match
+   `./THEMENAME/THEMENAME.info.yml`.
+4. Open `./THEMENAME/THEMENAME.info.yml` and change the name, description and any
+   other properties to suite your needs. Make sure to rename the library name as
+   well:  `- THEMENAME/globalstyling`.
+5. Rename the sub-theme configuration files, located at:
+   `./THEMENAME/config/install/THEMENAME.settings.yml` and
+   `./THEMENAME/config/schema/THEMENAME.schema.yml`.
+6. Open `./THEMENAME/config/schema/THEMENAME.schema.yml` and rename
+   `- THEMENAME.settings:` and `'THEMETITLE settings'`
 
 {.alert.alert-warning} **WARNING:** Ensure that the `.starterkit` suffix is
 not present on your sub-theme's `.info.yml` filename. This suffix is simply a stop
