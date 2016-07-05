@@ -19,6 +19,9 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * The "cdn_provider" theme setting.
  *
+ * @ingroup plugins_provider
+ * @ingroup plugins_setting
+ *
  * @BootstrapSetting(
  *   id = "cdn_provider",
  *   type = "select",

@@ -15,6 +15,8 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Provides helper methods for Drupal render elements.
  *
+ * @ingroup utility
+ *
  * @see \Drupal\Core\Render\Element
  */
 class Element extends DrupalAttributes {

@@ -13,6 +13,8 @@ use Drupal\Core\Annotation\Translation;
 /**
  * The "modal_backdrop" theme setting.
  *
+ * @ingroup plugins_setting
+ *
  * @BootstrapSetting(
  *   id = "modal_backdrop",
  *   type = "select",

@@ -17,7 +17,7 @@ use Drupal\file\Entity\File;
 /**
  * Pre-processes variables for the "file_link" theme hook.
  *
- * @ingroup theme_preprocess
+ * @ingroup plugins_preprocess
  *
  * @BootstrapPreprocess("file_link",
  *   replace = "template_preprocess_file_link"

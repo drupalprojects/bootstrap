@@ -14,6 +14,8 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * The "suppress_deprecated_warnings" theme setting.
  *
+ * @ingroup plugins_setting
+ *
  * @BootstrapSetting(
  *   id = "suppress_deprecated_warnings",
  *   type = "checkbox",

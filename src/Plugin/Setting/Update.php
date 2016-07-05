@@ -16,6 +16,9 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * The "schema" theme setting.
  *
+ * @ingroup plugins_setting
+ * @ingroup plugins_update
+ *
  * @BootstrapSetting(
  *   id = "schema",
  *   type = "hidden",

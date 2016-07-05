@@ -1,5 +1,5 @@
 <!-- @file Instructions on how to sub-theme the Drupal Bootstrap base theme. -->
-<!-- @defgroup -->
+<!-- @defgroup sub_theming -->
 # Sub-Theming
 
 If you haven't already installed the Drupal Bootstrap theme, read 
@@ -17,9 +17,9 @@ templates, and theme processing.
 
 #### Choose a Starterkit {#starterkit}
 
-- @link subtheme_cdn CDN Starterkit @endlink - uses the "out-of-the-box"
+- @link sub_theming_cdn CDN Starterkit @endlink - uses the "out-of-the-box"
   CSS and JavaScript files served by the [jsDelivr CDN].
-- @link subtheme_less LESS Starterkit @endlink - uses the [Bootstrap Framework]
+- @link sub_theming_less LESS Starterkit @endlink - uses the [Bootstrap Framework]
   [LESS] source files and a local [LESS] preprocessor.
 
 Once you've selected one of the above starterkits, here's how to install it:

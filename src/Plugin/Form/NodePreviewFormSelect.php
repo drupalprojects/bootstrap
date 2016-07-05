@@ -14,6 +14,8 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Implements hook_form_FORM_ID_alter().
  *
+ * @ingroup plugins_form
+ *
  * @BootstrapForm("node_preview_form_select")
  */
 class NodePreviewFormSelect extends FormBase {

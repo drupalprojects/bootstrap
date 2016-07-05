@@ -13,6 +13,8 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Replaces the process callback for dropbuttons on an "actions" element.
  *
+ * @ingroup plugins_process
+ *
  * @BootstrapProcess("actions__dropbutton",
  *   replace = "Drupal\Core\Render\Element\Actions::preRenderActionsDropbutton",
  * )

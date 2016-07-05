@@ -13,6 +13,8 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Processes the "actions" element.
  *
+ * @ingroup plugins_process
+ *
  * @BootstrapProcess("actions")
  */
 class Actions extends ProcessBase implements ProcessInterface {

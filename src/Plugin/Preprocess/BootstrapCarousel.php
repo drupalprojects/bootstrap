@@ -18,7 +18,7 @@ use Drupal\Core\Url;
 /**
  * Pre-processes variables for the "bootstrap_carousel" theme hook.
  *
- * @ingroup theme_preprocess
+ * @ingroup plugins_preprocess
  *
  * @BootstrapPreprocess("bootstrap_carousel")
  */

@@ -12,6 +12,8 @@ use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Defines the interface for an object oriented theme setting plugin.
+ *
+ * @ingroup plugins_setting
  */
 interface SettingInterface extends PluginInspectionInterface, FormInterface {
 

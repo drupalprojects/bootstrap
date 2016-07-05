@@ -12,6 +12,8 @@ use Drupal\Core\Annotation\Translation;
 /**
  * The "custom" CDN provider plugin.
  *
+ * @ingroup plugins_provider
+ *
  * @BootstrapProvider(
  *   id = "custom",
  *   label = @Translation("Custom"),

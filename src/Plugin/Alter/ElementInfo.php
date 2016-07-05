@@ -15,6 +15,8 @@ use Drupal\bootstrap\Plugin\ProcessManager;
 /**
  * Implements hook_element_info_alter().
  *
+ * @ingroup plugins_alter
+ *
  * @BootstrapAlter("element_info")
  */
 class ElementInfo extends PluginBase implements AlterInterface {

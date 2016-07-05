@@ -18,7 +18,7 @@ use Drupal\Core\Url;
 /**
  * Pre-processes variables for the "file_upload_help" theme hook.
  *
- * @ingroup theme_preprocess
+ * @ingroup plugins_preprocess
  *
  * @BootstrapPreprocess("file_upload_help",
  *   replace = "template_preprocess_file_upload_help"

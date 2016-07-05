@@ -11,6 +11,8 @@ use Drupal\bootstrap\Theme;
 
 /**
  * Base class for an update.
+ *
+ * @ingroup plugins_update
  */
 class UpdateBase extends PluginBase implements UpdateInterface {
 

@@ -14,7 +14,7 @@ use Drupal\Component\Utility\Html;
 /**
  * Pre-processes variables for the "bootstrap_panel" theme hook.
  *
- * @ingroup theme_preprocess
+ * @ingroup plugins_preprocess
  *
  * @BootstrapPreprocess("bootstrap_panel")
  */

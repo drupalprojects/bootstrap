@@ -16,6 +16,8 @@ use Drupal\Core\Config\StorageException;
  *
  * This is a wrapper around theme_get_setting() since it does not inherit
  * base theme config nor handle default/overridden values very well.
+ *
+ * @ingroup utility
  */
 class ThemeSettings extends Config {
 

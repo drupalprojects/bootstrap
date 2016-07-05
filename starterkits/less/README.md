@@ -1,6 +1,6 @@
 <!-- @file Instructions for subtheming using the LESS Starterkit. -->
-<!-- @defgroup subtheme_less -->
-<!-- @ingroup subtheme -->
+<!-- @defgroup sub_theming_less -->
+<!-- @ingroup sub_theming -->
 # LESS Starterkit
 
 Below are instructions on how to create a Bootstrap sub-theme using a LESS
@@ -57,7 +57,7 @@ This is the file that you should compile to `./subtheme/css/styles.css` (note
 the same file name, using a different extension of course).
 
 ## Override Theme Settings {#settings}
-Please refer to the @link subtheme_settings Sub-theme Settings @endlink topic.
+Please refer to the @link theme_settings Sub-theme Settings @endlink topic.
 
 ## Override Templates and Theme Functions {#registry}
 Please refer to the @link registry Theme Registry @endlink topic.

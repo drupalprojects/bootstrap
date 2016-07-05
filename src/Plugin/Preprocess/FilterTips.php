@@ -13,7 +13,7 @@ use Drupal\Core\Url;
 /**
  * Pre-processes variables for the "filter_tips" theme hook.
  *
- * @ingroup theme_preprocess
+ * @ingroup plugins_preprocess
  *
  * @BootstrapPreprocess("filter_tips",
  *   replace = "template_preprocess_filter_tips"

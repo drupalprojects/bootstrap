@@ -13,6 +13,8 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * The "cdn_jsdelivr_theme" theme setting.
  *
+ * @ingroup plugins_setting
+ *
  * @BootstrapSetting(
  *   cdn_provider = "jsdelivr",
  *   id = "cdn_jsdelivr_theme",

@@ -13,6 +13,8 @@ use Drupal\Core\Annotation\Translation;
 /**
  * The "navbar_position" theme setting.
  *
+ * @ingroup plugins_setting
+ *
  * @BootstrapSetting(
  *   id = "navbar_position",
  *   type = "select",

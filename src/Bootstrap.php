@@ -18,6 +18,8 @@ use Drupal\Core\Extension\ThemeHandlerInterface;
  * The primary class for the Drupal Bootstrap base theme.
  *
  * Provides many helper methods.
+ *
+ * @ingroup utility
  */
 class Bootstrap {
 

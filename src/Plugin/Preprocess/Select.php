@@ -13,7 +13,7 @@ use Drupal\bootstrap\Utility\Variables;
 /**
  * Pre-processes variables for the "select" theme hook.
  *
- * @ingroup theme_preprocess
+ * @ingroup plugins_preprocess
  *
  * @BootstrapPreprocess("select")
  */

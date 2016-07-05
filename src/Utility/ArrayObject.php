@@ -15,6 +15,8 @@ use Drupal\Core\Render\BubbleableMetadata;
  * Custom ArrayObject implementation.
  *
  * The native ArrayObject is unnecessarily complicated.
+ *
+ * @ingroup utility
  */
 class ArrayObject implements \IteratorAggregate, \ArrayAccess, \Serializable, \Countable, AttachmentsInterface, RefinableCacheableDependencyInterface {
 

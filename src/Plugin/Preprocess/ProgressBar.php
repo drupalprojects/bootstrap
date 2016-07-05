@@ -13,7 +13,7 @@ use Drupal\Component\Utility\Html;
 /**
  * Pre-processes variables for the "progress_bar" theme hook.
  *
- * @ingroup theme_preprocess
+ * @ingroup plugins_preprocess
  *
  * @BootstrapPreprocess("progress_bar")
  */

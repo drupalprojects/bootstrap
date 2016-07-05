@@ -14,6 +14,9 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Implements hook_form_system_theme_settings_alter().
  *
+ * @ingroup plugins_form
+ * @ingroup plugins_setting
+ *
  * @BootstrapForm("system_theme_settings")
  */
 class SystemThemeSettings extends FormBase implements FormInterface {

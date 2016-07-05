@@ -18,5 +18,7 @@ use Drupal\Component\Annotation\Plugin;
  * @see plugin_api
  *
  * @Annotation
+ *
+ * @ingroup plugins_update
  */
 class BootstrapUpdate extends Plugin {}

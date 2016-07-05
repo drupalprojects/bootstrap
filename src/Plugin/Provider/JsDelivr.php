@@ -14,6 +14,8 @@ use Drupal\Core\Annotation\Translation;
 /**
  * The "jsdelivr" CDN provider plugin.
  *
+ * @ingroup plugins_provider
+ *
  * @BootstrapProvider(
  *   id = "jsdelivr",
  *   label = @Translation("jsDelivr"),

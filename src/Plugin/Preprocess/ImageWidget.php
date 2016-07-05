@@ -13,7 +13,7 @@ use Drupal\bootstrap\Utility\Variables;
 /**
  * Pre-processes variables for the "image_widget" theme hook.
  *
- * @ingroup theme_preprocess
+ * @ingroup plugins_preprocess
  *
  * @see image-widget.html.twig
  *

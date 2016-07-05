@@ -13,7 +13,7 @@ use Drupal\Core\Template\Attribute;
 /**
  * Pre-processes variables for the "breadcrumb" theme hook.
  *
- * @ingroup theme_preprocess
+ * @ingroup plugins_preprocess
  *
  * @BootstrapPreprocess("breadcrumb")
  */

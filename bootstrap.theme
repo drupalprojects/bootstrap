@@ -32,6 +32,24 @@ Bootstrap::initialize();
 /**
  * {@inheritdoc}
  *
+ * @see hook_bootstrap_colorize_text_alter().
+ */
+function bootstrap_bootstrap_colorize_text_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
+  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
+}
+
+/**
+ * {@inheritdoc}
+ *
+ * @see hook_bootstrap_iconize_text_alter().
+ */
+function bootstrap_bootstrap_iconize_text_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
+  Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
+}
+
+/**
+ * {@inheritdoc}
+ *
  * @see \Drupal\bootstrap\Plugin\Alter\ElementInfo::alter()
  */
 function bootstrap_element_info_alter(&$data, &$context1 = NULL, &$context2 = NULL) {

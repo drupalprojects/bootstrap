@@ -1,6 +1,5 @@
 <!-- @file Maintaining the Drupal Bootstrap project. -->
 <!-- @defgroup -->
-<!-- @ingroup -->
 # Maintainers
 
 Generally speaking, these topics will not be very helpful to you unless you are
@@ -28,6 +27,15 @@ directory. This will install the necessary NodeJS modules inside the
 After NodeJS has finished installing its own modules, it will automatically
 invoke `grunt install` for you. This is a grunt task that is specifically
 designed to keep the project in sync amongst maintainers.
+
+## Drush
+There are several commands available to run, please execute `drush` to view the
+full list. This topic only covers the commands this project created.
+
+### `drush bootstrap-generate-docs` or `drush bs-docs`
+Generates markdown documentation for the Drupal based code. Possible arguments are:
+- **type:** The specific type of documentation to generate, defaults to `all`.
+  Possible values: `all|settings`
 
 ## Grunt
 There are several tasks available to run, please execute `grunt --help` to view

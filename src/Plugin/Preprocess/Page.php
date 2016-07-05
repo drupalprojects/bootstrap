@@ -12,7 +12,7 @@ use Drupal\bootstrap\Utility\Variables;
 /**
  * Pre-processes variables for the "page" theme hook.
  *
- * @ingroup theme_preprocess
+ * @ingroup plugins_preprocess
  *
  * @BootstrapPreprocess("page")
  */

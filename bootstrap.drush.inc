@@ -12,7 +12,7 @@ use Drupal\Component\Serialization\Yaml;
  */
 function bootstrap_drush_command() {
   $items['bootstrap-generate-docs'] = [
-    'description' => dt('Generates markdown documentation for Drupal based code.'),
+    'description' => dt('Generates markdown documentation for the Drupal based code.'),
     'arguments' => [
       'type' => 'The specific type of documentation to generate, defaults to "all". Can be: "all", "settings".',
     ],
@@ -106,5 +106,5 @@ function _drush_bootstrap_generate_docs_settings(Theme $bootstrap) {
   $output[] = '[Bootstrap Framework]: http://getbootstrap.com';
 
   // Save the generated output to the appropriate file.
-  return file_put_contents(realpath($bootstrap->getPath() . '/docs/subtheme/settings.md'), implode("\n", $output)) !== FALSE;
+  return file_put_contents(realpath($bootstrap->getPath() . '/docs/Theme-Settings.md'), implode("\n", $output)) !== FALSE;
 }

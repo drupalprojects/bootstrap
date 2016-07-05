@@ -10,6 +10,8 @@ use Drupal\bootstrap\Theme;
 
 /**
  * Manages discovery and instantiation of Bootstrap updates.
+ *
+ * @ingroup plugins_update
  */
 class UpdateManager extends PluginManager {
 

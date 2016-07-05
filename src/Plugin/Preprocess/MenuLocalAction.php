@@ -15,7 +15,7 @@ use Drupal\Component\Utility\SafeMarkup;
 /**
  * Pre-processes variables for the "menu_local_action" theme hook.
  *
- * @ingroup theme_preprocess
+ * @ingroup plugins_preprocess
  *
  * @BootstrapPreprocess("menu_local_action")
  */

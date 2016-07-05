@@ -10,6 +10,8 @@ use Drupal\bootstrap\Theme;
 
 /**
  * Defines the interface for an object oriented preprocess plugin.
+ *
+ * @ingroup plugins_update
  */
 interface UpdateInterface {
 

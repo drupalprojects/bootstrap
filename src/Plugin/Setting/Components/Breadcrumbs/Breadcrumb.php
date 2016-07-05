@@ -13,6 +13,8 @@ use Drupal\Core\Annotation\Translation;
 /**
  * The "breadcrumb" theme setting.
  *
+ * @ingroup plugins_setting
+ *
  * @BootstrapSetting(
  *   id = "breadcrumb",
  *   type = "select",

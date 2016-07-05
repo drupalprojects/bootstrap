@@ -14,7 +14,7 @@ use Drupal\bootstrap\Utility\Variables;
 /**
  * Pre-processes variables for the "bootstrap_dropdown" theme hook.
  *
- * @ingroup theme_preprocess
+ * @ingroup plugins_preprocess
  *
  * @BootstrapPreprocess("bootstrap_dropdown")
  */

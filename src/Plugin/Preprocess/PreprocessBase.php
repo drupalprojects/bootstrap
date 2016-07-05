@@ -14,7 +14,7 @@ use Drupal\Core\Template\Attribute;
 /**
  * Base preprocess class used to build the necessary variables for templates.
  *
- * @ingroup theme_preprocess
+ * @ingroup plugins_preprocess
  */
 class PreprocessBase extends PluginBase implements PreprocessInterface {
 

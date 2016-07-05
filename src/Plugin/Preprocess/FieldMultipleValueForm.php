@@ -13,7 +13,7 @@ use Drupal\bootstrap\Utility\Variables;
 /**
  * Pre-processes variables for the "field_multiple_value_form" theme hook.
  *
- * @ingroup theme_preprocess
+ * @ingroup plugins_preprocess
  *
  * @BootstrapPreprocess("field_multiple_value_form")
  */

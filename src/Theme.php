@@ -17,6 +17,8 @@ use Drupal\Core\Extension\ThemeHandlerInterface;
 
 /**
  * Defines a theme object.
+ *
+ * @ingroup utility
  */
 class Theme {
 
