@@ -17,6 +17,7 @@ use Drupal\Core\Annotation\Translation;
  *   id = "navbar_position",
  *   type = "select",
  *   title = @Translation("Navbar Position"),
+ *   description = @Translation("Determines where the navbar is positioned on the page."),
  *   defaultValue = "",
  *   groups = {
  *     "components" = @Translation("Components"),
