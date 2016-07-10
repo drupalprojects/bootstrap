@@ -33,7 +33,10 @@ class FieldMultipleValueForm extends PreprocessBase implements PreprocessInterfa
             '#suffix' => '</label>',
           ],
           'colspan' => 2,
-          'class' => ['field-label'],
+          'class' => [
+            'field-label',
+            !empty($element['#required']) ? 'form-required' : '',
+          ],
         ],
         t('Order', [], ['context' => 'Sort order']),
       ];
