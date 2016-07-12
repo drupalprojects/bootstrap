@@ -15,6 +15,7 @@
  * - caption: The caption for this table.
  * - accessibility_description: Extended description for the table details.
  * - accessibility_summary: Summary for the table details.
+ * - responsive: Whether or not to use the .table-responsive wrapper.
  * - rows: Table row items. Rows are keyed by row number.
  *   - attributes: HTML classes to apply to each row.
  *   - columns: Row column items. Columns are keyed by column number.
@@ -26,7 +27,7 @@
  * @see template_preprocess_views_view_table()
  */
 #}
-{% if theme.settings.table_responsive %}
+{% if responsive %}
   <div class="table-responsive">
 {% endif %}
 {% set classes = [
@@ -117,6 +118,6 @@
   {% endfor %}
   </tbody>
 </table>
-{% if theme.settings.table_responsive %}
+{% if responsive %}
   </div>
 {% endif %}
