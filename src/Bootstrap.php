@@ -255,9 +255,9 @@ class Bootstrap {
    * Please keep in mind, that it is merely an attempt and does not guarantee
    * that it will actually work. If it does not appear to work, do not use it.
    *
-   * @see \Drupal\Core\Extension\ThemeHandler::listInfo()
-   * @see \Drupal\Core\Extension\ThemeHandler::systemThemeList()
-   * @see system_list()
+   * @see \Drupal\Core\Extension\ThemeHandler::listInfo
+   * @see \Drupal\Core\Extension\ThemeHandler::systemThemeList
+   * @see system_list
    * @see system_register()
    * @see drupal_classloader_register()
    * 

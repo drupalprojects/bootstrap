@@ -60,7 +60,7 @@ class BootstrapPanel extends PreprocessBase implements PreprocessInterface {
       'errors' => 'errors',
       'footer' => 'footer',
       'required' => 'required',
-      'panel_state' => 'panel_state',
+      'panel_type' => 'panel_type',
       'title' => 'heading',
       'title_attributes' => 'heading_attributes',
     ];

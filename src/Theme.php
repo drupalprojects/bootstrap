@@ -65,6 +65,13 @@ class Theme {
   protected $info;
 
   /**
+   * The theme machine name.
+   *
+   * @var string
+   */
+  protected $name;
+
+  /**
    * The current theme Extension object.
    *
    * @var \Drupal\Core\Extension\Extension
@@ -86,6 +93,13 @@ class Theme {
   protected $themeHandler;
 
   /**
+   * The update plugin manager.
+   *
+   * @var \Drupal\bootstrap\Plugin\UpdateManager
+   */
+  protected $updateManager;
+
+  /**
    * Theme constructor.
    *
    * @param \Drupal\Core\Extension\Extension $theme
@@ -94,14 +108,14 @@ class Theme {
    *   The theme handler object.
    */
   public function __construct(Extension $theme, ThemeHandlerInterface $theme_handler) {
-    $name = $theme->getName();
+    $this->name = $theme->getName();
     $this->theme = $theme;
     $this->themeHandler = $theme_handler;
     $this->themes = $this->themeHandler->listInfo();
-    $this->info = isset($this->themes[$name]->info) ? $this->themes[$name]->info : [];
+    $this->info = isset($this->themes[$this->name]->info) ? $this->themes[$this->name]->info : [];
 
-    // Only install the theme if there is no schema version currently set.
-    if (!$this->getSetting('schema')) {
+    // Only install the theme if there is no schemas currently set.
+    if (!$this->getSetting('schemas')) {
       try {
         $this->install();
       }
@@ -110,6 +124,23 @@ class Theme {
         // @see https://www.drupal.org/node/2697075
       }
     }
+  }
+
+  /**
+   * Serialization method.
+   */
+  public function __sleep() {
+    // Only store the theme name.
+    return ['name'];
+  }
+
+  /**
+   * Unserialize method.
+   */
+  public function __wakeup() {
+    $theme_handler = Bootstrap::getThemeHandler();
+    $theme = $theme_handler->getTheme($this->name);
+    $this->__construct($theme, $theme_handler);
   }
 
   /**
@@ -262,8 +293,9 @@ class Theme {
   public function getCache($name, array $context = [], $default = []) {
     static $cache = [];
 
-    // Prepend the name as the first context item.
+    // Prepend the theme name as the first context item, followed by cache name.
     array_unshift($context, $name);
+    array_unshift($context, $this->getName());
 
     // Join context together with ":" and use it as the name.
     $name = implode(':', $context);
@@ -315,6 +347,32 @@ class Theme {
    */
   public function getPath() {
     return $this->theme->getPath();
+  }
+
+  /**
+   * Retrieves pending updates for the theme.
+   *
+   * @return \Drupal\bootstrap\Plugin\Update\UpdateInterface[]
+   *   An array of update plugin objects.
+   */
+  public function getPendingUpdates() {
+    $current_theme = $this->getName();
+    $pending = [];
+    $schemas = $this->getSetting('schemas');
+    foreach ($this->getAncestry() as $ancestor) {
+      $ancestor_name = $ancestor->getName();
+      if (!isset($schemas[$ancestor_name])) {
+        $schemas[$ancestor_name] = \Drupal::CORE_MINIMUM_SCHEMA_VERSION;
+        $this->setSetting('schemas', $schemas);
+      }
+      $pending_updates = $ancestor->getUpdateManager()->getPendingUpdates($current_theme === $ancestor_name);
+      foreach ($pending_updates as $schema => $update) {
+        if ((int) $schema > (int) $schemas[$ancestor_name]) {
+          $pending[] = $update;
+        }
+      }
+    }
+    return $pending;
   }
 
   /**
@@ -415,6 +473,18 @@ class Theme {
   }
 
   /**
+   * Retrieves the update plugin manager for the theme.
+   *
+   * @return \Drupal\bootstrap\Plugin\UpdateManager
+   */
+  public function getUpdateManager() {
+    if (!$this->updateManager) {
+      $this->updateManager = new UpdateManager($this);
+    }
+    return $this->updateManager;
+  }
+
+  /**
    * Determines whether or not if the theme has Bootstrap Framework Glyphicons.
    */
   public function hasGlyphicons() {
@@ -463,8 +533,11 @@ class Theme {
    * Installs a Bootstrap based theme.
    */
   final protected function install() {
-    $update_manager = new UpdateManager($this);
-    $this->setSetting('schema', $update_manager->getLatestVersion());
+    $schemas = [];
+    foreach ($this->getAncestry() as $ancestor) {
+      $schemas[$ancestor->getName()] = $ancestor->getUpdateManager()->getLatestSchema();
+    }
+    $this->setSetting('schemas', $schemas);
   }
 
   /**

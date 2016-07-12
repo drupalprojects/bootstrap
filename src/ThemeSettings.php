@@ -149,9 +149,9 @@ class ThemeSettings extends Config {
     // Retrieve configured theme-specific settings, if any.
     try {
       if ($theme_settings = \Drupal::config($theme->getName() . '.settings')->get()) {
-        // Remove the schema version if not the active theme.
+        // Remove schemas if not the active theme.
         if (!$active_theme) {
-          unset($theme_settings['schema']);
+          unset($theme_settings['schemas']);
         }
         $config->merge($theme_settings);
       }
