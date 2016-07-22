@@ -229,7 +229,19 @@ class ThemeSettings extends Config {
    *   TRUE or FALSE
    */
   public function overridesValue($name, $value) {
-    return !!DiffArray::diffAssocRecursive([$name => $value], [$name => $this->get($name)]);
+    // Retrieve the currently stored value.
+    $current_value = $this->get($name);
+
+    // Due to the nature of DiffArray::diffAssocRecursive, if the provided
+    // value is an empty array, it cannot be iterated over to determine if
+    // the values are different. Instead, tt must be checked for explicitly.
+    // @see https://www.drupal.org/node/2771121
+    if ($value === [] && $current_value !== []) {
+      return TRUE;
+    }
+
+    // Otherwise, determine if value is overridden by any array differences.
+    return !!DiffArray::diffAssocRecursive([$name => $value], [$name => $current_value]);
   }
 
   /**
