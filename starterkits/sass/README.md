@@ -48,8 +48,7 @@ file unless you need to add or remove files to be imported. This is the file
 that you should compile to `./THEMENAME/css/styles.css` (note the same file
 name, using a different extension of course).
 
-{.alert.alert-info} **SEE ALSO:**  
-  
+#### See also:
 - @link theme_settings Theme Settings @endlink
 - @link templates Templates @endlink
 - @link plugins Plugin System @endlink
