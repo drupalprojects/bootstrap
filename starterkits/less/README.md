@@ -39,7 +39,7 @@ Framework].
 
 The `./THEMENAME/less/bootstrap.less` file is nearly an exact copy from the
 [Bootstrap Framework Source Files]. The only difference is that it injects the
-`variable-overrides.less` file directly after it has imported the[Bootstrap
+`variable-overrides.less` file directly after it has imported the [Bootstrap
 Framework]'s `variables.less` file. This allows you to easily override variables
 without having to constantly keep up with newer or missing variables during an
 upgrade.
