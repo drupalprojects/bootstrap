@@ -1,0 +1,19 @@
+global-styling:
+  css:
+    theme:
+      css/style.css: {}
+
+bootstrap-scripts:
+  js:
+    bootstrap/javascripts/bootstrap/affix.js: {}
+    bootstrap/javascripts/bootstrap/alert.js: {}
+    bootstrap/javascripts/bootstrap/button.js: {}
+    bootstrap/javascripts/bootstrap/carousel.js: {}
+    bootstrap/javascripts/bootstrap/collapse.js: {}
+    bootstrap/javascripts/bootstrap/dropdown.js: {}
+    bootstrap/javascripts/bootstrap/modal.js: {}
+    bootstrap/javascripts/bootstrap/tooltip.js: {}
+    bootstrap/javascripts/bootstrap/popover.js: {}
+    bootstrap/javascripts/bootstrap/scrollspy.js: {}
+    bootstrap/javascripts/bootstrap/tab.js: {}
+    bootstrap/javascripts/bootstrap/transition.js: {}
