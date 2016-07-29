@@ -1,21 +1,19 @@
-<!-- @file Instructions for subtheming using the LESS Starterkit. -->
+<!-- @file Instructions for subtheming using the Less Starterkit. -->
 <!-- @defgroup sub_theming_less -->
 <!-- @ingroup sub_theming -->
-# LESS Starterkit
+# Less Starterkit
 
-Below are instructions on how to create a Bootstrap sub-theme using a LESS
+Below are instructions on how to create a Bootstrap sub-theme using a Less
 preprocessor.
 
 - [Prerequisites](#prerequisites)
 - [Additional Setup](#setup)
-- [Override Styles](#styles)
-- [Override Settings](#settings)
-- [Override Templates and Theme Functions](#registry)
+- [Overrides](#overrides)
 
 ## Prerequisites
 - Read the @link getting_started Getting Started @endlink documentation topic.
-- You must understand the basic concept of using the [LESS] CSS pre-processor.
-- You must use a **[local LESS compiler](https://www.google.com/search?q=less+compiler)**.
+- You must understand the basic concept of using the [Less] CSS pre-processor.
+- You must use a **[local Less compiler](https://www.google.com/search?q=less+compiler)**.
 - You must use the [Bootstrap Framework Source Files] ending in the `.less`
   extension, not files ending in `.css`.
 
@@ -34,7 +32,7 @@ or when you upgrade your version of the [Bootstrap Framework].
 `./THEMENAME/bootstrap` directly. Doing so may cause issues when upgrading the
 [Bootstrap Framework] in the future.
 
-## Override Styles {#styles}
+## Overrides {#overrides}
 The `./THEMENAME/less/variable-overrides.less` file is generally where you will
 the majority of your time overriding the variables provided by the [Bootstrap
 Framework].
@@ -51,17 +49,18 @@ properly integrate with the [Bootstrap Framework]. It may contain a few
 enhancements, feel free to edit this file as you see fit.
 
 The `./THEMENAME/less/style.less` file is the glue that combines the
-`bootstrap.less` and `overrides.less` files together. Generally, you will not
-need to modify this file unless you need to add or remove files to be imported.
-This is the file that you should compile to `./THEMENAME/css/styles.css` (note
-the same file name, using a different extension of course).
+[Bootstrap Framework Source Files] and `overrides.less` files together.
+Generally, you will not need to modify this file unless you need to add or
+remove files to be imported. This is the file that you should compile to
+`./THEMENAME/css/styles.css` (note the same file name, using a different
+extension of course).
 
-## Override Theme Settings {#settings}
-Please refer to the @link theme_settings Sub-theme Settings @endlink topic.
-
-## Override Templates and Theme Functions {#registry}
-Please refer to the @link registry Theme Registry @endlink topic.
+{.alert.alert-info} **SEE ALSO:**  
+  
+- @link theme_settings Theme Settings @endlink
+- @link templates Templates @endlink
+- @link plugins Plugin System @endlink
 
 [Bootstrap Framework]: http://getbootstrap.com
 [Bootstrap Framework Source Files]: https://github.com/twbs/bootstrap/releases
-[LESS]: http://lesscss.org
+[Less]: http://lesscss.org
