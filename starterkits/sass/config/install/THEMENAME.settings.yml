@@ -11,5 +11,5 @@
 # @see \Drupal\bootstrap\Plugin\Form\SystemThemeSettings
 # @see \Drupal\bootstrap\ThemeSettings
 
-# Disable the CDN provider so compiled LESS source files can be used.
+# Disable the CDN provider so compiled source files can be used.
 cdn_provider: ''

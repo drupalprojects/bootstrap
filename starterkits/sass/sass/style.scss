@@ -1,9 +1,8 @@
-// Custom variables.  Will override default Bootstrap variables b/c
-// Bootstrap's   _variables.scss has !default in the declarations.
-@import "variable-overrides";
+// Default variables.
+@import "default-variables";
 
-// Bootstrap library.
-@import '../bootstrap/stylesheets/bootstrap';
+// Bootstrap Framework.
+@import '../bootstrap/assets/stylesheets/bootstrap';
 
 // Base-theme overrides.
 @import 'overrides';

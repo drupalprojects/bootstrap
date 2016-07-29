@@ -33,20 +33,20 @@ or when you upgrade your version of the [Bootstrap Framework].
 [Bootstrap Framework] in the future.
 
 ## Overrides {#overrides}
-The `./THEMENAME/sass/_variable-overrides.scss` file is generally where you will
-the majority of your time overriding the variables provided by the [Bootstrap
-Framework].
+The `./THEMENAME/sass/_default-variables.scss` file is generally where you will
+spend the majority of your time providing any default variables that should be
+used by the [Bootstrap Framework] instead of its own.
 
 The `./THEMENAME/sass/overrides.scss` file contains various Drupal overrides to
 properly integrate with the [Bootstrap Framework]. It may contain a few
 enhancements, feel free to edit this file as you see fit.
 
-The `./THEMENAME/scss/style.scss` file is the glue that combines the
-[Bootstrap Framework Source Files] and `overrides.scss` files together.
-Generally, you will not need to modify this file unless you need to add or
-remove files to be imported. This is the file that you should compile to
-`./THEMENAME/css/styles.css` (note the same file name, using a different
-extension of course).
+The `./THEMENAME/scss/style.scss` file is the glue that combines:
+`_default-variables.scss`, [Bootstrap Framework Source Files] and the 
+`overrides.scss` file together. Generally, you will not need to modify this
+file unless you need to add or remove files to be imported. This is the file
+that you should compile to `./THEMENAME/css/styles.css` (note the same file
+name, using a different extension of course).
 
 {.alert.alert-info} **SEE ALSO:**  
   
