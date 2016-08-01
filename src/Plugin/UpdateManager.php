@@ -80,7 +80,7 @@ class UpdateManager extends PluginManager {
    */
   public function getPendingUpdates($private = FALSE) {
     $pending = [];
-    $installed = $this->theme->getSetting('schema');
+    $installed = $this->theme->getSetting('schemas', []);
     foreach ($this->getUpdates($private) as $version => $update) {
       if ($version > $installed) {
         $pending[$version] = $update;

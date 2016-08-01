@@ -358,7 +358,7 @@ class Theme {
   public function getPendingUpdates() {
     $current_theme = $this->getName();
     $pending = [];
-    $schemas = $this->getSetting('schemas');
+    $schemas = $this->getSetting('schemas', []);
     foreach ($this->getAncestry() as $ancestor) {
       $ancestor_name = $ancestor->getName();
       if (!isset($schemas[$ancestor_name])) {
@@ -416,20 +416,22 @@ class Theme {
    *
    * @param string $name
    *   The name of the setting to be retrieved.
-   * @param bool $original
-   *   Retrieve the original default value from code (or base theme config),
-   *   not from the active theme's stored config.
+   * @param mixed $default
+   *   A default value to provide if the setting is not found or if the plugin
+   *   does not have a "defaultValue" annotation key/value pair. Typically,
+   *   you will likely never need to use this unless in rare circumstances
+   *   where the setting plugin exists but needs a default value not able to
+   *   be set by conventional means (e.g. empty array).
    *
    * @return mixed
-   *   The value of the requested setting, NULL if the setting does not exist.
+   *   The value of the requested setting, NULL if the setting does not exist
+   *   and no $default value was provided.
    *
    * @see theme_get_setting()
    */
-  public function getSetting($name, $original = FALSE) {
-    if ($original) {
-      return $this->settings()->getOriginal($name);
-    }
-    return $this->settings()->get($name);
+  public function getSetting($name, $default = NULL) {
+    $value = $this->settings()->get($name);
+    return !isset($value) ? $default : $value;
   }
 
   /**

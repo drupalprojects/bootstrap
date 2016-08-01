@@ -145,7 +145,7 @@ class Schemas extends SettingBase {
       $context['results']['theme_name'] = $theme_name;
     }
     if (!isset($context['results']['schemas'])) {
-      $context['results']['schemas'] = $theme->getSetting('schemas');
+      $context['results']['schemas'] = $theme->getSetting('schemas', []);
     }
 
     $schemas = &$context['results']['schemas'];
