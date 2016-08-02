@@ -48,11 +48,10 @@ file unless you need to add or remove files to be imported. This is the file
 that you should compile to `./THEMENAME/css/styles.css` (note the same file
 name, using a different extension of course).
 
-## Override Theme Settings {#settings}
-Please refer to the @link subtheme_settings Sub-theme Settings @endlink topic.
-
-## Override Templates and Theme Functions {#registry}
-Please refer to the @link registry Theme Registry @endlink topic.
+#### See also:
+- @link templates Templates @endlink
+- @link theme_settings Theme Settings @endlink
+- @link registry Theme Registry @endlink
 
 [Bootstrap Framework]: http://getbootstrap.com
 [Bootstrap Framework Source Files]: https://github.com/twbs/bootstrap-sass

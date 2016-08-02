@@ -1,10 +1,4 @@
 // Media query variables.
-/* Have to know how to translate this to SASS
-@tablet:  ~"screen and (min-width: @{screen-sm-min})";
-@normal:  ~"screen and (min-width: @{screen-md-min})";
-@wide:    ~"screen and (min-width: @{screen-lg-min})";
-*/
-
 $tablet:  "screen and (min-width: 768px)";
 $normal:  "screen and (min-width: 992px)";
 $wide:    "screen and (min-width: 1200px)";
@@ -819,9 +813,9 @@ body.navbar-is-fixed-top.navbar-administration .navbar-fixed-top {
 }
 /* Small devices (tablets, 768px and up) */
 @media (min-width: $screen-sm-min) {
-body.navbar-is-fixed-top.navbar-administration.navbar-vertical.navbar-tray-open .navbar-fixed-top {
-  left: 240px;
-  left: 24rem;
+  body.navbar-is-fixed-top.navbar-administration.navbar-vertical.navbar-tray-open .navbar-fixed-top {
+    left: 240px;
+    left: 24rem;
   }
 }
 .navbar-administration #navbar-administration.navbar-oriented .navbar-bar{

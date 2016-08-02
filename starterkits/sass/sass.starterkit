@@ -1,4 +1,4 @@
-name = StarterKit Bootstrap with Sass
+name = 'THEMETITLE'
 description = Uses the Bootstrap Framework Sass source files and must be compiled (not for beginners).
 core = 7.x
 base theme = bootstrap
@@ -44,5 +44,5 @@ scripts[] = 'bootstrap/assets/javascripts/bootstrap/scrollspy.js'
 scripts[] = 'bootstrap/assets/javascripts/bootstrap/tab.js'
 scripts[] = 'bootstrap/assets/javascripts/bootstrap/transition.js'
 
-; Disable BootstrapCDN so the compiled Sass source files can be used.
+; Disable the CDN provider so compiled source files can be used.
 settings[bootstrap_cdn] = ''
