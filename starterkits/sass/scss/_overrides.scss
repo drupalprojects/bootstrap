@@ -190,9 +190,10 @@ ul.secondary {
   margin-top: 0;
 }
 
-// Blocks
-.block {
-  &:first-child h2.block-title {
+// Sidebar blocks.
+.region-sidebar-first,
+.region-sidebar-second {
+  .block:first-child h2.block-title {
     margin-top: 0;
   }
 }
