@@ -4,9 +4,8 @@
 # @BootstrapSetting
 
 - [Create a plugin](#create)
-- [Customize a plugin](#customize)
 - [Rebuild the cache](#rebuild)
-- [Helpful Tips](#helpful-tips)
+- [Public Methods](#methods)
 
 ## Create a plugin {#create}
 
@@ -29,16 +28,17 @@ use Drupal\bootstrap\Plugin\Setting\SettingBase;
 use Drupal\Core\Annotation\Translation;
 
 /**
- * The "THEMENAME_skip_link" theme setting.
+ * The "THEMENAME_skip_link_id" theme setting.
  *
  * @ingroup plugins_setting
  *
  * @BootstrapSetting(
- *   id = "THEMENAME_skip_link",
+ *   id = "THEMENAME_skip_link_id",
  *   type = "textfield",
  *   title = @Translation("Anchor ID for the ""skip link"""),
  *   defaultValue = "main-content",
- *   description = @Translation("Specify the HTML ID of the element that the accessible-but-hidden ""skip link"" should link to. (<a href="":link"">Read more about skip links</a>.)", arguments = { ":link"  = "http://drupal.org/node/467976" }),
+ *   description = @Translation("Specify the HTML ID of the element that the accessible-but-hidden ""skip link"" should link to. (<a href="":link"" target=""_blank"">Read more about skip links</a>.)",
+     arguments = { ":link"  = "http://drupal.org/node/467976" }),
  *   groups = {
  *     "THEMENAME" = "THEMETITLE",
  *     "accessibility" = @Translation("Accessibility"),
@@ -48,14 +48,14 @@ use Drupal\Core\Annotation\Translation;
 class SkipLink extends SettingBase {}
 ```
 
-Helpfully Bootstrap adds a global "theme" variable added to every template
+Helpfully Bootstrap adds a global `theme` variable added to every template
 in `Bootstrap::preprocess()`.
 
 This variable can now simply be called in the `html.html.twig` file with the
 following contents:
 
 ```twig
-<a href="#{{ theme.settings.THEMENAME_skip_link }}" class="visually-hidden focusable skip-link">
+<a href="#{{ theme.settings.THEMENAME_skip_link_id }}" class="visually-hidden focusable skip-link">
   {{ 'Skip to main content'|t }}
 </a>
 ```
@@ -64,85 +64,8 @@ In addition, the `page.html.twig` file will also need to be adjusted for this to
 work properly with the new anchor id.
 
 ```twig
-<a id="{{ theme.settings.THEMENAME_skip_link }}"></a>
+<a id="{{ theme.settings.THEMENAME_skip_link_id }}"></a>
 ```
-
-## Customize a plugin {#customize}
-
-Now that we covered how to create a basic `@BootstrapSetting` plugin, we can
-discuss how to customize a setting to fulfill a range of requirements.
-
-The `@BootstrapSetting` is implemented through the base class `SettingBase.php`
-which provides a variety of public methods to assist in the customization of
-a plugin.
-
-## SettingBase::alterForm
-
-The `alterForm` public method provides a way for you to alter the form state of
-the `@BootstrapSetting` configuration.
-
-For example the `CdnProvider::alterForm()` provides functionality to
-automatically create groupings for the different cdn providers as well as
-provides helpful introductory text.
-
-Another example leveraging the `RegionWells::alterForm()` is how the
-`BootstrapSetting` plugin provides configuration for specifying a class to
-apply to a Region Well. It also creates dynamic well settings for every
-defined region to really allow for fine grained customization.
-
-## SettingBase::drupalSettings
-
-The `drupalSettings` public method provides a way for you to determine whether
-a theme setting should be added to `drupalSettings`. Please note that by default
-this is set to false to prevent leaked information from being exposed.
-
-## SettingBase::getCacheTags
-
-The `getCacheTags` public method provides a way for you to add cache tags that
-when the instantiated class is modified the associated cache tags will be
-invalidated. This is incredibly useful for example for
-`CdnCustomCss::getCacheTags()` which returns an an array of `library_info`. So
-when a `CdnCustomCss` instantiated plugin changes the `library_info` cache tag
-will be invalidated automatically.
-
-```php
-public function getCacheTags() {
-  return ['library_info'];
-}
-```
-
-## SettingBase::getElement
-
-The `getElement` public method provides a way for you to retrieve the form
-element for a particular `@BootstrapSetting`. This function while similar
-to the `SettingBase::alterForm` is much more practical to use when a form needs
-to be more then slightly altered.
-
-## SettingBase::getGroup
-
-The `getGroup` public method provides a way for you to get a group that the
-`@BootstrapSetting` belongs to. You can also set properties based on the
-returned group such as which group should be open by default.
-
-## SettingBase::getGroups
-
-The `getGroups` public method simply provides a way for you to list all of the
-groups that the `@BootstrapSetting` belongs to.
-
-## SettingBase::submitForm
-
-The `submitForm` public method provides a way for you customize the form output
-based on the actual values provided to the form. For instance the
-`RegionWells::submitForm` method will extract all regions with individual
-dynamic settings by checking if `/^region_well-/` exists in any of the values.
-
-## SettingBase::validateForm
-
-The `validateForm` public method provides a way for you to validate a
-form. This can be based on the values submitted or a variety of other
-conditions. This method could, for instance, be useful when a custom cdn
-provider were to be added. The `validateForm` could check that the new cdn
-provider is the correct version and location.
 
 ## Rebuild the cache {#rebuild}
 
@@ -156,7 +79,156 @@ command line.
 
 Voilà! After this, you should have a fully functional `@BootstrapSetting` plugin!
 
-## Helpful tips {#helpful-tips}
+## Public Methods {#methods}
 
-A helpful primer on Annotation-based plugins can be found at:
-https://www.drupal.org/node/1882526
+Now that we covered how to create a basic `@BootstrapSetting` plugin, we can
+discuss how to customize a setting to fulfill a range of requirements.
+
+The `@BootstrapSetting` is implemented through the base class `SettingBase`
+which provides a variety of public methods to assist in the customization of
+a plugin.
+
+#### SettingBase::alterForm
+
+This method provides a way for you to alter the form render array as well as the
+$formState object of the `@BootstrapSetting`.
+
+For example, the CDNProvider::alterForm() provides functionality to
+automatically create groupings for the different CDN providers as well as
+providing helpful introductory text.
+
+Another more in-depth example is RegionWells::alterForm() which helps to
+provide configuration for specifying a custom "well" class to apply to a Region.
+Interestingly this plugin creates dynamic well settings for every defined region
+to assist in fine grained customization.
+
+```php
+public function alterForm(array &$form, FormStateInterface $form_state, $form_id = NULL) {
+  parent::alterForm($form, $form_state, $form_id);
+
+  $setting = $this->getElement($form, $form_state);
+
+  // Retrieve the current default values.
+  $default_values = $setting->getProperty('default_value', $this->getDefaultValue());
+
+  $wells = [
+    '' => t('None'),
+    'well' => t('.well (normal)'),
+    'well well-sm' => t('.well-sm (small)'),
+    'well well-lg' => t('.well-lg (large)'),
+  ];
+  // Create dynamic well settings for each region.
+  $regions = system_region_list($this->theme->getName());
+  foreach ($regions as $name => $title) {
+    if (in_array($name, ['page_top', 'page_bottom'])) {
+      continue;
+    }
+    $setting->{'region_well-' . $name} = [
+      '#title' => $title,
+      '#type' => 'select',
+      '#attributes' => [
+        'class' => ['input-sm'],
+      ],
+      '#options' => $wells,
+      '#default_value' => isset($default_values[$name]) ? $default_values[$name] : '',
+    ];
+  }
+}
+```
+
+#### SettingBase::drupalSettings
+
+This method provides a way for you to determine whether a theme setting should
+be added to the `drupalSettings` javascript variable. Please note that by
+default this is set to false to prevent leaked information from being exposed.
+
+```php
+public function drupalSettings() {
+  return FALSE;
+}
+```
+
+#### SettingBase::getCacheTags
+
+This method provides a way for you to add cache tags that when the instantiated
+class is modified the associated cache tags will be invalidated. This is
+incredibly useful for example with CDNCustomCss::getCacheTags() which returns an
+array of `library_info`. So when a CdnProvider::getCacheTags() instantiated
+plugin changes the `library_info` cache tag will be invalidated automatically.
+
+It is important to note that the invalidation occurs because the base theme
+loads external resources using libraries by altering the libraries it defines
+based on settings in LibraryInfo::alter().
+
+```php
+public function getCacheTags() {
+  return ['library_info'];
+}
+```
+
+#### SettingBase::getElement
+
+This method provides a way for you to retrieve the form element that was
+automatically generated by the base theme; based on the plugin definition.
+
+#### SettingBase::getGroup
+
+This method provides a way for you to retrieve the last group (fieldset /
+details form element), as defined by the groups plugin definition the setting
+lives in. You can also perform other operations such as setting properties based
+on the returned group such as which group should be open by default.
+
+#### SettingBase::getGroups
+
+This method retrieves the associative array of groups as defined in the plugin
+definition. It's keyed by the group machine name and it's value is the
+translatable label.
+
+```php
+public function getGroups() {
+  return !empty($this->pluginDefinition['groups']) ? $this->pluginDefinition['groups'] : [];
+}
+```
+
+#### SettingBase::submitForm
+
+This method provides a way for you alter the submitted values stored in the
+$formState before the setting's value is stored in configuration. This is
+performed automatically for you by the base theme.
+
+Additionally this method can also provide functionality such that after a user
+has clicked the "Save configuration" button an additional message to the user
+would be displayed based on a value.
+
+An example is illustrated below where the RegionWells::submitForm method will
+extract all regions with individual dynamic settings by checking if
+`/^region_well-/` exists in any of the values.
+
+```php
+public static function submitForm(array &$form, FormStateInterface $form_state, $form_id = NULL) {
+  $values = $form_state->getValues();
+
+  // Extract the regions from individual dynamic settings.
+  $regex = '/^region_well-/';
+  $region_wells = [];
+  foreach ($values as $key => $value) {
+    if (!preg_match($regex, $key)) {
+      continue;
+    }
+    $region_wells[preg_replace($regex, '', $key)] = $value;
+    unset($values[$key]);
+  }
+
+  // Store the new values.
+  $values['region_wells'] = $region_wells;
+  $form_state->setValues($values);
+}
+```
+
+#### SettingBase::validateForm
+
+This method provides a way for you to validate a form. This can be based on the
+values submitted or a variety of other conditions. This method could, for
+instance, be useful when a custom CDN provider were to be added. The
+`validateForm` could check that the new CDN provider is the correct version and
+the proper location has been given.

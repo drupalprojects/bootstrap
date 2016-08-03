@@ -64,4 +64,7 @@ object available to them: e.g. `$this->theme`. This will allow you to do things
 like get a theme setting very, very easily: e.g.
 `$this->theme->getSetting('button_size')`.
 
+A helpful primer on Annotation-based plugins can be found at:
+https://www.drupal.org/node/1882526
+
 [Drupal Bootstrap]: https://www.drupal.org/project/bootstrap
