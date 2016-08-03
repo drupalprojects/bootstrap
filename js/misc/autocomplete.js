@@ -94,10 +94,10 @@ Drupal.jsAC.prototype.found = function (matches) {
   });
   for (var key in matches) {
     $('<li></li>')
-      .html($('<a href="#"></a>').html(matches[key]).click(function (e) { e.preventDefault(); }))
-      .mousedown(function () { ac.select(this); })
-      .mouseover(function () { ac.highlight(this); })
-      .mouseout(function () { ac.unhighlight(this); })
+      .html($('<a href="#"></a>').html(matches[key]).on('click', function (e) { e.preventDefault(); }))
+      .on('mousedown', function () { ac.hidePopup(this); })
+      .on('mouseover', function () { ac.highlight(this); })
+      .on('mouseout', function () { ac.unhighlight(this); })
       .data('autocompleteValue', key)
       .appendTo(ul);
   }
