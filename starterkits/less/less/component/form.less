@@ -66,14 +66,15 @@
   }
 }
 
-// Use CSS for required mark.
-// Inspired from https://www.drupal.org/node/2152217.
+// Use CSS/SVG image for required mark.
+// @see https://www.drupal.org/node/2152217
+// @see https://www.drupal.org/node/2274631
 .form-required:after {
+  background-image: url(../images/required.svg);
+  background-size: 10px 7px;
   content:"";
-  background-image: url(../../required.svg);
   display: inline-block;
   line-height:1;
-  background-size: 10px 7px;
-  width: 10px;
   height: 7px;
+  width: 10px;
 }
