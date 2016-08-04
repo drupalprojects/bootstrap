@@ -464,18 +464,41 @@ class Element extends DrupalAttributes {
   }
 
   /**
-   * Renders the element.
+   * Renders the final element HTML.
    *
-   * @return \Drupal\Component\Render\MarkupInterface|string
+   * @return \Drupal\Component\Render\MarkupInterface
    *   The rendered HTML.
    */
   public function render() {
     /** @var \Drupal\Core\Render\Renderer $renderer */
-    static $renderer;
-    if (!isset($renderer)) {
-      $renderer = \Drupal::service('renderer');
-    }
+    $renderer = \Drupal::service('renderer');
     return $renderer->render($this->array);
+  }
+
+  /**
+   * Renders the final element HTML.
+   *
+   * @return \Drupal\Component\Render\MarkupInterface
+   *   The rendered HTML.
+   */
+  public function renderPlain() {
+    /** @var \Drupal\Core\Render\Renderer $renderer */
+    $renderer = \Drupal::service('renderer');
+    return $renderer->renderPlain($this->array);
+  }
+
+  /**
+   * Renders the final element HTML.
+   *
+   * (Cannot be executed within another render context.)
+   *
+   * @return \Drupal\Component\Render\MarkupInterface
+   *   The rendered HTML.
+   */
+  public function renderRoot() {
+    /** @var \Drupal\Core\Render\Renderer $renderer */
+    $renderer = \Drupal::service('renderer');
+    return $renderer->renderRoot($this->array);
   }
 
   /**
