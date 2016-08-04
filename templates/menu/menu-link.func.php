@@ -44,11 +44,7 @@ function bootstrap_menu_link(array $variables) {
       $element['#localized_options']['attributes']['data-toggle'] = 'dropdown';
     }
   }
-  // On primary navigation menu, class 'active' is not set on active menu item.
-  // @see https://drupal.org/node/1896674
-  if (($element['#href'] == $_GET['q'] || ($element['#href'] == '<front>' && drupal_is_front_page())) && (empty($element['#localized_options']['language']))) {
-    $element['#attributes']['class'][] = 'active';
-  }
+
   $output = l($element['#title'], $element['#href'], $element['#localized_options']);
   return '<li' . drupal_attributes($element['#attributes']) . '>' . $output . $sub_menu . "</li>\n";
 }
