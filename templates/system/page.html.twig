@@ -72,7 +72,7 @@
         {{ page.navigation }}
         {# .btn-navbar is used as the toggle for collapsed navbar content #}
         {% if page.navigation_collapsible %}
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
             <span class="sr-only">{{ 'Toggle navigation'|t }}</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -83,7 +83,7 @@
 
       {# Navigation (collapsible) #}
       {% if page.navigation_collapsible %}
-        <div class="navbar-collapse collapse">
+        <div id="navbar-collapse" class="navbar-collapse collapse">
           {{ page.navigation_collapsible }}
         </div>
       {% endif %}
