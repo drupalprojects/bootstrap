@@ -82,19 +82,17 @@ class SettingBase extends PluginBase implements SettingInterface {
 
       // Append additional "see" link references to the description.
       $description = (string) $group->$plugin_id->getProperty('description') ?: '';
-      /** @var \Drupal\Core\Render\Renderer $renderer */
-      $renderer = \Drupal::service('renderer');
       $links = [];
       foreach ($this->pluginDefinition['see'] as $url => $title) {
-        $link = [
+        $link = Element::createStandalone([
           '#type' => 'link',
           '#url' => Url::fromUri($url),
           '#title' => $title,
           '#attributes' => [
             'target' => '_blank',
           ],
-        ];
-        $links[] = (string) $renderer->render($link);
+        ]);
+        $links[] = (string) $link->renderPlain();
       }
       if (!empty($links)) {
         $description .= '<br>';

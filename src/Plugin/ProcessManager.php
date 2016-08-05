@@ -143,7 +143,7 @@ class ProcessManager extends PluginManager {
         '#type' => 'html_tag',
         '#tag' => 'span',
         '#attributes' => $input_group_attributes,
-        '#value' => Element::create($prefix)->render(),
+        '#value' => Element::create($prefix)->renderPlain(),
         '#weight' => -1,
       ]);
     }
@@ -152,7 +152,7 @@ class ProcessManager extends PluginManager {
         '#type' => 'html_tag',
         '#tag' => 'span',
         '#attributes' => $input_group_attributes,
-        '#value' => Element::create($suffix)->render(),
+        '#value' => Element::create($suffix)->renderPlain(),
         '#weight' => 1,
       ]);
     }
