@@ -252,13 +252,36 @@ class Element extends DrupalAttributes {
    * @param array|string $element
    *   A render array element or a string.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
+   *   A current FormState instance, if any.
    *
    * @return \Drupal\bootstrap\Utility\Element
    *   The newly created element instance.
    */
   public static function create(&$element = [], FormStateInterface $form_state = NULL) {
-    return new self($element, $form_state);
+    return $element instanceof self ? $element : new self($element, $form_state);
+  }
+
+  /**
+   * Creates a new standalone \Drupal\bootstrap\Utility\Element instance.
+   *
+   * It does not reference the original element passed. If an Element instance
+   * is passed, it will clone it so it doens't affect the original element.
+   *
+   * @param array|string|\Drupal\bootstrap\Utility\Element $element
+   *   A render array element, string or Element instance.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   A current FormState instance, if any.
+   *
+   * @return \Drupal\bootstrap\Utility\Element
+   *   The newly created element instance.
+   */
+  public static function createStandalone($element = [], FormStateInterface $form_state = NULL) {
+    // Immediately return a cloned version if element is already an Element.
+    if ($element instanceof self) {
+      return clone $element;
+    }
+    $standalone = is_object($element) ? clone $element : $element;
+    return static::create($standalone, $form_state);
   }
 
   /**
