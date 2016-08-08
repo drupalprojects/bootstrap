@@ -24,6 +24,8 @@ topic will focus on the two primarily and most common ways.
   CSS and JavaScript files served by the [jsDelivr CDN].
 - @link subtheme_less LESS Starterkit @endlink - uses the [Bootstrap Framework]
   [LESS] source files and a local [LESS] preprocessor.
+- @link subtheme_sass Sass Starterkit @endlink - uses the [Bootstrap Framework]
+  [Sass] source files and a local [Sass] preprocessor.
 
 #### Create a New Sub-theme {#create}
 
