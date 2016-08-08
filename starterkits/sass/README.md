@@ -50,7 +50,7 @@ name, using a different extension of course).
 
 #### See also:
 - @link templates Templates @endlink
-- @link theme_settings Theme Settings @endlink
+- @link subtheme_settings Theme Settings @endlink
 - @link registry Theme Registry @endlink
 
 [Bootstrap Framework]: http://getbootstrap.com
