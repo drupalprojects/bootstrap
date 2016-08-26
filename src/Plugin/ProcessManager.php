@@ -70,13 +70,6 @@ class ProcessManager extends PluginManager {
       $e->addClass('form-inline', 'wrapper_attributes');
     }
 
-    // Check for errors and set the "has_error" property flag.
-    $errors = $e->getError();
-    $e->setProperty('errors', $errors);
-    if (isset($errors) || ($e->getProperty('required') && $theme->getSetting('forms_required_has_error'))) {
-      $e->setProperty('has_error', TRUE);
-    }
-
     // Process input groups.
     if ($e->getProperty('input') && ($e->getProperty('input_group') || $e->getProperty('input_group_button'))) {
       static::processInputGroups($e, $form_state, $complete_form);
