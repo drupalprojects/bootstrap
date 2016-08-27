@@ -31,8 +31,8 @@ class Schemas extends SettingBase {
   /**
    * {@inheritdoc}
    */
-  public function alterForm(array &$form, FormStateInterface $form_state, $form_id = NULL) {
-    parent::alterForm($form, $form_state, $form_id);
+  public function alterFormElement(Element $form, FormStateInterface $form_state, $form_id = NULL) {
+    parent::alterFormElement($form, $form_state, $form_id);
 
     $updates = [];
     foreach ($this->theme->getPendingUpdates() as $version => $update) {
