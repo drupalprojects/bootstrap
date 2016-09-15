@@ -13,6 +13,7 @@ use Drupal\bootstrap\Utility\Unicode;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Extension\ThemeHandlerInterface;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * The primary class for the Drupal Bootstrap base theme.
@@ -182,29 +183,50 @@ class Bootstrap {
     // Extract the alter hook name.
     $hook = Unicode::extractHook($function, 'alter');
 
-    // Handle form alters separately.
-    if (strpos($hook, 'form') === 0) {
+    // Handle form alters as a separate plugin.
+    if (strpos($hook, 'form') === 0 && $context1 instanceof FormStateInterface) {
+      $form_state = $context1;
       $form_id = $context2;
-      if (!$form_id) {
-        $form_id = Unicode::extractHook($function, 'alter', 'form');
-      }
 
       // Due to a core bug that affects admin themes, we should not double
       // process the "system_theme_settings" form twice in the global
       // hook_form_alter() invocation.
       // @see https://drupal.org/node/943212
-      if ($context2 === 'system_theme_settings') {
+      if ($form_id === 'system_theme_settings') {
         return;
+      }
+
+      // Keep track of the form identifiers.
+      $ids = [];
+
+      // Get the build data.
+      $build_info = $form_state->getBuildInfo();
+
+      // Extract the base_form_id.
+      $base_form_id = !empty($build_info['base_form_id']) ? $build_info['base_form_id'] : FALSE;
+      if ($base_form_id) {
+        $ids[] = $base_form_id;
+      }
+
+      // If there was no provided form identifier, extract it.
+      if (!$form_id) {
+        $form_id = !empty($build_info['form_id']) ? $build_info['form_id'] : Unicode::extractHook($function, 'alter', 'form');
+      }
+      if ($form_id) {
+        $ids[] = $form_id;
       }
 
       // Retrieve a list of form definitions.
       $form_manager = new FormManager($theme);
 
-      /** @var \Drupal\bootstrap\Plugin\Form\FormInterface $form */
-      if ($form_manager->hasDefinition($form_id) && ($form = $form_manager->createInstance($form_id, ['theme' => $theme]))) {
-        $data['#submit'][] = [get_class($form), 'submitForm'];
-        $data['#validate'][] = [get_class($form), 'validateForm'];
-        $form->alterForm($data, $context1, $context2);
+      // Iterate over each form identifier and look for a possible plugin.
+      foreach ($ids as $id) {
+        /** @var \Drupal\bootstrap\Plugin\Form\FormInterface $form */
+        if ($form_manager->hasDefinition($id) && ($form = $form_manager->createInstance($id, ['theme' => $theme]))) {
+          $data['#submit'][] = [get_class($form), 'submitForm'];
+          $data['#validate'][] = [get_class($form), 'validateForm'];
+          $form->alterForm($data, $form_state, $form_id);
+        }
       }
     }
     // Process hook alter normally.
