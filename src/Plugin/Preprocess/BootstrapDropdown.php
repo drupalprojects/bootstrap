@@ -85,7 +85,10 @@ class BootstrapDropdown extends PreprocessBase implements PreprocessInterface {
       }
 
       $variables->items = array_values($variables->links);
-      $variables->split = TRUE;
+
+      // Determine if toggle should be a split button.
+      $variables->split = count($variables->links) > 1;
+
       unset($variables->links);
     }
   }
