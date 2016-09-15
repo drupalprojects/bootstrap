@@ -8,8 +8,8 @@ namespace Drupal\bootstrap\Plugin\Alter;
 
 use Drupal\bootstrap\Annotation\BootstrapAlter;
 use Drupal\bootstrap\Plugin\PluginBase;
-use Drupal\bootstrap\Utility\Element;
 use Drupal\bootstrap\Utility\Unicode;
+use Drupal\bootstrap\Utility\Variables;
 
 /**
  * Implements hook_theme_suggestions_alter().
@@ -23,7 +23,9 @@ class ThemeSuggestions extends PluginBase implements AlterInterface {
   /**
    * {@inheritdoc}
    */
-  public function alter(&$suggestions, &$variables = NULL, &$hook = NULL) {
+  public function alter(&$suggestions, &$context1 = NULL, &$hook = NULL) {
+    $variables = Variables::create($context1);
+
     switch ($hook) {
       case 'links':
         if (Unicode::strpos($variables['theme_hook_original'], 'links__dropbutton') !== FALSE) {
@@ -38,20 +40,21 @@ class ThemeSuggestions extends PluginBase implements AlterInterface {
 
       case 'fieldset':
       case 'details':
+      if ($variables->element && $variables->element->getProperty('bootstrap_panel', TRUE)) {
         $suggestions[] = 'bootstrap_panel';
+      }
         break;
 
       case 'input':
-        $element = Element::create($variables['element']);
-        if ($element->isButton()) {
-          if ($element->getProperty('dropbutton')) {
+        if ($variables->element && $variables->element->isButton()) {
+          if ($variables->element->getProperty('dropbutton')) {
             $suggestions[] = 'input__button__dropdown';
           }
           else {
-            $suggestions[] = $element->getProperty('split') ? 'input__button__split' : 'input__button';
+            $suggestions[] = $variables->element->getProperty('split') ? 'input__button__split' : 'input__button';
           }
         }
-        elseif (!$element->isType(['checkbox', 'hidden', 'radio'])) {
+        elseif ($variables->element && !$variables->element->isType(['checkbox', 'hidden', 'radio'])) {
           $suggestions[] = 'input__form_control';
         }
         break;
