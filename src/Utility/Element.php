@@ -402,7 +402,7 @@ class Element extends DrupalAttributes {
    *   Whether the given property on the element is empty.
    */
   public function isPropertyEmpty($name) {
-    return $this->hasProperty($name) && !empty($this->getProperty($name));
+    return $this->hasProperty($name) && empty($this->getProperty($name));
   }
 
   /**
