@@ -40,9 +40,9 @@ class ThemeSuggestions extends PluginBase implements AlterInterface {
 
       case 'fieldset':
       case 'details':
-      if ($variables->element && $variables->element->getProperty('bootstrap_panel', TRUE)) {
-        $suggestions[] = 'bootstrap_panel';
-      }
+        if ($variables->element && $variables->element->getProperty('bootstrap_panel', TRUE)) {
+          $suggestions[] = 'bootstrap_panel';
+        }
         break;
 
       case 'input':
