@@ -406,6 +406,24 @@ class Element extends DrupalAttributes {
   }
 
   /**
+   * Checks if a value is a render array.
+   *
+   * @param mixed $value
+   *   The value to check.
+   *
+   * @return bool
+   *   TRUE if the given value is a render array, otherwise FALSE.
+   */
+  public static function isRenderArray($value) {
+    return is_array($value) && (isset($value['#type']) ||
+      isset($value['#theme']) || isset($value['#theme_wrappers']) ||
+      isset($value['#markup']) || isset($value['#attached']) ||
+      isset($value['#cache']) || isset($value['#lazy_builder']) ||
+      isset($value['#create_placeholder']) || isset($value['#pre_render']) ||
+      isset($value['#post_render']) || isset($value['#process']));
+  }
+
+  /**
    * Checks if the element is a specific type of element.
    *
    * @param string|array $type

@@ -28,10 +28,10 @@ class Variables extends DrupalAttributes {
    */
   public function __construct(array &$variables) {
     $this->array = &$variables;
-    if (isset($variables['element'])) {
+    if (isset($variables['element']) && Element::isRenderArray($variables['element'])) {
       $this->element = Element::create($variables['element']);
     }
-    elseif (isset($variables['elements'])) {
+    elseif (isset($variables['elements']) && Element::isRenderArray($variables['elements'])) {
       $this->element = Element::create($variables['elements']);
     }
   }
