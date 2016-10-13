@@ -265,7 +265,7 @@ class Element extends DrupalAttributes {
    * Creates a new standalone \Drupal\bootstrap\Utility\Element instance.
    *
    * It does not reference the original element passed. If an Element instance
-   * is passed, it will clone it so it doens't affect the original element.
+   * is passed, it will clone it so it doesn't affect the original element.
    *
    * @param array|string|\Drupal\bootstrap\Utility\Element $element
    *   A render array element, string or Element instance.
