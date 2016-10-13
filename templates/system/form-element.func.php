@@ -156,7 +156,7 @@ function bootstrap_form_element(&$variables) {
       '#attributes' => array(
         'class' => array('help-block'),
       ),
-      '#weight' => isset($element['#description_display']) && $element['#description_display'] === 'before' ? 0 : 2,
+      '#weight' => isset($element['#description_display']) && $element['#description_display'] === 'before' ? 0 : 20,
       0 => array('#markup' => filter_xss_admin($element['#description'])),
     );
   }
