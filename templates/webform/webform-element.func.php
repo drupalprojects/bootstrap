@@ -14,7 +14,7 @@ function bootstrap_webform_element(&$variables) {
   $element = &$variables['element'];
 
   // Inline title.
-  if ($element['#title_display'] === 'inline') {
+  if (isset($element['#title_display']) && $element['#title_display'] === 'inline') {
     $element['#title_display'] = 'before';
     $element['#wrapper_attributes']['class'][] = 'form-inline';
   }
