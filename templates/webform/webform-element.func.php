@@ -29,7 +29,6 @@ function bootstrap_webform_element(&$variables) {
     $element['#input_group'] = TRUE;
   }
 
-  // Render with bootstrap_form_element().
-  bootstrap_include('bootstrap', 'templates/system/form-element.func.php');
-  return bootstrap_form_element($variables);
+  // Render as a normal "form_element" theme hook.
+  return theme('form_element', $variables);
 }
