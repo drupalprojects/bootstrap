@@ -340,6 +340,7 @@ class Bootstrap {
           t('Submit')->render()             => 'primary',
           t('Search')->render()             => 'primary',
           t('Settings')->render()           => 'primary',
+          t('Log in')->render()             => 'primary',
 
           // Danger class.
           t('Delete')->render()             => 'danger',
@@ -660,6 +661,7 @@ class Bootstrap {
           t('Search')->render()     => 'search',
           t('Upload')->render()     => 'upload',
           t('Preview')->render()    => 'eye-open',
+          t('Log in')->render()     => 'log-in',
         ],
       ];
 
