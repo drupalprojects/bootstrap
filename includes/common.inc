@@ -1058,6 +1058,7 @@ function _bootstrap_colorize_text($string, $default = '') {
         t('Filter')             => 'primary',
         t('Submit')             => 'primary',
         t('Search')             => 'primary',
+        t('Log in')             => 'primary',
 
         // Success class.
         t('Add')                => 'success',
@@ -1156,6 +1157,7 @@ function _bootstrap_iconize_text($string, $default = '') {
         t('Delete')     => 'trash',
         t('Remove')     => 'trash',
         t('Upload')     => 'upload',
+        t('Log In')     => 'log-in',
       ),
     );
 
