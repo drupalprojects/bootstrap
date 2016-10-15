@@ -303,6 +303,25 @@ class Element extends DrupalAttributes {
   }
 
   /**
+   * Retrieves a context value from the #context element property, if any.
+   *
+   * @param string $name
+   *   The name of the context key to retrieve.
+   * @param mixed $default
+   *   Optional. The default value to use if the context $name isn't set.
+   *
+   * @return mixed|NULL
+   *   The context value or the $default value if not set.
+   */
+  public function &getContext($name, $default = NULL) {
+    $context = &$this->getProperty('context', []);
+    if (!isset($context[$name])) {
+      $context[$name] = $default;
+    }
+    return $context[$name];
+  }
+
+  /**
    * Returns the error message filed against the given form element.
    *
    * Form errors higher up in the form structure override deeper errors as well

@@ -50,6 +50,30 @@ class Variables extends DrupalAttributes {
   }
 
   /**
+   * Retrieves a context value from the variables array or its element, if any.
+   *
+   * @param string $name
+   *   The name of the context key to retrieve.
+   * @param mixed $default
+   *   Optional. The default value to use if the context $name isn't set.
+   *
+   * @return mixed|NULL
+   *   The context value or the $default value if not set.
+   */
+  public function &getContext($name, $default = NULL) {
+    $context = &$this->offsetGet($this->attributePrefix . 'context', []);
+    if (!isset($context[$name])) {
+      // If there is no context on the variables array but there is an element
+      // present, proxy the method to the element.
+      if ($this->element) {
+        return $this->element->getContext($name, $default);
+      }
+      $context[$name] = $default;
+    }
+    return $context[$name];
+  }
+
+  /**
    * Maps an element's properties to the variables attributes array.
    *
    * @param array $map
