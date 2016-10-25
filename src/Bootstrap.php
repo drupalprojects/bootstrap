@@ -9,6 +9,7 @@ namespace Drupal\bootstrap;
 use Drupal\bootstrap\Plugin\AlterManager;
 use Drupal\bootstrap\Plugin\FormManager;
 use Drupal\bootstrap\Plugin\PreprocessManager;
+use Drupal\bootstrap\Utility\Element;
 use Drupal\bootstrap\Utility\Unicode;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
@@ -293,8 +294,9 @@ class Bootstrap {
   /**
    * Matches a Bootstrap class based on a string value.
    *
-   * @param string $string
-   *   The string to match classes against.
+   * @param string|array $value
+   *   The string to match against to determine the class. Passed by reference
+   *   in case it is a render array that needs to be rendered and typecast.
    * @param string $default
    *   The default class to return if no match is found.
    *
@@ -302,16 +304,17 @@ class Bootstrap {
    *   The Bootstrap class matched against the value of $haystack or $default
    *   if no match could be made.
    */
-  public static function cssClassFromString($string, $default = '') {
+  public static function cssClassFromString(&$value, $default = '') {
     static $lang;
     if (!isset($lang)) {
       $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
     }
 
-    $theme = Bootstrap::getTheme();
+    $theme = static::getTheme();
     $texts = $theme->getCache('cssClassFromString', [$lang]);
 
-    $string = (string) $string;
+    // Ensure it's a string value that was passed.
+    $string = static::toString($value);
 
     if ($texts->isEmpty()) {
       $data = [
@@ -615,8 +618,9 @@ class Bootstrap {
   /**
    * Matches a Bootstrap Glyphicon based on a string value.
    *
-   * @param string $string
-   *   The string to match classes against.
+   * @param string $value
+   *   The string to match against to determine the icon. Passed by reference
+   *   in case it is a render array that needs to be rendered and typecast.
    * @param array $default
    *   The default render array to return if no match is found.
    *
@@ -624,16 +628,17 @@ class Bootstrap {
    *   The Bootstrap icon matched against the value of $haystack or $default if
    *   no match could be made.
    */
-  public static function glyphiconFromString($string, $default = []) {
+  public static function glyphiconFromString(&$value, $default = []) {
     static $lang;
     if (!isset($lang)) {
       $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
     }
 
-    $theme = Bootstrap::getTheme();
+    $theme = static::getTheme();
     $texts = $theme->getCache('glyphiconFromString', [$lang]);
 
-    $string = (string) $string;
+    // Ensure it's a string value that was passed.
+    $string = static::toString($value);
 
     if ($texts->isEmpty()) {
       $data = [
@@ -1078,6 +1083,19 @@ class Bootstrap {
         $class->preprocess($variables, $hook, $info);
       }
     }
+  }
+
+  /**
+   * Ensures a value is typecast to a string, rendering an array if necessary.
+   *
+   * @param string|array $value
+   *   The value to typecast, passed by reference.
+   *
+   * @return string
+   *   The typecast string value.
+   */
+  public static function toString(&$value) {
+    return (string) (Element::isRenderArray($value) ? Element::create($value)->renderPlain() : $value);
   }
 
 }
