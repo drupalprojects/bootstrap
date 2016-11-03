@@ -379,16 +379,16 @@ class Bootstrap {
 
     // Iterate over the array.
     foreach ($texts as $pattern => $strings) {
-      foreach ($strings as $value => $class) {
+      foreach ($strings as $text => $class) {
         switch ($pattern) {
           case 'matches':
-            if ($string === $value) {
+            if ($string === $text) {
               return $class;
             }
             break;
 
           case 'contains':
-            if (strpos(Unicode::strtolower($string), Unicode::strtolower($value)) !== FALSE) {
+            if (strpos(Unicode::strtolower($string), Unicode::strtolower($text)) !== FALSE) {
               return $class;
             }
             break;
@@ -680,16 +680,16 @@ class Bootstrap {
 
     // Iterate over the array.
     foreach ($texts as $pattern => $strings) {
-      foreach ($strings as $value => $icon) {
+      foreach ($strings as $text => $icon) {
         switch ($pattern) {
           case 'matches':
-            if ($string === $value) {
+            if ($string === $text) {
               return self::glyphicon($icon, $default);
             }
             break;
 
           case 'contains':
-            if (strpos(Unicode::strtolower($string), Unicode::strtolower($value)) !== FALSE) {
+            if (strpos(Unicode::strtolower($string), Unicode::strtolower($text)) !== FALSE) {
               return self::glyphicon($icon, $default);
             }
             break;
