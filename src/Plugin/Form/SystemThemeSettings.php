@@ -103,7 +103,7 @@ class SystemThemeSettings extends FormBase implements FormInterface {
     $theme = isset($build_info['args'][0]) ? Bootstrap::getTheme($build_info['args'][0]) : FALSE;
 
     // Do not continue if the theme is not Bootstrap specific.
-    if (!$theme || !$theme->subthemeOf('bootstrap')) {
+    if (!$theme || !$theme->isBootstrap()) {
       unset($form['#submit'][0]);
       unset($form['#validate'][0]);
     }

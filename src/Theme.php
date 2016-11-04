@@ -58,6 +58,13 @@ class Theme {
   const IGNORE_TEMPLATES = 0x16;
 
   /**
+   * Flag indicating if the theme is Bootstrap based.
+   *
+   * @var bool
+   */
+  protected $bootstrap;
+
+  /**
    * The current theme info.
    *
    * @var array
@@ -113,9 +120,11 @@ class Theme {
     $this->themeHandler = $theme_handler;
     $this->themes = $this->themeHandler->listInfo();
     $this->info = isset($this->themes[$this->name]->info) ? $this->themes[$this->name]->info : [];
+    $this->bootstrap = $this->subthemeOf('bootstrap');
 
-    // Only install the theme if there is no schemas currently set.
-    if (!$this->getSetting('schemas')) {
+    // Only install the theme if it's Bootstrap based and there are no schemas
+    // currently set.
+    if ($this->isBootstrap() && !$this->getSetting('schemas')) {
       try {
         $this->install();
       }
@@ -160,6 +169,11 @@ class Theme {
    *   The theme settings for drupalSettings.
    */
   public function drupalSettings() {
+    // Immediately return if theme is not Bootstrap based.
+    if (!$this->isBootstrap()) {
+      return [];
+    }
+
     $cache = $this->getCache('drupalSettings');
     $drupal_settings = $cache->getAll();
     if (!$drupal_settings) {
@@ -356,22 +370,27 @@ class Theme {
    *   An array of update plugin objects.
    */
   public function getPendingUpdates() {
-    $current_theme = $this->getName();
     $pending = [];
-    $schemas = $this->getSetting('schemas', []);
-    foreach ($this->getAncestry() as $ancestor) {
-      $ancestor_name = $ancestor->getName();
-      if (!isset($schemas[$ancestor_name])) {
-        $schemas[$ancestor_name] = \Drupal::CORE_MINIMUM_SCHEMA_VERSION;
-        $this->setSetting('schemas', $schemas);
-      }
-      $pending_updates = $ancestor->getUpdateManager()->getPendingUpdates($current_theme === $ancestor_name);
-      foreach ($pending_updates as $schema => $update) {
-        if ((int) $schema > (int) $schemas[$ancestor_name]) {
-          $pending[] = $update;
+
+    // Only continue if the theme is Bootstrap based.
+    if ($this->isBootstrap()) {
+      $current_theme = $this->getName();
+      $schemas = $this->getSetting('schemas', []);
+      foreach ($this->getAncestry() as $ancestor) {
+        $ancestor_name = $ancestor->getName();
+        if (!isset($schemas[$ancestor_name])) {
+          $schemas[$ancestor_name] = \Drupal::CORE_MINIMUM_SCHEMA_VERSION;
+          $this->setSetting('schemas', $schemas);
+        }
+        $pending_updates = $ancestor->getUpdateManager()->getPendingUpdates($current_theme === $ancestor_name);
+        foreach ($pending_updates as $schema => $update) {
+          if ((int) $schema > (int) $schemas[$ancestor_name]) {
+            $pending[] = $update;
+          }
         }
       }
     }
+
     return $pending;
   }
 
@@ -385,10 +404,13 @@ class Theme {
    *   A provider instance or FALSE if there is no provider.
    */
   public function getProvider($provider = NULL) {
-    $provider = $provider ?: $this->getSetting('cdn_provider');
-    $provider_manager = new ProviderManager($this);
-    if ($provider_manager->hasDefinition($provider)) {
-      return $provider_manager->createInstance($provider, ['theme' => $this]);
+    // Only continue if the theme is Bootstrap based.
+    if ($this->isBootstrap()) {
+      $provider = $provider ?: $this->getSetting('cdn_provider');
+      $provider_manager = new ProviderManager($this);
+      if ($provider_manager->hasDefinition($provider)) {
+        return $provider_manager->createInstance($provider, ['theme' => $this]);
+      }
     }
     return FALSE;
   }
@@ -401,13 +423,18 @@ class Theme {
    */
   public function getProviders() {
     $providers = [];
-    $provider_manager = new ProviderManager($this);
-    foreach (array_keys($provider_manager->getDefinitions()) as $provider) {
-      if ($provider === 'none') {
-        continue;
+
+    // Only continue if the theme is Bootstrap based.
+    if ($this->isBootstrap()) {
+      $provider_manager = new ProviderManager($this);
+      foreach (array_keys($provider_manager->getDefinitions()) as $provider) {
+        if ($provider === 'none') {
+          continue;
+        }
+        $providers[$provider] = $provider_manager->createInstance($provider, ['theme' => $this]);
       }
-      $providers[$provider] = $provider_manager->createInstance($provider, ['theme' => $this]);
     }
+
     return $providers;
   }
 
@@ -442,10 +469,15 @@ class Theme {
    */
   public function getSettingPlugins() {
     $settings = [];
-    $setting_manager = new SettingManager($this);
-    foreach (array_keys($setting_manager->getDefinitions()) as $setting) {
-      $settings[$setting] = $setting_manager->createInstance($setting);
+
+    // Only continue if the theme is Bootstrap based.
+    if ($this->isBootstrap()) {
+      $setting_manager = new SettingManager($this);
+      foreach (array_keys($setting_manager->getDefinitions()) as $setting) {
+        $settings[$setting] = $setting_manager->createInstance($setting);
+      }
     }
+
     return $settings;
   }
 
@@ -477,9 +509,15 @@ class Theme {
   /**
    * Retrieves the update plugin manager for the theme.
    *
-   * @return \Drupal\bootstrap\Plugin\UpdateManager
+   * @return \Drupal\bootstrap\Plugin\UpdateManager|FALSE
+   *   The Update plugin manager or FALSE if theme is not Bootstrap based.
    */
   public function getUpdateManager() {
+    // Immediately return if theme is not Bootstrap based.
+    if (!$this->isBootstrap()) {
+      return FALSE;
+    }
+
     if (!$this->updateManager) {
       $this->updateManager = new UpdateManager($this);
     }
@@ -534,12 +572,27 @@ class Theme {
   /**
    * Installs a Bootstrap based theme.
    */
-  final protected function install() {
+  protected function install() {
+    // Immediately return if theme is not Bootstrap based.
+    if (!$this->isBootstrap()) {
+      return;
+    }
+
     $schemas = [];
     foreach ($this->getAncestry() as $ancestor) {
       $schemas[$ancestor->getName()] = $ancestor->getUpdateManager()->getLatestSchema();
     }
     $this->setSetting('schemas', $schemas);
+  }
+
+  /**
+   * Indicates whether the theme is bootstrap based.
+   *
+   * @return bool
+   *   TRUE or FALSE
+   */
+  public function isBootstrap() {
+    return $this->bootstrap;
   }
 
   /**

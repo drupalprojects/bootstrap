@@ -177,7 +177,7 @@ class Bootstrap {
     }
 
     // Immediately return if the active theme is not Bootstrap based.
-    if (!$theme->subthemeOf('bootstrap')) {
+    if (!$theme->isBootstrap()) {
       return;
     }
 
