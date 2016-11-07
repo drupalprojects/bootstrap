@@ -34,7 +34,7 @@ class SystemThemeSettings extends FormBase implements FormInterface {
     $this->createGroups($form, $form_state);
 
     // Iterate over all setting plugins and add them to the form.
-    foreach ($theme->getSettingPlugins() as $setting) {
+    foreach ($theme->getSettingPlugin() as $setting) {
       $setting->alterForm($form->getArray(), $form_state);
     }
   }
@@ -126,7 +126,7 @@ class SystemThemeSettings extends FormBase implements FormInterface {
 
     // Iterate over all setting plugins and manually save them since core's
     // process is severely limiting and somewhat broken.
-    foreach ($theme->getSettingPlugins() as $name => $setting) {
+    foreach ($theme->getSettingPlugin() as $name => $setting) {
       // Allow the setting to participate in the form submission process.
       // Must call the "submitForm" method in case any setting actually uses it.
       // It should, in turn, invoke "submitFormElement", if the setting that
@@ -177,7 +177,7 @@ class SystemThemeSettings extends FormBase implements FormInterface {
     }
 
     // Iterate over all setting plugins and allow them to participate.
-    foreach ($theme->getSettingPlugins() as $setting) {
+    foreach ($theme->getSettingPlugin() as $setting) {
       // Allow the setting to participate in the form validation process.
       // Must call the "validateForm" method in case any setting actually uses it.
       // It should, in turn, invoke "validateFormElement", if the setting that

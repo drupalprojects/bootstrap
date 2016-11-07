@@ -177,7 +177,7 @@ class Theme {
     $cache = $this->getCache('drupalSettings');
     $drupal_settings = $cache->getAll();
     if (!$drupal_settings) {
-      foreach ($this->getSettingPlugins() as $name => $setting) {
+      foreach ($this->getSettingPlugin() as $name => $setting) {
         if ($setting->drupalSettings()) {
           $drupal_settings[$name] = TRUE;
         }
@@ -462,12 +462,17 @@ class Theme {
   }
 
   /**
-   * Retrieves the theme's setting plugin instances.
+   * Retrieves a theme's setting plugin instance(s).
    *
-   * @return \Drupal\bootstrap\Plugin\Setting\SettingInterface[]
-   *   An associative array of setting objects, keyed by their name.
+   * @param string $name
+   *   Optional. The name of a specific setting plugin instance to return.
+   *
+   * @return \Drupal\bootstrap\Plugin\Setting\SettingInterface|\Drupal\bootstrap\Plugin\Setting\SettingInterface[]|NULL
+   *   If $name was provided, it will either return a specific setting plugin
+   *   instance or NULL if not set. If $name was omitted it will return an array
+   *   of setting plugin instances, keyed by their name.
    */
-  public function getSettingPlugins() {
+  public function getSettingPlugin($name = NULL) {
     $settings = [];
 
     // Only continue if the theme is Bootstrap based.
@@ -478,7 +483,26 @@ class Theme {
       }
     }
 
+    // Return a specific setting plugin.
+    if (isset($name)) {
+      return isset($settings[$name]) ? $settings[$name] : NULL;
+    }
+
+    // Return all setting plugins.
     return $settings;
+  }
+
+  /**
+   * Retrieves the theme's setting plugin instances.
+   *
+   * @return \Drupal\bootstrap\Plugin\Setting\SettingInterface[]
+   *   An associative array of setting objects, keyed by their name.
+   *
+   * @deprecated Will be removed in a future release. Use \Drupal\bootstrap\Theme::getSettingPlugin instead.
+   */
+  public function getSettingPlugins() {
+    Bootstrap::deprecated();
+    return $this->getSettingPlugin();
   }
 
   /**

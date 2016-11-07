@@ -132,6 +132,13 @@ class SettingBase extends PluginBase implements SettingInterface {
   /**
    * {@inheritdoc}
    */
+  public function getOptions() {
+    return isset($this->pluginDefinition['options']) ? (array) $this->pluginDefinition['options'] : [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getSettingElement(Element $form, FormStateInterface $form_state) {
     // Construct the group elements.
     $group = $this->getGroupElement($form, $form_state);

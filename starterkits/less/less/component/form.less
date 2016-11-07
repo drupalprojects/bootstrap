@@ -80,6 +80,13 @@
 }
 
 // Form action buttons.
-.form-actions .btn {
-  margin-right: 10px;
+.form-actions {
+  .btn, .btn-group {
+    margin-right: 10px;
+  }
+  .btn-group {
+    .btn {
+      margin-right: 0;
+    }
+  }
 }

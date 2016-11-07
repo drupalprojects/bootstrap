@@ -101,6 +101,14 @@ interface SettingInterface extends PluginInspectionInterface, FormInterface {
   public function getElement(array &$form, FormStateInterface $form_state);
 
   /**
+   * Retrieves the settings options, if set.
+   *
+   * @return array
+   *   An array of options.
+   */
+  public function getOptions();
+
+  /**
    * Retrieves the form element for the setting.
    *
    * @param \Drupal\bootstrap\Utility\Element $form
