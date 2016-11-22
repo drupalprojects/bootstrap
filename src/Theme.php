@@ -14,6 +14,8 @@ use Drupal\bootstrap\Utility\Storage;
 use Drupal\bootstrap\Utility\StorageItem;
 use Drupal\Core\Extension\Extension;
 use Drupal\Core\Extension\ThemeHandlerInterface;
+use Drupal\Core\Site\Settings;
+use Drupal\Core\Url;
 
 /**
  * Defines a theme object.
@@ -65,11 +67,44 @@ class Theme {
   protected $bootstrap;
 
   /**
+   * Flag indicating if the theme is in "development" mode.
+   *
+   * This property can only be set via `settings.local.php`:
+   *
+   * @code
+   * $settings['theme.dev'] = TRUE;
+   * @endcode
+   *
+   * @var bool
+   */
+  protected $dev;
+
+  /**
    * The current theme info.
    *
    * @var array
    */
   protected $info;
+
+  /**
+   * A URL for where a livereload instance is listening, if set.
+   *
+   * This property can only be set via `settings.local.php`:
+   *
+   * @code
+   * // Enable default value: //127.0.0.1:35729/livereload.js.
+   * $settings['theme.livereload'] = TRUE;
+   *
+   * // Or, set just the port number: //127.0.0.1:12345/livereload.js.
+   * $settings['theme.livereload'] = 12345;
+   *
+   * // Or, Set an explicit URL.
+   * $settings['theme.livereload'] = '//127.0.0.1:35729/livereload.js';
+   * @endcode
+   *
+   * @var string
+   */
+  protected $livereload;
 
   /**
    * The theme machine name.
@@ -115,6 +150,34 @@ class Theme {
    *   The theme handler object.
    */
   public function __construct(Extension $theme, ThemeHandlerInterface $theme_handler) {
+    // Determine if "development mode" is set.
+    $this->dev = !!Settings::get('theme.dev');
+
+    // Determine the URL for livereload, if set.
+    $this->livereload = '';
+    if ($livereload = Settings::get('theme.livereload')) {
+      // If TRUE, then set the port to the default used by grunt-contrib-watch.
+      if ($livereload === TRUE) {
+        $livereload = '//127.0.0.1:35729/livereload.js';
+      }
+      // If an integer, assume it's a port.
+      else if (is_int($livereload)) {
+        $livereload = "//127.0.0.1:$livereload/livereload.js";
+      }
+      // If it's scalar, attempt to parse the URL.
+      elseif (is_scalar($livereload)) {
+        try {
+          $livereload = Url::fromUri($livereload)->toString();
+        }
+        catch (\Exception $e) {
+          $livereload = '';
+        }
+      }
+
+      // Typecast livereload URL to a string.
+      $this->livereload = "$livereload" ?: '';
+    }
+
     $this->name = $theme->getName();
     $this->theme = $theme;
     $this->themeHandler = $theme_handler;
@@ -617,6 +680,29 @@ class Theme {
    */
   public function isBootstrap() {
     return $this->bootstrap;
+  }
+
+  /**
+   * Indicates whether the theme is in "development mode".
+   *
+   * @return bool
+   *   TRUE or FALSE
+   *
+   * @see \Drupal\bootstrap\Theme::dev
+   */
+  public function isDev() {
+    return $this->dev;
+  }
+
+  /**
+   * Returns the livereload URL set, if any.
+   *
+   * @return string
+   *
+   * @see \Drupal\bootstrap\Theme::livereload
+   */
+  public function livereloadUrl() {
+    return $this->livereload;
   }
 
   /**

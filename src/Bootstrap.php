@@ -257,22 +257,22 @@ class Bootstrap {
 
   /**
    * Returns the autoload fix include path.
-   * 
+   *
    * This method assists class based callbacks that normally do not work.
-   * 
+   *
    * If you notice that your class based callback is never invoked, you may try
    * using this helper method as an "include" or "file" for your callback, if
    * the callback metadata supports such an option.
-   * 
+   *
    * Depending on when or where a callback is invoked during a request, such as
    * an ajax or batch request, the theme handler may not yet be fully
    * initialized.
-   * 
+   *
    * Typically there is little that can be done about this "issue" from core.
    * It must balance the appropriate level that should be bootstrapped along
    * with common functionality. Cross-request class based callbacks are not
    * common in themes.
-   * 
+   *
    * When this file is included, it will attempt to jump start this process.
    *
    * Please keep in mind, that it is merely an attempt and does not guarantee
@@ -283,7 +283,7 @@ class Bootstrap {
    * @see system_list
    * @see system_register()
    * @see drupal_classloader_register()
-   * 
+   *
    * @return string
    *   The autoload fix include path, relative to Drupal root.
    */
@@ -1067,6 +1067,8 @@ class Bootstrap {
     // @see https://www.drupal.org/node/2630870
     if (!isset($variables['theme'])) {
       $variables['theme'] = $theme->getInfo();
+      $variables['theme']['dev'] = $theme->isDev();
+      $variables['theme']['livereload'] = $theme->livereloadUrl();
       $variables['theme']['name'] = $theme->getName();
       $variables['theme']['path'] = $theme->getPath();
       $variables['theme']['title'] = $theme->getTitle();
