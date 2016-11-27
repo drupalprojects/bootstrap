@@ -1007,6 +1007,24 @@ class Bootstrap {
   }
 
   /**
+   * Determines if the "cache_context.url.path.is_front" service exists.
+   *
+   * @return bool
+   *   TRUE or FALSE
+   *
+   * @see \Drupal\bootstrap\Bootstrap::isFront
+   * @see \Drupal\bootstrap\Bootstrap::preprocess
+   * @see https://www.drupal.org/node/2829588
+   */
+  public static function hasIsFrontCacheContext() {
+    static $has_is_front_cache_context;
+    if (!isset($has_is_front_cache_context)) {
+      $has_is_front_cache_context = \Drupal::getContainer()->has('cache_context.url.path.is_front');
+    }
+    return $has_is_front_cache_context;
+  }
+
+  /**
    * Initializes the active theme.
    */
   final public static function initialize() {
@@ -1030,6 +1048,32 @@ class Bootstrap {
   }
 
   /**
+   * Determines if the current path is the "front" page.
+   *
+   * Note: this will not return TRUE if there is not a proper
+   * "cache_context.url.path.is_front" service implemented.
+   *
+   * @return bool
+   *   TRUE or FALSE
+   *
+   * @see \Drupal\bootstrap\Bootstrap::hasIsFrontCacheContext
+   * @see \Drupal\bootstrap\Bootstrap::preprocess
+   * @see https://www.drupal.org/node/2829588
+   */
+  public static function isFront() {
+    static $is_front;
+    if (!isset($is_front)) {
+      try {
+        $is_front = static::hasIsFrontCacheContext() ? \Drupal::service('path.matcher')->isFrontPage() : FALSE;
+      }
+      catch (\Exception $e) {
+        $is_front = FALSE;
+      }
+    }
+    return $is_front;
+  }
+
+  /**
    * Preprocess theme hook variables.
    *
    * @param array $variables
@@ -1047,6 +1091,15 @@ class Bootstrap {
     static $preprocess_manager;
     if (!isset($preprocess_manager)) {
       $preprocess_manager = new PreprocessManager($theme);
+    }
+
+    // Adds a global "is_front" variable back to all templates.
+    // @see https://www.drupal.org/node/2829585
+    if (!isset($variables['is_front'])) {
+      $variables['is_front'] = static::isFront();
+      if (static::hasIsFrontCacheContext()) {
+        $variables['#cache']['contexts'][] = 'url.path.is_front';
+      }
     }
 
     // Ensure that any default theme hook variables exist. Due to how theme
