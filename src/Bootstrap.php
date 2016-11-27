@@ -1050,8 +1050,15 @@ class Bootstrap {
   /**
    * Determines if the current path is the "front" page.
    *
-   * Note: this will not return TRUE if there is not a proper
-   * "cache_context.url.path.is_front" service implemented.
+   * *Note:* This method will not return `TRUE` if there is not a proper
+   * "cache_context.url.path.is_front" service defined.
+   *
+   * *Note:* If using this method in preprocess/render array logic, the proper
+   * #cache context must also be defined:
+   *
+   * ```php
+   * $variables['#cache']['contexts'][] = 'url.path.is_front';
+   * ```
    *
    * @return bool
    *   TRUE or FALSE
