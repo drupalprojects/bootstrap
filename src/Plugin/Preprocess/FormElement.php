@@ -23,8 +23,8 @@ class FormElement extends PreprocessBase implements PreprocessInterface {
    * {@inheritdoc}
    */
   public function preprocessElement(Element $element, Variables $variables) {
-    // Set errors flag.
-    $variables['errors'] = $element->hasProperty('has_error');
+    // Set has_error flag.
+    $variables['has_error'] = $element->getProperty('has_error');
 
     if ($element->getProperty('autocomplete_route_name')) {
       $variables['is_autocomplete'] = TRUE;
