@@ -47,7 +47,9 @@ class FormElement extends PreprocessBase implements PreprocessInterface {
       $label = Element::create($variables['label']);
       $children = &$label->getProperty('children', '');
       $children .= $variables['children'];
-      unset($variables['children']);
+      if ($label->getProperty('title')) {
+        unset($variables['children']);
+      }
 
       // Inform label if it is in checkbox/radio context.
       $label->setProperty('is_checkbox', $checkbox);
