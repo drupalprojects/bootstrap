@@ -45,14 +45,9 @@ implemented because of either extremely high usage or the fact it was designed
 explicitly for use with this base theme and has maintainers in both projects.
 
 **Supported modules:**
-- [Admin Menu](https://www.drupal.org/project/admin_menu)
-- [Bootstrap Core](https://www.drupal.org/project/bootstrap_core)
-- [jQuery Update](https://www.drupal.org/project/jquery_update)
-- [Icon API](https://www.drupal.org/project/icon)
-- [Picture](https://www.drupal.org/project/picture)
-- [Views](https://www.drupal.org/project/picture) _(partial support)_
-- [Webform](https://www.drupal.org/project/webform) _(partial support)_
+See project page for a list of supported modules.
 
+**"Un-supported" modules:**
 The following modules are "un-supported modules" and are not documented by the
 [Drupal Bootstrap] base theme. This does not mean that the base theme will not
 work with them or that they are "bad". It simply means that this project does
@@ -69,15 +64,10 @@ However, if you choose to use one of these modules, you are really doing so
 at your own expense. Do not expect support from this base theme or the project
 you are attempting to integrate the base theme with.
 
-**"Un-supported" modules:**
 - Color module (in core)
 - [Bootstrap API](https://www.drupal.org/project/bootstrap_api)
 - [Bootstrap Library](https://www.drupal.org/project/bootstrap_library)
-- [Display Suite](https://www.drupal.org/project/ds)
-- [Display Suite Bootstrap Layouts](https://www.drupal.org/project/ds_bootstrap_layouts)
 - [LESS module](https://drupal.org/project/less)
-- [Panels](https://www.drupal.org/project/panels)
-- [Panels Bootstrap Layouts](https://www.drupal.org/project/panels_bootstrap_layouts)
 
 ---
 
