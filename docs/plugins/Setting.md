@@ -109,7 +109,7 @@ Two useful examples to study:
 #### SettingBase::drupalSettings()
 
 This method provides a way for you to determine whether a theme setting should
-be added to the `drupalSettings` javascript variable. Please note that by
+be added to the `drupalSettings` JavaScript variable. Please note that by
 default this is set to `FALSE` to prevent any potentially sensitive information
 from being leaked.
 
