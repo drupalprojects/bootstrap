@@ -26,7 +26,8 @@ function bootstrap_menu_link(array $variables) {
 
   // Filter the title if the "html" is not set, otherwise l() will automatically
   // sanitize using check_plain(), so no need to call that here.
-  $title = empty($options['html']) ? _bootstrap_filter_xss($element['#title']) : $element['#title'];
+  $title = empty($options['html']) ? filter_xss_admin($element['#title']) : $element['#title'];
+
   $href = $element['#href'];
   $attributes = !empty($element['#attributes']) ? $element['#attributes'] : array();
 
@@ -94,7 +95,7 @@ function bootstrap_menu_link__book_toc(array $variables) {
   // Otherwise, filter the title if "html" is not set, otherwise l() will automatically
   // sanitize using check_plain(), so no need to call that here.
   elseif (empty($options['html'])) {
-    $title = _bootstrap_filter_xss($title);
+    $title = filter_xss_admin($title);
   }
 
   return '<li' . drupal_attributes($attributes) . '>' . $title . $sub_menu . "</li>\n";

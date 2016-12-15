@@ -28,7 +28,8 @@ function bootstrap_menu_local_task($variables) {
 
   // Filter the title if the "html" is not set, otherwise l() will automatically
   // sanitize using check_plain(), so no need to call that here.
-  $title = empty($options['html']) ? _bootstrap_filter_xss($link['title']) : $link['title'];
+  $title = empty($options['html']) ? filter_xss_admin($link['title']) : $link['title'];
+
   $href = $link['href'];
   $attributes = array();
 

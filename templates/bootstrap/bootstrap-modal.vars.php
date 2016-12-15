@@ -45,7 +45,7 @@ function bootstrap_process_bootstrap_modal(&$variables) {
   $variables['dialog_attributes'] = drupal_attributes($variables['dialog_attributes']);
 
   $html = !empty($variables['html_heading']);
-  $heading = $html && is_scalar($variables['heading']) ? _bootstrap_filter_xss($variables['heading']) : render($variables['heading']);
+  $heading = $html && is_scalar($variables['heading']) ? filter_xss_admin($variables['heading']) : render($variables['heading']);
   $variables['heading'] = $html ? $heading : check_plain($heading);
 
   $variables['body'] = render($variables['body']);

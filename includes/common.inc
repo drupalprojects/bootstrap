@@ -592,6 +592,10 @@ function _bootstrap_file_scan_directory($dir, $mask, array $options = array()) {
  *   valid UTF-8.
  *
  * @see filter_xss()
+ * @see filter_xss_admin()
+ *
+ * @deprecated Use filter_xss() or filter_xss_admin() instead.
+ * Will be removed in a future release.
  */
 function _bootstrap_filter_xss($string, array $allowed_tags = NULL) {
   if (is_null($allowed_tags)) {
