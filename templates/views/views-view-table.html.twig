@@ -21,6 +21,12 @@
  *   - columns: Row column items. Columns are keyed by column number.
  *     - attributes: HTML classes to apply to each column.
  *     - content: The column content.
+ * - bordered: Flag indicating whether or not the table should be bordered.
+ * - condensed: Flag indicating whether or not the table should be condensed.
+ * - hover: Flag indicating whether or not table rows should be hoverable.
+ * - striped: Flag indicating whether or not table rows should be striped.
+ * - responsive: Flag indicating whether or not the table should be wrapped to
+ *   be responsive (using the Bootstrap Framework .table-responsive wrapper).
  *
  * @ingroup templates
  *
@@ -30,14 +36,16 @@
 {% if responsive %}
   <div class="table-responsive">
 {% endif %}
-{% set classes = [
-  'table',
-  context.bordered is not empty or theme.settings.table_bordered ? 'table-bordered',
-  context.condensed is not empty or theme.settings.table_condensed ? 'table-condensed',
-  context.hover is not empty or theme.settings.table_hover ? 'table-hover',
-  context.striped is not empty or theme.settings.table_striped ? 'table-striped',
-  sticky ? 'sticky-enabled',
-] %}
+{%
+  set classes = [
+    'table',
+    bordered ? 'table-bordered',
+    condensed ? 'table-condensed',
+    hover ? 'table-hover',
+    striped ? 'table-striped',
+    sticky ? 'sticky-enabled',
+  ]
+%}
 <table{{ attributes.addClass(classes) }}>
   {% if caption_needed %}
     <caption>

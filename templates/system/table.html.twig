@@ -33,9 +33,13 @@
  * - footer: Table footer rows, in the same format as the rows variable.
  * - empty: The message to display in an extra row if table does not have
  *   any rows.
- * - no_striping: A boolean indicating that the row should receive no striping.
  * - header_columns: The number of columns in the header.
- * - responsive: Whether or not to use the .table-responsive wrapper.
+ * - bordered: Flag indicating whether or not the table should be bordered.
+ * - condensed: Flag indicating whether or not the table should be condensed.
+ * - hover: Flag indicating whether or not table rows should be hoverable.
+ * - striped: Flag indicating whether or not table rows should be striped.
+ * - responsive: Flag indicating whether or not the table should be wrapped to
+ *   be responsive (using the Bootstrap Framework .table-responsive wrapper).
  *
  * @ingroup templates
  *
@@ -45,14 +49,16 @@
 {% if responsive %}
   <div class="table-responsive">
 {% endif %}
-{% set classes = [
-  'table',
-  context.bordered is not empty or theme.settings.table_bordered ? 'table-bordered',
-  context.condensed is not empty or theme.settings.table_condensed ? 'table-condensed',
-  context.hover is not empty or theme.settings.table_hover ? 'table-hover',
-  context.striped is not empty or theme.settings.table_striped ? 'table-striped',
-  sticky ? 'sticky-enabled',
-] %}
+{%
+  set classes = [
+    'table',
+    bordered ? 'table-bordered',
+    condensed ? 'table-condensed',
+    hover ? 'table-hover',
+    striped ? 'table-striped',
+    sticky ? 'sticky-enabled',
+  ]
+%}
 <table{{ attributes.addClass(classes) }}>
   {% if caption %}
     <caption>{{ caption }}</caption>
@@ -90,11 +96,7 @@
   {% if rows %}
     <tbody>
       {% for row in rows %}
-        {%
-        set row_classes = [
-          not no_striping ? cycle(['odd', 'even'], loop.index0),
-        ]
-        %}
+        {% set row_classes = [cycle(['odd', 'even'], loop.index0)] %}
         <tr{{ row.attributes.addClass(row_classes) }}>
           {% for cell in row.cells %}
             <{{ cell.tag }}{{ cell.attributes }}>
