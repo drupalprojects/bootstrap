@@ -67,6 +67,16 @@ class ThemeRegistry extends Registry implements AlterInterface {
     // Sort the registry alphabetically (for easier debugging).
     ksort($cache);
 
+    // Add extra variables to all theme hooks.
+    $extra_variables = Bootstrap::extraVariables();
+    foreach (array_keys($cache) as $hook) {
+      // Skip theme hooks that don't set variables.
+      if (!isset($cache[$hook]['variables'])) {
+        continue;
+      }
+      $cache[$hook]['variables'] += $extra_variables;
+    }
+
     // Ensure paths to templates are set properly. This allows templates to
     // be moved around in a theme without having to constantly ensuring that
     // the theme's hook_theme() definitions have the correct static "path" set.

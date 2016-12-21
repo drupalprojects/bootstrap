@@ -1116,13 +1116,6 @@ class Bootstrap {
       $variables = NestedArray::mergeDeepArray([$info['variables'], $variables], TRUE);
     }
 
-    // Add extra variables to all theme hooks.
-    foreach (Bootstrap::extraVariables() as $key => $value) {
-      if (!isset($variables[$key])) {
-        $variables[$key] = $value;
-      }
-    }
-
     // Add active theme context.
     // @see https://www.drupal.org/node/2630870
     if (!isset($variables['theme'])) {
