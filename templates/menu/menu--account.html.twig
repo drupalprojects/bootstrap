@@ -35,7 +35,7 @@
       {%
         set item_classes = [
           item.is_expanded? 'expanded',
-          menu_level == 0 ? 'dropdown',
+          item.is_expanded and menu_level == 0 ? 'dropdown',
           item.in_active_trail ? 'active',
         ]
       %}
