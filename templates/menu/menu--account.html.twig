@@ -34,8 +34,8 @@
     {% for item in items %}
       {%
         set item_classes = [
-          'expanded',
-          'dropdown',
+          item.is_expanded? 'expanded',
+          menu_level == 0 ? 'dropdown',
           item.in_active_trail ? 'active',
         ]
       %}
