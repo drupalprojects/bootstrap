@@ -27,6 +27,7 @@ class InputButton extends Input implements PreprocessInterface {
     $element->setButtonSize();
     $element->setIcon($element->getProperty('icon'));
     $variables['icon_only'] = $element->getProperty('icon_only');
+    $variables['icon_position'] = $element->getProperty('icon_position');
     $variables['label'] = $element->getProperty('value');
     if ($element->getProperty('split')) {
       $variables->map([$variables::SPLIT_BUTTON]);
