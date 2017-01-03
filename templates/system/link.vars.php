@@ -21,9 +21,7 @@ function bootstrap_preprocess_link(&$variables) {
     'attributes' => array(),
     'html' => FALSE,
   );
-
-  $variables['icon'] = _bootstrap_icon('menu-left');
-
+  
   // Core is so backwards on this theme hook. It does not provide a proper
   // preprocess function or attributes array. Merge any passed attributes
   // (which take precedence over passed option attributes) into the options
