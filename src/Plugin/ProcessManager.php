@@ -125,8 +125,9 @@ class ProcessManager extends PluginManager {
 
       // Find the closest button.
       if ($button = self::findButton($parent)) {
-        $element->appendProperty('field_suffix', $button->setIcon());
-        $button->setProperty('access', FALSE);
+        // Since this button is technically being "moved", it needs to be
+        // rendered now, so it doesn't get printed twice (in the original spot).
+        $element->appendProperty('field_suffix', $button->setIcon()->render());
       }
     }
 
