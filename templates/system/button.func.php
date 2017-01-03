@@ -21,19 +21,25 @@
  */
 function bootstrap_button($variables) {
   $element = $variables['element'];
+  $text = $element['#value'];
 
   // Allow button text to be appear hidden.
   // @see https://www.drupal.org/node/2327437
-  $text = !empty($element['#hide_text']) ? '<span class="element-invisible">' . $element['#value'] . '</span>' : $element['#value'];
+  if (!empty($element['#hide_text']) || $element['#icon_position'] === 'icon_only') {
+    $text = '<span class="sr-only">' . $text . '</span>';
+  }
 
   // Add icons before or after the value.
   // @see https://www.drupal.org/node/2219965
-  if (!empty($element['#icon'])) {
-    if ($element['#icon_position'] === 'before') {
-      $text = $element['#icon'] . ' ' . $text;
+  if (!empty($element['#icon']) && ($icon = render($element['#icon']))) {
+    // Add icon position class.
+    _bootstrap_add_class('icon-' . drupal_html_class($element['#icon_position'] === 'icon_only' ? 'only' : $element['#icon_position']), $element);
+
+    if ($element['#icon_position'] === 'after') {
+      $text .= ' ' . $icon;
     }
-    elseif ($element['#icon_position'] === 'after') {
-      $text .= ' ' . $element['#icon'];
+    else {
+      $text = $icon . ' ' . $text;
     }
   }
 
