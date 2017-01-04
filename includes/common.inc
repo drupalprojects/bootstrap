@@ -1104,9 +1104,10 @@ function _bootstrap_colorize_text($string, $default = '') {
         // Primary class.
         t('Confirm')            => 'primary',
         t('Filter')             => 'primary',
+        t('Log in')             => 'primary',
         t('Submit')             => 'primary',
         t('Search')             => 'primary',
-        t('Log in')             => 'primary',
+        t('Upload')             => 'primary',
 
         // Success class.
         t('Add')                => 'success',
