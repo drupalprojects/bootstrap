@@ -340,10 +340,11 @@ class Bootstrap {
           // Primary class.
           t('Confirm')->render()            => 'primary',
           t('Filter')->render()             => 'primary',
+          t('Log in')->render()             => 'primary',
           t('Submit')->render()             => 'primary',
           t('Search')->render()             => 'primary',
           t('Settings')->render()           => 'primary',
-          t('Log in')->render()             => 'primary',
+          t('Upload')->render()             => 'primary',
 
           // Danger class.
           t('Delete')->render()             => 'danger',
