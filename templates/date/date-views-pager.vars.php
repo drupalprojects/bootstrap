@@ -18,7 +18,10 @@ function bootstrap_preprocess_date_views_pager(&$variables) {
 
   // Link types.
   $types = array(
-    'prev' => t('Previous', array(), array('context' => 'date_nav')),
+    // Because this is using the "date_nav" context, this must use "Prev"
+    // instead of the full English word "Previous".
+    // @todo Should this be fixed upstream in the date/date_views module?
+    'prev' => t('Prev', array(), array('context' => 'date_nav')),
     'next' => t('Next', array(), array('context' => 'date_nav')),
   );
 
