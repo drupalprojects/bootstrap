@@ -247,7 +247,15 @@ class Theme {
       }
       $cache->setMultiple($drupal_settings);
     }
-    return array_intersect_key($this->settings()->get(), $drupal_settings);
+
+    $drupal_settings = array_intersect_key($this->settings()->get(), $drupal_settings);
+
+    // Indicate that theme is in dev mode.
+    if ($this->isDev()) {
+      $drupal_settings['dev'] = TRUE;
+    }
+
+    return $drupal_settings;
   }
 
   /**

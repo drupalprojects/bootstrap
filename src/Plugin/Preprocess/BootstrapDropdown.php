@@ -10,7 +10,9 @@ use Drupal\bootstrap\Annotation\BootstrapPreprocess;
 use Drupal\bootstrap\Utility\Element;
 use Drupal\bootstrap\Utility\Unicode;
 use Drupal\bootstrap\Utility\Variables;
+use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Url;
 
 /**
  * Pre-processes variables for the "bootstrap_dropdown" theme hook.
@@ -53,50 +55,92 @@ class BootstrapDropdown extends PreprocessBase implements PreprocessInterface {
       $operations = !!Unicode::strpos($variables->theme_hook_original, 'operations');
 
       // Normal dropbutton links are not actually render arrays, convert them.
-      foreach ($variables->links as &$link) {
-        if (isset($link['title']) && $link['url']) {
+      foreach ($variables->links as &$element) {
+        if (isset($element['title']) && $element['url']) {
           // Preserve query parameters (if any)
-          if (!empty($link['query'])) {
-            $url_query = $link['url']->getOption('query') ?: [];
-            $link['url']->setOption('query', NestedArray::mergeDeep($url_query , $link['query']));
+          if (!empty($element['query'])) {
+            $url_query = $element['url']->getOption('query') ?: [];
+            $element['url']->setOption('query', NestedArray::mergeDeep($url_query , $element['query']));
           }
 
           // Build render array.
-          $link = [
+          $element = [
             '#type' => 'link',
-            '#title' => $link['title'],
-            '#url' => $link['url'],
+            '#title' => $element['title'],
+            '#url' => $element['url'],
           ];
         }
       }
 
-      // Pop off the first link as the "toggle".
-      $variables->toggle = array_shift($variables->links);
-      $toggle = Element::create($variables->toggle);
+      $items = Element::createStandalone();
 
-      // Convert any toggle links to a proper button.
-      if ($toggle->isType('link')) {
-        $toggle->exchangeArray([
-          '#type' => 'button',
-          '#value' => $toggle->getProperty('title'),
-          '#attributes' => [
-            'data-url' => $toggle->getProperty('url')->toString(),
-          ],
-        ]);
-        if ($operations) {
-          $toggle->setButtonSize('btn-xs');
+      $primary_action = NULL;
+      $links = Element::create($variables->links);
+
+      // Iterate over all provided "links". The array may be associative, so
+      // this cannot rely on the key to be numeric, it must be tracked manually.
+      $i = -1;
+      foreach ($links->children(TRUE) as $key => $child) {
+        $i++;
+
+        // The first item is always the "primary link".
+        if ($i === 0) {
+          // Must generate an ID for this child because the toggle will use it.
+          $child->getProperty('id', $child->getAttribute('id', Html::getUniqueId('dropdown-item')));
+          $primary_action = $child->addClass('hidden');
+        }
+
+        // If actually a "link", add it to the items array directly.
+        if ($child->isType('link')) {
+          $items->$key->link = $child->getArrayCopy();
+        }
+        // Otherwise, convert into a proper link.
+        else {
+          // Hide the original element
+          $items->$key->element = $child->addClass('hidden')->getArrayCopy();
+
+          // Retrieve any set HTML identifier for the link, generating a new
+          // one if necessary.
+          $id = $child->getProperty('id', $child->getAttribute('id', Html::getUniqueId('dropdown-item')));
+          $items->$key->link = Element::createStandalone([
+            '#type' => 'link',
+            '#title' => $child->getProperty('value', $child->getProperty('title', $child->getProperty('text'))),
+            '#url' => Url::fromUserInput('#'),
+            '#attributes' => ['data-dropdown-target' => "#$id"],
+          ]);
+
+          // Also hide the real link if it's the primary action.
+          if ($i === 0) {
+            $items->$key->link->addClass('hidden');
+          }
         }
       }
-      // Remove the dropbutton property.
-      else {
-        $toggle->unsetProperty('dropbutton');
+
+      // Create a toggle button, extracting relevant info from primary action.
+      $toggle = Element::createStandalone([
+        '#type' => 'button',
+        '#attributes' => $primary_action->getAttributes()->getArrayCopy(),
+        '#value' => $primary_action->getProperty('value', $primary_action->getProperty('title', $primary_action->getProperty('text'))),
+      ]);
+
+      // Remove the "hidden" class that was added to the primary action.
+      $toggle->removeClass('hidden')->removeAttribute('id')->setAttribute('data-dropdown-target', '#' . $primary_action->getAttribute('id'));
+
+      // Make operations smaller.
+      if ($operations) {
+        $toggle->setButtonSize('btn-xs', FALSE);
       }
 
-      $variables->items = array_values($variables->links);
+      // Add the toggle render array to the variables.
+      $variables->toggle = $toggle->getArrayCopy();
 
       // Determine if toggle should be a split button.
-      $variables->split = !!$variables->links;
+      $variables->split = count($items) > 1;
 
+      // Add the items variable for "bootstrap_dropdown".
+      $variables->items = $items->getArrayCopy();
+
+      // Remove the unnecessary "links" variable now.
       unset($variables->links);
     }
   }

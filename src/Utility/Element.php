@@ -206,9 +206,12 @@ class Element extends DrupalAttributes {
   /**
    * Adds a specific Bootstrap class to color a button based on its text value.
    *
+   * @param bool $override
+   *   Flag determining whether or not to override any existing set class.
+   *
    * @return $this
    */
-  public function colorize() {
+  public function colorize($override = TRUE) {
     $button = $this->isButton();
 
     // @todo refactor this more so it's not just "button" specific.
@@ -226,7 +229,7 @@ class Element extends DrupalAttributes {
     $class = $button && !Bootstrap::getTheme()->getSetting('button_colorize') ? 'btn-default' : FALSE;
 
     // Search for an existing class.
-    if (!$class) {
+    if (!$class || !$override) {
       foreach ($classes as $value) {
         if ($this->hasClass($value)) {
           $class = $value;
@@ -573,10 +576,13 @@ class Element extends DrupalAttributes {
    * @param string $class
    *   The full button size class to add. If none is provided, it will default
    *   to any set theme setting.
+   * @param bool $override
+   *   Flag indicating if the passed $class should be forcibly set. Setting
+   *   this to FALSE allows any existing set class to persist.
    *
    * @return $this
    */
-  public function setButtonSize($class = NULL) {
+  public function setButtonSize($class = NULL, $override = TRUE) {
     // Immediately return if element is not a button.
     if (!$this->isButton()) {
       return $this;
@@ -592,7 +598,7 @@ class Element extends DrupalAttributes {
     }
 
     // Search for an existing class.
-    if (!$class) {
+    if (!$class || !$override) {
       foreach ($classes as $value) {
         if ($this->hasClass($value)) {
           $class = $value;

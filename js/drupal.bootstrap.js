@@ -8,7 +8,7 @@
  *
  * @namespace
  */
-(function ($, Drupal) {
+(function ($, Drupal, drupalSettings) {
   'use strict';
 
   Drupal.bootstrap = {
@@ -86,8 +86,87 @@
       plugin.Constructor = constructor;
 
       var old = $.fn[id];
-      plugin.noConflict = function () { $.fn[id] = old; return this; };
+      plugin.noConflict = function () {
+        $.fn[id] = old;
+        return this;
+      };
       $.fn[id] = plugin;
+    }
+  };
+
+  /**
+   * Map of supported events by regular expression.
+   *
+   * @type {Object<Event|MouseEvent|KeyboardEvent|TouchEvent,RegExp>}
+   */
+  Drupal.bootstrap.eventMap = {
+    Event: /^(?:load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll)$/,
+    MouseEvent: /^(?:click|dblclick|mouse(?:down|enter|leave|up|over|move|out))$/,
+    KeyboardEvent: /^(?:key(?:down|press|up))$/,
+    TouchEvent: /^(?:touch(?:start|end|move|cancel))$/
+  };
+
+  /**
+   * Simulates a native event on an element in the browser.
+   *
+   * Note: This is a pretty complete modern implementation. If things are quite
+   * working the way you intend (in older browsers), you may wish to use the
+   * jQuery.simulate plugin. If it's available, this method will defer to it.
+   *
+   * @see https://github.com/jquery/jquery-simulate
+   *
+   * @param {HTMLElement} element
+   *   A DOM element to dispatch event on.
+   * @param {String} type
+   *   The type of event to simulate.
+   * @param {Object} [options]
+   *   An object of options to pass to the event constructor. Typically, if
+   *   an event is being proxied, you should just pass the original event
+   *   object here. This allows, if the browser supports it, to be a truly
+   *   simulated event.
+   */
+  Drupal.bootstrap.simulate = function (element, type, options) {
+    // Defer to the jQuery.simulate plugin, if it's available.
+    if (typeof $.simulate === 'function') {
+      new $.simulate(element, type, options);
+      return;
+    }
+    var event;
+    var ctor;
+    for (var name in Drupal.bootstrap.eventMap) {
+      if (Drupal.bootstrap.eventMap[name].test(type)) {
+        ctor = name;
+        break;
+      }
+    }
+    if (!ctor) {
+      throw new SyntaxError('Only rudimentary HTMLEvents, KeyboardEvents and MouseEvents are supported: ' + type);
+    }
+    var opts = {bubbles: true, cancelable: true};
+    if (ctor === 'KeyboardEvent' || ctor === 'MouseEvent') {
+      $.extend(opts, {ctrlKey: !1, altKey: !1, shiftKey: !1, metaKey: !1});
+    }
+    if (ctor === 'MouseEvent') {
+      $.extend(opts, {button: 0, pointerX: 0, pointerY: 0, view: window});
+    }
+    if (options) {
+      $.extend(opts, options);
+    }
+    if (typeof window[ctor] === 'function') {
+      event = new window[ctor](type, opts);
+      element.dispatchEvent(event);
+    }
+    else if (document.createEvent) {
+      event = document.createEvent(ctor);
+      event.initEvent(type, opts.bubbles, opts.cancelable);
+      element.dispatchEvent(event);
+    }
+    else if (typeof element.fireEvent === 'function') {
+      event = $.extend(document.createEventObject(), opts);
+      element.fireEvent('on' + type, event);
+    }
+    else if (typeof element[type]) {
+      element[type]();
     }
   };
 

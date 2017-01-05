@@ -16,7 +16,7 @@
 {%
   set classes = [
     'btn-group',
-    alignment == 'up' ? 'dropup',
+    alignment ? 'drop' ~ alignment|clean_class : 'dropdown',
   ]
 %}
 <div{{ attributes.addClass(classes) }}>

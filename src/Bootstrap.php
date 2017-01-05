@@ -524,7 +524,7 @@ class Bootstrap {
 
     $hooks['bootstrap_dropdown'] = [
       'variables' => [
-        'alignment' => NULL,
+        'alignment' => 'down',
         'attributes' => [],
         'items' => [],
         'split' => FALSE,

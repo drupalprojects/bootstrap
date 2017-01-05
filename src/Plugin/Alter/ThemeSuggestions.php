@@ -107,10 +107,7 @@ class ThemeSuggestions extends PluginBase implements AlterInterface {
   protected function alterInput() {
     if ($this->element && $this->element->isButton()) {
       $hook = 'input__button';
-      if ($this->element->getProperty('dropbutton')) {
-        $hook .= '__dropdown';
-      }
-      elseif ($this->element->getProperty('split')) {
+      if ($this->element->getProperty('split')) {
         $hook .= '__split';
       }
       $this->addSuggestion($hook);
