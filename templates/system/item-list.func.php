@@ -47,6 +47,7 @@ function bootstrap_item_list($variables) {
     if (is_string($title)) {
       $title = array(
         'text' => $title,
+        'html' => TRUE,
       );
     }
     // Set defaults.
