@@ -47,7 +47,7 @@ class FormElement extends PreprocessBase implements PreprocessInterface {
       $label = Element::create($variables['label']);
       $children = &$label->getProperty('children', '');
       $children .= $variables['children'];
-      if ($label->getProperty('title')) {
+      if ($label->getProperty('title_display') != 'none') {
         unset($variables['children']);
       }
 
