@@ -57,7 +57,7 @@ settings:
     <td class="col-xs-3">cdn_custom_css</td>
     <td>
       <div class="help-block">It is best to use <code>https</code> protocols here as it will allow more flexibility if the need ever arises.</div>
-      <pre class=" language-yaml"><code>cdn_custom_css: 'https://cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap.css'
+      <pre class=" language-yaml"><code>cdn_custom_css: 'https://cdn.jsdelivr.net/bootstrap/3.3.7/css/bootstrap.css'
 </code></pre>
     </td>
   </tr>
@@ -65,7 +65,7 @@ settings:
     <td class="col-xs-3">cdn_custom_css_min</td>
     <td>
       <div class="help-block">Additionally, you can provide the minimized version of the file. It will be used instead if site aggregation is enabled.</div>
-      <pre class=" language-yaml"><code>cdn_custom_css_min: 'https://cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap.min.css'
+      <pre class=" language-yaml"><code>cdn_custom_css_min: 'https://cdn.jsdelivr.net/bootstrap/3.3.7/css/bootstrap.min.css'
 </code></pre>
     </td>
   </tr>
@@ -73,7 +73,7 @@ settings:
     <td class="col-xs-3">cdn_custom_js</td>
     <td>
       <div class="help-block">It is best to use <code>https</code> protocols here as it will allow more flexibility if the need ever arises.</div>
-      <pre class=" language-yaml"><code>cdn_custom_js: 'https://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.js'
+      <pre class=" language-yaml"><code>cdn_custom_js: 'https://cdn.jsdelivr.net/bootstrap/3.3.7/js/bootstrap.js'
 </code></pre>
     </td>
   </tr>
@@ -81,7 +81,7 @@ settings:
     <td class="col-xs-3">cdn_custom_js_min</td>
     <td>
       <div class="help-block">Additionally, you can provide the minimized version of the file. It will be used instead if site aggregation is enabled.</div>
-      <pre class=" language-yaml"><code>cdn_custom_js_min: 'https://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js'
+      <pre class=" language-yaml"><code>cdn_custom_js_min: 'https://cdn.jsdelivr.net/bootstrap/3.3.7/js/bootstrap.min.js'
 </code></pre>
     </td>
   </tr>
@@ -89,7 +89,7 @@ settings:
     <td class="col-xs-3">cdn_jsdelivr_version</td>
     <td>
       <div class="help-block">Choose the Bootstrap version from jsdelivr</div>
-      <pre class=" language-yaml"><code>cdn_jsdelivr_version: 3.3.5
+      <pre class=" language-yaml"><code>cdn_jsdelivr_version: 3.3.7
 </code></pre>
     </td>
   </tr>

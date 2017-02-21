@@ -65,7 +65,7 @@ class Bootstrap {
    *
    * @var string
    */
-  const FRAMEWORK_VERSION = '3.3.5';
+  const FRAMEWORK_VERSION = '3.3.7';
 
   /**
    * The Bootstrap Framework documentation site.
@@ -996,6 +996,8 @@ class Bootstrap {
         'glyphicon-xbt' => 'xbt',
       ]);
       $versions['3.3.5'] = $versions['3.3.4'];
+      $versions['3.3.6'] = $versions['3.3.5'];
+      $versions['3.3.7'] = $versions['3.3.6'];
     }
 
     // Return a specific versions icon set.

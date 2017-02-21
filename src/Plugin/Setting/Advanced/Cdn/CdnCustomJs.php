@@ -21,7 +21,7 @@ use Drupal\Core\Annotation\Translation;
  *   type = "textfield",
  *   weight = 3,
  *   title = @Translation("Bootstrap JavaScript URL"),
- *   defaultValue = "https://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.js",
+ *   defaultValue = "https://cdn.jsdelivr.net/bootstrap/3.3.7/js/bootstrap.js",
  *   description = @Translation("It is best to use <code>https</code> protocols here as it will allow more flexibility if the need ever arises."),
  *   groups = {
  *     "advanced" = @Translation("Advanced"),
