@@ -40,7 +40,7 @@ function bootstrap_preprocess_date_views_pager(&$variables) {
   );
 
   // Create necessary links.
-  $items = [];
+  $items = array();
   foreach ($types as $type => $text) {
     $item_classes = array($type);
 
