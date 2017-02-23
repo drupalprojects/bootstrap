@@ -21,7 +21,8 @@ Create a file at `./THEMENAME/src/Plugin/Setting/THEMENAME/Accessibility/SkipLin
 with the following contents:
 
 ```php
-namespace Drupal\THEMENAME\Plugin\Setting\THEMENAME\Accessibility\SkipLink;
+<?php
+namespace Drupal\THEMENAME\Plugin\Setting\THEMENAME\Accessibility;
 
 use Drupal\bootstrap\Annotation\BootstrapSetting;
 use Drupal\bootstrap\Plugin\Setting\SettingBase;
