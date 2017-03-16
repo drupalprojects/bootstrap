@@ -127,6 +127,77 @@
     }
   };
 
+  /**
+   * Finds the next sibling item.
+   */
+  Drupal.jsAC.prototype.findNextSibling = function (element) {
+    var sibling = element && element.nextSibling;
+    if (sibling && !this.validItem(sibling)) {
+      return this.findNextSibling(sibling.nextSibling);
+    }
+    return sibling;
+  };
+
+  /**
+   * Finds the previous sibling item.
+   */
+  Drupal.jsAC.prototype.findPreviousSibling = function (element) {
+    var sibling = element && element.previousSibling;
+    if (sibling && !this.validItem(sibling)) {
+      return this.findPreviousSibling(sibling.previousSibling);
+    }
+    return sibling;
+  };
+
+  /**
+   * Highlights the next suggestion.
+   */
+  Drupal.jsAC.prototype.selectDown = function () {
+    var sibling = this.findNextSibling(this.selected);
+    if (sibling) {
+      this.highlight(sibling);
+    }
+    else if (this.popup) {
+      var lis = $('li', this.popup);
+      if (lis.length > 0) {
+        if (this.validItem(lis[0])) {
+          this.highlight(lis[0]);
+        }
+        else {
+          this.highlight(this.findNextSibling(lis[0]));
+        }
+      }
+    }
+  };
+
+  /**
+   * Highlights the previous suggestion.
+   */
+  Drupal.jsAC.prototype.selectUp = function () {
+    var sibling = this.findPreviousSibling(this.selected);
+    if (sibling) {
+      this.highlight(sibling);
+    }
+    else if (this.popup) {
+      var lis = $('li', this.popup);
+      if (lis.length > 0) {
+        if (this.validItem(lis[lis.length - 1])) {
+          this.highlight(lis[lis.length - 1]);
+        }
+        else {
+          this.highlight(this.findPreviousSibling(lis[lis.length - 1]));
+        }
+      }
+    }
+  };
+
+  /**
+   * Ensures the item is valid.
+   */
+  Drupal.jsAC.prototype.validItem = function (element) {
+    return !$(element).is('.dropdown-header, .divider, .disabled');
+  };
+
   Drupal.jsAC.prototype.setStatus = function (status) {
     var $throbber = $(this.input).parent().find('.glyphicon-refresh, .autocomplete-throbber').first();
     var throbbingClass = $throbber.is('.autocomplete-throbber') ? 'throbbing' : 'glyphicon-spin';
