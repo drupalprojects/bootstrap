@@ -35,8 +35,9 @@ function bootstrap_image_widget($variables) {
   }
   else {
     $element['upload']['#prefix'] = '<div class="input-group">';
+    $element['upload']['#suffix'] = '</div>';
     $element['upload_button']['#prefix'] = '<span class="input-group-btn">';
-    $element['upload_button']['#suffix'] = '</span></div>';
+    $element['upload_button']['#suffix'] = '</span>';
   }
 
   $output .= drupal_render_children($element);
