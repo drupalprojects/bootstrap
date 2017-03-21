@@ -87,6 +87,10 @@ drupal.tabledrag:
   js:
     js/misc/tabledrag.js: {}
 
+image_widget_crop:
+  js:
+    js/modules/image_widget_crop/ImageWidgetCrop.js: {}
+
 views.ajax:
   js:
     js/modules/views/ajax_view.js: {}

@@ -35,6 +35,8 @@ libraries-extend:
     - bootstrap/drupal.states
   core/drupal.tabledrag:
     - bootstrap/drupal.tabledrag
+  image_widget_crop/cropper.integration:
+    - bootstrap/image_widget_crop
   views/views.ajax:
     - bootstrap/views.ajax
 
