@@ -16,10 +16,7 @@
     'click', 'dblclick', 'mousedown', 'mouseenter', 'mouseleave', 'mouseup', 'mouseover', 'mousemove', 'mouseout',
 
     // KeyboardEvent.
-    'keypress', 'keydown', 'keyup',
-
-    // TouchEvent.
-    'touchstart', 'touchend', 'touchmove', 'touchcancel'
+    'keypress', 'keydown', 'keyup'
   ];
 
   /**
