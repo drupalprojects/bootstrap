@@ -90,7 +90,7 @@ function bootstrap_process_html(&$variables) {
   // Merge in (not reference!) core's ambiguous and separate "attribute" and
   // "class" arrays. These arrays are meant for the BODY element, but it must
   // be done at the process level in case sub-themes wish to add classes to
-  // core's non-standard arrays (which are for html only).
+  // core's non-standard arrays (which are for the BODY element only).
   // @see https://www.drupal.org/node/2868426
   $variables['body_attributes_array'] = drupal_array_merge_deep($variables['body_attributes_array'], $variables['attributes_array']);
 
