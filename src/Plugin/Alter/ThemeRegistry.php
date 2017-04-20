@@ -87,12 +87,23 @@ class ThemeRegistry extends Registry implements AlterInterface {
         $hook = str_replace('-', '_', str_replace('.html.twig', '', $file->filename));
         $path = dirname($file->uri);
         $incomplete = !isset($cache[$hook]) || strrpos($hook, '__');
+
+        // Create a new theme hook. This primarily happens when theme hook
+        // suggestion templates are created. To prevent the new hook from
+        // inheriting parent hook's "template", it must be manually set here.
+        // @see https://www.drupal.org/node/2871551
         if (!isset($cache[$hook])) {
-          $cache[$hook] = [];
+          $cache[$hook] = [
+            'template' => str_replace('.html.twig', '', $file->filename),
+          ];
         }
+
+        // Always ensure that "path", "type" and "theme path" are properly set.
         $cache[$hook]['path'] = $path;
         $cache[$hook]['type'] = $current_theme ? 'theme' : 'base_theme';
         $cache[$hook]['theme path'] = $theme_path;
+
+        // Flag incomplete.
         if ($incomplete) {
           $cache[$hook]['incomplete preprocess functions'] = TRUE;
         }
