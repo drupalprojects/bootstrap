@@ -20,9 +20,6 @@
  * - front_page: The URL of the front page. Use this instead of base_path when
  *   linking to the front page. This includes the language domain or prefix.
  *
- * Navigation:
- * - breadcrumb: The breadcrumb trail for the current page.
- *
  * Page content (in order of occurrence in the default page.html.twig):
  * - title_prefix: Additional output populated by modules, intended to be
  *   displayed in front of the main title tag that appears in the template.
@@ -135,13 +132,6 @@
         {% if page.highlighted %}
           {% block highlighted %}
             <div class="highlighted">{{ page.highlighted }}</div>
-          {% endblock %}
-        {% endif %}
-
-        {# Breadcrumbs #}
-        {% if breadcrumb %}
-          {% block breadcrumb %}
-            {{ breadcrumb }}
           {% endblock %}
         {% endif %}
 
