@@ -77,8 +77,8 @@ class BootstrapCarousel extends PreprocessBase implements PreprocessInterface {
         '#items' => array_keys($variables->slides),
         '#context' => [
           'target' => "#$id",
+          'start_index' => $variables->start_index,
         ],
-        '#start_index' => $variables->start_index,
       ];
     }
 

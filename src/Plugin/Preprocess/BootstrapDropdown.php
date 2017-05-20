@@ -35,8 +35,10 @@ class BootstrapDropdown extends PreprocessBase implements PreprocessInterface {
     // Convert the items into a proper item list.
     $variables->items = [
       '#theme' => 'item_list__dropdown',
-      '#alignment' => $variables->alignment,
       '#items' => $variables->items,
+      '#context' => [
+        'alignment' => $variables->alignment,
+      ],
     ];
 
     // Ensure all attributes are proper objects.

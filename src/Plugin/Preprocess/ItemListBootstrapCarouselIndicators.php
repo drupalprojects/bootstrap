@@ -20,6 +20,7 @@ class ItemListBootstrapCarouselIndicators extends PreprocessBase implements Prep
     parent::preprocessVariables($variables);
 
     $variables->target = $variables->getContext('target');
+    $variables->start_index = $variables->getContext('start_index');
   }
 
 }
