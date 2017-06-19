@@ -671,11 +671,18 @@ class Element extends DrupalAttributes {
    *   The name of the property to set.
    * @param mixed $value
    *   The value of the property to set.
+   * @param bool $recurse
+   *   Flag indicating wither to set the same property on child elements.
    *
    * @return $this
    */
-  public function setProperty($name, $value) {
+  public function setProperty($name, $value, $recurse = FALSE) {
     $this->array["#$name"] = $value instanceof Element ? $value->getArray() : $value;
+    if ($recurse) {
+      foreach ($this->children() as $child) {
+        $child->setProperty($name, $value, $recurse);
+      }
+    }
     return $this;
   }
 
