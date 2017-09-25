@@ -752,9 +752,23 @@ class Element extends DrupalAttributes {
 
     // Return if element or target shouldn't have "simple" tooltip descriptions.
     $html = FALSE;
-    if (($input_only && !$target->hasProperty('input'))
-      // Ignore if the actual element has no #description set.
-      || !$this->hasProperty('description')
+
+    // If the description is a render array, it must first be pre-rendered so
+    // it can be later passed to Unicode::isSimple() if needed.
+    $description = $this->hasProperty('description') ? $this->getProperty('description') : FALSE;
+    if (static::isRenderArray($description)) {
+      $description = static::createStandalone($description)->renderPlain();
+    }
+
+    if (
+      // Ignore if element has no #description.
+      !$description
+
+      // Ignore if description is not a simple string or MarkupInterface.
+      || (!is_string($description) && !($description instanceof MarkupInterface))
+
+      // Ignore if element is not an input.
+      || ($input_only && !$target->hasProperty('input'))
 
       // Ignore if the target element already has a "data-toggle" attribute set.
       || $target->hasAttribute('data-toggle')
@@ -768,7 +782,7 @@ class Element extends DrupalAttributes {
       || !$target->getProperty('smart_description', TRUE)
 
       // Ignore if the description is not "simple".
-      || !Unicode::isSimple($this->getProperty('description'), $length, $allowed_tags, $html)
+      || !Unicode::isSimple($description, $length, $allowed_tags, $html)
     ) {
       // Set the both the actual element and the target element
       // #smart_description property to FALSE.
@@ -793,7 +807,7 @@ class Element extends DrupalAttributes {
     $attributes = $target->getAttributes($type);
 
     // Set the tooltip attributes.
-    $attributes['title'] = $allowed_tags !== FALSE ? Xss::filter((string) $this->getProperty('description'), $allowed_tags) : $this->getProperty('description');
+    $attributes['title'] = $allowed_tags !== FALSE ? Xss::filter((string) $description, $allowed_tags) : $description;
     $attributes['data-toggle'] = 'tooltip';
     if ($html || $allowed_tags === FALSE) {
       $attributes['data-html'] = 'true';
