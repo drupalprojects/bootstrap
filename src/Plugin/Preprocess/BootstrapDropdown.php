@@ -58,7 +58,21 @@ class BootstrapDropdown extends PreprocessBase implements PreprocessInterface {
 
       // Normal dropbutton links are not actually render arrays, convert them.
       foreach ($variables->links as &$element) {
-        if (isset($element['title']) && $element['url']) {
+        // Only process links that have "title".
+        if (!isset($element['title'])) {
+          continue;
+        }
+
+        // If title is an actual render array, just move it up.
+        if (Element::isRenderArray($element['title']) && !isset($element['url'])) {
+          $element = $element['title'];
+        }
+        // Otherwise, convert into an actual "link" render array element.
+        else {
+          if (!isset($element['url'])) {
+            $element['url'] = Url::fromRoute('<none>');
+          }
+
           // Preserve query parameters (if any)
           if (!empty($element['query'])) {
             $url_query = $element['url']->getOption('query') ?: [];
@@ -87,10 +101,17 @@ class BootstrapDropdown extends PreprocessBase implements PreprocessInterface {
       foreach ($links->children(TRUE) as $key => $child) {
         $i++;
 
+        // Ensure validation errors are limited.
+        if ($child->getProperty('limit_validation_errors') !== FALSE) {
+          $child->setAttribute('formnovalidate', 'formnovalidate');
+        }
+
         // The first item is always the "primary link".
         if ($i === 0) {
           // Must generate an ID for this child because the toggle will use it.
-          $child->getProperty('id', $child->getAttribute('id', Html::getUniqueId('dropdown-item')));
+          if (!$child->getAttribute('id')) {
+            $child->setAttribute('id', $child->getProperty('id', Html::getUniqueId('dropdown-item')));
+          }
           $primary_action = $child->addClass('hidden');
         }
 
@@ -105,7 +126,12 @@ class BootstrapDropdown extends PreprocessBase implements PreprocessInterface {
 
           // Retrieve any set HTML identifier for the link, generating a new
           // one if necessary.
-          $id = $child->getProperty('id', $child->getAttribute('id', Html::getUniqueId('dropdown-item')));
+          $id = $child->getAttribute('id');
+          if (!$id) {
+            $id = $child->getProperty('id', Html::getUniqueId('dropdown-item'));
+            $child->setAttribute('id', $id);
+          }
+
           $items->$key->link = Element::createStandalone([
             '#type' => 'link',
             '#title' => $child->getProperty('value', $child->getProperty('title', $child->getProperty('text'))),
