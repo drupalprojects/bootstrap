@@ -84,8 +84,8 @@ class BootstrapDropdown extends PreprocessBase implements PreprocessInterface {
             '#type' => 'link',
             '#title' => $element['title'],
             '#url' => $element['url'],
-            '#ajax' => isset($element['ajax']) ? $element['ajax'] ? [],
-            '#attributes' => isset($element['attributes']) ? $element['attributes'] ? [],
+            '#ajax' => isset($element['ajax']) ? $element['ajax'] : [],
+            '#attributes' => isset($element['attributes']) ? $element['attributes'] : [],
           ];
         }
       }
