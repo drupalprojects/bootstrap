@@ -35,8 +35,14 @@ function bootstrap_preprocess_page(&$variables) {
   // Primary nav.
   $variables['primary_nav'] = FALSE;
   if ($variables['main_menu']) {
+    // Load the tree
+    $tree = menu_tree_all_data(variable_get('menu_main_links_source', 'main-menu'));
+    // Localize the tree.
+    if (module_exists('i18n_menu')) {
+      $tree = i18n_menu_localize_tree($tree);
+    }
     // Build links.
-    $variables['primary_nav'] = menu_tree(variable_get('menu_main_links_source', 'main-menu'));
+    $variables['primary_nav'] = menu_tree_output($tree);
     // Provide default theme wrapper function.
     $variables['primary_nav']['#theme_wrappers'] = array('menu_tree__primary');
   }
