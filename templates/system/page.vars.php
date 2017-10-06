@@ -32,17 +32,22 @@ function bootstrap_preprocess_page(&$variables) {
     $variables['container_class'] = 'container';
   }
 
+  $i18n = module_exists('i18n_menu');
+
   // Primary nav.
   $variables['primary_nav'] = FALSE;
   if ($variables['main_menu']) {
     // Load the tree
     $tree = menu_tree_all_data(variable_get('menu_main_links_source', 'main-menu'));
+
     // Localize the tree.
-    if (module_exists('i18n_menu')) {
+    if ($i18n) {
       $tree = i18n_menu_localize_tree($tree);
     }
+
     // Build links.
     $variables['primary_nav'] = menu_tree_output($tree);
+
     // Provide default theme wrapper function.
     $variables['primary_nav']['#theme_wrappers'] = array('menu_tree__primary');
   }
@@ -50,8 +55,17 @@ function bootstrap_preprocess_page(&$variables) {
   // Secondary nav.
   $variables['secondary_nav'] = FALSE;
   if ($variables['secondary_menu']) {
+    // Load the tree
+    $tree = menu_tree_all_data(variable_get('menu_secondary_links_source', 'user-menu'));
+
+    // Localize the tree.
+    if ($i18n) {
+      $tree = i18n_menu_localize_tree($tree);
+    }
+
     // Build links.
-    $variables['secondary_nav'] = menu_tree(variable_get('menu_secondary_links_source', 'user-menu'));
+    $variables['secondary_nav'] = menu_tree_output($tree);
+
     // Provide default theme wrapper function.
     $variables['secondary_nav']['#theme_wrappers'] = array('menu_tree__secondary');
   }
