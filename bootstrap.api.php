@@ -21,17 +21,19 @@
  */
 function hook_bootstrap_colorize_text_alter(&$texts) {
   // This matches the exact string: "My Unique Button Text".
-  $texts['matches'][t('My Unique Button Text')] = 'primary';
+  // Note: the t() function in D8 returns a TranslatableMarkup object.
+  // You must be rendered to a string before it can be added as an array key.
+  $texts['matches'][t('My Unique Button Text')->render()] = 'primary';
 
   // This would also match the string above, however the class returned would
   // also be the one above; "matches" takes precedence over "contains".
-  $texts['contains'][t('Unique')] = 'notice';
+  $texts['contains'][t('Unique')->render()] = 'notice';
 
   // Remove matching for strings that contain "apply":
-  unset($texts['contains'][t('Apply')]);
+  unset($texts['contains'][t('Apply')->render()]);
 
   // Change the class that matches "Rebuild" (originally "warning"):
-  $texts['contains'][t('Rebuild')] = 'success';
+  $texts['contains'][t('Rebuild')->render()] = 'success';
 }
 
 /**
@@ -45,17 +47,19 @@ function hook_bootstrap_colorize_text_alter(&$texts) {
  */
 function hook_bootstrap_iconize_text_alter(&$texts) {
   // This matches the exact string: "My Unique Button Text".
-  $texts['matches'][t('My Unique Button Text')] = 'heart';
+  // Note: the t() function in D8 returns a TranslatableMarkup object.
+  // You must be rendered to a string before it can be added as an array key.
+  $texts['matches'][t('My Unique Button Text')->render()] = 'heart';
 
   // This would also match the string above, however the class returned would
   // also be the one above; "matches" takes precedence over "contains".
-  $texts['contains'][t('Unique')] = 'bullhorn';
+  $texts['contains'][t('Unique')->render()] = 'bullhorn';
 
   // Remove matching for strings that contain "filter":
-  unset($texts['contains'][t('Filter')]);
+  unset($texts['contains'][t('Filter')->render()]);
 
   // Change the icon that matches "Upload" (originally "upload"):
-  $texts['contains'][t('Upload')] = 'ok';
+  $texts['contains'][t('Upload')->render()] = 'ok';
 }
 
 /**
