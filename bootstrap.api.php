@@ -22,7 +22,7 @@
 function hook_bootstrap_colorize_text_alter(&$texts) {
   // This matches the exact string: "My Unique Button Text".
   // Note: the t() function in D8 returns a TranslatableMarkup object.
-  // You must be rendered to a string before it can be added as an array key.
+  // It must be rendered to a string before it can be added as an array key.
   $texts['matches'][t('My Unique Button Text')->render()] = 'primary';
 
   // This would also match the string above, however the class returned would
@@ -48,7 +48,7 @@ function hook_bootstrap_colorize_text_alter(&$texts) {
 function hook_bootstrap_iconize_text_alter(&$texts) {
   // This matches the exact string: "My Unique Button Text".
   // Note: the t() function in D8 returns a TranslatableMarkup object.
-  // You must be rendered to a string before it can be added as an array key.
+  // It must be rendered to a string before it can be added as an array key.
   $texts['matches'][t('My Unique Button Text')->render()] = 'heart';
 
   // This would also match the string above, however the class returned would
