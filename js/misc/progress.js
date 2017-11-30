@@ -61,7 +61,7 @@
      * @param {string} string
      */
     displayError: function (string) {
-      var error = $('<div class="alert alert-block alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a><h4>' + Drupal.t('Error message') + '</h4></div>').append(string);
+      var error = $('<div class="alert alert-block alert-error"><button class="close" data-dismiss="alert">&times;</button><h4>' + Drupal.t('Error message') + '</h4></div>').append(string);
       $(this.element).before(error).hide();
 
       if (this.errorCallback) {
