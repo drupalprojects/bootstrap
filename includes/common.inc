@@ -559,20 +559,24 @@ function _bootstrap_get_base_themes($theme_key = NULL, $include_theme_key = FALS
  * @see file_scan_directory()
  */
 function _bootstrap_file_scan_directory($dir, $mask, array $options = array()) {
-  // Retrieve cached data.
-  $cid = 'theme_registry:bootstrap:files';
-  $files = array();
-  if ($cache = cache_get($cid)) {
-    $files = $cache->data;
+  $files = &drupal_static(__FUNCTION__, array());
+
+  // Generate a unique cache identifier for all parameters passed as a change
+  // in any of them would return different results.
+  $cid = 'theme_registry:bootstrap:files:' . drupal_hash_base64(serialize(func_get_args()));
+
+  // Load from DB cache or scan filesystem if files are not statically cached.
+  if (!isset($files[$cid])) {
+    if (($cache = cache_get($cid)) && isset($cache->data)) {
+      $files[$cid] = $cache->data;
+    }
+    else {
+      $files[$cid] = file_scan_directory($dir, $mask, $options);
+      cache_set($cid, $files[$cid]);
+    }
   }
-  // Generate a unique hash for all parameters passed as a change in any of
-  // them would return different results.
-  $hash = drupal_hash_base64(serialize(func_get_args()));
-  if (!isset($files[$hash])) {
-    $files[$hash] = file_scan_directory($dir, $mask, $options);
-    cache_set($cid, $files);
-  }
-  return $files[$hash];
+
+  return $files[$cid];
 }
 
 /**
