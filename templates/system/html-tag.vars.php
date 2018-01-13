@@ -21,7 +21,7 @@ function bootstrap_process_html_tag(&$variables) {
     // Remove default "type" attribute. Leave others unaffected as it may be
     // needed and used for other purposes.
     // @see http://stackoverflow.com/a/5265361/1226717
-    // @see https://drupal.org/node/2201779
+    // @see https://www.drupal.org/node/2201779
     $types = array(
       // @see http://www.w3.org/TR/html5/document-metadata.html#attr-style-type
       'style' => 'text/css',

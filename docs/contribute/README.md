@@ -8,8 +8,8 @@ topics first before creating an issue in this project's issue queue.
 Anything that falls within the scope of existing documentation or answered
 questions will be marked as "Closed (works as designed)" or "Closed (won't fix)".
 
-The [Theme development](https://drupal.org/forum/3) support forum and
-[Drupal StackExchange](http://drupal.stackexchange.com) are also amazing
+The [Theme development](https://www.drupal.org/forum/3) support forum and
+[Drupal StackExchange](https://drupal.stackexchange.com) are also amazing
 resources for asking questions, learning new techniques and overall general
 support.
 
@@ -25,7 +25,7 @@ please update it yourself (all logged in users have edit capability).
 
 {.alert.alert-info} **Recommended reading:** [How To Solve All Your [Drupal] Problems](http://www.lullabot.com/blog/article/how-solve-all-your-problems)
 
-{.alert.alert-warning} Please, [search the issue queue](https://drupal.org/project/issues/search/bootstrap)
+{.alert.alert-warning} Please, [search the issue queue](https://www.drupal.org/project/issues/search/bootstrap)
 first. **DO NOT** duplicate existing issues.
 
 **If you find an existing issue and the issue status is:**
@@ -47,8 +47,8 @@ first. **DO NOT** duplicate existing issues.
 - JavaScript, jQuery, Bootstrap plugins or custom (site specific) plugins
 - Modules that don't work in multiple themes. File the issue with that module.
   It is likely they are not using [APIs](https://api.drupal.org) properly, not
-  following existing [Coding Standards](https://drupal.org/coding-standards)
-  or not developing with [Best Practices](https://drupal.org/best-practices) in
+  following existing [Coding Standards](https://www.drupal.org/coding-standards)
+  or not developing with [Best Practices](https://www.drupal.org/best-practices) in
   mind. It is actually a rare event when it is a legitimate issue with the
   [Drupal Bootstrap] project.
 
@@ -62,4 +62,4 @@ Please keep in mind though, this **IS NOT** a "support" channel. It's primary
 use is to discuss issues and to help fix bugs with the base theme itself.
 
 [Drupal Bootstrap]: https://www.drupal.org/project/bootstrap
-[Bootstrap Framework]: http://getbootstrap.com
+[Bootstrap Framework]: https://getbootstrap.com/docs/3.3/

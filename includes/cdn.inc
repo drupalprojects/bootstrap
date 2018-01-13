@@ -47,11 +47,11 @@ function bootstrap_cdn_provider($provider = NULL, $reset = FALSE) {
           'title' => t('Custom'),
         ),
         'jsdelivr' => array(
-          'api' => 'http://api.jsdelivr.com/v1/bootstrap/libraries',
+          'api' => 'https://api.jsdelivr.com/v1/bootstrap/libraries',
           'title' => t('jsDelivr'),
-          'description' =>  t('<p style="background:#EB4C36"><a href="!jsdelivr" target="_blank"><img src="http://www.jsdelivr.com/img/logo-34.png" alt="jsDelivr Logo" /></a></p><p><a href="!jsdelivr" target="_blank">jsDelivr</a> is a free multi-CDN infrastructure that uses <a href="!maxcdn" target="_blank">MaxCDN</a>, <a href="!cloudflare" target="_blank">Cloudflare</a> and many others to combine their powers for the good of the open source community... <a href="!jsdelivr_about" target="_blank">read more</a></p>', array(
-            '!jsdelivr' => 'http://www.jsdelivr.com',
-            '!jsdelivr_about' => 'http://www.jsdelivr.com/about',
+          'description' =>  t('<p style="background:#EB4C36"><a href="!jsdelivr" target="_blank"><img src="//www.jsdelivr.com/img/logo.png" alt="jsDelivr Logo"/></a></p><p><a href="!jsdelivr" target="_blank">jsDelivr</a> is a free multi-CDN infrastructure that uses <a href="!maxcdn" target="_blank">MaxCDN</a>, <a href="!cloudflare" target="_blank">Cloudflare</a> and many others to combine their powers for the good of the open source community... <a href="!jsdelivr_about" target="_blank">read more</a></p>', array(
+            '!jsdelivr' => 'https://www.jsdelivr.com',
+            '!jsdelivr_about' => 'https://www.jsdelivr.com/about',
             '!maxcdn' => 'http://www.maxcdn.com',
             '!cloudflare' => 'http://www.cloudflare.com',
           )),
@@ -488,7 +488,7 @@ function bootstrap_bootstrap_cdn_provider_jsdelivr_settings_form_alter(&$element
     '#title' => t('Theme'),
     '#description' => t('Choose the example <a href="!bootstrap_theme" target="_blank">Bootstrap Theme</a> provided by Bootstrap or one of the many, many <a href="!bootswatch" target="_blank">Bootswatch</a> themes!', array(
       '!bootswatch' => 'https://bootswatch.com',
-      '!bootstrap_theme' => 'http://getbootstrap.com/examples/theme/',
+      '!bootstrap_theme' => 'https://getbootstrap.com/docs/3.3/examples/theme/',
     )),
     '#default_value' => bootstrap_setting('cdn_jsdelivr_theme', $theme),
     '#options' => $themes,

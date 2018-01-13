@@ -14,7 +14,7 @@ require_once dirname(__FILE__) . '/common.inc';
 function bootstrap_icon_providers() {
   $providers['bootstrap'] = array(
     'title' => t('Bootstrap'),
-    'url' => 'http://getbootstrap.com/components/#glyphicons',
+    'url' => 'https://getbootstrap.com/docs/3.3/components/#glyphicons',
   );
   return $providers;
 }

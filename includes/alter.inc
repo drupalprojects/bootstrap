@@ -102,7 +102,7 @@ function bootstrap_element_info_alter(&$info) {
 
         // Setup a default "icon" variable. This allows #icon to be passed
         // to every template and theme function.
-        // @see https://drupal.org/node/2219965
+        // @see https://www.drupal.org/node/2219965
         $element['#icon'] = NULL;
         $element['#icon_position'] = 'before';
 
@@ -364,7 +364,7 @@ function bootstrap_js_alter(&$js) {
   }
 
   // Ensure jQuery Once is always loaded.
-  // @see https://drupal.org/node/2149561
+  // @see https://www.drupal.org/node/2149561
   if (empty($js['misc/jquery.once.js'])) {
     $jquery_once = drupal_get_library('system', 'jquery.once');
     $js['misc/jquery.once.js'] = $jquery_once['js']['misc/jquery.once.js'];

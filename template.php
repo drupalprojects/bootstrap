@@ -15,7 +15,7 @@
  * the `./templates` folder. This is a highly automated and complex system
  * designed to only load the necessary files when a given theme hook is invoked.
  *
- * Visit this project's official documentation site, http://drupal-bootstrap.org
+ * Visit this project's official documentation site, https://drupal-bootstrap.org
  * or the markdown files inside the `./docs` folder.
  *
  * @see _bootstrap_theme()
