@@ -13,25 +13,13 @@
  *   - localized_options: Menu link localized options.
  *
  * @ingroup templates
+ *
+ * Define a custom macro that will render all menu trees.
  */
 #}
-{% import _self as menus %}
-
-{#
-  We call a macro which calls itself to render the full tree.
-  @see http://twig.sensiolabs.org/doc/tags/macro.html
-#}
-
-{{ menus.menu_links(items, attributes, 0, menu_name|clean_class) }}
-
-{% macro menu_links(items, attributes, menu_level, menu_name) %}
-  {% import _self as menus %}
+{% macro menu_links(items, attributes, menu_level, classes) %}
   {% if items %}
-    {% if menu_level == 0 %}
-      <ul{{ attributes.addClass('menu', 'nav', menu_name) }}>
-    {% else %}
-      <ul{{ attributes.addClass('dropdown-menu', menu_name) }}>
-    {% endif %}
+    <ul{{ attributes.addClass(menu_level == 0 ? classes : 'dropdown-menu') }}>
     {% for item in items %}
       {%
         set item_classes = [
@@ -48,10 +36,17 @@
         {{ link(item.title, item.url) }}
       {% endif %}
       {% if item.below %}
-        {{ menus.menu_links(item.below, attributes.removeClass('nav'), menu_level + 1, menu_name) }}
+        {{ _self.menu_links(item.below, attributes.removeClass(classes), menu_level + 1, classes) }}
       {% endif %}
       </li>
     {% endfor %}
     </ul>
   {% endif %}
 {% endmacro %}
+
+{#
+  Invoke the custom macro defined above. If classes were provided, use them.
+  This allows the template to be extended without having to also duplicate the
+  code above. @see http://twig.sensiolabs.org/doc/tags/macro.html
+#}
+{{ _self.menu_links(items, attributes, 0, classes ? classes : ['menu', 'menu--' ~ menu_name|clean_class, 'nav']) }}
