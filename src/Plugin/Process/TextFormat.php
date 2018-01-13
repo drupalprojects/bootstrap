@@ -26,6 +26,10 @@ class TextFormat extends ProcessBase implements ProcessInterface {
    * {@inheritdoc}
    */
   public static function processElement(Element $element, FormStateInterface $form_state, array &$complete_form) {
+    // Don't add the form-group class to the actual textarea element since
+    // text_format elements are already wrapped.
+    $element->value->setProperty('form_group', FALSE);
+
     if (isset($element->format)) {
       $element->format->addClass('form-inline');
 
