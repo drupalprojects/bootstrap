@@ -38,7 +38,7 @@ function bootstrap_preprocess_page(&$variables) {
   $variables['primary_nav'] = FALSE;
   if ($variables['main_menu']) {
     // Load the tree
-    $tree = menu_tree_all_data(variable_get('menu_main_links_source', 'main-menu'));
+    $tree = menu_tree_page_data(variable_get('menu_main_links_source', 'main-menu'));
 
     // Localize the tree.
     if ($i18n) {
@@ -56,7 +56,7 @@ function bootstrap_preprocess_page(&$variables) {
   $variables['secondary_nav'] = FALSE;
   if ($variables['secondary_menu']) {
     // Load the tree
-    $tree = menu_tree_all_data(variable_get('menu_secondary_links_source', 'user-menu'));
+    $tree = menu_tree_page_data(variable_get('menu_secondary_links_source', 'user-menu'));
 
     // Localize the tree.
     if ($i18n) {
