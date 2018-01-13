@@ -9,7 +9,7 @@ $grid-breakpoint: "screen and (min-width: #{$grid-float-breakpoint})";
 
 body {
   // Fix horizontal scrolling on iOS devices.
-  // http://drupal.org/node/1870076
+  // https://www.drupal.org/node/1870076
   position: relative;
 
   &.navbar-is-static-top {

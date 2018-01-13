@@ -72,7 +72,7 @@ class Bootstrap {
    *
    * @var string
    */
-  const FRAMEWORK_HOMEPAGE = 'http://getbootstrap.com';
+  const FRAMEWORK_HOMEPAGE = 'https://getbootstrap.com/docs/3.3/';
 
   /**
    * The Bootstrap Framework repository.
@@ -93,7 +93,7 @@ class Bootstrap {
    *
    * @var string
    */
-  const PROJECT_DOCUMENTATION = 'http://drupal-bootstrap.org';
+  const PROJECT_DOCUMENTATION = 'https://drupal-bootstrap.org';
 
   /**
    * The Drupal Bootstrap project page.
@@ -192,7 +192,7 @@ class Bootstrap {
       // Due to a core bug that affects admin themes, we should not double
       // process the "system_theme_settings" form twice in the global
       // hook_form_alter() invocation.
-      // @see https://drupal.org/node/943212
+      // @see https://www.drupal.org/node/943212
       if ($form_id === 'system_theme_settings') {
         return;
       }
@@ -435,10 +435,10 @@ class Bootstrap {
    */
   public static function extraVariables() {
     return [
-      // @see https://drupal.org/node/2035055
+      // @see https://www.drupal.org/node/2035055
       'context' => [],
 
-      // @see https://drupal.org/node/2219965
+      // @see https://www.drupal.org/node/2219965
       'icon' => NULL,
       'icon_position' => 'before',
       'icon_only' => FALSE,

@@ -39,7 +39,7 @@ class ModalEnabled extends SettingBase {
     parent::alterFormElement($form, $form_state, $form_id);
     $group = $this->getGroupElement($form, $form_state);
     $group->setProperty('description', t('Modals are streamlined, but flexible, dialog prompts with the minimum required functionality and smart defaults. See <a href=":url" target="_blank">Bootstrap Modals</a> for more documentation.', [
-      ':url' => 'http://getbootstrap.com/javascript/#modals',
+      ':url' => 'https://getbootstrap.com/docs/3.3/javascript/#modals',
     ]));
   }
 

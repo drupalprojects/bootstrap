@@ -19,7 +19,7 @@ use Drupal\Core\Annotation\Translation;
  * @BootstrapProvider(
  *   id = "jsdelivr",
  *   label = @Translation("jsDelivr"),
- *   api = "http://api.jsdelivr.com/v1/bootstrap/libraries",
+ *   api = "https://api.jsdelivr.com/v1/bootstrap/libraries",
  *   themes = { },
  *   versions = { },
  * )

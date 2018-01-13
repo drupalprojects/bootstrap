@@ -26,8 +26,8 @@ use Drupal\Core\Annotation\Translation;
  *     "button" = @Translation("Buttons"),
  *   },
  *   see = {
- *     "http://getbootstrap.com/css/#buttons" = @Translation("Buttons"),
- *     "http://drupal-bootstrap.org/apis/hook_bootstrap_colorize_text_alter" = @Translation("hook_bootstrap_colorize_text_alter()"),
+ *     "https://getbootstrap.com/docs/3.3/css/#buttons" = @Translation("Buttons"),
+ *     "https://drupal-bootstrap.org/apis/hook_bootstrap_colorize_text_alter" = @Translation("hook_bootstrap_colorize_text_alter()"),
  *   },
  * )
  */

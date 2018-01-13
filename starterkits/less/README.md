@@ -60,6 +60,6 @@ extension of course).
 - @link templates Templates @endlink
 - @link plugins Plugin System @endlink
 
-[Bootstrap Framework]: http://getbootstrap.com
+[Bootstrap Framework]: https://getbootstrap.com/docs/3.3/
 [Bootstrap Framework Source Files]: https://github.com/twbs/bootstrap/releases
 [Less]: http://lesscss.org

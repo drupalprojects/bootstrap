@@ -37,7 +37,7 @@ use Drupal\Core\Form\FormStateInterface;
  *     "region_wells" = @Translation("Region Wells"),
  *   },
  *   see = {
- *     "http://getbootstrap.com/components/#wells" = @Translation("Bootstrap Wells"),
+ *     "https://getbootstrap.com/docs/3.3/components/#wells" = @Translation("Bootstrap Wells"),
  *   },
  * )
  */

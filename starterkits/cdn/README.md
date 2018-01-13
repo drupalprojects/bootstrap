@@ -25,5 +25,5 @@ Please refer to the @link theme_settings Sub-theme Settings @endlink topic.
 Please refer to the @link registry Theme Registry @endlink topic.
 
 [Drupal Bootstrap]: https://www.drupal.org/project/bootstrap
-[Bootstrap Framework]: http://getbootstrap.com
+[Bootstrap Framework]: https://getbootstrap.com/docs/3.3/
 [jsDelivr CDN]: http://www.jsdelivr.com

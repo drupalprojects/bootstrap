@@ -26,7 +26,7 @@ use Drupal\Core\Annotation\Translation;
  *     "container" = @Translation("Container"),
  *   },
  *   see = {
- *     "http://getbootstrap.com/css/#grid-example-fluid" = @Translation("Fluid container"),
+ *     "https://getbootstrap.com/docs/3.3/css/#grid-example-fluid" = @Translation("Fluid container"),
  *   },
  * )
  */

@@ -28,7 +28,7 @@ use Drupal\Core\Annotation\Translation;
  *   },
  *   see = {
  *     "https://github.com/twbs/bootstrap/issues/4215" = @Translation("Issue #4215"),
- *     "http://jsfiddle.net/fScua/" = @Translation("JSFiddle Example"),
+ *     "https://jsfiddle.net/fScua/" = @Translation("JSFiddle Example"),
  *   },
  * )
  */

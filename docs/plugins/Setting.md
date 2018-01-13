@@ -39,7 +39,7 @@ use Drupal\Core\Annotation\Translation;
  *   title = @Translation("Anchor ID for the ""skip link"""),
  *   defaultValue = "main-content",
  *   description = @Translation("Specify the HTML ID of the element that the accessible-but-hidden ""skip link"" should link to. (<a href="":link"" target=""_blank"">Read more about skip links</a>.)",
-     arguments = { ":link"  = "http://drupal.org/node/467976" }),
+     arguments = { ":link"  = "https://www.drupal.org/node/467976" }),
  *   groups = {
  *     "THEMENAME" = "THEMETITLE",
  *     "accessibility" = @Translation("Accessibility"),
