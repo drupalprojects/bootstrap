@@ -17,8 +17,8 @@
           var $input = $formItem.find(':input');
           $input.on('keyup focus blur', function () {
             if (this.defaultValue !== void 0) {
-              $formItem[this.defaultValue !== this.value ? 'addClass' : 'addClass']('has-error');
-              $input[this.defaultValue !== this.value ? 'addClass' : 'removeClass']('error');
+              $formItem[this.defaultValue !== this.value ? 'removeClass' : 'addClass']('has-error');
+              $input[this.defaultValue !== this.value ? 'removeClass' : 'addClass']('error');
             }
           });
         });
