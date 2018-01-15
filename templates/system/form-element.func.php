@@ -77,7 +77,7 @@ function bootstrap_form_element(&$variables) {
   );
 
   // Add wrapper ID for 'item' type.
-  if ($type && $type === 'item' && !empty($element['#markup']) && !empty($element['#id'])) {
+  if ($type && $type === 'item' && isset($element['#markup']) && !empty($element['#id'])) {
     $wrapper_attributes['id'] = $element['#id'];
   }
 
