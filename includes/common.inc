@@ -935,37 +935,83 @@ function _bootstrap_glyphicons($version = NULL) {
 }
 
 /**
- * Returns a specific Bootstrap Glyphicon.
+ * Returns a specific Bootstrap Glyphicon as rendered HTML markup.
  *
  * @param string $name
  *   The icon name, minus the "glyphicon-" prefix.
  * @param string $default
  *   (Optional) The default value to return.
+ * @param array $attributes
+ *   (Optional) Additional attributes to merge onto the icon.
  *
  * @return string
  *   The HTML markup containing the icon defined by $name, $default value if
  *   icon does not exist or returns empty output for whatever reason.
  */
-function _bootstrap_icon($name, $default = NULL) {
-  $output = NULL;
+function _bootstrap_icon($name, $default = NULL, array $attributes = array()) {
+  $icon = _bootstrap_glyphicon($name, $default, $attributes);
+  return render($icon);
+}
+
+/**
+ * Returns a specific Bootstrap Glyphicon as a render array.
+ *
+ * Note: This function was added to keep BC with the former _bootstrap_icon()
+ * implementation since it didn't return a render array. It is basically a
+ * backport of 8.x-3.x code so the added $attributes parameter can be more
+ * easily dealt with.
+ *
+ * @see https://www.drupal.org/project/bootstrap/issues/2844885
+ *
+ * @param string $name
+ *   The icon name, minus the "glyphicon-" prefix.
+ * @param array|string $default
+ *   (Optional) The default render array to use if $name is not available.
+ * @param array $attributes
+ *   (Optional) Additional attributes to merge onto the icon.
+ *
+ * @return array
+ *   The render containing the icon defined by $name, $default value if
+ *   icon does not exist or returns NULL if no icon could be rendered.
+ */
+function _bootstrap_glyphicon($name, $default = array(), array $attributes = array()) {
+  $icon = array();
+
   // Ensure the icon specified is a valid Bootstrap Glyphicon.
-  // @todo Supply a specific version to _bootstrap_glyphicons() when Icon API
-  // supports versioning.
   if (_bootstrap_glyphicons_supported() && in_array($name, _bootstrap_glyphicons())) {
     // Attempt to use the Icon API module, if enabled and it generates output.
     if (module_exists('icon')) {
-      $output = theme('icon', array('bundle' => 'bootstrap', 'icon' => 'glyphicon-' . $name));
-    }
-    if (empty($output)) {
-      // Mimic the Icon API markup.
-      $attributes = array(
-        'class' => array('icon', 'glyphicon', 'glyphicon-' . $name),
-        'aria-hidden' => 'true',
+      $icon = array(
+        '#type' => 'icon',
+        '#bundle' => 'bootstrap',
+        '#icon' => 'glyphicon-' . $name,
+        '#attributes' => $attributes,
       );
-      $output = '<span' . drupal_attributes($attributes) . '></span>';
+    }
+    else {
+      $icon = array(
+        '#theme' => 'html_tag',
+        '#tag' => 'span',
+        '#value' => '',
+        '#attributes' => $attributes,
+      );
+
+      // Unlike 8.x-3.x, it will be easier to add the classes and aria-hidden
+      // attribute afterwards since there is a passed default $attributes
+      // parameter and drupal_array_merge_deep() is notorious for not properly
+      // merging attributes, especially when dealing with classes.
+      _bootstrap_add_class(array('icon', 'glyphicon', 'glyphicon-' . $name), $icon);
+      $icon['#attributes']['aria-hidden'] = 'true';
     }
   }
-  return empty($output) && isset($default) ? $default : $output;
+
+  // Return the icon.
+  if (!empty($icon)) {
+    return $icon;
+  }
+
+  // _bootstrap_icon() may pass NULL as $default. If so, return an empty array.
+  return isset($default) ? $default : array();
 }
 
 /**
