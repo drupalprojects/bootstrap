@@ -152,7 +152,14 @@ class Attributes extends ArrayObject {
    * @see \Drupal\bootstrap\Utility\ArrayObject::offsetSet()
    */
   public function setAttribute($name, $value) {
-    $this->offsetSet($name, $value);
+    // Handle class attribute differently.
+    if ($name === 'class') {
+      $this->removeAttribute('class');
+      $this->addClass($value);
+    }
+    else {
+      $this->offsetSet($name, $value);
+    }
   }
 
   /**
@@ -164,6 +171,14 @@ class Attributes extends ArrayObject {
    * @see \Drupal\bootstrap\Utility\ArrayObject::merge()
    */
   public function setAttributes(array $values) {
+    // Handle class attribute differently.
+    $classes = isset($values['class']) ? $values['class'] : [];
+    unset($values['class']);
+    if ($classes) {
+      $this->addClass($classes);
+    }
+
+    // Merge the reset of the attributes.
     $this->merge($values);
   }
 

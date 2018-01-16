@@ -346,6 +346,53 @@ function &_bootstrap_get_classes(array &$element, $property = 'attributes') {
 }
 
 /**
+ * Returns a specific Bootstrap Glyphicon as a render array.
+ *
+ * Note: This function was added in 7.x-3.17 to keep BC with the former
+ * _bootstrap_icon() implementation since it didn't return a render array. It
+ * is basically a backport of 8.x-3.x code so the added $attributes parameter
+ * can be more easily dealt with.
+ *
+ * @see https://www.drupal.org/project/bootstrap/issues/2844885
+ *
+ * @param string $name
+ *   The icon name, minus the "glyphicon-" prefix.
+ * @param array|string $default
+ *   (Optional) The default render array to use if $name is not available.
+ * @param array $attributes
+ *   (Optional) Additional attributes to merge onto the icon.
+ *
+ * @return array
+ *   The render containing the icon defined by $name, $default value if
+ *   icon does not exist or returns NULL if no icon could be rendered.
+ *
+ * @deprecated Will be removed in a future release.
+ *
+ * @code
+ *   // Before.
+ *   $icon = _bootstrap_glyphicon($name, $default, $attributes);
+ *
+ *   // After.
+ *   use Drupal\bootstrap\Bootstrap;
+ *   use Drupal\bootstrap\Utility\Element;
+ *   $icon = Bootstrap::glyphicon($name, ['#markup' => $default]);
+ *   $icon_attributes = isset($icon['#attributes']) ? $icon['#attributes'] : [];
+ *   unset($icon['#attributes']);
+ *   $icon = Element::createStandalone($icon)->setAttributes($attributes)->setAttributes($icon_attributes)->getArray();
+ * @endcode
+ *
+ * @see \Drupal\bootstrap\Bootstrap::glyphicon()
+ * @see \Drupal\bootstrap\Utility\Element::createStandalone()
+ */
+function _bootstrap_glyphicon($name, $default = array(), array $attributes = array()) {
+  Bootstrap::deprecated();
+  $icon = Bootstrap::glyphicon($name, ['#markup' => $default]);
+  $icon_attributes = isset($icon['#attributes']) ? $icon['#attributes'] : [];
+  unset($icon['#attributes']);
+  return Element::createStandalone($icon)->setAttributes($attributes)->setAttributes($icon_attributes)->getArray();
+}
+
+/**
  * Returns a list of available Bootstrap Glyphicons.
  *
  * @param string $version
@@ -396,12 +443,14 @@ function _bootstrap_glyphicons_supported() {
 }
 
 /**
- * Returns a specific Bootstrap Glyphicon.
+ * Returns a specific Bootstrap Glyphicon as rendered HTML markup.
  *
  * @param string $name
  *   The icon name, minus the "glyphicon-" prefix.
  * @param string $default
  *   (Optional) The default value to return.
+ * @param array $attributes
+ *   (Optional) Additional attributes to merge onto the icon.
  *
  * @return string
  *   The HTML markup containing the icon defined by $name, $default value if
@@ -411,19 +460,26 @@ function _bootstrap_glyphicons_supported() {
  *
  * @code
  *   // Before.
- *   $icon = _bootstrap_icon($name, $default);
+ *   $icon = _bootstrap_icon($name, $default, $attributes);
  *
  *   // After.
  *   use Drupal\bootstrap\Bootstrap;
  *   use Drupal\bootstrap\Utility\Element;
- *   $icon = (string) Element::createStandalone(Bootstrap::glyphicon($name, ['#markup' => $default]))->renderPlain();
+ *   $icon = Bootstrap::glyphicon($name, ['#markup' => $default]);
+ *   $icon_attributes = isset($icon['#attributes']) ? $icon['#attributes'] : [];
+ *   unset($icon['#attributes']);
+ *   $icon = (string) Element::createStandalone($icon)->setAttributes($attributes)->setAttributes($icon_attributes)->renderPlain();
  * @endcode
  *
  * @see \Drupal\bootstrap\Bootstrap::glyphicon()
+ * @see \Drupal\bootstrap\Utility\Element::createStandalone()
  */
-function _bootstrap_icon($name, $default = NULL) {
+function _bootstrap_icon($name, $default = NULL, array $attributes = []) {
   Bootstrap::deprecated();
-  return Element::createStandalone(Bootstrap::glyphicon($name, ['#markup' => $default]))->renderPlain();
+  $icon = Bootstrap::glyphicon($name, ['#markup' => $default]);
+  $icon_attributes = isset($icon['#attributes']) ? $icon['#attributes'] : [];
+  unset($icon['#attributes']);
+  return (string) Element::createStandalone($icon)->setAttributes($attributes)->setAttributes($icon_attributes)->renderPlain();
 }
 
 /**
