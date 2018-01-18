@@ -1,12 +1,7 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Alter\LibraryInfo.
- */
 
 namespace Drupal\bootstrap\Plugin\Alter;
 
-use Drupal\bootstrap\Annotation\BootstrapAlter;
 use Drupal\bootstrap\Bootstrap;
 use Drupal\bootstrap\Plugin\PluginBase;
 use Drupal\Component\Utility\NestedArray;
@@ -96,7 +91,7 @@ class LibraryInfo extends PluginBase implements AlterInterface {
    * @param callable $callback
    *   The callback to perform processing on the library.
    */
-  public function processLibrary(&$libraries, callable $callback) {
+  public function processLibrary(array &$libraries, callable $callback) {
     foreach ($libraries as &$library) {
       foreach ($library as $type => $definition) {
         if (is_array($definition)) {
