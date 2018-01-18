@@ -1,4 +1,4 @@
-<!-- @file Instructions on how to sub-theme the Drupal Bootstrap base theme using the CDN Starterkit. -->
+<!-- @file Instructions for subtheming using the CDN Starterkit. -->
 <!-- @defgroup subtheme_cdn -->
 <!-- @ingroup subtheme -->
 # CDN Starterkit

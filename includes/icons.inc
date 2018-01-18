@@ -2,7 +2,6 @@
 
 /**
  * @file
- * icons.inc
  * Provide Bootstrap Glyphicons support via the Icon API module.
  */
 

@@ -1,8 +1,11 @@
 <?php
+
 /**
  * @file
  * Stub file for bootstrap_form_element().
  */
+
+/* @noinspection PhpDocMissingThrowsInspection */
 
 /**
  * Returns HTML for a form element.
@@ -55,7 +58,7 @@
  *
  * @ingroup theme_functions
  */
-function bootstrap_form_element(&$variables) {
+function bootstrap_form_element(array &$variables) {
   $element = &$variables['element'];
   $name = !empty($element['#name']) ? $element['#name'] : FALSE;
   $type = !empty($element['#type']) ? $element['#type'] : FALSE;
@@ -120,6 +123,7 @@ function bootstrap_form_element(&$variables) {
     $build['#theme_wrappers'] = array('container__form_element');
 
     // Render the label for the form element.
+    /* @noinspection PhpUnhandledExceptionInspection */
     $build['label'] = array(
       '#markup' => theme('form_element_label', $variables),
       '#weight' => $element['#title_display'] === 'before' ? 0 : 2,

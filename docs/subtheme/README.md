@@ -33,9 +33,11 @@ topic will focus on the two primarily and most common ways.
    `./bootstrap/starterkits` folder into `sites/all/themes` or a respective
    `sites/*/themes` folder.
 2. Rename the folder to a unique machine readable name. This will be your
-   sub-theme's "name". For this example and future examples we'll use `subtheme`.
-3. Rename `./subtheme/cdn.starterkit` or, if using the LESS Starterkit, `./subtheme/less.starterkit` to match the folder name and append
-   `.info` (e.g. `./subtheme/subtheme.info`).
+   sub-theme's "name". For this example and future examples we'll use
+   `subtheme`.
+3. Rename `./subtheme/cdn.starterkit` or, if using the LESS Starterkit,
+   `./subtheme/less.starterkit` to match the folder name and append `.info`
+   (e.g. `./subtheme/subtheme.info`).
 4. Open `./subtheme/subtheme.info` and change the name, description and any
    other properties to suite your needs.
 

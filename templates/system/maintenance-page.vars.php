@@ -14,11 +14,14 @@ bootstrap_include('bootstrap', 'templates/system/page.vars.php');
  *
  * See template for list of available variables.
  *
+ * @param array $variables
+ *   An associative array of variables, passed by reference.
+ *
  * @see maintenance-page.tpl.php
  *
  * @ingroup theme_preprocess
  */
-function bootstrap_preprocess_maintenance_page(&$variables) {
+function bootstrap_preprocess_maintenance_page(array &$variables) {
   bootstrap_preprocess_html($variables);
   bootstrap_preprocess_page($variables);
 }
@@ -28,11 +31,14 @@ function bootstrap_preprocess_maintenance_page(&$variables) {
  *
  * See template for list of available variables.
  *
+ * @param array $variables
+ *   An associative array of variables, passed by reference.
+ *
  * @see maintenance-page.tpl.php
  *
  * @ingroup theme_process
  */
-function bootstrap_process_maintenance_page(&$variables) {
+function bootstrap_process_maintenance_page(array &$variables) {
   bootstrap_process_html($variables);
   bootstrap_process_page($variables);
 }

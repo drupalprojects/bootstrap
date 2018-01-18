@@ -5,7 +5,8 @@
 - [Do you support X module?](#support)
 - [Do you support Internet Explorer?](#ie)
 - [Is Drupal Bootstrap a module or theme?](#module-or-theme)
-- [What does the JavaScript error `TypeError: $(...).on is not a function` mean?](#jquery)
+- [What does the JavaScript error `TypeError: $(...).on is not a function`
+  mean?](#jquery)
 - [Where can I discuss an issue in real time?](#irc)
 - [Where should I make changes?](#changes)
 - [Why are my sub-theme's `.info` settings ignored?](#theme-settings-ignored)

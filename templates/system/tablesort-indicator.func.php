@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Stub file for bootstrap_tablesort_indicator().
@@ -7,7 +8,7 @@
 /**
  * Returns HTML for a tablesort indicator.
  *
- * @param $variables
+ * @param array $variables
  *   An associative array containing:
  *   - style: Set to either 'asc' or 'desc', this determines which icon to
  *     show.
@@ -19,7 +20,7 @@
  *
  * @ingroup theme_functions
  */
-function bootstrap_tablesort_indicator($variables) {
+function bootstrap_tablesort_indicator(array $variables) {
   if ($variables['style'] === 'asc') {
     return _bootstrap_icon('chevron-down', t('(asc)'), array(
       'class' => array('icon-after'),

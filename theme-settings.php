@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * theme-settings.php
@@ -66,7 +67,7 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
     '#group' => 'bootstrap',
   );
 
-  //Container
+  // Container.
   $form['general']['container'] = array(
     '#type' => 'fieldset',
     '#title' => t('Container'),
@@ -315,7 +316,7 @@ function bootstrap_form_system_theme_settings_alter(&$form, $form_state, $form_i
     '#default_value' => bootstrap_setting('navbar_inverse', $theme),
   );
 
-  // Pager
+  // Pager.
   $form['components']['pager'] = array(
     '#type' => 'fieldset',
     '#title' => t('Pagination'),

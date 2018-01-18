@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Stub file for bootstrap_status_messages().
@@ -23,7 +24,7 @@
  *
  * @ingroup theme_functions
  */
-function bootstrap_status_messages($variables) {
+function bootstrap_status_messages(array $variables) {
   $display = $variables['display'];
   $output = '';
 

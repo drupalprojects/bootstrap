@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Stub file for "html_tag" theme hook [pre]process functions.
@@ -9,11 +10,14 @@
  *
  * See theme function for list of available variables.
  *
+ * @param array $variables
+ *   An associative array of variables, passed by reference.
+ *
  * @see theme_html_tag()
  *
  * @ingroup theme_process
  */
-function bootstrap_process_html_tag(&$variables) {
+function bootstrap_process_html_tag(array &$variables) {
   // Reference the element and tag name for easier coding below.
   $element = &$variables['element'];
   $tag = $element['#tag'];

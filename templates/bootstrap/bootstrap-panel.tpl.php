@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Default theme implementation to display a Bootstrap panel component.
@@ -21,7 +22,8 @@
     <?php endif; ?>
   <?php endif; ?>
   <div<?php print $body_attributes; ?>>
-    <?php if ($description): ?><div class="help-block"><?php print $description; ?></div><?php endif; ?>
+    <?php if ($description): ?><div class="help-block"><?php print $description; ?></div><?php
+    endif; ?>
     <?php print $content; ?>
   </div>
 </fieldset>

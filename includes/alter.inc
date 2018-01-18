@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * alter.inc
@@ -158,7 +159,7 @@ function bootstrap_element_info_alter(&$info) {
  * @return array
  *   The altered element info array.
  */
-function _bootstrap_element_info_array_merge($info, $cached) {
+function _bootstrap_element_info_array_merge(array $info, array $cached) {
   foreach ($cached as $type => $element) {
     $replacement_data = isset($element['#bootstrap_replace']) ? $element['#bootstrap_replace'] : array();
     unset($element['#bootstrap_replace']);
