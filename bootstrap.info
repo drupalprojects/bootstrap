@@ -51,7 +51,7 @@ settings[bootstrap_table_bordered] = 0
 settings[bootstrap_table_condensed] = 0
 settings[bootstrap_table_hover] = 1
 settings[bootstrap_table_striped] = 1
-settings[bootstrap_table_responsive] = 1
+settings[bootstrap_table_responsive] = -1
 
 ; Breadcrumbs
 ; --------------

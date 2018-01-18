@@ -312,6 +312,8 @@ function bootstrap_include($theme, $path) {
  * @param string $prefix
  *   The prefix used on the $name of the setting, this will be appended with
  *   "_" automatically if set.
+ * @param mixed $default
+ *   The default value to return if setting doesn't exist or is not set.
  *
  * @return mixed
  *   The value of the requested setting, NULL if the setting does not exist.
@@ -320,7 +322,7 @@ function bootstrap_include($theme, $path) {
  *
  * @todo Refactor in 7.x-4.x and get rid of the deprecated settings.
  */
-function bootstrap_setting($name, $theme = NULL, $prefix = 'bootstrap') {
+function bootstrap_setting($name, $theme = NULL, $prefix = 'bootstrap', $default = NULL) {
   $prefix = !empty($prefix) ? $prefix . '_' : '';
   $setting = theme_get_setting($prefix . $name, $theme);
   switch ($prefix . $name) {
@@ -360,7 +362,7 @@ function bootstrap_setting($name, $theme = NULL, $prefix = 'bootstrap') {
       break;
 
   }
-  return $setting;
+  return isset($setting) ? $setting : $default;
 }
 
 /**
