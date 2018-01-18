@@ -57,10 +57,6 @@ Drupal.behaviors.collapse = {
         .append($fieldset.hasClass('collapsed') ? Drupal.t('Show') : Drupal.t('Hide'))
         .prependTo($legend);
 
-      $fieldset.find('[data-toggle=collapse]').on('click', function (e) {
-        e.preventDefault();
-      });
-
       // Bind Bootstrap events with Drupal core events.
       $fieldset
         .append(summary)
