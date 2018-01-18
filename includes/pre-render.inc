@@ -14,16 +14,17 @@ function bootstrap_pre_render($element) {
     return $element;
   }
 
-  // Only add the "form-control" class for specific element input types.
-  $types = array(
-    // Core.
+  // Only add the "form-control" class to supported theme hooks.
+  $theme_hooks = array(
     'password',
-    'password_confirm',
-    'machine_name',
     'select',
     'textarea',
     'textfield',
+  );
 
+  // Additionally, support some popular 3rd-party modules that don't follow
+  // standards by creating custom theme hooks to use in their element types.
+  $types = array(
     // Elements module (HTML5).
     'date',
     'datefield',
@@ -45,14 +46,27 @@ function bootstrap_pre_render($element) {
     'webform_number',
   );
 
-  // Add necessary classes for specific types.
-  if ($type = !empty($element['#type']) ? $element['#type'] : FALSE) {
-    if (in_array($type, $types) || ($type === 'file' && empty($element['#managed_file']))) {
-      $element['#attributes']['class'][] = 'form-control';
-    }
-    if ($type === 'machine_name') {
-      $element['#wrapper_attributes']['class'][] = 'form-inline';
-    }
+  // Determine element theme hook.
+  $theme = !empty($element['#theme']) ? $element['#theme'] : FALSE;
+
+  // Handle array of theme hooks, just use first one (rare, but could happen).
+  if (is_array($theme)) {
+    $theme = array_shift($theme);
+  }
+
+  // Remove any suggestions.
+  $parts = explode('__', $theme);
+  $theme = array_shift($parts);
+
+  // Determine element type.
+  $type = !empty($element['#type']) ? $element['#type'] : FALSE;
+
+  // Add necessary classes for specific element types/theme hooks.
+  if (($theme && in_array($theme, $theme_hooks)) || ($type && in_array($type, $types)) || ($type === 'file' && empty($element['#managed_file']))) {
+    $element['#attributes']['class'][] = 'form-control';
+  }
+  if ($type === 'machine_name') {
+    $element['#wrapper_attributes']['class'][] = 'form-inline';
   }
 
   // Add smart descriptions to the element, if necessary.
