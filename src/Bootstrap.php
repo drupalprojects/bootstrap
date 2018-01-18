@@ -167,15 +167,37 @@ class Bootstrap {
    *   associative array as described above.
    */
   public static function alter($function, &$data, &$context1 = NULL, &$context2 = NULL) {
-    static $theme;
-    if (!isset($theme)) {
-      $theme = self::getTheme();
-    }
+    // Do not statically cache this as the active theme may change.
+    $theme = static::getTheme();
+    $theme_name = $theme->getName();
 
     // Immediately return if the active theme is not Bootstrap based.
     if (!$theme->isBootstrap()) {
       return;
     }
+
+    // Handle alter and form managers.
+    static $drupal_static_fast;
+    if (!isset($drupal_static_fast)) {
+      $drupal_static_fast['alter_managers'] = &drupal_static(__METHOD__ . '__alterManagers', []);
+      $drupal_static_fast['form_managers'] = &drupal_static(__METHOD__ . '__formManagers', []);
+    }
+
+    /* @var \Drupal\bootstrap\Plugin\AlterManager[] $alter_managers */
+    $alter_managers = &$drupal_static_fast['alter_managers'];
+    if (!isset($alter_managers[$theme_name])) {
+      $alter_managers[$theme_name] = new AlterManager($theme);
+    }
+
+    /* @var \Drupal\bootstrap\Plugin\FormManager[] $form_managers */
+    $form_managers = &$drupal_static_fast['form_managers'];
+    if (!isset($form_managers[$theme_name])) {
+      $form_managers[$theme_name] = new FormManager($theme);
+    }
+
+    // Retrieve the alter and form managers for this theme.
+    $alter_manager = $alter_managers[$theme_name];
+    $form_manager = $form_managers[$theme_name];
 
     // Extract the alter hook name.
     $hook = Unicode::extractHook($function, 'alter');
@@ -213,9 +235,6 @@ class Bootstrap {
         $ids[] = $form_id;
       }
 
-      // Retrieve a list of form definitions.
-      $form_manager = new FormManager($theme);
-
       // Iterate over each form identifier and look for a possible plugin.
       foreach ($ids as $id) {
         /** @var \Drupal\bootstrap\Plugin\Form\FormInterface $form */
@@ -228,9 +247,6 @@ class Bootstrap {
     }
     // Process hook alter normally.
     else {
-      // Retrieve a list of alter definitions.
-      $alter_manager = new AlterManager($theme);
-
       /** @var \Drupal\bootstrap\Plugin\Alter\AlterInterface $class */
       if ($alter_manager->hasDefinition($hook) && ($class = $alter_manager->createInstance($hook, ['theme' => $theme]))) {
         $class->alter($data, $context1, $context2);
@@ -459,12 +475,11 @@ class Bootstrap {
     }
 
     static $themes = [];
-    static $active_theme;
-    if (!isset($active_theme)) {
-      $active_theme = \Drupal::theme()->getActiveTheme()->getName();
-    }
+
+    // Retrieve the active theme.
+    // Do not statically cache this as the active theme may change.
     if (!isset($name)) {
-      $name = $active_theme;
+      $name = \Drupal::theme()->getActiveTheme()->getName();
     }
 
     if (!isset($theme_handler)) {
