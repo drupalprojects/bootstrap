@@ -1,12 +1,7 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Prerender\Dropbutton.
- */
 
 namespace Drupal\bootstrap\Plugin\Prerender;
 
-use Drupal\bootstrap\Annotation\BootstrapPrerender;
 use Drupal\bootstrap\Utility\Element;
 
 /**

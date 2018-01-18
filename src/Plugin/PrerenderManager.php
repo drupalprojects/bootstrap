@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\PrerenderManager.
- */
 
 namespace Drupal\bootstrap\Plugin;
 

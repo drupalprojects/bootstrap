@@ -1,12 +1,7 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Preprocess\BootstrapPanel.
- */
 
 namespace Drupal\bootstrap\Plugin\Preprocess;
 
-use Drupal\bootstrap\Annotation\BootstrapPreprocess;
 use Drupal\bootstrap\Utility\Element;
 use Drupal\bootstrap\Utility\Variables;
 use Drupal\Component\Render\MarkupInterface;
@@ -29,7 +24,12 @@ class BootstrapPanel extends PreprocessBase implements PreprocessInterface {
     $element->map(['id']);
 
     // Add necessary classes.
-    $element->addClass(['form-item', 'js-form-item', 'form-wrapper', 'js-form-wrapper']);
+    $element->addClass([
+      'form-item',
+      'js-form-item',
+      'form-wrapper',
+      'js-form-wrapper',
+    ]);
 
     $body = [];
     $properties = ['field_prefix', 'body', 'children'];

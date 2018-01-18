@@ -1,14 +1,8 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Setting\General\Forms\FormsSmartDescriptions.
- */
 
 namespace Drupal\bootstrap\Plugin\Setting\General\Forms;
 
-use Drupal\bootstrap\Annotation\BootstrapSetting;
 use Drupal\bootstrap\Plugin\Setting\SettingBase;
-use Drupal\Core\Annotation\Translation;
 
 /**
  * The "forms_smart_descriptions" theme setting.

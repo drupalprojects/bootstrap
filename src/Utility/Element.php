@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Utility\Element.
- */
 
 namespace Drupal\bootstrap\Utility;
 
@@ -11,6 +7,7 @@ use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element as CoreElement;
 
 /**
  * Provides helper methods for Drupal render elements.
@@ -71,7 +68,7 @@ class Element extends DrupalAttributes {
    *   Throws this error when the name is a property (key starting with #).
    */
   public function &__get($key) {
-    if (\Drupal\Core\Render\Element::property($key)) {
+    if (CoreElement::property($key)) {
       throw new \InvalidArgumentException('Cannot dynamically retrieve element property. Please use \Drupal\bootstrap\Utility\Element::getProperty instead.');
     }
     $instance = new self($this->offsetGet($key, []));
@@ -92,7 +89,7 @@ class Element extends DrupalAttributes {
    *   Throws this error when the name is a property (key starting with #).
    */
   public function __set($key, $value) {
-    if (\Drupal\Core\Render\Element::property($key)) {
+    if (CoreElement::property($key)) {
       throw new \InvalidArgumentException('Cannot dynamically retrieve element property. Use \Drupal\bootstrap\Utility\Element::setProperty instead.');
     }
     $this->offsetSet($key, ($value instanceof Element ? $value->getArray() : $value));
@@ -113,7 +110,7 @@ class Element extends DrupalAttributes {
    *   Throws this error when the name is a property (key starting with #).
    */
   public function __isset($name) {
-    if (\Drupal\Core\Render\Element::property($name)) {
+    if (CoreElement::property($name)) {
       throw new \InvalidArgumentException('Cannot dynamically check if an element has a property. Use \Drupal\bootstrap\Utility\Element::unsetProperty instead.');
     }
     return parent::__isset($name);
@@ -131,7 +128,7 @@ class Element extends DrupalAttributes {
    *   Throws this error when the name is a property (key starting with #).
    */
   public function __unset($name) {
-    if (\Drupal\Core\Render\Element::property($name)) {
+    if (CoreElement::property($name)) {
       throw new \InvalidArgumentException('Cannot dynamically unset an element property. Use \Drupal\bootstrap\Utility\Element::hasProperty instead.');
     }
     parent::__unset($name);
@@ -180,7 +177,7 @@ class Element extends DrupalAttributes {
    *   The array keys of the element's children.
    */
   public function childKeys($sort = FALSE) {
-    return \Drupal\Core\Render\Element::children($this->array, $sort);
+    return CoreElement::children($this->array, $sort);
   }
 
   /**
@@ -222,7 +219,7 @@ class Element extends DrupalAttributes {
       "$prefix-primary", "$prefix-success", "$prefix-info",
       "$prefix-warning", "$prefix-danger", "$prefix-link",
       // Default should be last.
-      "$prefix-default"
+      "$prefix-default",
     ];
 
     // Set the class to "btn-default" if it shouldn't be colorized.
@@ -319,7 +316,7 @@ class Element extends DrupalAttributes {
    * @param mixed $default
    *   Optional. The default value to use if the context $name isn't set.
    *
-   * @return mixed|NULL
+   * @return mixed|null
    *   The context value or the $default value if not set.
    */
   public function &getContext($name, $default = NULL) {
@@ -372,7 +369,7 @@ class Element extends DrupalAttributes {
    *   The array keys of the element's visible children.
    */
   public function getVisibleChildren() {
-    return \Drupal\Core\Render\Element::getVisibleChildren($this->array);
+    return CoreElement::getVisibleChildren($this->array);
   }
 
   /**
@@ -404,7 +401,8 @@ class Element extends DrupalAttributes {
    *   TRUE or FALSE.
    */
   public function isButton() {
-    return !empty($this->array['#is_button']) || $this->isType(['button', 'submit', 'reset', 'image_button']) || $this->hasClass('btn');
+    $button_types = ['button', 'submit', 'reset', 'image_button'];
+    return !empty($this->array['#is_button']) || $this->isType($button_types) || $this->hasClass('btn');
   }
 
   /**
@@ -417,7 +415,7 @@ class Element extends DrupalAttributes {
    *   Whether the given element is empty.
    */
   public function isEmpty() {
-    return \Drupal\Core\Render\Element::isEmpty($this->array);
+    return CoreElement::isEmpty($this->array);
   }
 
   /**
@@ -472,7 +470,7 @@ class Element extends DrupalAttributes {
    *   TRUE if the element is visible, otherwise FALSE.
    */
   public function isVisible() {
-    return \Drupal\Core\Render\Element::isVisibleElement($this->array);
+    return CoreElement::isVisibleElement($this->array);
   }
 
   /**
@@ -488,7 +486,7 @@ class Element extends DrupalAttributes {
    * @return $this
    */
   public function map(array $map) {
-    \Drupal\Core\Render\Element::setAttributes($this->array, $map);
+    CoreElement::setAttributes($this->array, $map);
     return $this;
   }
 
@@ -529,7 +527,7 @@ class Element extends DrupalAttributes {
    *   An array of property keys for the element.
    */
   public function properties() {
-    return \Drupal\Core\Render\Element::properties($this->array);
+    return CoreElement::properties($this->array);
   }
 
   /**
@@ -689,7 +687,7 @@ class Element extends DrupalAttributes {
   /**
    * Converts an element description into a tooltip based on certain criteria.
    *
-   * @param array|\Drupal\bootstrap\Utility\Element|NULL $target_element
+   * @param array|\Drupal\bootstrap\Utility\Element|null $target_element
    *   The target element render array the tooltip is to be attached to, passed
    *   by reference or an existing Element object. If not set, it will default
    *   this Element instance.
@@ -718,7 +716,7 @@ class Element extends DrupalAttributes {
     }
 
     // Allow a different element to attach the tooltip.
-    /** @var Element $target */
+    /** @var \Drupal\bootstrap\Utility\Element $target */
     if (is_object($target_element) && $target_element instanceof self) {
       $target = $target_element;
     }

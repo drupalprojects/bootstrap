@@ -1,12 +1,9 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Utility\Unicode.
- */
 
 namespace Drupal\bootstrap\Utility;
 
 use Drupal\bootstrap\Bootstrap;
+use Drupal\Component\Utility\Unicode as CoreUnicode;
 use Drupal\Component\Utility\Xss;
 
 /**
@@ -14,7 +11,7 @@ use Drupal\Component\Utility\Xss;
  *
  * @ingroup utility
  */
-class Unicode extends \Drupal\Component\Utility\Unicode {
+class Unicode extends CoreUnicode {
 
   /**
    * Extracts the hook name from a function name.
@@ -70,10 +67,10 @@ class Unicode extends \Drupal\Component\Utility\Unicode {
    *
    * @param string $string
    *   The string of text to check "simple" criteria on.
-   * @param int|FALSE $length
+   * @param int|false $length
    *   The length of characters used to determine whether or not $string is
    *   considered "simple". Set explicitly to FALSE to disable this criteria.
-   * @param array|FALSE $allowed_tags
+   * @param array|false $allowed_tags
    *   An array of allowed tag elements. Set explicitly to FALSE to disable this
    *   criteria.
    * @param bool $html

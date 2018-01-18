@@ -20,14 +20,11 @@ Create a file at `./THEMENAME/src/Plugin/Form/SearchBlockForm.php` with the
 following contents:
 
 ```php
-/**
- * @file
- * Contains \Drupal\THEMENAME\Plugin\Form\SearchBlockForm.
- */
+<?php
 
 namespace Drupal\THEMENAME\Plugin\Form;
 
-use Drupal\bootstrap\Annotation\BootstrapForm;
+use Drupal\bootstrap\Plugin\Form\SearchBlockForm as BootstrapSearchBlockForm;
 use Drupal\bootstrap\Utility\Element;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -38,7 +35,7 @@ use Drupal\Core\Form\FormStateInterface;
  *
  * @BootstrapForm("search_block_form")
  */
-class SearchBlockForm extends \Drupal\bootstrap\Plugin\Form\SearchBlockForm {
+class SearchBlockForm extends BootstrapSearchBlockForm {
 
   /**
    * {@inheritdoc}
@@ -59,9 +56,9 @@ class SearchBlockForm extends \Drupal\bootstrap\Plugin\Form\SearchBlockForm {
     // This method is the same as above, except the the $form argument passed is
     // an instance of \Drupal\bootstrap\Utility\Element for easier manipulation.
     // Using this method is preferable and considered "Best Practice".
-
+    //
     // Disable #input_group_button using the $form Element object:
-    // $form->keys->setProperty('input_group_button', FALSE);
+    // $form->keys->setProperty('input_group_button', FALSE);.
   }
 
   /**
@@ -97,6 +94,7 @@ class SearchBlockForm extends \Drupal\bootstrap\Plugin\Form\SearchBlockForm {
   }
 
 }
+?>
 ```
 
 ## Rebuild the cache {#rebuild}

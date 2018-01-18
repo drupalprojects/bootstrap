@@ -1,12 +1,7 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Alter\PageAttachments.
- */
 
 namespace Drupal\bootstrap\Plugin\Alter;
 
-use Drupal\bootstrap\Annotation\BootstrapAlter;
 use Drupal\bootstrap\Plugin\PluginBase;
 
 /**

@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Utility\DrupalAttributes.
- */
 
 namespace Drupal\bootstrap\Utility;
 
@@ -347,6 +343,5 @@ class DrupalAttributes extends ArrayObject {
     $this->getAttributes($type)->setAttributes($values);
     return $this;
   }
-
 
 }

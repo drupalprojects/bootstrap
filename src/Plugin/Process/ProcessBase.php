@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Process\ProcessBase.
- */
 
 namespace Drupal\bootstrap\Plugin\Process;
 

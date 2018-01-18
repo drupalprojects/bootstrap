@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\AlterManager.
- */
 
 namespace Drupal\bootstrap\Plugin;
 

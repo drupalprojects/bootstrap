@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Fix the class loader to allow cross-request class based theme callbacks.

@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap.
- */
 
 namespace Drupal\bootstrap;
 
@@ -69,13 +65,13 @@ class Theme {
   /**
    * Flag indicating if the theme is in "development" mode.
    *
+   * @var bool
+   *
    * This property can only be set via `settings.local.php`:
    *
    * @code
    * $settings['theme.dev'] = TRUE;
    * @endcode
-   *
-   * @var bool
    */
   protected $dev;
 
@@ -89,6 +85,8 @@ class Theme {
   /**
    * A URL for where a livereload instance is listening, if set.
    *
+   * @var string
+   *
    * This property can only be set via `settings.local.php`:
    *
    * @code
@@ -101,8 +99,6 @@ class Theme {
    * // Or, Set an explicit URL.
    * $settings['theme.livereload'] = '//127.0.0.1:35729/livereload.js';
    * @endcode
-   *
-   * @var string
    */
   protected $livereload;
 
@@ -161,7 +157,7 @@ class Theme {
         $livereload = '//127.0.0.1:35729/livereload.js';
       }
       // If an integer, assume it's a port.
-      else if (is_int($livereload)) {
+      elseif (is_int($livereload)) {
         $livereload = "//127.0.0.1:$livereload/livereload.js";
       }
       // If it's scalar, attempt to parse the URL.
@@ -318,7 +314,12 @@ class Theme {
         $ignore_directories += ['docs', 'documentation'];
       }
       if ($flags & self::IGNORE_DEV) {
-        $ignore_directories += ['bower_components', 'grunt', 'node_modules', 'starterkits'];
+        $ignore_directories += [
+          'bower_components',
+          'grunt',
+          'node_modules',
+          'starterkits',
+        ];
       }
       if ($flags & self::IGNORE_TEMPLATES) {
         $ignore_directories += ['templates', 'theme'];
@@ -389,7 +390,7 @@ class Theme {
       $storage = self::getStorage();
       $value = $storage->get($name);
       if (!isset($value)) {
-        $value  = is_array($default) ? new StorageItem($default, $storage) : $default;
+        $value = is_array($default) ? new StorageItem($default, $storage) : $default;
         $storage->set($name, $value);
       }
       $cache[$name] = $value;
@@ -471,7 +472,7 @@ class Theme {
    * @param string $provider
    *   A CDN provider name. Defaults to the provider set in the theme settings.
    *
-   * @return \Drupal\bootstrap\Plugin\Provider\ProviderInterface|FALSE
+   * @return \Drupal\bootstrap\Plugin\Provider\ProviderInterface|false
    *   A provider instance or FALSE if there is no provider.
    */
   public function getProvider($provider = NULL) {
@@ -538,7 +539,7 @@ class Theme {
    * @param string $name
    *   Optional. The name of a specific setting plugin instance to return.
    *
-   * @return \Drupal\bootstrap\Plugin\Setting\SettingInterface|\Drupal\bootstrap\Plugin\Setting\SettingInterface[]|NULL
+   * @return \Drupal\bootstrap\Plugin\Setting\SettingInterface|\Drupal\bootstrap\Plugin\Setting\SettingInterface[]|null
    *   If $name was provided, it will either return a specific setting plugin
    *   instance or NULL if not set. If $name was omitted it will return an array
    *   of setting plugin instances, keyed by their name.
@@ -604,7 +605,7 @@ class Theme {
   /**
    * Retrieves the update plugin manager for the theme.
    *
-   * @return \Drupal\bootstrap\Plugin\UpdateManager|FALSE
+   * @return \Drupal\bootstrap\Plugin\UpdateManager|false
    *   The Update plugin manager or FALSE if theme is not Bootstrap based.
    */
   public function getUpdateManager() {
@@ -705,9 +706,10 @@ class Theme {
   /**
    * Returns the livereload URL set, if any.
    *
-   * @return string
-   *
    * @see \Drupal\bootstrap\Theme::livereload
+   *
+   * @return string
+   *   The livereload URL.
    */
   public function livereloadUrl() {
     return $this->livereload;
@@ -745,7 +747,7 @@ class Theme {
     static $themes = [];
     $name = $this->getName();
     if (!isset($themes[$name])) {
-      $themes[$name] = new ThemeSettings($this, $this->themeHandler);
+      $themes[$name] = new ThemeSettings($this);
     }
     return $themes[$name];
   }

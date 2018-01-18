@@ -1,12 +1,7 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Alter\ElementInfo.
- */
 
 namespace Drupal\bootstrap\Plugin\Alter;
 
-use Drupal\bootstrap\Annotation\BootstrapAlter;
 use Drupal\bootstrap\Bootstrap;
 use Drupal\bootstrap\Plugin\PluginBase;
 use Drupal\bootstrap\Plugin\PrerenderManager;

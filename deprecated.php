@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * This contains deprecated functions that will be removed in a future release.
@@ -353,8 +354,6 @@ function &_bootstrap_get_classes(array &$element, $property = 'attributes') {
  * is basically a backport of 8.x-3.x code so the added $attributes parameter
  * can be more easily dealt with.
  *
- * @see https://www.drupal.org/project/bootstrap/issues/2844885
- *
  * @param string $name
  *   The icon name, minus the "glyphicon-" prefix.
  * @param array|string $default
@@ -381,10 +380,11 @@ function &_bootstrap_get_classes(array &$element, $property = 'attributes') {
  *   $icon = Element::createStandalone($icon)->setAttributes($attributes)->setAttributes($icon_attributes)->getArray();
  * @endcode
  *
+ * @see https://www.drupal.org/project/bootstrap/issues/2844885
  * @see \Drupal\bootstrap\Bootstrap::glyphicon()
  * @see \Drupal\bootstrap\Utility\Element::createStandalone()
  */
-function _bootstrap_glyphicon($name, $default = array(), array $attributes = array()) {
+function _bootstrap_glyphicon($name, $default = [], array $attributes = []) {
   Bootstrap::deprecated();
   $icon = Bootstrap::glyphicon($name, ['#markup' => $default]);
   $icon_attributes = isset($icon['#attributes']) ? $icon['#attributes'] : [];
@@ -568,10 +568,10 @@ function _bootstrap_is_button(array $element) {
  *
  * @param string $string
  *   The string of text to check "simple" criteria on.
- * @param int|FALSE $length
+ * @param int|false $length
  *   The length of characters used to determine whether or not $string is
  *   considered "simple". Set explicitly to FALSE to disable this criteria.
- * @param array|FALSE $allowed_tags
+ * @param array|false $allowed_tags
  *   An array of allowed tag elements. Set explicitly to FALSE to disable this
  *   criteria.
  * @param bool $html
@@ -640,7 +640,7 @@ function _bootstrap_remove_class($class, array &$element, $property = 'attribute
  * @param bool $reset
  *   Toggle determining whether or not to reset the database cache.
  *
- * @return array|FALSE
+ * @return array|false
  *   An associative array of CDN providers, keyed by their machine name if
  *   $provider is not set. If $provider is set and exists, it's individual
  *   data array will be returned. If $provider is set and the data does not

@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\FormManager.
- */
 
 namespace Drupal\bootstrap\Plugin;
 

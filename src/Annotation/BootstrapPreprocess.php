@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Annotation\BootstrapPreprocess.
- */
 
 namespace Drupal\bootstrap\Annotation;
 

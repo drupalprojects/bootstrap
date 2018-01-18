@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Preprocess\PreprocessInterface.
- */
 
 namespace Drupal\bootstrap\Plugin\Preprocess;
 

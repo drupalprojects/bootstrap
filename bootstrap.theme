@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * The primary PHP file for the Drupal Bootstrap base theme.
@@ -15,7 +16,7 @@
  * the `./templates` directory. This is a highly automated and complex system
  * designed to only load the necessary files when a given theme hook is invoked.
  *
- * Visit this project's official documentation site, https://drupal-bootstrap.org
+ * Visit this project's official documentation site https://drupal-bootstrap.org
  * or the markdown files inside the `./docs` directory.
  *
  * @see bootstrap_theme()
@@ -32,7 +33,7 @@ Bootstrap::initialize();
 /**
  * {@inheritdoc}
  *
- * @see hook_bootstrap_colorize_text_alter().
+ * @see hook_bootstrap_colorize_text_alter()
  */
 function bootstrap_bootstrap_colorize_text_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
   Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
@@ -41,7 +42,7 @@ function bootstrap_bootstrap_colorize_text_alter(&$data, &$context1 = NULL, &$co
 /**
  * {@inheritdoc}
  *
- * @see hook_bootstrap_iconize_text_alter().
+ * @see hook_bootstrap_iconize_text_alter()
  */
 function bootstrap_bootstrap_iconize_text_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
   Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
@@ -50,7 +51,7 @@ function bootstrap_bootstrap_iconize_text_alter(&$data, &$context1 = NULL, &$con
 /**
  * {@inheritdoc}
  *
- * @see hook_bootstrap_layouts_class_options_alter().
+ * @see hook_bootstrap_layouts_class_options_alter()
  */
 function bootstrap_bootstrap_layouts_class_options_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
   Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);

@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Annotation\BootstrapAlter.
- */
 
 namespace Drupal\bootstrap\Annotation;
 

@@ -1,13 +1,7 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Alter\ThemeRegistry.
- */
 
-// Name of the base theme must be lowercase for it to be autoload discoverable.
 namespace Drupal\bootstrap\Plugin\Alter;
 
-use Drupal\bootstrap\Annotation\BootstrapAlter;
 use Drupal\bootstrap\Bootstrap;
 use Drupal\bootstrap\Plugin\PreprocessManager;
 use Drupal\Core\Theme\Registry;

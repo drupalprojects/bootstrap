@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\SettingManager.
- */
 
 namespace Drupal\bootstrap\Plugin;
 

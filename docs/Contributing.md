@@ -2,11 +2,13 @@
 <!-- @defgroup -->
 # Contributing
 
-Please read the @link faq FAQ @endlink and @link getting_started Getting Started @endlink
-topics first before creating an issue in this project's issue queue.
+Please read the @link faq FAQ @endlink and
+@link getting_started Getting Started @endlink topics first before creating
+an issue in this project's issue queue.
 
 Anything that falls within the scope of existing documentation or answered
-questions will be marked as "Closed (works as designed)" or "Closed (won't fix)".
+questions will be marked as "Closed (works as designed)" or
+"Closed (won't fix)".
 
 The [Theme development](https://www.drupal.org/forum/3) support forum and
 [Drupal StackExchange](https://drupal.stackexchange.com) are also amazing
@@ -14,12 +16,13 @@ resources for asking questions, learning new techniques and overall general
 support.
 
 ## Drupal.org Handbook Pages
-There has been some amazing Drupal Community work done around integration between
-Drupal and the [Bootstrap Framework]. Additional community driven documentation
-can be found on the [original Drupal.org handbook pages](https://www.drupal.org/node/1976938).
+There has been some amazing Drupal Community work done around integration
+between Drupal and the [Bootstrap Framework]. Additional community driven
+documentation can be found on the [original Drupal.org handbook pages](https://www.drupal.org/node/1976938).
 
-If you find that the documentation in these locations are inaccurate or missing,
-please update it yourself (all logged in users have edit capability).
+If you find that the documentation in these locations are inaccurate or
+missing, please update it yourself (all logged in users have edit
+capability).
 
 ## Creating New Issues
 

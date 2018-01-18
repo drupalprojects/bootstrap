@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Prerender\PrerenderBase.
- */
 
 namespace Drupal\bootstrap\Plugin\Prerender;
 

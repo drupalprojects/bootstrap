@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Alter\AlterInterface.
- */
 
 namespace Drupal\bootstrap\Plugin\Alter;
 

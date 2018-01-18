@@ -1,14 +1,8 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Setting\General\Tables\TableResponsive.
- */
 
 namespace Drupal\bootstrap\Plugin\Setting\General\Tables;
 
-use Drupal\bootstrap\Annotation\BootstrapSetting;
 use Drupal\bootstrap\Plugin\Setting\SettingBase;
-use Drupal\Core\Annotation\Translation;
 
 /**
  * The "table_responsive" theme setting.

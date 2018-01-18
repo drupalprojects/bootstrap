@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Annotation\BootstrapConstant.
- */
 
 namespace Drupal\bootstrap\Annotation;
 

@@ -1,15 +1,9 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Setting\General\Forms\FormsSmartDescriptionsLimit.
- */
 
 namespace Drupal\bootstrap\Plugin\Setting\General\Forms;
 
-use Drupal\bootstrap\Annotation\BootstrapSetting;
 use Drupal\bootstrap\Plugin\Setting\SettingBase;
 use Drupal\bootstrap\Utility\Element;
-use Drupal\Core\Annotation\Translation;
 use Drupal\Core\Form\FormStateInterface;
 
 /**

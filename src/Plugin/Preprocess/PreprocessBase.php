@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Preprocess\PreprocessBase.
- */
 
 namespace Drupal\bootstrap\Plugin\Preprocess;
 
@@ -21,21 +17,21 @@ class PreprocessBase extends PluginBase implements PreprocessInterface {
   /**
    * The theme hook invoked.
    *
-   * @type string
+   * @var string
    */
   protected $hook;
 
   /**
    * The theme hook info array from the theme registry.
    *
-   * @type array
+   * @var array
    */
   protected $info;
 
   /**
    * The Variables object.
    *
-   * @type \Drupal\bootstrap\Utility\Variables
+   * @var \Drupal\bootstrap\Utility\Variables
    */
   protected $variables;
 

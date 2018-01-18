@@ -1,19 +1,13 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Setting\Advanced\Cdn\CdnProvider.
- */
 
 namespace Drupal\bootstrap\Plugin\Setting\Advanced\Cdn;
 
-use Drupal\bootstrap\Annotation\BootstrapSetting;
 use Drupal\bootstrap\Bootstrap;
 use Drupal\bootstrap\Plugin\Provider\ProviderInterface;
 use Drupal\bootstrap\Plugin\ProviderManager;
 use Drupal\bootstrap\Plugin\Setting\SettingBase;
 use Drupal\bootstrap\Utility\Element;
 use Drupal\Component\Utility\Html;
-use Drupal\Core\Annotation\Translation;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -72,7 +66,9 @@ class CdnProvider extends SettingBase {
     $default_provider = $form_state->getValue('cdn_provider', $this->theme->getSetting('cdn_provider'));
 
     $group = $this->getGroupElement($form, $form_state);
-    $group->setProperty('description', '<div class="alert alert-info messages warning"><strong>' . t('NOTE') . ':</strong> ' . t('Using one of the "CDN Provider" options below is the preferred method for loading Bootstrap CSS and JS on simpler sites that do not use a site-wide CDN. Using a "CDN Provider" for loading Bootstrap, however, does mean that it depends on a third-party service. There is no obligation or commitment by these third-parties that guarantees any up-time or service quality. If you need to customize Bootstrap and have chosen to compile the source code locally (served from this site), you must disable the "CDN Provider" option below by choosing "- None -" and alternatively enable a site-wide CDN implementation. All local (served from this site) versions of Bootstrap will be superseded by any enabled "CDN Provider" below. <strong>Do not do both</strong>.') . '</div>');
+    $description_label = $this->t('NOTE');
+    $description = $this->t('Using one of the "CDN Provider" options below is the preferred method for loading Bootstrap CSS and JS on simpler sites that do not use a site-wide CDN. Using a "CDN Provider" for loading Bootstrap, however, does mean that it depends on a third-party service. There is no obligation or commitment by these third-parties that guarantees any up-time or service quality. If you need to customize Bootstrap and have chosen to compile the source code locally (served from this site), you must disable the "CDN Provider" option below by choosing "- None -" and alternatively enable a site-wide CDN implementation. All local (served from this site) versions of Bootstrap will be superseded by any enabled "CDN Provider" below. <strong>Do not do both</strong>.');
+    $group->setProperty('description', '<div class="alert alert-info messages warning"><strong>' . $description_label . ':</strong> ' . $description . '</div>');
     $group->setProperty('open', !!$default_provider);
 
     // Intercept possible manual import of API data via AJAX callback.
@@ -137,11 +133,13 @@ class CdnProvider extends SettingBase {
     // Indicate there was an error retrieving the provider's API data.
     if ($provider->hasError() || $provider->isImported()) {
       if ($provider->hasError()) {
+        $description_label = $this->t('ERROR');
+        $description = $this->t('Unable to reach or parse the data provided by the @title API. Ensure the server this website is hosted on is able to initiate HTTP requests. If the request consistently fails, it is likely that there are certain PHP functions that have been disabled by the hosting provider for security reasons. It is possible to manually copy and paste the contents of the following URL into the "Imported @title data" section below.<br /><br /><a href=":provider_api" target="_blank">:provider_api</a>.', [
+          '@title' => $provider->getLabel(),
+          ':provider_api' => $provider->getApi(),
+        ]);
         $group->$plugin_id->error = [
-          '#markup' => '<div class="alert alert-danger messages error"><strong>' . t('ERROR') . ':</strong> ' . t('Unable to reach or parse the data provided by the @title API. Ensure the server this website is hosted on is able to initiate HTTP requests. If the request consistently fails, it is likely that there are certain PHP functions that have been disabled by the hosting provider for security reasons. It is possible to manually copy and paste the contents of the following URL into the "Imported @title data" section below.<br /><br /><a href=":provider_api" target="_blank">:provider_api</a>.', [
-              '@title' => $provider->getLabel(),
-              ':provider_api' => $provider->getApi(),
-            ]) . '</div>',
+          '#markup' => '<div class="alert alert-danger messages error"><strong>' . $description_label . ':</strong> ' . $description . '</div>',
           '#weight' => -20,
         ];
       }

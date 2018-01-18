@@ -11,7 +11,8 @@ preprocessor.
 - [Overrides](#overrides)
 
 ## Prerequisites
-- Read the @link getting_started Getting Started @endlink and @link sub_theming Sub-theming @endlink documentation topics.
+- Read the @link getting_started Getting Started @endlink and
+  @link sub_theming Sub-theming @endlink documentation topics.
 - You must understand the basic concept of using the [Sass] CSS pre-processor.
 - You must use a **[local Sass compiler](https://www.google.com/search?q=sass+compiler)**.
 - You must use the [Bootstrap Framework Source Files] ending in the `.scss`

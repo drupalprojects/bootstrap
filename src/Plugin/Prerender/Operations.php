@@ -1,12 +1,6 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Prerender\Operations.
- */
 
 namespace Drupal\bootstrap\Plugin\Prerender;
-
-use Drupal\bootstrap\Annotation\BootstrapPrerender;
 
 /**
  * Pre-render callback for the "operations" element type.

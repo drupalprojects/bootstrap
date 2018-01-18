@@ -1,12 +1,7 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Process\ManagedFile.
- */
 
 namespace Drupal\bootstrap\Plugin\Process;
 
-use Drupal\bootstrap\Annotation\BootstrapProcess;
 use Drupal\bootstrap\Utility\Element;
 use Drupal\Core\Form\FormStateInterface;
 

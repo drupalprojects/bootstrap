@@ -1,13 +1,7 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Annotation\BootstrapSetting.
- */
 
 namespace Drupal\bootstrap\Annotation;
 
-use Doctrine\Common\Annotations\Annotation\Attribute;
-use Doctrine\Common\Annotations\Annotation\Attributes;
 use Drupal\Component\Annotation\Plugin;
 
 /**

@@ -1,15 +1,9 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Provider\JsDelivr.
- */
 
 namespace Drupal\bootstrap\Plugin\Provider;
 
-use Drupal\bootstrap\Annotation\BootstrapProvider;
 use Drupal\bootstrap\Bootstrap;
 use Drupal\Component\Utility\NestedArray;
-use Drupal\Core\Annotation\Translation;
 
 /**
  * The "jsdelivr" CDN provider plugin.

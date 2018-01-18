@@ -1,14 +1,8 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Setting\Advanced\Cdn\CdnJsdelivrTheme.
- */
 
 namespace Drupal\bootstrap\Plugin\Setting\Advanced\Cdn;
 
-use Drupal\bootstrap\Annotation\BootstrapSetting;
 use Drupal\bootstrap\Utility\Element;
-use Drupal\Core\Annotation\Translation;
 use Drupal\Core\Form\FormStateInterface;
 
 /**

@@ -1,11 +1,8 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\PluginBase.
- */
 
 namespace Drupal\bootstrap\Plugin;
 
+use Drupal\Core\Plugin\PluginBase as CorePluginBase;
 use Drupal\bootstrap\Bootstrap;
 
 /**
@@ -13,7 +10,7 @@ use Drupal\bootstrap\Bootstrap;
  *
  * @ingroup utility
  */
-class PluginBase extends \Drupal\Core\Plugin\PluginBase {
+class PluginBase extends CorePluginBase {
 
   /**
    * The currently set theme object.

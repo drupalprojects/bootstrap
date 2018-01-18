@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Bootstrap.
- */
 
 namespace Drupal\bootstrap;
 
@@ -585,7 +581,7 @@ class Bootstrap {
    *   The render containing the icon defined by $name, $default value if
    *   icon does not exist or returns NULL if no icon could be rendered.
    */
-  public static function glyphicon($name, $default = []) {
+  public static function glyphicon($name, array $default = []) {
     $icon = [];
 
     // Ensure the icon specified is a valid Bootstrap Glyphicon.
@@ -625,11 +621,11 @@ class Bootstrap {
    * @param array $default
    *   The default render array to return if no match is found.
    *
-   * @return string
+   * @return array
    *   The Bootstrap icon matched against the value of $haystack or $default if
    *   no match could be made.
    */
-  public static function glyphiconFromString(&$value, $default = []) {
+  public static function glyphiconFromString(&$value, array $default = []) {
     static $lang;
     if (!isset($lang)) {
       $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();

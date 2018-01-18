@@ -1,12 +1,7 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Preprocess\BootstrapDropdown.
- */
 
 namespace Drupal\bootstrap\Plugin\Preprocess;
 
-use Drupal\bootstrap\Annotation\BootstrapPreprocess;
 use Drupal\bootstrap\Utility\Element;
 use Drupal\bootstrap\Utility\Unicode;
 use Drupal\bootstrap\Utility\Variables;
@@ -91,7 +86,7 @@ class BootstrapDropdown extends PreprocessBase implements PreprocessInterface {
           // Preserve query parameters (if any)
           if (!empty($element['query'])) {
             $url_query = $element['url']->getOption('query') ?: [];
-            $element['url']->setOption('query', NestedArray::mergeDeep($url_query , $element['query']));
+            $element['url']->setOption('query', NestedArray::mergeDeep($url_query, $element['query']));
           }
 
           // Build render array.
@@ -133,7 +128,7 @@ class BootstrapDropdown extends PreprocessBase implements PreprocessInterface {
 
         // Convert into a proper link.
         if (!$child->isType('link')) {
-          // Hide the original element
+          // Hide the original element.
           $element = $child->addClass('hidden')->getArrayCopy();
 
           // Retrieve any set HTML identifier for the link, generating a new

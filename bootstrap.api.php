@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * List of available procedural hook and alter APIs for use in your sub-theme.
@@ -19,7 +20,7 @@
  *
  * @see \Drupal\bootstrap\Bootstrap::cssClassFromString()
  */
-function hook_bootstrap_colorize_text_alter(&$texts) {
+function hook_bootstrap_colorize_text_alter(array &$texts) {
   // This matches the exact string: "My Unique Button Text".
   // Note: the t() function in D8 returns a TranslatableMarkup object.
   // It must be rendered to a string before it can be added as an array key.
@@ -45,7 +46,7 @@ function hook_bootstrap_colorize_text_alter(&$texts) {
  *
  * @see \Drupal\bootstrap\Bootstrap::glyphiconFromString()
  */
-function hook_bootstrap_iconize_text_alter(&$texts) {
+function hook_bootstrap_iconize_text_alter(array &$texts) {
   // This matches the exact string: "My Unique Button Text".
   // Note: the t() function in D8 returns a TranslatableMarkup object.
   // It must be rendered to a string before it can be added as an array key.

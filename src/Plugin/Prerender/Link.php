@@ -1,13 +1,7 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Prerender\Link.
- */
 
 namespace Drupal\bootstrap\Plugin\Prerender;
 
-use Drupal\bootstrap\Annotation\BootstrapConstant;
-use Drupal\bootstrap\Annotation\BootstrapPrerender;
 use Drupal\bootstrap\Bootstrap;
 use Drupal\bootstrap\Utility\Element;
 use Drupal\Component\Render\FormattableMarkup;

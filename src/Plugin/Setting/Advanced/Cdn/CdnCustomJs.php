@@ -1,14 +1,8 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Setting\Advanced\Cdn\CdnCustomJs.
- */
 
 namespace Drupal\bootstrap\Plugin\Setting\Advanced\Cdn;
 
-use Drupal\bootstrap\Annotation\BootstrapSetting;
 use Drupal\bootstrap\Plugin\Setting\SettingBase;
-use Drupal\Core\Annotation\Translation;
 
 /**
  * The "cdn_custom_js" theme setting.

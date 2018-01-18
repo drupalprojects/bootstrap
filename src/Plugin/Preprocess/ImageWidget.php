@@ -1,12 +1,7 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Preprocess\ImageWidget.
- */
 
 namespace Drupal\bootstrap\Plugin\Preprocess;
 
-use Drupal\bootstrap\Annotation\BootstrapPreprocess;
 use Drupal\bootstrap\Utility\Element;
 use Drupal\bootstrap\Utility\Variables;
 
@@ -27,7 +22,12 @@ class ImageWidget extends PreprocessBase implements PreprocessInterface {
    * {@inheritdoc}
    */
   public function preprocessElement(Element $element, Variables $variables) {
-    $variables->addClass(['image-widget', 'js-form-managed-file', 'form-managed-file', 'clearfix']);
+    $variables->addClass([
+      'image-widget',
+      'js-form-managed-file',
+      'form-managed-file',
+      'clearfix',
+    ]);
 
     $data = &$variables->offsetGet('data', []);
     foreach ($element->children() as $key => $child) {

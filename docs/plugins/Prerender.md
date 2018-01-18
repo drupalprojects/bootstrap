@@ -1,4 +1,4 @@
-<!-- @file Documentation for the @BootstrapPrerender annotated discovery plugin. -->
+<!-- @file Documentation for the @BootstrapPrerender annotated plugin. -->
 <!-- @defgroup -->
 <!-- @ingroup -->
 # @BootstrapPrerender
@@ -16,14 +16,18 @@ example will only work if the link is passed some sort of `#context` when the
 render array is built, like the following:
 
 ```php
+<?php
 $build['my_button'] = [
   '#type' => 'link',
   '#title' => t('Download'),
-  '#url' => \Drupal\Core\Url::fromUserInput('/download', ['query' => ['item' => '1234']]),
+  '#url' => Url::fromUserInput('/download', [
+    'query' => ['item' => '1234'],
+  ]),
   '#context' => [
     'downloadButton' => TRUE,
   ],
 ];
+?>
 ```
 
 Replace all following instances of `THEMENAME` with the actual machine name of
@@ -33,15 +37,11 @@ Create a file at `./THEMENAME/src/Plugin/Prerender/Link.php` with the
 following contents:
 
 ```php
-/**
- * @file
- * Contains \Drupal\THEMENAME\Plugin\Prerender\Link.
- */
+<?php
 
 namespace Drupal\THEMENAME\Plugin\Prerender;
 
-use Drupal\bootstrap\Annotation\BootstrapConstant;
-use Drupal\bootstrap\Annotation\BootstrapPrerender;
+use Drupal\bootstrap\Plugin\Prerender\Link as BootstrapLink;
 use Drupal\bootstrap\Bootstrap;
 use Drupal\bootstrap\Utility\Element;
 
@@ -58,11 +58,12 @@ use Drupal\bootstrap\Utility\Element;
  *
  * @see \Drupal\Core\Render\Element\Link::preRenderLink()
  */
-class Link extends \Drupal\bootstrap\Plugin\Prerender\Link {
-
-  // It should be noted that you do not need both methods here.
-  // This is to just show you the different examples of how this plugin
-  // works and how it can be tailored to your needs.
+class Link extends BootstrapLink {
+  /*
+   * It should be noted that you do not need both methods here.
+   * This is to just show you the different examples of how this plugin
+   * works and how it can be tailored to your needs.
+   */
 
   /**
    * {@inheritdoc}
@@ -78,8 +79,9 @@ class Link extends \Drupal\bootstrap\Plugin\Prerender\Link {
       $element['#attributes']['class'][] = 'btn-lg';
     }
 
-    // You must always return the element in this method, as well as call
-    // the parent method when sub-classing this method. It invokes preRenderElement().
+    // You must always return the element in this method, as well as call the
+    // parent method when sub-classing this method as it is used to invoke
+    // static::preRenderElement().
     return parent::preRender($element);
   }
 
@@ -87,11 +89,9 @@ class Link extends \Drupal\bootstrap\Plugin\Prerender\Link {
    * {@inheritdoc}
    */
   public static function preRenderElement(Element $element) {
-    $context = $element->getProperty('context', []);
-
     // Make downloadButton links into buttons.
     // Same as above, just a little cleaner with the Element utility class.
-    if (!empty($context['downloadButton'])) {
+    if ($element->getContext('downloadButton')) {
       $element->addClass(['btn', 'btn-primary', 'btn-lg'])->setIcon(Bootstrap::glyphicon('download-alt'));
     }
 
@@ -102,7 +102,7 @@ class Link extends \Drupal\bootstrap\Plugin\Prerender\Link {
   }
 
 }
-
+?>
 ```
 
 ## Rebuild the cache {#rebuild}
@@ -115,4 +115,5 @@ To rebuild your cache, navigate to `admin/config/development/performance` and
 click the `Clear all caches` button. Or if you prefer, run `drush cr` from the
 command line.
 
-Voilà! After this, you should have a fully functional `@BootstrapPrerender` plugin!
+Voilà! After this, you should have a fully functional `@BootstrapPrerender`
+plugin!

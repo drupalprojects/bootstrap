@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Utility\ArrayObject.
- */
 
 namespace Drupal\bootstrap\Utility;
 

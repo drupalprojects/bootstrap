@@ -1,12 +1,7 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Process\TextFormat.
- */
 
 namespace Drupal\bootstrap\Plugin\Process;
 
-use Drupal\bootstrap\Annotation\BootstrapProcess;
 use Drupal\bootstrap\Bootstrap;
 use Drupal\bootstrap\Utility\Element;
 use Drupal\Core\Form\FormStateInterface;

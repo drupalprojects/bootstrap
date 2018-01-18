@@ -1,12 +1,7 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Setting\Schemas.
- */
 
 namespace Drupal\bootstrap\Plugin\Setting;
 
-use Drupal\bootstrap\Annotation\BootstrapSetting;
 use Drupal\bootstrap\Bootstrap;
 use Drupal\bootstrap\Plugin\Form\SystemThemeSettings;
 use Drupal\bootstrap\Utility\Element;
@@ -101,7 +96,10 @@ class Schemas extends SettingBase {
       // Create an operation for each update.
       $operations = [];
       foreach ($theme->getPendingUpdates() as $update) {
-        $operations[] = [[__CLASS__, 'batchProcessUpdate'], [$theme_name, $update->getProvider() . ':' . $update->getSchema()]];
+        $operations[] = [
+          [__CLASS__, 'batchProcessUpdate'],
+          [$theme_name, $update->getProvider() . ':' . $update->getSchema()],
+        ];
       }
 
       if ($operations) {
@@ -123,7 +121,7 @@ class Schemas extends SettingBase {
    * Processes an update in a batch operation.
    *
    * @param string $theme_name
-   *  The machine name of the theme this update is being applied to.
+   *   The machine name of the theme this update is being applied to.
    * @param string $update_id
    *   The combined identifier of the update being applied, e.g.
    *   provider:schema.
@@ -138,7 +136,7 @@ class Schemas extends SettingBase {
     list($provider, $plugin_id) = explode(':', $update_id);
     $provider = Bootstrap::getTheme($provider);
 
-    /** @type \Drupal\bootstrap\Plugin\Update\UpdateInterface $update */
+    /* @type \Drupal\bootstrap\Plugin\Update\UpdateInterface $update */
     $update = $provider->getUpdateManager()->createInstance($plugin_id, ['theme' => $provider]);
 
     // Initialize results with theme name and installed schemas.
@@ -169,7 +167,7 @@ class Schemas extends SettingBase {
 
       $context['results']['success'][] = t('<strong>[@theme][@schema] @label</strong>', $variables);
     }
-      // Capture any errors.
+    // Capture any errors.
     catch (\Exception $e) {
       $variables['@message'] = $e->getMessage();
       $context['results']['errors'][] = t('<strong>[@theme][@schema] @label</strong> - @message', $variables);
@@ -177,18 +175,18 @@ class Schemas extends SettingBase {
   }
 
   /**
-   * Batch 'finished' callback
+   * Batch 'finished' callback.
    *
    * @param bool $success
    *   A boolean indicating whether the batch has completed successfully.
    * @param array $results
    *   The value(s) set in $context['results'] in
    *   \Drupal\bootstrap\Plugin\Setting\Update::batchProcess().
-   * @param $operations
+   * @param mixed $operations
    *   If $success is FALSE, contains the operations that remained unprocessed.
    */
-  public static function batchFinished($success, $results, $operations) {
-    /** @type \Drupal\bootstrap\Theme $theme */
+  public static function batchFinished($success, array $results, $operations) {
+    /* @type \Drupal\bootstrap\Theme $theme */
     // Reconstruct the theme object this update is being applied to.
     $theme = Bootstrap::getTheme($results['theme_name']);
 

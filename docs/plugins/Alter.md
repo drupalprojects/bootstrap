@@ -1,4 +1,4 @@
-<!-- @file Documentation for the @BootstrapAlter annotated discovery plugin. -->
+<!-- @file Documentation for the @BootstrapAlter annotated plugin. -->
 <!-- @defgroup -->
 <!-- @ingroup -->
 # @BootstrapAlter
@@ -23,15 +23,17 @@ all you have to do is call the `Bootstrap::alter` helper method and pass the
 alter function name and parameters as arguments:
 
 ```php
+<?php
 use Drupal\bootstrap\Bootstrap;
 
 /**
- * Implements hook_some_hook_alter().
+ * Implements hook_HOOK_alter().
  */
-function THEMENAME_some_hook_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
+function hook_some_hook_alter(&$data, &$context1 = NULL, &$context2 = NULL) {
   Bootstrap::alter(__FUNCTION__, $data, $context1, $context2);
 }
 
+?>
 ```
 
 ## Supported alter hooks {#supported}
@@ -69,8 +71,8 @@ do with them. So if you're interested in those, please go see:
 
 @link plugins_form @BootstrapForm @endlink
 
-While, yes technically, `hook_form_system_theme_settings_alter` could also
-fall under the form plugin, we decided to take those a step further as well, see:
+While, yes technically, `hook_form_system_theme_settings_alter` could also fall
+under the form plugin, we decided to take those a step further as well, see:
 
 
 @link plugins_setting @BootstrapSetting @endlink
@@ -87,6 +89,7 @@ Create a file at `./THEMENAME/src/Plugin/Alter/PageAttachments.php` with the
 following contents:
 
 ```php
+<?php
 /**
  * @file
  * Contains \Drupal\THEMENAME\Plugin\Alter\PageAttachments.
@@ -94,7 +97,7 @@ following contents:
 
 namespace Drupal\THEMENAME\Plugin\Alter;
 
-use Drupal\bootstrap\Annotation\BootstrapAlter;
+use Drupal\bootstrap\Plugin\Alter\PageAttachments as BootstrapPageAttachements;
 
 /**
  * Implements hook_page_attachments_alter().
@@ -103,7 +106,7 @@ use Drupal\bootstrap\Annotation\BootstrapAlter;
  *
  * @BootstrapAlter("page_attachments")
  */
-class PageAttachments extends \Drupal\bootstrap\Plugin\Alter\PageAttachments {
+class PageAttachments extends BootstrapPageAttachements {
 
   /**
    * {@inheritdoc}
@@ -118,6 +121,7 @@ class PageAttachments extends \Drupal\bootstrap\Plugin\Alter\PageAttachments {
   }
 
 }
+?>
 ```
 
 ## Rebuild the cache {#rebuild}

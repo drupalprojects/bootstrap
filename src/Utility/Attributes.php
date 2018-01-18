@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Utility\Attributes.
- */
 
 namespace Drupal\bootstrap\Utility;
 

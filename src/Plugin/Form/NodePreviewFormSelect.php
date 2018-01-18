@@ -1,12 +1,7 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Form\NodePreviewFormSelect.
- */
 
 namespace Drupal\bootstrap\Plugin\Form;
 
-use Drupal\bootstrap\Annotation\BootstrapForm;
 use Drupal\bootstrap\Bootstrap;
 use Drupal\bootstrap\Utility\Element;
 use Drupal\Core\Form\FormStateInterface;
@@ -43,7 +38,6 @@ class NodePreviewFormSelect extends FormBase {
     $options['attributes'] = $form->backlink->getAttributes()->getArrayCopy();
 
     $form->backlink->setProperty('options', $options);
-
 
     // View mode.
     $form->view_mode->addClass('pull-right', $form::WRAPPER);

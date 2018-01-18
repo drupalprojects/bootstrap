@@ -1,11 +1,8 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\ThemeSettings.
- */
 
 namespace Drupal\bootstrap;
 
+use Drupal\Core\Theme\ThemeSettings as CoreThemeSettings;
 use Drupal\Component\Utility\DiffArray;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Config\Config;
@@ -110,10 +107,10 @@ class ThemeSettings extends Config {
     if ($apply_overrides) {
       // Apply overrides.
       if (isset($this->moduleOverrides) && is_array($this->moduleOverrides)) {
-        $original_data = NestedArray::mergeDeepArray(array($original_data, $this->moduleOverrides), TRUE);
+        $original_data = NestedArray::mergeDeepArray([$original_data, $this->moduleOverrides], TRUE);
       }
       if (isset($this->settingsOverrides) && is_array($this->settingsOverrides)) {
-        $original_data = NestedArray::mergeDeepArray(array($original_data, $this->settingsOverrides), TRUE);
+        $original_data = NestedArray::mergeDeepArray([$original_data, $this->settingsOverrides], TRUE);
       }
     }
 
@@ -144,7 +141,7 @@ class ThemeSettings extends Config {
    *   A array diff of overridden config theme settings.
    */
   public function getThemeConfig(Theme $theme, $active_theme = FALSE) {
-    $config = new \Drupal\Core\Theme\ThemeSettings($theme->getName());
+    $config = new CoreThemeSettings($theme->getName());
 
     // Retrieve configured theme-specific settings, if any.
     try {

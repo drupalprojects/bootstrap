@@ -1,4 +1,4 @@
-<!-- @file Documentation for the @BootstrapSetting annotated discovery plugin. -->
+<!-- @file Documentation for the @BootstrapSetting annotated plugin. -->
 <!-- @defgroup -->
 <!-- @ingroup -->
 # @BootstrapSetting
@@ -17,16 +17,15 @@ to change in the Theme Settings interface altering the default of
 Replace all of the following instances of `THEMENAME` with the actual machine
 name of your sub-theme.
 
-Create a file at `./THEMENAME/src/Plugin/Setting/THEMENAME/Accessibility/SkipLink.php`
+Create a file at
+`./THEMENAME/src/Plugin/Setting/THEMENAME/Accessibility/SkipLink.php`
 with the following contents:
 
 ```php
 <?php
 namespace Drupal\THEMENAME\Plugin\Setting\THEMENAME\Accessibility;
 
-use Drupal\bootstrap\Annotation\BootstrapSetting;
 use Drupal\bootstrap\Plugin\Setting\SettingBase;
-use Drupal\Core\Annotation\Translation;
 
 /**
  * The "THEMENAME_skip_link_id" theme setting.
@@ -39,7 +38,7 @@ use Drupal\Core\Annotation\Translation;
  *   title = @Translation("Anchor ID for the ""skip link"""),
  *   defaultValue = "main-content",
  *   description = @Translation("Specify the HTML ID of the element that the accessible-but-hidden ""skip link"" should link to. (<a href="":link"" target=""_blank"">Read more about skip links</a>.)",
-     arguments = { ":link"  = "https://www.drupal.org/node/467976" }),
+ *   arguments = { ":link"  = "https://www.drupal.org/node/467976" }),
  *   groups = {
  *     "THEMENAME" = "THEMETITLE",
  *     "accessibility" = @Translation("Accessibility"),
@@ -47,6 +46,7 @@ use Drupal\Core\Annotation\Translation;
  * )
  */
 class SkipLink extends SettingBase {}
+?>
 ```
 
 Helpfully Bootstrap adds a global `theme` variable added to every template
@@ -56,7 +56,8 @@ This variable can now simply be called in the `html.html.twig` file with the
 following contents:
 
 ```twig
-<a href="#{{ theme.settings.THEMENAME_skip_link_id }}" class="visually-hidden focusable skip-link">
+<a href="#{{ theme.settings.THEMENAME_skip_link_id }}"
+  class="visually-hidden focusable skip-link">
   {{ 'Skip to main content'|t }}
 </a>
 ```
@@ -78,7 +79,8 @@ To rebuild your cache, navigate to `admin/config/development/performance` and
 click the `Clear all caches` button. Or if you prefer, run `drush cr` from the
 command line.
 
-Voilà! After this, you should have a fully functional `@BootstrapSetting` plugin!
+Voilà! After this, you should have a fully functional `@BootstrapSetting`
+plugin!
 
 ## Public Methods {#methods}
 

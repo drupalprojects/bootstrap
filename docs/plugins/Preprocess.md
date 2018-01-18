@@ -1,4 +1,4 @@
-<!-- @file Documentation for the @BootstrapPreprocess annotated discovery plugin. -->
+<!-- @file Documentation for the @BootstrapPreprocess annotated plugin. -->
 <!-- @defgroup -->
 <!-- @ingroup -->
 # @BootstrapPreprocess
@@ -21,14 +21,11 @@ Create a file at `./THEMENAME/src/Plugin/Preprocess/Page.php` with the
 following contents:
 
 ```php
-/**
- * @file
- * Contains \Drupal\THEMENAME\Plugin\Preprocess\Page.
- */
+<?php
 
 namespace Drupal\THEMENAME\Plugin\Preprocess;
 
-use Drupal\bootstrap\Annotation\BootstrapPreprocess;
+use Drupal\bootstrap\Plugin\Preprocess\Page as BootstrapPage;
 use Drupal\bootstrap\Utility\Element;
 use Drupal\bootstrap\Utility\Variables;
 
@@ -39,11 +36,12 @@ use Drupal\bootstrap\Utility\Variables;
  *
  * @BootstrapPreprocess("page")
  */
-class Page extends \Drupal\bootstrap\Plugin\Preprocess\Page {
-
-  // It should be noted that you do not need all three methods here.
-  // This is to just show you the different examples of how this plugin
-  // works and how they can be tailored to your needs.
+class Page extends BootstrapPage {
+  /*
+   * It should be noted that you do not need all three methods here.
+   * This is to just show you the different examples of how this plugin
+   * works and how they can be tailored to your needs.
+   */
 
   /**
    * {@inheritdoc}
@@ -103,6 +101,7 @@ class Page extends \Drupal\bootstrap\Plugin\Preprocess\Page {
   }
 
 }
+?>
 ```
 
 ## Rebuild the cache {#rebuild}
@@ -115,4 +114,5 @@ To rebuild your cache, navigate to `admin/config/development/performance` and
 click the `Clear all caches` button. Or if you prefer, run `drush cr` from the
 command line.
 
-Voilà! After this, you should have a fully functional `@BootstrapPreprocess` plugin!
+Voilà! After this, you should have a fully functional `@BootstrapPreprocess`
+plugin!

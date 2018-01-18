@@ -1,4 +1,4 @@
-<!-- @file Documents the "Plugin System" for the Drupal Bootstrap base theme. -->
+<!-- @file Documents the Plugin System for the Drupal Bootstrap base theme. -->
 <!-- @defgroup -->
 <!-- @ingroup -->
 # Plugin System
@@ -31,8 +31,8 @@ container construction since a theme could vary from page to page (in theory).
 So, instead, this base theme implements its own annotated discovery plugins
 to leverage the powerful inheritance capabilities of PHP class instances.
 
-All of these plugins can be found in the following directories and are discussed,
-in length, below in their respective sub-topics:
+All of these plugins can be found in the following directories and are
+discussed, in length, below in their respective sub-topics:
 - `./bootstrap/src/Plugin/Alter`
 - `./bootstrap/src/Plugin/Form`
 - `./bootstrap/src/Plugin/Preprocess`

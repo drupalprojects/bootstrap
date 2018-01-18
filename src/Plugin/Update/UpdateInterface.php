@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Update\UpdateInterface.
- */
 
 namespace Drupal\bootstrap\Plugin\Update;
 
@@ -32,9 +28,10 @@ interface UpdateInterface {
   public function getLabel();
 
   /**
-   * Retrieves the update schema.
+   * Retrieves the provider.
    *
-   * @return int
+   * @return string
+   *   The provider.
    */
   public function getProvider();
 
@@ -42,6 +39,7 @@ interface UpdateInterface {
    * Retrieves the update schema.
    *
    * @return int
+   *   The update schema.
    */
   public function getSchema();
 
@@ -60,6 +58,7 @@ interface UpdateInterface {
    * (the theme that implemented the plugin) and none of its sub-themes.
    *
    * @return \Drupal\bootstrap\Theme
+   *   The theme.
    */
   public function getTheme();
 
@@ -67,6 +66,7 @@ interface UpdateInterface {
    * Indicates whether or not the update is private.
    *
    * @return bool
+   *   TRUE or FALSE
    */
   public function isPrivate();
 

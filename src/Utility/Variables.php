@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Utility\Variables.
- */
 
 namespace Drupal\bootstrap\Utility;
 
@@ -16,7 +12,7 @@ class Variables extends DrupalAttributes {
   /**
    * An element object.
    *
-   * @var \Drupal\bootstrap\Utility\Element|FALSE
+   * @var \Drupal\bootstrap\Utility\Element|false
    */
   public $element = FALSE;
 
@@ -57,7 +53,7 @@ class Variables extends DrupalAttributes {
    * @param mixed $default
    *   Optional. The default value to use if the context $name isn't set.
    *
-   * @return mixed|NULL
+   * @return mixed|null
    *   The context value or the $default value if not set.
    */
   public function &getContext($name, $default = NULL) {

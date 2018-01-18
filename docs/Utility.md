@@ -1,4 +1,4 @@
-<!-- @file List of theme utility helper classes used in the Drupal Bootstrap base theme. -->
+<!-- @file List of utility helper classes used in base theme. -->
 <!-- @defgroup -->
 # Utilities
 

@@ -1,14 +1,8 @@
 <?php
-/**
- * @file
- * Contains \Drupal\bootstrap\Plugin\Preprocess\FileUploadHelp.
- */
 
 namespace Drupal\bootstrap\Plugin\Preprocess;
 
-use Drupal\bootstrap\Annotation\BootstrapPreprocess;
 use Drupal\bootstrap\Bootstrap;
-use Drupal\bootstrap\Utility\Element;
 use Drupal\bootstrap\Utility\Variables;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Utility\Html;
@@ -77,7 +71,7 @@ class FileUploadHelp extends PreprocessBase implements PreprocessInterface {
     $variables['descriptions'] = $descriptions;
 
     if ($descriptions && $this->theme->getSetting('popover_enabled')) {
-      $build = array();
+      $build = [];
       $id = Html::getUniqueId('upload-instructions');
       $build['toggle'] = [
         '#type' => 'link',
