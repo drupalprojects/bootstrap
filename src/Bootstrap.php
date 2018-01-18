@@ -1105,14 +1105,39 @@ class Bootstrap {
    *   The theme hook info.
    */
   public static function preprocess(array &$variables, $hook, array $info) {
-    static $theme;
-    if (!isset($theme)) {
-      $theme = self::getTheme();
+    // Do not statically cache this as the active theme may change.
+    $theme = static::getTheme();
+    $theme_name = $theme->getName();
+
+    // Handle preprocess managers.
+    static $drupal_static_fast;
+    if (!isset($drupal_static_fast)) {
+      $drupal_static_fast['preprocess_managers'] = &drupal_static(__METHOD__ . '__preprocessManagers', []);
+      $drupal_static_fast['theme_info'] = &drupal_static(__METHOD__ . '__themeInfo', []);
     }
-    static $preprocess_manager;
-    if (!isset($preprocess_manager)) {
-      $preprocess_manager = new PreprocessManager($theme);
+
+    /* @var \Drupal\bootstrap\Plugin\PreprocessManager[] $preprocess_managers */
+    $preprocess_managers = &$drupal_static_fast['preprocess_managers'];
+    if (!isset($preprocess_managers[$theme_name])) {
+      $preprocess_managers[$theme_name] = new PreprocessManager($theme);
     }
+
+    // Retrieve the theme info that will be used in the variables.
+    $theme_info = &$drupal_static_fast['theme_info'];
+    if (!isset($theme_info[$theme_name])) {
+      $theme_info[$theme_name] = $theme->getInfo();
+      $theme_info[$theme_name]['dev'] = $theme->isDev();
+      $theme_info[$theme_name]['livereload'] = $theme->livereloadUrl();
+      $theme_info[$theme_name]['name'] = $theme->getName();
+      $theme_info[$theme_name]['path'] = $theme->getPath();
+      $theme_info[$theme_name]['title'] = $theme->getTitle();
+      $theme_info[$theme_name]['settings'] = $theme->settings()->get();
+      $theme_info[$theme_name]['has_glyphicons'] = $theme->hasGlyphicons();
+      $theme_info[$theme_name]['query_string'] = \Drupal::getContainer()->get('state')->get('system.css_js_query_string') ?: '0';
+    }
+
+    // Retrieve the preprocess manager for this theme.
+    $preprocess_manager = $preprocess_managers[$theme_name];
 
     // Adds a global "is_front" variable back to all templates.
     // @see https://www.drupal.org/node/2829585
@@ -1133,15 +1158,7 @@ class Bootstrap {
     // Add active theme context.
     // @see https://www.drupal.org/node/2630870
     if (!isset($variables['theme'])) {
-      $variables['theme'] = $theme->getInfo();
-      $variables['theme']['dev'] = $theme->isDev();
-      $variables['theme']['livereload'] = $theme->livereloadUrl();
-      $variables['theme']['name'] = $theme->getName();
-      $variables['theme']['path'] = $theme->getPath();
-      $variables['theme']['title'] = $theme->getTitle();
-      $variables['theme']['settings'] = $theme->settings()->get();
-      $variables['theme']['has_glyphicons'] = $theme->hasGlyphicons();
-      $variables['theme']['query_string'] = \Drupal::getContainer()->get('state')->get('system.css_js_query_string') ?: '0';
+      $variables['theme'] = $theme_info[$theme_name];
     }
 
     // Invoke necessary preprocess plugin.
