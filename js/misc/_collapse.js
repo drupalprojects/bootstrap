@@ -32,11 +32,13 @@ Drupal.behaviors.collapse = {
   attach: function (context, settings) {
     $('fieldset.collapsible', context).once('collapse', function () {
       var $fieldset = $(this);
+      var $body = $fieldset.find('> .panel-collapse');
       // Expand fieldset if there are errors inside, or if it contains an
       // element that is targeted by the URI fragment identifier.
       var anchor = location.hash && location.hash != '#' ? ', ' + location.hash : '';
       if ($fieldset.find('.error' + anchor).length) {
         $fieldset.removeClass('collapsed');
+        $body.removeClass('collapsed');
       }
 
       var summary = $('<span class="summary"></span>');
@@ -66,6 +68,7 @@ Drupal.behaviors.collapse = {
           $fieldset
             .removeClass('collapsed')
             .find('> legend span.fieldset-legend-prefix').html(Drupal.t('Hide'));
+          $body.removeClass('collapsed');
         })
         .on('shown.bs.collapse', function () {
           $fieldset.trigger({ type: 'collapsed', value: false });
@@ -75,6 +78,7 @@ Drupal.behaviors.collapse = {
           $fieldset
             .addClass('collapsed')
             .find('> legend span.fieldset-legend-prefix').html(Drupal.t('Show'));
+          $body.addClass('collapsed');
         })
         .on('hidden.bs.collapse', function () {
           $fieldset.trigger({ type: 'collapsed', value: true });

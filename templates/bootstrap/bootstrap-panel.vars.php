@@ -37,22 +37,38 @@ function bootstrap_preprocess_bootstrap_panel(&$variables) {
   $variables['collapsed'] = FALSE;
   if (isset($element['#collapsed'])) {
     $variables['collapsed'] = $element['#collapsed'];
+    // Remove collapsed class as it should only be applied to the body.
+    _bootstrap_remove_class('collapsed', $element);
   }
   // Force grouped fieldsets to not be collapsible (for vertical tabs).
   if (!empty($element['#group'])) {
     $variables['collapsible'] = FALSE;
     $variables['collapsed'] = FALSE;
   }
-  // Collapsible elements need an ID, so generate one if necessary.
-  if (!isset($attributes['id']) && $variables['collapsible']) {
+
+  // Generate a unique identifier for the fieldset wrapper.
+  if (!isset($attributes['id'])) {
     $attributes['id'] = drupal_html_id('bootstrap-panel');
   }
 
-  // Set the target if the element has an id.
-  $variables['target'] = NULL;
-  if (isset($attributes['id'])) {
-    $variables['target'] = '#' . $attributes['id'] . ' > .collapse';
+  // Get body attributes.
+  $body_attributes = &_bootstrap_get_attributes($element, 'body_attributes');
+
+  // Add default .panel-body class.
+  _bootstrap_add_class('panel-body', $element, 'body_attributes');
+
+  // Add more classes to the body if collapsible.
+  if ($variables['collapsible']) {
+    _bootstrap_add_class(array('panel-collapse', 'collapse', 'fade', ($variables['collapsed'] ? 'collapsed' : 'in')), $element, 'body_attributes');
   }
+
+  // Generate a unique identifier for the body.
+  if (!isset($body_attributes['id'])) {
+    $body_attributes['id'] = drupal_html_id($attributes['id'] . '--body');
+  }
+
+  // Set the target to the body element.
+  $variables['target'] = '#' . $body_attributes['id'];
 
   // Build the panel content.
   $variables['content'] = $element['#children'];
@@ -73,6 +89,7 @@ function bootstrap_preprocess_bootstrap_panel(&$variables) {
 
   // Add the attributes.
   $variables['attributes'] = $attributes;
+  $variables['body_attributes'] = $body_attributes;
 }
 
 /**
@@ -86,6 +103,7 @@ function bootstrap_preprocess_bootstrap_panel(&$variables) {
  */
 function bootstrap_process_bootstrap_panel(&$variables) {
   $variables['attributes'] = drupal_attributes($variables['attributes']);
+  $variables['body_attributes'] = drupal_attributes($variables['body_attributes']);
   if (!empty($variables['title'])) {
     $variables['title'] = filter_xss_admin(render($variables['title']));
   }
