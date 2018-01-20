@@ -45,27 +45,27 @@
   }
 %}
 {% for type, messages in message_list %}
-{%
-  set message_classes = [
-    'alert',
-    'alert-' ~ status_classes[type],
-    'alert-dismissible',
-  ]
-%}
-{# Reset the attribute classes and then add the message specific classes. #}
-<div{{ attributes.setAttribute('class', classes).addClass(message_classes).setAttribute('role', 'alert') }}>
-  <button role="button" class="close" data-dismiss="alert" aria-label="{{ 'Close'|t }}"><span aria-hidden="true">&times;</span></button>
-  {% if status_headings[type] %}
-    <h4 class="sr-only">{{ status_headings[type] }}</h4>
-  {% endif %}
-  {% if messages|length > 1 %}
-    <ul class="item-list item-list--messages">
-      {% for message in messages %}
-        <li class="item item--message">{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    {{ messages|first }}
-  {% endif %}
-</div>
+  {%
+    set message_classes = [
+      'alert',
+      'alert-' ~ status_classes[type],
+      'alert-dismissible',
+    ]
+  %}
+  {# Reset the attribute classes and then add the message specific classes. #}
+  <div{{ attributes.setAttribute('class', classes).addClass(message_classes).setAttribute('role', 'alert') }}>
+    <button role="button" class="close" data-dismiss="alert" aria-label="{{ 'Close'|t }}"><span aria-hidden="true">&times;</span></button>
+    {% if status_headings[type] %}
+      <h4 class="sr-only">{{ status_headings[type] }}</h4>
+    {% endif %}
+    {% if messages|length > 1 %}
+      <ul class="item-list item-list--messages">
+        {% for message in messages %}
+          <li class="item item--message">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      {{ messages|first }}
+    {% endif %}
+  </div>
 {% endfor %}
