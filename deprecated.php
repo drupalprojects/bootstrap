@@ -895,6 +895,8 @@ function bootstrap_include($theme, $path) {
  * @param string $prefix
  *   The prefix used on the $name of the setting, this will be appended with
  *   "_" automatically if set.
+ * @param mixed $default
+ *   The default value to return if setting doesn't exist or is not set.
  *
  * @return mixed
  *   The value of the requested setting, NULL if the setting does not exist.
@@ -916,9 +918,9 @@ function bootstrap_include($theme, $path) {
  * @see \Drupal\bootstrap\Theme::getSetting()
  * @see \Drupal\bootstrap\Bootstrap::getTheme()
  */
-function bootstrap_setting($name, $theme = NULL, $prefix = 'bootstrap') {
+function bootstrap_setting($name, $theme = NULL, $prefix = 'bootstrap', $default = NULL) {
   Bootstrap::deprecated();
   $theme = Bootstrap::getTheme($theme);
   $prefix = $prefix !== 'bootstrap' && !empty($prefix) ? $prefix . '_' : '';
-  return $theme->getSetting($prefix . $name);
+  return $theme->getSetting($prefix . $name, $default);
 }
