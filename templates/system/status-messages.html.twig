@@ -25,6 +25,9 @@
  * @see template_preprocess_status_messages()
  */
 #}
+{# Save original attribute classes. This is needed to override in loop below. #}
+{# @see https://www.drupal.org/project/bootstrap/issues/2892936 #}
+{% set classes = attributes.offsetGet('class')|default({}) %}
 {%
   set status_heading = {
     'status': 'Status message'|t,
@@ -43,13 +46,14 @@
 %}
 {% for type, messages in message_list %}
 {%
-  set classes = [
+  set message_classes = [
     'alert',
     'alert-' ~ status_classes[type],
     'alert-dismissible',
   ]
 %}
-<div{{ attributes.addClass(classes) }} role="alert">
+{# Reset the attribute classes and then add the message specific classes. #}
+<div{{ attributes.setAttribute('class', classes).addClass(message_classes).setAttribute('role', 'alert') }}>
   <button role="button" class="close" data-dismiss="alert" aria-label="{{ 'Close'|t }}"><span aria-hidden="true">&times;</span></button>
   {% if status_headings[type] %}
     <h4 class="sr-only">{{ status_headings[type] }}</h4>
