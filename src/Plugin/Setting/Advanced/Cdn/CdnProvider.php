@@ -6,6 +6,7 @@ use Drupal\bootstrap\Bootstrap;
 use Drupal\bootstrap\Plugin\Provider\ProviderInterface;
 use Drupal\bootstrap\Plugin\ProviderManager;
 use Drupal\bootstrap\Plugin\Setting\SettingBase;
+use Drupal\bootstrap\Traits\FormAutoloadFixTrait;
 use Drupal\bootstrap\Utility\Element;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
@@ -32,6 +33,8 @@ use Drupal\Core\Form\FormStateInterface;
  * )
  */
 class CdnProvider extends SettingBase {
+
+  use FormAutoloadFixTrait;
 
   /**
    * The current provider.
@@ -62,6 +65,9 @@ class CdnProvider extends SettingBase {
    * {@inheritdoc}
    */
   public function alterFormElement(Element $form, FormStateInterface $form_state, $form_id = NULL) {
+    // Add autoload fix to make sure AJAX callbacks work.
+    static::formAutoloadFix($form_state);
+
     // Retrieve the provider from form values or the setting.
     $default_provider = $form_state->getValue('cdn_provider', $this->theme->getSetting('cdn_provider'));
 

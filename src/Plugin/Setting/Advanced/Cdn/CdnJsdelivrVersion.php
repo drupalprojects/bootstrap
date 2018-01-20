@@ -33,6 +33,9 @@ class CdnJsdelivrVersion extends CdnProvider {
    * {@inheritdoc}
    */
   public function alterFormElement(Element $form, FormStateInterface $form_state, $form_id = NULL) {
+    // Add autoload fix to make sure AJAX callbacks work.
+    static::formAutoloadFix($form_state);
+
     $plugin_id = Html::cleanCssIdentifier($this->provider->getPluginId());
     $setting = $this->getSettingElement($form, $form_state);
 
