@@ -25,7 +25,9 @@ function bootstrap_pre_render($element) {
 
   // Additionally, support some popular 3rd-party modules that don't follow
   // standards by creating custom theme hooks to use in their element types.
-  $types = array(
+  // Go ahead and merge in the theme hooks as a start since most elements mimic
+  // their theme hook counterparts as well.
+  $types = array_merge($theme_hooks, array(
     // Elements module (HTML5).
     'date',
     'datefield',
@@ -45,7 +47,7 @@ function bootstrap_pre_render($element) {
     // Webform module.
     'webform_email',
     'webform_number',
-  );
+  ));
 
   // Determine element theme hook.
   $theme = !empty($element['#theme']) ? $element['#theme'] : FALSE;
