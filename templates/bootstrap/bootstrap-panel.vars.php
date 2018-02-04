@@ -44,6 +44,11 @@ function bootstrap_preprocess_bootstrap_panel(array &$variables) {
     // Remove collapsed class as it should only be applied to the body.
     _bootstrap_remove_class('collapsed', $element);
   }
+  // Force grouped fieldsets to not be collapsible (for vertical tabs).
+  if (!empty($element['#group'])) {
+    $variables['collapsible'] = FALSE;
+    $variables['collapsed'] = FALSE;
+  }
 
   // Generate a unique identifier for the fieldset wrapper.
   if (!isset($attributes['id'])) {
