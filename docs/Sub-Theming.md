@@ -40,7 +40,7 @@ Once you've selected one of the above starterkits, here's how to install it:
 5. Rename `./THEMENAME/THEMENAME.theme`.
 6. Open `./THEMENAME/THEMENAME.info.yml` and change the name, description and
    any other properties to suite your needs. Make sure to rename the library
-   name as well:  `- THEMENAME/global-styling`.
+   extension name as well:  `THEMENAME/framework`.
 7. Rename the sub-theme configuration files, located at:
    `./THEMENAME/config/install/THEMENAME.settings.yml` and
    `./THEMENAME/config/schema/THEMENAME.schema.yml`.

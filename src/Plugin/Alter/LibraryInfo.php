@@ -47,12 +47,12 @@ class LibraryInfo extends PluginBase implements AlterInterface {
       }
 
       // Merge the assets into the library info.
-      $libraries['theme'] = NestedArray::mergeDeepArray([$assets, $libraries['theme']], TRUE);
+      $libraries['framework'] = NestedArray::mergeDeepArray([$assets, $libraries['framework']], TRUE);
 
       // Add a specific version and theme CSS overrides file.
       // @todo This should be retrieved by the Provider API.
       $version = $this->theme->getSetting('cdn_' . $provider->getPluginId() . '_version') ?: Bootstrap::FRAMEWORK_VERSION;
-      $libraries['theme']['version'] = $version;
+      $libraries['framework']['version'] = $version;
       $provider_theme = $this->theme->getSetting('cdn_' . $provider->getPluginId() . '_theme') ?: 'bootstrap';
       $provider_theme = $provider_theme === 'bootstrap' || $provider_theme === 'bootstrap_theme' ? '' : "-$provider_theme";
 
@@ -68,7 +68,7 @@ class LibraryInfo extends PluginBase implements AlterInterface {
           // it isn't added after any potential sub-theme's "theme" category.
           // There's no weight, so it will be added after the provider's assets.
           // @see https://www.drupal.org/node/2770613
-          $libraries['theme']['css']['base'][$overrides] = [];
+          $libraries['framework']['css']['base'][$overrides] = [];
           break;
         }
       }
