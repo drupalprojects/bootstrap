@@ -19,6 +19,5 @@ regions:
   page_top: 'Page top'
   page_bottom: 'Page bottom'
 
-libraries-extend:
-  bootstrap/framework:
-    - THEMENAME/framework
+libraries:
+  - 'THEMENAME/global-styling'
