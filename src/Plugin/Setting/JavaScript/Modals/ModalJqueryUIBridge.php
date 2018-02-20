@@ -7,33 +7,36 @@ use Drupal\bootstrap\Utility\Element;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * The "modal_enabled" theme setting.
+ * The "modal_jquery_ui_bridge" theme setting.
  *
  * @ingroup plugins_setting
  *
  * @BootstrapSetting(
- *   id = "modal_enabled",
+ *   id = "modal_jquery_ui_bridge",
  *   type = "checkbox",
- *   title = @Translation("Enable Bootstrap Modals"),
+ *   title = @Translation("jQuery UI Bridge"),
+ *   description = @Translation("Enabling this replaces the core/jquery.ui.dialog dependency in the core/drupal.dialog library with a bridge. This bridge adds support to Bootstrap Modals so that it may interpret jQuery UI Dialog functionality. It is highly recommended that this remain enabled unless you know what you're really doing."),
  *   defaultValue = 1,
- *   weight = -1,
+ *   weight = 0,
  *   groups = {
  *     "javascript" = @Translation("JavaScript"),
  *     "modals" = @Translation("Modals"),
  *   },
  * )
  */
-class ModalEnabled extends SettingBase {
+class ModalJqueryUIBridge extends SettingBase {
 
   /**
    * {@inheritdoc}
    */
   public function alterFormElement(Element $form, FormStateInterface $form_state, $form_id = NULL) {
     parent::alterFormElement($form, $form_state, $form_id);
-    $group = $this->getGroupElement($form, $form_state);
-    $group->setProperty('description', t('Modals are streamlined, but flexible, dialog prompts with the minimum required functionality and smart defaults. See <a href=":url" target="_blank">Bootstrap Modals</a> for more documentation.', [
-      ':url' => 'https://getbootstrap.com/docs/3.3/javascript/#modals',
-    ]));
+    $setting = $this->getSettingElement($form, $form_state);
+    $setting->setProperty('states', [
+      'visible' => [
+        ':input[name="modal_enabled"]' => ['checked' => TRUE],
+      ],
+    ]);
   }
 
   /**
