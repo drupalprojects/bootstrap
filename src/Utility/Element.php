@@ -299,6 +299,27 @@ class Element extends DrupalAttributes {
   }
 
   /**
+   * Traverses the element to find the closest button.
+   *
+   * @return \Drupal\bootstrap\Utility\Element|false
+   *   The first button element or FALSE if no button could be found.
+   */
+  public function &findButton() {
+    $button = FALSE;
+    foreach ($this->children() as $child) {
+      if ($child->isButton()) {
+        $button = $child;
+        break;
+      }
+      if ($result = &$child->findButton()) {
+        $button = $result;
+        break;
+      }
+    }
+    return $button;
+  }
+
+  /**
    * Retrieves the render array for the element.
    *
    * @return array

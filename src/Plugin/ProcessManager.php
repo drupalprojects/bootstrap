@@ -121,7 +121,7 @@ class ProcessManager extends PluginManager {
       $parent = Element::create(NestedArray::getValue($complete_form, $array_parents), $form_state);
 
       // Find the closest button.
-      if ($button = self::findButton($parent)) {
+      if ($button = &$parent->findButton()) {
         // Since this button is technically being "moved", it needs to be
         // rendered now, so it doesn't get printed twice (in the original spot).
         $element->appendProperty('field_suffix', $button->setIcon()->render());
@@ -157,18 +157,13 @@ class ProcessManager extends PluginManager {
    *
    * @return \Drupal\bootstrap\Utility\Element|false
    *   The first button element or FALSE if no button could be found.
+   *
+   * @deprecated Will be removed in a future release.
+   *   Use \Drupal\bootstrap\Utility\Element::findButton() directly.
    */
   protected static function &findButton(Element $element) {
-    $button = FALSE;
-    foreach ($element->children() as $child) {
-      if ($child->isButton()) {
-        $button = $child;
-      }
-      if ($result = &self::findButton($child)) {
-        $button = $result;
-      }
-    }
-    return $button;
+    Bootstrap::deprecated();
+    return $element->findButton();
   }
 
 }
