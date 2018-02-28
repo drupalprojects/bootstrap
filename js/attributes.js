@@ -346,7 +346,7 @@
       identifier = identifier.replace('__', '#DOUBLE_UNDERSCORE#', identifier);
     }
 
-    identifier = identifier.replace(Object.keys(filter), Object.values(filter), identifier);
+    identifier = identifier.replace(Object.keys(filter), Object.keys(filter).map(function(key) { return filter[key]; }), identifier);
 
     if (filter['__'] === void 0) {
       identifier = identifier.replace('#DOUBLE_UNDERSCORE#', '__', identifier);
