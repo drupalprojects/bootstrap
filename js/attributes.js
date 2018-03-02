@@ -288,7 +288,9 @@
       .filter()
 
       // Clean the class to ensure it's a valid class name.
-      .map(Attributes.cleanClass)
+      .map(function (value) {
+        return Attributes.cleanClass(value);
+      })
 
       // Ensure classes are unique.
       .uniq()
