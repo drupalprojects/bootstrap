@@ -18,6 +18,12 @@
  * @ingroup theme_preprocess
  */
 function bootstrap_preprocess_bootstrap_panel(array &$variables) {
+  // Temporarily provide field_group "support" until properly "fixed" upstream.
+  // @see https://www.drupal.org/project/bootstrap/issues/2910624
+  if (!empty($variables['element']['#group']->format_type) && $variables['element']['#group']->format_type == 'htab') {
+    $variables['element']['#collapsed'] = FALSE;
+  }
+
   $element = &$variables['element'];
 
   // Set the element's attributes.
@@ -43,11 +49,6 @@ function bootstrap_preprocess_bootstrap_panel(array &$variables) {
     $variables['collapsed'] = $element['#collapsed'];
     // Remove collapsed class as it should only be applied to the body.
     _bootstrap_remove_class('collapsed', $element);
-  }
-  // Force grouped fieldsets to not be collapsible (for vertical tabs).
-  if (!empty($element['#group'])) {
-    $variables['collapsible'] = FALSE;
-    $variables['collapsed'] = FALSE;
   }
 
   // Generate a unique identifier for the fieldset wrapper.
