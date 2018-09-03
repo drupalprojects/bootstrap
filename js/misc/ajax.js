@@ -65,8 +65,8 @@ Drupal.ajax.prototype.beforeSend = function (xmlhttprequest, options) {
       $('.throbber', this.progress.element).after('<div class="message">' + this.progress.message + '</div>');
     }
 
-    // If element is an input type, append after.
-    if ($element.is('input')) {
+    // If element is an input type, empty, or not visible, append after.
+    if ($element.is('input, :empty, :not(:visible)')) {
       $element.after(this.progress.element);
     }
     else if ($element.is('select')) {
